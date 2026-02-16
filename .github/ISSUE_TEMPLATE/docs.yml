@@ -1,0 +1,13 @@
+name: 📄 Documentation
+description: Update or add documentation
+title: 'docs: '
+labels: ['documentation']
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Documentation description
+      placeholder: 'Describe the documentation changes'
+    validations:
+      required: true

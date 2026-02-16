@@ -1,0 +1,48 @@
+{
+  //Controls formatting
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  //Controls spaces/tabs, rendering whitespaces
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": true,
+  "editor.renderWhitespace": "selection",
+
+  // Controls how lines should wrap
+  "editor.wordWrap": "bounded",
+  "editor.wrappingIndent": "same",
+  "editor.wordWrapColumn": 100,
+
+  //Controls remembered suggestion selections
+  "editor.suggestSelection": "recentlyUsed",
+
+  //For more convenient use
+  "editor.scrollBeyondLastLine": true,
+  "editor.smoothScrolling": true,
+  "editor.cursorBlinking": "phase",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.mouseWheelZoom": true,
+  "editor.minimap.enabled": false,
+  "workbench.tree.indent": 10,
+  "workbench.list.smoothScrolling": true,
+
+  //For autoClosingTags and updating HTML tags while editing.
+  "editor.linkedEditing": true,
+  "html.more convenient use": true,
+  "javascript.autoClosingTags": true,
+  "typescript.autoClosingTags": true,
+
+  //Prettier settings
+  "prettier.tabWidth": 2,
+  "prettier.bracketSameLine": true,
+  "prettier.arrowParens": "always",
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "es5",
+  "prettier.bracketSpacing": true,
+  "prettier.semi": true,
+  "prettier.useTabs": false,
+  "prettier.endOfLine": "auto",
+  "prettier.printWidth": 100
+}

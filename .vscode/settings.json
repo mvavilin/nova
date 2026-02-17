@@ -4,11 +4,13 @@
   "editor.formatOnPaste": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
 
-  //Controls spaces/tabs, rendering whitespaces
+  //Controls whitespaces/tabs, rendering whitespaces
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
   "editor.detectIndentation": true,
   "editor.renderWhitespace": "selection",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
 
   // Controls how lines should wrap
   "editor.wordWrap": "bounded",
@@ -30,7 +32,7 @@
 
   //For autoClosingTags and updating HTML tags while editing.
   "editor.linkedEditing": true,
-    "html.autoClosingTags": true,
+  "html.autoClosingTags": true,
   "javascript.autoClosingTags": true,
   "typescript.autoClosingTags": true,
 

@@ -1,0 +1,13 @@
+name: 🏗️ Build
+description: Changes to build system or dependencies
+title: 'build: '
+labels: ['build']
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Build description
+      placeholder: 'Describe changes to build or dependencies'
+    validations:
+      required: true

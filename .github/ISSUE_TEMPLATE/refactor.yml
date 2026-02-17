@@ -1,0 +1,13 @@
+name: 🔨 Refactor
+description: Refactor code without changing functionality
+title: 'refactor: '
+labels: ['refactor']
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Refactoring description
+      placeholder: 'Describe the code to refactor and why'
+    validations:
+      required: true

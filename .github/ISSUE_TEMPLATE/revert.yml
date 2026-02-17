@@ -1,0 +1,13 @@
+name: ⏪ Revert
+description: Revert a previous commit
+title: 'revert: '
+labels: ['revert']
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Revert description
+      placeholder: 'Describe the commit to revert and why'
+    validations:
+      required: true

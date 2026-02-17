@@ -1,0 +1,13 @@
+name: 🔧 CI
+description: Changes to CI/CD configuration
+title: 'ci: '
+labels: ['ci']
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: CI change description
+      placeholder: 'Describe the CI/CD configuration changes'
+    validations:
+      required: true

@@ -1,0 +1,13 @@
+name: 🎨 Style
+description: Code style changes (formatting, linting)
+title: 'style: '
+labels: ['style']
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Style change description
+      placeholder: 'Describe the style changes to apply'
+    validations:
+      required: true

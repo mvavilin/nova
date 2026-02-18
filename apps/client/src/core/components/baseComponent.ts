@@ -1,0 +1,236 @@
+import type {
+  BaseComponentProps,
+  ListenersMap,
+  AttributesMap,
+  Namespace,
+} from '../../types/components/base';
+
+export default class BaseComponent {
+  #element: HTMLElement | SVGElement | null = null;
+
+  #namespace: Namespace = 'html';
+
+  #parent: BaseComponent | null = null;
+
+  #children: BaseComponent[] = [];
+
+  #listeners: Array<{ event: string; handler: EventListener }> = [];
+
+  subscriptions: (() => void)[] = [];
+
+  constructor({
+    tag = 'div',
+    namespace,
+    children,
+    classes,
+    listeners,
+    attributes,
+    content,
+    id,
+    title,
+  }: BaseComponentProps = {}) {
+    if (namespace) this.#namespace = namespace;
+    if (tag) this.createElement(tag);
+    if (children) this.setChildren(children);
+    if (classes) this.setClasses(classes);
+    if (listeners) this.setListeners(listeners);
+    if (attributes) this.setAttributes(attributes);
+    if (content !== undefined) this.setContent(content);
+    if (id !== undefined) this.setId(id);
+    if (title !== undefined) this.setTitle(title);
+  }
+
+  get element(): HTMLElement | SVGElement | null {
+    return this.#element;
+  }
+
+  get parent(): BaseComponent | null {
+    return this.#parent;
+  }
+
+  get children(): BaseComponent[] {
+    return this.#children;
+  }
+
+  get root(): BaseComponent {
+    return this.#parent ? this.#parent.root : this;
+  }
+
+  get content(): string {
+    return this.element?.textContent ?? '';
+  }
+
+  get id(): string {
+    return this.element?.id ?? '';
+  }
+
+  private createElement(tag: string) {
+    this.#element =
+      this.#namespace === 'svg'
+        ? document.createElementNS('http://www.w3.org/2000/svg', tag)
+        : document.createElement(tag);
+
+    return this;
+  }
+
+  private setParent(parent: BaseComponent | null) {
+    this.#parent = parent;
+    return this;
+  }
+
+  public setClasses(classes: string[] | string) {
+    const array = Array.isArray(classes) ? classes : [classes];
+    this.#element?.classList.add(...array);
+    return this;
+  }
+
+  public removeClasses(classes: string[] | string) {
+    const array = Array.isArray(classes) ? classes : [classes];
+    this.#element?.classList.remove(...array);
+    return this;
+  }
+
+  public toggleClasses(classes: string[] | string, force?: boolean) {
+    const array = Array.isArray(classes) ? classes : [classes];
+    array.forEach((cls) => this.#element?.classList.toggle(cls, force));
+    return this;
+  }
+
+  public setAttributes(attributes: AttributesMap) {
+    if (!attributes || !this.#element) return this;
+    Object.entries(attributes).forEach(([key, value]) => {
+      if (value === false || value === null || value === undefined) {
+        this.#element?.removeAttribute(key);
+      } else {
+        this.#element?.setAttribute(key, String(value));
+      }
+    });
+
+    return this;
+  }
+
+  public setChild(child: BaseComponent) {
+    if (this.#element && child.element) this.#element.append(child.element);
+    this.#children.push(child);
+    child.setParent(this);
+    return this;
+  }
+
+  public setChildren(children: BaseComponent[]) {
+    const fragment = document.createDocumentFragment();
+    children.forEach((child) => {
+      if (child.element) fragment.appendChild(child.element);
+      this.#children.push(child);
+      child.setParent(this);
+    });
+    this.#element?.appendChild(fragment);
+    return this;
+  }
+
+  public removeChild(child: BaseComponent) {
+    const index = this.#children.indexOf(child);
+    if (index !== -1) {
+      child.remove();
+      this.#children.splice(index, 1);
+    }
+    return this;
+  }
+
+  public removeChildren() {
+    const children = [...this.#children];
+    this.#children = [];
+    children.forEach((child) => child.remove());
+    return this;
+  }
+
+  public remove() {
+    this.removeListeners();
+
+    this.subscriptions.forEach((unsubscribe) => unsubscribe());
+    this.subscriptions = [];
+
+    const children = [...this.#children];
+    this.#children = [];
+    children.forEach((child) => child.remove());
+
+    this.#element?.remove();
+
+    if (this.#parent) {
+      const index = this.#parent.children.indexOf(this);
+      if (index !== -1) {
+        this.#parent.children.splice(index, 1);
+      }
+    }
+
+    this.#parent = null;
+    this.#element = null;
+  }
+
+  public setListeners(listeners: ListenersMap) {
+    Object.entries(listeners).forEach(([event, handler]) => {
+      this.#element?.addEventListener(event, handler);
+      this.#listeners.push({ event, handler });
+    });
+    return this;
+  }
+
+  public removeListeners() {
+    this.#listeners.forEach(({ event, handler }) =>
+      this.#element?.removeEventListener(event, handler),
+    );
+    this.#listeners = [];
+    return this;
+  }
+
+  public setContent(content: string | number | Node) {
+    if (!this.#element) return this;
+
+    if (content instanceof Node) {
+      this.#element.textContent = '';
+      this.#element.appendChild(content);
+    } else {
+      this.#element.textContent = String(content);
+    }
+
+    return this;
+  }
+
+  public setId(id: string) {
+    if (this.#element) this.#element.id = id;
+    return this;
+  }
+
+  public setTitle(title: string) {
+    if (this.#element && this.#element instanceof HTMLElement) this.#element.title = title;
+    return this;
+  }
+
+  public findParent<T extends BaseComponent, A extends unknown[] = []>(
+    Class: new (...arguments_: A) => T,
+  ): T | null {
+    let current = this.parent;
+    while (current) {
+      if (current instanceof Class) return current as T;
+      current = current.parent;
+    }
+    return null;
+  }
+
+  public findChild<T extends BaseComponent, A extends unknown[] = []>(
+    Class: new (...arguments_: A) => T,
+  ): T | null {
+    return this.#children.reduce<T | null>((acc, child) => {
+      if (acc) return acc;
+      if (child instanceof Class) return child as T;
+      return child.findChild(Class);
+    }, null);
+  }
+
+  public show() {
+    this.setAttributes({ hidden: false });
+  }
+
+  public hide() {
+    this.setAttributes({ hidden: true });
+  }
+}

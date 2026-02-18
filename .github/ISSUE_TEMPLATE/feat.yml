@@ -1,0 +1,13 @@
+name: ✨Feature
+description: Add a new feature
+title: 'feat: '
+labels: ['enhancement']
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Feature description
+      placeholder: 'Describe the feature and why it is needed'
+    validations:
+      required: true

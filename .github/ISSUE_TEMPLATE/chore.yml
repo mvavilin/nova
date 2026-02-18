@@ -1,0 +1,13 @@
+name: ⚙️ Chore
+description: Maintenance tasks not affecting functionality
+title: 'chore: '
+labels: ['chore']
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Chore description
+      placeholder: 'Describe the task to perform'
+    validations:
+      required: true

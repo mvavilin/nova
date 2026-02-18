@@ -1,0 +1,13 @@
+name: ⚡ Performance
+description: Improve performance
+title: 'perf: '
+labels: ['performance']
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Performance improvement
+      placeholder: 'Describe the changes to improve performance'
+    validations:
+      required: true

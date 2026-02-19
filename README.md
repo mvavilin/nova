@@ -1,3 +1,59 @@
+# Codenames Game
+
+This is an interactive multiplayer Codenames game, aimed at preparing for a front-end developer interview.\
+Answer the various JS/TS/Front-end questions right and earn points. You can see your progress in your Profile.
+
+Prototype: [Classic game Codenames](<https://en.wikipedia.org/wiki/Codenames_(board_game)>)
+
+## Game Rules
+
+There are 2 modes: playing in a team and playing with a AI Agent.
+...
+
+## Developer Team
+
+- [Mikhail Vavilin](https://github.com/mvavilin) (Lead)
+- [Sergey Elsukov](https://github.com/sergey-ado) (Backend-Dev)
+- [Andrey Zharkikh](https://github.com/Peccopa) (Frontend-Dev)
+- [Elena Valiullina](https://github.com/Walle908) (Frontend-Dev)
+
+## Tech Stack
+
+- TypeScript (strict mode)
+- Node.js + Express + Socket.IO
+- NPM Workspaces
+- Vitest
+- Husky, Commintlint, lint-staged
+- Eslint
+- Prettier
+- Tailwind
+
+## Getting Started
+
+### Clone this repository
+
+```
+git clone https://github.com/mvavilin/nova
+```
+
+### Install dependencies
+
+```
+npm install
+```
+
+### Run the app
+
+```
+npm run dev
+```
+
+## Application Structure
+
+...
+
+<details><summary>Turborepo</summary>
+
 # Turborepo starter
 
 This Turborepo starter is maintained by the Turborepo core team.
@@ -133,3 +189,5 @@ Learn more about the power of Turborepo:
 - [Filtering](https://turborepo.dev/docs/crafting-your-repository/running-tasks#using-filters)
 - [Configuration Options](https://turborepo.dev/docs/reference/configuration)
 - [CLI Usage](https://turborepo.dev/docs/reference/command-line-reference)
+
+</details>

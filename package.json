@@ -8,13 +8,15 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "test": "turbo run test",
-    "prepare": "husky"
+    "prepare": "husky",
+    "check-branch": "validate-branch-name"
   },
   "devDependencies": {
     "husky": "^9.1.7",
     "prettier": "^3.7.4",
     "turbo": "^2.8.9",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "validate-branch-name": "^1.3.2"
   },
   "engines": {
     "node": ">=18"
@@ -23,5 +25,9 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "validate-branch-name": {
+    "pattern": "^\\d+-(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)-[a-z0-9-]+$",
+    "errorMsg": "Branch name must follow pattern: <issue-number>-<type>-<description>. Example: 117-feat-add-login-form"
+  }
 }

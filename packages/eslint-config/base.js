@@ -1,32 +1,51 @@
-import js from "@eslint/js";
-import eslintConfigPrettier from "eslint-config-prettier";
-import turboPlugin from "eslint-plugin-turbo";
-import tseslint from "typescript-eslint";
-import onlyWarn from "eslint-plugin-only-warn";
+import js from '@eslint/js';
+import tsEslint from 'typescript-eslint';
+import pluginPrettier from 'eslint-plugin-prettier';
+import unicorn from 'eslint-plugin-unicorn';
+import turboPlugin from 'eslint-plugin-turbo';
+import eslintConfigPrettier from 'eslint-config-prettier';
+import tsParser from '@typescript-eslint/parser';
 
-/**
- * A shared ESLint configuration for the repository.
- *
- * @type {import("eslint").Linter.Config[]}
- * */
-export const config = [
+export default [
   js.configs.recommended,
+
+  ...tsEslint.configs.recommended,
+
   eslintConfigPrettier,
-  ...tseslint.configs.recommended,
+
   {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        // Использовать tsconfig.json из проекта
+        project: true,
+      },
+    },
     plugins: {
       turbo: turboPlugin,
+      unicorn,
+      prettier: pluginPrettier,
     },
     rules: {
-      "turbo/no-undeclared-env-vars": "warn",
+      // Проверка переменных окружения Turbo
+      'turbo/no-undeclared-env-vars': 'warn',
+
+      // Запрещает утверждения типа (angle bracket или 'as')
+      '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
+
+      // Запрещает ненулевые утверждения с использованием '!'
+      '@typescript-eslint/no-non-null-assertion': 'error',
+
+      // Проверяет соответствие форматированию Prettier
+      'prettier/prettier': 'error',
+
+      // Ограничивает функции максимум 40 строками (исключая пустые строки и комментарии)
+      'max-lines-per-function': ['error', { max: 40, skipBlankLines: true, skipComments: true }],
     },
   },
+
   {
-    plugins: {
-      onlyWarn,
-    },
-  },
-  {
-    ignores: ["dist/**"],
+    ignores: ['dist/**', 'node_modules/**'],
   },
 ];

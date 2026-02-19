@@ -1,0 +1,4 @@
+{
+  "pattern": "^\\d+-(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)-[a-z0-9-]+$",
+  "errorMessage": "Branch name must follow pattern: <issue-number>-<type>-<description>. Example: 117-feat-add-login-form"
+}

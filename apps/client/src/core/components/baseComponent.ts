@@ -90,10 +90,29 @@ export default class BaseComponent {
     return this;
   }
 
+  public replaceClasses(
+    oldClasses: string[] | string,
+    newClasses: string[] | string,
+  ) {
+    if (!this.#element) return this;
+
+    const oldArray = Array.isArray(oldClasses) ? oldClasses : [oldClasses];
+    const newArray = Array.isArray(newClasses) ? newClasses : [newClasses];
+    this.#element.classList.remove(...oldArray);
+    this.#element.classList.add(...newArray);
+    return this;
+  }
+
   public toggleClasses(classes: string[] | string, force?: boolean) {
     const array = Array.isArray(classes) ? classes : [classes];
     array.forEach((cls) => this.#element?.classList.toggle(cls, force));
     return this;
+  }
+
+  public hasClasses(classes: string[] | string) {
+    if (!this.#element) return false;
+    const array = Array.isArray(classes) ? classes : [classes];
+    return array.every((cls) => this.#element!.classList.contains(cls));
   }
 
   public setAttributes(attributes: AttributesMap) {
@@ -195,13 +214,41 @@ export default class BaseComponent {
     return this;
   }
 
+  public clearContent() {
+    if (!this.#element) return this;
+    this.#element.textContent = '';
+    return this;
+  }
+
   public setId(id: string) {
     if (this.#element) this.#element.id = id;
     return this;
   }
 
   public setTitle(title: string) {
-    if (this.#element && this.#element instanceof HTMLElement) this.#element.title = title;
+    if (this.#element && this.#element instanceof HTMLElement)
+      this.#element.title = title;
+    return this;
+  }
+
+  public setStyle(styles: Partial<CSSStyleDeclaration>) {
+    if (!this.#element || !(this.#element instanceof HTMLElement)) return this;
+
+    for (const key in styles) {
+      const value = styles[key];
+      if (value !== undefined && value !== null) {
+        this.#element.style[key] = value;
+      }
+    }
+    return this;
+  }
+
+  public removeStyle(...keys: string[]) {
+    if (!this.#element || !(this.#element instanceof HTMLElement)) return this;
+
+    keys.forEach((key) => {
+      this.#element!.style.removeProperty(key);
+    });
     return this;
   }
 

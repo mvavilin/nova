@@ -13,8 +13,13 @@
     "test": "turbo run test",
     "prepare": "husky"
   },
+  "lint-staged": {
+    "*.{ts,js}": "eslint --fix",
+    "*.{json,md}": "prettier --write"
+  },
   "devDependencies": {
     "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
     "prettier": "^3.7.4",
     "turbo": "^2.8.9",
     "typescript": "5.9.2"

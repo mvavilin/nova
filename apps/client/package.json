@@ -9,13 +9,14 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint \"**/*.{ts,tsx,js}\" --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,md,js}\"",
-    "format:check": "prettier --check \"**/*.{ts,tsx,md,js}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md,js,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,js,json}\""
   },
   "devDependencies": {
     "@repo/eslint-config": "^0.0.0",
     "typescript": "~5.9.3",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vite-tsconfig-paths": "^6.1.1"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.0",

@@ -1,18 +1,14 @@
 {
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
-    "types": [
-      "vite/client"
-    ],
+    "types": ["vite/client"],
     "baseUrl": "./src",
     "paths": {
-      "@/*": [
-        "*"
-      ]
+      "@/*": ["*"],
+      "@components": ["components"],
+      "@pages": ["pages"],
+      "@utils": ["utils"]
     }
   },
-  "include": [
-    "src",
-    "vite.config.ts"
-  ]
+  "include": ["src", "vite.config.ts"]
 }

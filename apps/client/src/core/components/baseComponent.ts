@@ -204,7 +204,7 @@ export default class BaseComponent {
     return this;
   }
 
-  public removeChildren(
+  public detachChildren(
     children: BaseComponent | BaseComponent[] = this.children,
   ) {
     return this.removeChildrenInternal(children, false);

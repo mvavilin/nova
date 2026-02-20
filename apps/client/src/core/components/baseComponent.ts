@@ -136,19 +136,22 @@ export default class BaseComponent {
     return this;
   }
 
-  public toggleAttribute(key: string, force?: boolean) {
+  public toggleAttributes(keyOrKeys: string | string[], force?: boolean) {
     if (!this.#element) return this;
-    const has = this.#element.hasAttribute(key);
 
-    if (force === undefined) {
-      has
-        ? this.#element.removeAttribute(key)
-        : this.#element.setAttribute(key, '');
-    } else if (force) {
-      this.#element.setAttribute(key, '');
-    } else {
-      this.#element.removeAttribute(key);
-    }
+    const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
+    keys.forEach((key) => {
+      const has = this.#element!.hasAttribute(key);
+      if (force === undefined) {
+        has
+          ? this.#element!.removeAttribute(key)
+          : this.#element!.setAttribute(key, '');
+      } else if (force) {
+        this.#element!.setAttribute(key, '');
+      } else {
+        this.#element!.removeAttribute(key);
+      }
+    });
 
     return this;
   }
@@ -339,13 +342,13 @@ export default class BaseComponent {
         transition: `opacity ${duration}ms`,
         opacity: '0',
       });
-      this.removeAttributes('hidden');
+      this.toggleAttributes('hidden', false);
 
       requestAnimationFrame(() => {
         this.setStyle({ opacity: '1' });
       });
     } else {
-      this.removeAttributes('hidden');
+      this.toggleAttributes('hidden', false);
       this.setStyle({ opacity: '1', transition: '' });
     }
   }
@@ -357,10 +360,10 @@ export default class BaseComponent {
       this.setStyle({ transition: `opacity ${duration}ms`, opacity: '0' });
 
       setTimeout(() => {
-        if (this.#element) this.#element.setAttribute('hidden', '');
+        this.toggleAttributes('hidden', true);
       }, duration);
     } else {
-      this.#element.setAttribute('hidden', '');
+      this.toggleAttributes('hidden', true);
       this.setStyle({ opacity: '1', transition: '' });
     }
   }

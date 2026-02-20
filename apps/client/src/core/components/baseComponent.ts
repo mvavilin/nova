@@ -128,38 +128,92 @@ export default class BaseComponent {
     return this;
   }
 
-  public setChild(child: BaseComponent) {
-    if (this.#element && child.element) this.#element.append(child.element);
-    this.#children.push(child);
-    child.setParent(this);
+  public removeAttributes(...keys: string[]) {
+    if (!this.#element) return this;
+
+    keys.forEach((key) => this.#element?.removeAttribute(key));
+
     return this;
   }
 
-  public setChildren(children: BaseComponent[]) {
+  public toggleAttribute(key: string, force?: boolean) {
+    if (!this.#element) return this;
+    const has = this.#element.hasAttribute(key);
+
+    if (force === undefined) {
+      has
+        ? this.#element.removeAttribute(key)
+        : this.#element.setAttribute(key, '');
+    } else if (force) {
+      this.#element.setAttribute(key, '');
+    } else {
+      this.#element.removeAttribute(key);
+    }
+
+    return this;
+  }
+
+  private addChildrenInternal(
+    children: BaseComponent | BaseComponent[],
+    append = false,
+  ) {
+    if (!this.#element) return this;
+
+    const childrenArray = Array.isArray(children) ? children : [children];
     const fragment = document.createDocumentFragment();
-    children.forEach((child) => {
+
+    childrenArray.forEach((child) => {
+      if (child.parent) child.parent.destroyChildren(child);
       if (child.element) fragment.appendChild(child.element);
       this.#children.push(child);
       child.setParent(this);
     });
-    this.#element?.appendChild(fragment);
-    return this;
-  }
 
-  public removeChild(child: BaseComponent) {
-    const index = this.#children.indexOf(child);
-    if (index !== -1) {
-      child.remove();
-      this.#children.splice(index, 1);
+    if (append) {
+      this.#element.appendChild(fragment);
+    } else {
+      this.destroyChildren();
+      this.#element.appendChild(fragment);
     }
+
     return this;
   }
 
-  public removeChildren() {
-    const children = [...this.#children];
-    this.#children = [];
-    children.forEach((child) => child.remove());
+  public setChildren(children: BaseComponent | BaseComponent[]) {
+    return this.addChildrenInternal(children, false);
+  }
+
+  public appendChildren(children: BaseComponent | BaseComponent[]) {
+    return this.addChildrenInternal(children, true);
+  }
+
+  private removeChildrenInternal(
+    children: BaseComponent | BaseComponent[],
+    full = false,
+  ) {
+    const childrenArray = Array.isArray(children) ? children : [children];
+
+    childrenArray.forEach((child) => {
+      const index = this.#children.indexOf(child);
+      if (index !== -1) this.#children.splice(index, 1);
+      if (child.element) child.element.remove();
+      child.setParent(null);
+      if (full) child.remove();
+    });
+
     return this;
+  }
+
+  public removeChildren(
+    children: BaseComponent | BaseComponent[] = this.children,
+  ) {
+    return this.removeChildrenInternal(children, false);
+  }
+
+  public destroyChildren(
+    children: BaseComponent | BaseComponent[] = this.children,
+  ) {
+    return this.removeChildrenInternal(children, true);
   }
 
   public remove() {
@@ -204,8 +258,9 @@ export default class BaseComponent {
   public setContent(content: string | number | Node) {
     if (!this.#element) return this;
 
+    this.destroyChildren();
+
     if (content instanceof Node) {
-      this.#element.textContent = '';
       this.#element.appendChild(content);
     } else {
       this.#element.textContent = String(content);
@@ -240,6 +295,7 @@ export default class BaseComponent {
         this.#element.style[key] = value;
       }
     }
+
     return this;
   }
 
@@ -247,8 +303,10 @@ export default class BaseComponent {
     if (!this.#element || !(this.#element instanceof HTMLElement)) return this;
 
     keys.forEach((key) => {
-      this.#element!.style.removeProperty(key);
+      const kebabKey = key.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase());
+      if (this.#element) this.#element.style.removeProperty(kebabKey);
     });
+
     return this;
   }
 
@@ -273,11 +331,37 @@ export default class BaseComponent {
     }, null);
   }
 
-  public show() {
-    this.setAttributes({ hidden: false });
+  public show(animated = true, duration = 300) {
+    if (!this.#element) return this;
+
+    if (animated) {
+      this.setStyle({
+        transition: `opacity ${duration}ms`,
+        opacity: '0',
+      });
+      this.removeAttributes('hidden');
+
+      requestAnimationFrame(() => {
+        this.setStyle({ opacity: '1' });
+      });
+    } else {
+      this.removeAttributes('hidden');
+      this.setStyle({ opacity: '1', transition: '' });
+    }
   }
 
-  public hide() {
-    this.setAttributes({ hidden: true });
+  public hide(animated = true, duration = 300) {
+    if (!this.#element) return this;
+
+    if (animated) {
+      this.setStyle({ transition: `opacity ${duration}ms`, opacity: '0' });
+
+      setTimeout(() => {
+        if (this.#element) this.#element.setAttribute('hidden', '');
+      }, duration);
+    } else {
+      this.#element.setAttribute('hidden', '');
+      this.setStyle({ opacity: '1', transition: '' });
+    }
   }
 }

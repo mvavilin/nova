@@ -1,4 +1,4 @@
-import BaseComponent from './BaseComponent';
+import BaseComponent from './BaseComponent/BaseComponent';
 import type { FormComponentProps } from '../../types/components/FormComponent.types';
 
 export class FormComponent extends BaseComponent {

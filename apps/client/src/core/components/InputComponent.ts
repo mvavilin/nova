@@ -1,4 +1,4 @@
-import BaseComponent from './BaseComponent';
+import BaseComponent from './BaseComponent/BaseComponent';
 import type { InputComponentProps } from '../../types/components/InputComponent.types';
 
 export class InputComponent extends BaseComponent {

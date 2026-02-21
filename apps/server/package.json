@@ -2,10 +2,10 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "build": "echo 'Build successful'",
-    "start": "node index.js",
+    "start": "node index.ts",
     "test": "echo \"No tests configured\""
   },
   "keywords": [],

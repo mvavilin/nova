@@ -1,4 +1,4 @@
-import type { BaseComponentProps } from './BaseComponent.types';
+import type { BaseComponentProps } from '../../core/components/BaseComponent/BaseComponent.types';
 
 export type InputType =
   | 'text'
@@ -23,7 +23,9 @@ export type InputType =
   | 'reset'
   | 'button';
 
-type RequireNameOrId = { name: string; id?: string } | { id: string; name?: string };
+type RequireNameOrId =
+  | { name: string; id?: string }
+  | { id: string; name?: string };
 
 export type InputComponentProps = ({
   type?: InputType;

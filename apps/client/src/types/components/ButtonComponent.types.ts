@@ -1,4 +1,4 @@
-import type { BaseComponentProps } from './BaseComponent.types';
+import type { BaseComponentProps } from '../../core/components/BaseComponent/BaseComponent.types';
 
 export type ButtonComponentProps = {
   type?: 'button' | 'submit' | 'reset';

@@ -3,7 +3,15 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  server: { open: true },
-
   plugins: [tsconfigPaths(), tailwindcss()],
+
+  server: {
+    port: 3000,
+    open: true,
+  },
+
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+  },
 });

@@ -11,6 +11,8 @@ export default [
 
   ...tsEslint.configs.recommended,
 
+  unicorn.configs.recommended,
+
   eslintConfigPrettier,
 
   {
@@ -18,30 +20,51 @@ export default [
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        // Использовать tsconfig.json из проекта
+        // использовать tsconfig.json из проекта
         project: true,
       },
     },
     plugins: {
       turbo: turboPlugin,
-      unicorn,
       prettier: pluginPrettier,
     },
     rules: {
-      // Проверка переменных окружения Turbo
+      // проверка переменных окружения turbo
       'turbo/no-undeclared-env-vars': 'warn',
 
-      // Запрещает утверждения типа (angle bracket или 'as')
+      // запрещает утверждения типа (angle bracket или 'as')
       '@typescript-eslint/consistent-type-assertions': ['error', { assertionStyle: 'never' }],
 
-      // Запрещает ненулевые утверждения с использованием '!'
+      // запрещает ненулевые утверждения с использованием '!'
       '@typescript-eslint/no-non-null-assertion': 'error',
 
-      // Проверяет соответствие форматированию Prettier
+      // запрещает использование any
+      '@typescript-eslint/no-explicit-any': 'error',
+
+      // требует явного указания типа возвращаемого значения функции
+      '@typescript-eslint/explicit-function-return-type': 'error',
+
+      // требует явного указания модификаторов доступа в классах (кроме constructor)
+      '@typescript-eslint/explicit-member-accessibility': [
+        'error',
+        {
+          overrides: {
+            constructors: 'off',
+          },
+        },
+      ],
+
+      // разрешает использование null
+      'unicorn/no-null': 'off',
+
+      // проверяет соответствие форматированию prettier
       'prettier/prettier': 'error',
 
-      // Ограничивает функции максимум 40 строками (исключая пустые строки и комментарии)
+      // ограничивает функции максимум 40 строками (исключая пустые строки и комментарии)
       'max-lines-per-function': ['error', { max: 40, skipBlankLines: true, skipComments: true }],
+    },
+    linterOptions: {
+      noInlineConfig: true, // запрещает отключение правил через комментарии
     },
   },
 

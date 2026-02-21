@@ -1,4 +1,4 @@
-import BaseComponent from '../../core/components/BaseComponent';
+import BaseComponent from './BaseComponent';
 
 export type ListenersMap = Record<string, EventListener>;
 export type AttributeValue = string | number | boolean | null | undefined;

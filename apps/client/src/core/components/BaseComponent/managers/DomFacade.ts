@@ -1,15 +1,16 @@
 import type BaseComponent from '../BaseComponent';
-import type { Namespace } from '../../../types/components/BaseComponent.types';
+import type { Namespace } from '../BaseComponent.types';
 
-import ElementManager from './ElementManager';
-import ClassManager from './ClassManager';
-import StyleManager from './StyleManager';
-import AttributeManager from './AttributeManager';
-import EventManager from './EventManager';
-import ChildrenManager from './ChildrenManager';
-import VisibilityManager from './VisibilityManager';
+import ElementManager from './core/ElementManager';
+import ClassManager from './appearance/ClassManager';
+import StyleManager from './appearance/StyleManager';
+import AttributeManager from './behavior/AttributeManager';
+import EventManager from './behavior/EventManager';
+import ChildrenManager from './core/ChildrenManager';
+import VisibilityManager from './appearance/VisibilityManager';
+import ContentManager from './appearance/ContentManager';
 
-export default class DomManager {
+export default class DomFacade {
   private elementManager: ElementManager;
   private classManager: ClassManager;
   private styleManager: StyleManager;
@@ -17,17 +18,19 @@ export default class DomManager {
   private eventManager: EventManager;
   private childrenManager: ChildrenManager;
   private visibilityManager: VisibilityManager;
+  private contentManager: ContentManager;
 
   constructor(owner: BaseComponent, tag = 'div', namespace?: Namespace) {
     this.elementManager = new ElementManager(tag, namespace);
-    const element = this.elementManager.domElement!;
+    const element = this.elementManager.domElement;
 
+    this.contentManager = new ContentManager(element);
     this.classManager = new ClassManager(element);
     this.styleManager = new StyleManager(element);
     this.attributeManager = new AttributeManager(element);
     this.eventManager = new EventManager(element);
     this.childrenManager = new ChildrenManager(owner, element);
-    this.visibilityManager = new VisibilityManager(this.styleManager, this.attributeManager);
+    this.visibilityManager = new VisibilityManager(element);
   }
 
   get element() {
@@ -56,5 +59,9 @@ export default class DomManager {
 
   get visibility() {
     return this.visibilityManager;
+  }
+
+  get content() {
+    return this.contentManager;
   }
 }

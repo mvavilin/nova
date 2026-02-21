@@ -1,0 +1,33 @@
+import type { DOMElement } from '../../BaseComponent.types';
+
+export default class ContentManager {
+  private element: DOMElement | null;
+
+  constructor(element: DOMElement | null) {
+    this.element = element;
+  }
+
+  public set(content: string | number | Node): this {
+    if (!this.element) return this;
+
+    this.clear();
+
+    if (content instanceof Node) {
+      this.element.appendChild(content);
+    } else {
+      this.element.textContent = String(content);
+    }
+
+    return this;
+  }
+
+  public clear(): this {
+    if (!this.element) return this;
+
+    while (this.element.firstChild) {
+      this.element.removeChild(this.element.firstChild);
+    }
+
+    return this;
+  }
+}

@@ -1,4 +1,4 @@
-import type { DOMElement, ListenersMap } from '../../../types/components/BaseComponent.types';
+import type { DOMElement, ListenersMap } from '../../BaseComponent.types';
 
 export default class EventManager {
   private element: DOMElement | null;
@@ -9,34 +9,38 @@ export default class EventManager {
     this.element = element;
   }
 
-  add(listeners: ListenersMap): this {
+  public add(listeners: ListenersMap): this {
     Object.entries(listeners).forEach(([event, handler]) => {
       this.element?.addEventListener(event, handler);
-      this.listeners.push({ event, handler });
+      if (!this.listeners.includes({ event, handler })) {
+        this.listeners.push({ event, handler });
+      }
     });
+
     return this;
   }
 
-  removeAll(): this {
+  public removeAll(): this {
     this.listeners.forEach(({ event, handler }) => {
       this.element?.removeEventListener(event, handler);
     });
     this.listeners = [];
+
     return this;
   }
 
-  addSubscription(unsubscribe: () => void): this {
+  public addSubscription(unsubscribe: () => void): this {
     this.subscriptions.push(unsubscribe);
     return this;
   }
 
-  clearSubscriptions(): this {
+  public clearSubscriptions(): this {
     this.subscriptions.forEach((unsubscribe) => unsubscribe());
     this.subscriptions = [];
     return this;
   }
 
-  destroy(): void {
+  public destroy(): void {
     this.removeAll();
     this.clearSubscriptions();
   }

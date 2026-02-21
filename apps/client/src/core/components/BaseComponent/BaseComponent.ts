@@ -2,12 +2,12 @@ import type {
   BaseComponentProps,
   ListenersMap,
   AttributesMap,
-} from '../../types/components/BaseComponent.types';
+} from './BaseComponent.types';
 
-import DomManager from '../../core/components/managers/DomManager';
+import DomFacade from './managers/DomFacade';
 
 export default class BaseComponent {
-  private dom: DomManager;
+  private dom: DomFacade;
 
   #parent: BaseComponent | null = null;
 
@@ -22,7 +22,7 @@ export default class BaseComponent {
     id,
     title,
   }: BaseComponentProps = {}) {
-    this.dom = new DomManager(this, tag, namespace);
+    this.dom = new DomFacade(this, tag, namespace);
 
     if (classes) this.setClasses(classes);
     if (children) this.setChildren(children);
@@ -57,7 +57,7 @@ export default class BaseComponent {
     return this.element?.id ?? '';
   }
 
-  protected setParent(parent: BaseComponent | null) {
+  public setParent(parent: BaseComponent | null) {
     this.#parent = parent;
     return this;
   }
@@ -72,7 +72,10 @@ export default class BaseComponent {
     return this;
   }
 
-  public replaceClasses(oldClasses: string[] | string, newClasses: string[] | string) {
+  public replaceClasses(
+    oldClasses: string[] | string,
+    newClasses: string[] | string,
+  ) {
     this.dom.classes.replace(oldClasses, newClasses);
     return this;
   }
@@ -125,19 +128,21 @@ export default class BaseComponent {
     return this;
   }
 
-  public remove() {
+  public detach(): this {
+    this.dom.children.detach();
+    this.dom.element?.remove();
+    this.#parent = null;
+
+    return this;
+  }
+
+  public destroy(): this {
     this.dom.events.destroy();
     this.dom.children.destroy();
     this.dom.element?.remove();
-
-    if (this.#parent) {
-      const index = this.#parent.children.indexOf(this);
-      if (index !== -1) {
-        this.#parent.children.splice(index, 1);
-      }
-    }
-
     this.#parent = null;
+
+    return this;
   }
 
   public setListeners(listeners: ListenersMap) {
@@ -156,21 +161,12 @@ export default class BaseComponent {
   }
 
   public setContent(content: string | number | Node) {
-    if (!this.dom.element) return this;
-    this.destroyChildren();
-
-    if (content instanceof Node) {
-      this.dom.element.appendChild(content);
-    } else {
-      this.dom.element.textContent = String(content);
-    }
-
+    this.dom.content.set(content);
     return this;
   }
 
   public clearContent() {
-    if (!this.dom.element) return this;
-    this.dom.element.textContent = '';
+    this.dom.content.clear();
     return this;
   }
 

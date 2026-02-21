@@ -1,7 +1,4 @@
-import type {
-  DOMElement,
-  AttributesMap,
-} from '../../../types/components/BaseComponent.types';
+import type { DOMElement, AttributesMap } from '../../BaseComponent.types';
 
 export default class AttributeManager {
   private element: DOMElement | null;
@@ -10,7 +7,7 @@ export default class AttributeManager {
     this.element = element;
   }
 
-  set(attributes: AttributesMap): this {
+  public set(attributes: AttributesMap): this {
     Object.entries(attributes).forEach(([key, value]) => {
       if (value === false || value === null || value === undefined) {
         this.element?.removeAttribute(key);
@@ -22,11 +19,11 @@ export default class AttributeManager {
     return this;
   }
 
-  has(key: string): boolean | undefined {
+  public has(key: string): boolean | undefined {
     return this.element?.hasAttribute(key);
   }
 
-  remove(...keys: string[]): this {
+  public remove(...keys: string[]): this {
     keys.forEach((key) => {
       this.element?.removeAttribute(key);
     });
@@ -34,7 +31,7 @@ export default class AttributeManager {
     return this;
   }
 
-  toggle(keyOrKeys: string | string[], force?: boolean): this {
+  public toggle(keyOrKeys: string | string[], force?: boolean): this {
     const keys = Array.isArray(keyOrKeys) ? keyOrKeys : [keyOrKeys];
 
     keys.forEach((key) => {

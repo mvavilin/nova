@@ -1,10 +1,12 @@
-import type { Namespace, DOMElement } from '../../../types/components/BaseComponent.types';
+import type { Namespace, DOMElement } from '../../BaseComponent.types';
 
 export default class ElementManager {
   private element: DOMElement | null = null;
   private namespace: Namespace = 'html';
 
   constructor(tag = 'div', namespace?: Namespace) {
+    if (this.element) return this;
+
     if (namespace) this.namespace = namespace;
     this.createElement(tag);
   }
@@ -16,7 +18,8 @@ export default class ElementManager {
         : document.createElement(tag);
   }
 
-  get domElement(): DOMElement | null {
+  get domElement(): DOMElement {
+    if (!this.element) throw new Error('Element not created');
     return this.element;
   }
 }

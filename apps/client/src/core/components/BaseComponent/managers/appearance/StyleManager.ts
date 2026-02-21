@@ -1,4 +1,4 @@
-import type { DOMElement } from '../../../types/components/BaseComponent.types';
+import type { DOMElement } from '../../BaseComponent.types';
 
 export default class StyleManager {
   private element: DOMElement | null;
@@ -7,7 +7,7 @@ export default class StyleManager {
     this.element = element;
   }
 
-  set(styles: Partial<CSSStyleDeclaration>): this {
+  public set(styles: Partial<CSSStyleDeclaration>): this {
     if (!(this.element instanceof HTMLElement)) return this;
 
     for (const key in styles) {
@@ -19,7 +19,7 @@ export default class StyleManager {
     return this;
   }
 
-  remove(...keys: string[]): this {
+  public remove(...keys: string[]): this {
     if (!(this.element instanceof HTMLElement)) return this;
 
     keys.forEach((key) => {

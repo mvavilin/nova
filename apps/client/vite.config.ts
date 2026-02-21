@@ -17,7 +17,7 @@ export default defineConfig({
     outDir: 'dist',
     emptyOutDir: true,
     rollupOptions: {
-      input: path.resolve(__dirname, 'main.ts'),
+      // input: path.resolve(__dirname, 'main.ts'),
     },
   },
 });

@@ -1,10 +1,8 @@
 # Nova Codenames Game
 
-This is an interactive multiplayer Codenames game, aimed at preparing for technical interviews frontend-developers and training hard skills (JS, TS, Algorithms).\
-There are two modes - playing in a team as a Spymaster or a field agent and playing as a field agent with AI as a Spymaster.\
+This is an interactive multiplayer Codenames game, aimed at preparing for technical interviews frontend-developers and training hard skills (JS, TS, Algorithms). There are two modes - playing in a team as a Spymaster or a field agent and playing as a field agent with AI as a Spymaster.
 Being a field agent answer the various JS/TS/Front-end questions right and earn points, being a Spymaster
-help your team win.\
-You can track your progress in your Profile.
+help your team win. You can track your progress in your Profile.
 
 Prototype: [Classic game Codenames](<https://en.wikipedia.org/wiki/Codenames_(board_game)>)
 
@@ -62,21 +60,20 @@ Prototype: [Classic game Codenames](<https://en.wikipedia.org/wiki/Codenames_(bo
 
 1. Teams take turns.
 2. Each turn, one team's Spymaster gives a hint to help their field agent guess the squares with words in their team's color, while avoiding the squares intended for enemy agents, innocent bystanders, and the assassin. A hint can only be one word and a number. The number indicates how many word squares the field agents must choose in that round, and the word itself (ideally) contains a thematic clue telling the field agent which word squares to choose. For example: "Asynchrony, 3" - means 3 words related to asynchrony.
-3. If the card belongs to the player's team, the word “opens” with a question, then the Check phase is mandatory - the result (point or not) is determined by the result of the check.
+3. The field agent clicks the card following the Spymaster's hint. If the card belongs to the player's team, the word “opens” with a question, then the Check phase is mandatory - the result (point or not) is determined by the result of the check.
 4. Check: the game is paused, a pop-up opens with a question for the selected word (for example: “What is the difference from sessionStorage?”, “Data volume limit?”). Depending on the room settings:
    - Self/mutual assessment mode:
      - The player enters the answer in the field and clicks “Show answer” button.
      - Everyone sees the player's answer and the right answer.
-     - Then the player and his opponents evaluate the player's answer: “Right” / “Wrong” button and a point is counted only for majority chosses“Right”.
-     - If the answer is right and not all words have been guessed yet, the player continues to guess the word (you can see remaining attempts to guess).
+     - Then the player and his opponents evaluate the player's answer: “Right” / “Wrong” button and a point is counted only for majority chosses “Right”.
      - If the answer is wrong a point is not counted and the turn goes to the other team.
 
    - AI mode: the player enters the answer by text or voice (Speech-to-Text); AI evaluates the essence of the answer and decides whether to count the point or not.
 
-   - After completing the check, the pop-up closes, the game continues (the card is already open, the point is either counted or not).
-
-5. If the card belongs to other team or is an innocent bystander, it isn't opened and the turn goes to the other team.
-6. If the card is an assassin card, it opens and the team immediately loses and the game finishes.
+5. After completing the check, the pop-up closes, the game continues (the card is already open, the point is either counted or not).
+6. If the answer is right and not all round words have been guessed yet, the player continues to guess the word (you can see remaining attempts to guess).
+7. If the card belongs to other team or is an innocent bystander, it isn't opened and the turn goes to the other team.
+8. If the card is an assassin card, it opens and the team immediately loses and the game finishes.
 
 ### Victory
 
@@ -95,8 +92,7 @@ Prototype: [Classic game Codenames](<https://en.wikipedia.org/wiki/Codenames_(bo
 
 7. **Solo game page**: Game with AI as a Spymaster.
 8. **Result page**: Show the results of the game: the winning and losing team, a list of participating players with their roles: the spymasters earns 1 point as a master, if the their team wins, the fiels agents earns the count of their right answers. The game results are recorded into the players’ profiles.
-9. **Profile page**: Contains form with info about the player with the ability to change the password or change the avatar and statistics:
-   number of games won as a Spymasters and points earned as field agent, the current player's level (it is determined by the combination of the results of the Spymaster and field agent roles results).
+9. **Profile page**: Contains form with info about the player with the ability to change the password or change the avatar and statistics: number of games won as a Spymasters and points earned as field agent, the current player's level (it is determined by the combination of the results of the Spymaster and field agent roles results).
 
 <details><summary>Turborepo</summary>
 

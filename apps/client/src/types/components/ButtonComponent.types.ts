@@ -1,8 +1,8 @@
 import type { BaseComponentProps } from '../../core/components/BaseComponent/BaseComponent.types';
 
 export type ButtonComponentProps = {
-  type?: 'button' | 'submit' | 'reset';
+  type?: HTMLButtonElement['type'];
   disabled?: boolean;
   name?: string;
   value?: string;
-} & BaseComponentProps;
+} & Omit<BaseComponentProps, 'tag'>;

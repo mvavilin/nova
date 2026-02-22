@@ -12,19 +12,14 @@ export default class ClassManager {
   }
 
   private get classList(): DOMTokenList | null {
-    if (
-      this.element instanceof HTMLElement ||
-      this.element instanceof SVGElement
-    ) {
+    if (this.element instanceof HTMLElement || this.element instanceof SVGElement) {
       return this.element.classList;
     }
     return null;
   }
 
   public has(classes: string | string[]): boolean {
-    return this.normalize(classes).every(
-      (cls) => this.classList?.contains(cls) ?? false,
-    );
+    return this.normalize(classes).every((cls) => this.classList?.contains(cls) ?? false);
   }
 
   public add(classes: string | string[]): this {
@@ -38,9 +33,7 @@ export default class ClassManager {
   }
 
   public toggle(classes: string | string[], force?: boolean): this {
-    this.normalize(classes).forEach((cls) =>
-      this.classList?.toggle(cls, force),
-    );
+    this.normalize(classes).forEach((cls) => this.classList?.toggle(cls, force));
     return this;
   }
 

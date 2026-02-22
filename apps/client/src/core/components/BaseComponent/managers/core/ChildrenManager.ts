@@ -15,10 +15,7 @@ export default class ChildrenManager {
     return this.children;
   }
 
-  private add(
-    children: BaseComponent | BaseComponent[],
-    append: boolean,
-  ): this {
+  private add(children: BaseComponent | BaseComponent[], append: boolean): this {
     const childrenArray = Array.isArray(children) ? children : [children];
     const fragment = document.createDocumentFragment();
 
@@ -28,7 +25,7 @@ export default class ChildrenManager {
       if (child.parent) child.parent.detachChildren(child);
       if (child.element) fragment.appendChild(child.element);
       if (!this.children.includes(child)) this.children.push(child);
-      child.setParent(this.owner);
+      child['setParent'](this.owner);
     });
 
     this.element?.appendChild(fragment);
@@ -36,17 +33,14 @@ export default class ChildrenManager {
     return this;
   }
 
-  private remove(
-    children: BaseComponent | BaseComponent[],
-    full: boolean,
-  ): this {
-    const childrenArray = Array.isArray(children) ? children : [children];
+  private remove(children: BaseComponent | BaseComponent[], full: boolean): this {
+    const childrenArray = Array.isArray(children) ? [...children] : [children];
 
     childrenArray.forEach((child) => {
       const index = this.children.indexOf(child);
       if (index !== -1) this.children.splice(index, 1);
       child.element?.remove();
-      child.setParent(null);
+      child['setParent'](null);
       if (full) child.destroy();
     });
 

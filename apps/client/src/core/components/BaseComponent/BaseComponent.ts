@@ -3,13 +3,11 @@ import type {
   ListenersMap,
   AttributesMap,
 } from './BaseComponent.types';
-
 import DomFacade from './managers/DomFacade';
 
 export default class BaseComponent {
-  private dom: DomFacade;
-
-  #parent: BaseComponent | null = null;
+  private _dom: DomFacade;
+  private _parent: BaseComponent | null = null;
 
   constructor({
     tag = 'div',
@@ -22,7 +20,7 @@ export default class BaseComponent {
     id,
     title,
   }: BaseComponentProps = {}) {
-    this.dom = new DomFacade(this, tag, namespace);
+    this._dom = new DomFacade(this, tag, namespace);
 
     if (classes) this.setClasses(classes);
     if (children) this.setChildren(children);
@@ -33,193 +31,228 @@ export default class BaseComponent {
     if (title !== undefined) this.setTitle(title);
   }
 
+  // ===== Core Properties =====
+
   get element(): HTMLElement | SVGElement | null {
-    return this.dom.element;
+    return this._dom.element;
   }
 
   get parent(): BaseComponent | null {
-    return this.#parent;
-  }
-
-  get children(): BaseComponent[] {
-    return this.dom.children.list;
+    return this._parent;
   }
 
   get root(): BaseComponent {
-    return this.#parent ? this.#parent.root : this;
+    return this._parent ? this._parent.root : this;
   }
 
-  get content(): string {
-    return this.element?.textContent ?? '';
-  }
-
-  get id(): string {
+  get id(): string | null {
     return this.element?.id ?? '';
   }
 
-  public setParent(parent: BaseComponent | null) {
-    this.#parent = parent;
+  get content(): string | null {
+    if (this.children.length > 0) return null;
+    return this.element?.textContent ?? '';
+  }
+
+  // ===== Private Helpers =====
+
+  private getManager<K extends keyof DomFacade>(key: K): DomFacade[K] {
+    return this._dom[key];
+  }
+
+  // ===== Public Getters for Managers =====
+
+  get hierarchy() {
+    return this.getManager('hierarchy');
+  }
+  get children(): BaseComponent[] {
+    return this.getManager('children').list;
+  }
+  get classes() {
+    return this.getManager('classes');
+  }
+  get styles() {
+    return this.getManager('styles');
+  }
+  get visibility() {
+    return this.getManager('visibility');
+  }
+  get contentManager() {
+    return this.getManager('content');
+  }
+  get attributes() {
+    return this.getManager('attributes');
+  }
+  get events() {
+    return this.getManager('events');
+  }
+
+  // ===== Parent / Hierarchy =====
+
+  protected setParent(parent: BaseComponent | null) {
+    this._parent = parent;
     return this;
   }
 
-  public setClasses(classes: string[] | string) {
-    this.dom.classes.add(classes);
-    return this;
+  public findParent<T extends BaseComponent>(
+    Class: new (...arguments_: unknown[]) => T,
+  ): T | null {
+    return this.hierarchy.findParent(Class);
   }
 
-  public removeClasses(classes: string[] | string) {
-    this.dom.classes.remove(classes);
-    return this;
+  public findChild<T extends BaseComponent>(
+    Class: new (...arguments_: unknown[]) => T,
+  ): T | null {
+    return this.hierarchy.findChild(Class);
   }
 
-  public replaceClasses(
-    oldClasses: string[] | string,
-    newClasses: string[] | string,
-  ) {
-    this.dom.classes.replace(oldClasses, newClasses);
-    return this;
+  public findParentByClass(className: string): BaseComponent | null {
+    return this.hierarchy.findParentByClass(className);
   }
 
-  public toggleClasses(classes: string[] | string, force?: boolean) {
-    this.dom.classes.toggle(classes, force);
-    return this;
+  public findParentById(id: string): BaseComponent | null {
+    return this.hierarchy.findParentById(id);
   }
 
-  public hasClasses(classes: string[] | string) {
-    return this.dom.classes.has(classes);
+  public findChildByClass(className: string): BaseComponent | null {
+    return this.hierarchy.findChildByClass(className);
   }
 
-  public setAttributes(attributes: AttributesMap) {
-    this.dom.attributes.set(attributes);
-    return this;
-  }
-
-  public removeAttributes(...keys: string[]) {
-    this.dom.attributes.remove(...keys);
-    return this;
-  }
-
-  public toggleAttributes(keyOrKeys: string | string[], force?: boolean) {
-    this.dom.attributes.toggle(keyOrKeys, force);
-    return this;
-  }
-
-  public hasAttribute(key: string) {
-    return this.dom.attributes.has(key);
-  }
-
-  public setChildren(children: BaseComponent | BaseComponent[]) {
-    this.dom.children.set(children);
-    return this;
-  }
-
-  public appendChildren(children: BaseComponent | BaseComponent[]) {
-    this.dom.children.append(children);
-    return this;
-  }
-
-  public detachChildren(children?: BaseComponent | BaseComponent[]) {
-    this.dom.children.detach(children);
-    return this;
-  }
-
-  public destroyChildren(children?: BaseComponent | BaseComponent[]) {
-    this.dom.children.destroy(children);
-    return this;
+  public findChildById(id: string): BaseComponent | null {
+    return this.hierarchy.findChildById(id);
   }
 
   public detach(): this {
-    this.dom.children.detach();
-    this.dom.element?.remove();
-    this.#parent = null;
-
+    this.parent?._dom.children.detach(this);
     return this;
   }
 
   public destroy(): this {
-    this.dom.events.destroy();
-    this.dom.children.destroy();
-    this.dom.element?.remove();
-    this.#parent = null;
-
+    this.events.destroy();
+    this.getManager('children').destroy();
+    this.element?.remove();
+    this._parent = null;
     return this;
   }
+
+  // ===== Class Management =====
+
+  public setClasses(classes: string[] | string) {
+    this.classes.add(classes);
+    return this;
+  }
+  public removeClasses(classes: string[] | string) {
+    this.classes.remove(classes);
+    return this;
+  }
+  public replaceClasses(
+    oldClasses: string[] | string,
+    newClasses: string[] | string,
+  ) {
+    this.classes.replace(oldClasses, newClasses);
+    return this;
+  }
+  public toggleClasses(classes: string[] | string, force?: boolean) {
+    this.classes.toggle(classes, force);
+    return this;
+  }
+  public hasClasses(classes: string[] | string) {
+    return this.classes.has(classes);
+  }
+
+  // ===== Attribute Management =====
+
+  public setAttributes(attributes: AttributesMap) {
+    this.attributes.set(attributes);
+    return this;
+  }
+  public removeAttributes(...keys: string[]) {
+    this.attributes.remove(...keys);
+    return this;
+  }
+  public toggleAttributes(keyOrKeys: string | string[], force?: boolean) {
+    this.attributes.toggle(keyOrKeys, force);
+    return this;
+  }
+  public hasAttribute(key: string) {
+    return this.attributes.has(key);
+  }
+
+  // ===== Children Management =====
+
+  public setChildren(children: BaseComponent | BaseComponent[]) {
+    this.getManager('children').set(children);
+    return this;
+  }
+  public appendChildren(children: BaseComponent | BaseComponent[]) {
+    this.getManager('children').append(children);
+    return this;
+  }
+  public detachChildren(children?: BaseComponent | BaseComponent[]) {
+    this.getManager('children').detach(children);
+    return this;
+  }
+  public destroyChildren(children?: BaseComponent | BaseComponent[]) {
+    this.getManager('children').destroy(children);
+    return this;
+  }
+
+  // ===== Event Management =====
 
   public setListeners(listeners: ListenersMap) {
-    this.dom.events.add(listeners);
+    this.events.add(listeners);
     return this;
   }
-
   public removeListeners() {
-    this.dom.events.removeAll();
+    this.events.removeAll();
     return this;
   }
-
   public addSubscription(unsubscribe: () => void) {
-    this.dom.events.addSubscription(unsubscribe);
+    this.events.addSubscription(unsubscribe);
     return this;
   }
 
-  public setContent(content: string | number | Node) {
-    this.dom.content.set(content);
+  // ===== Content Management =====
+
+  public setContent(content: string | number) {
+    this.contentManager.set(content);
     return this;
   }
-
   public clearContent() {
-    this.dom.content.clear();
+    this.contentManager.clear();
     return this;
   }
+
+  // ===== ID / Title Management =====
 
   public setId(id: string) {
-    if (this.dom.element) this.dom.element.id = id;
+    if (this.element) this.element.id = id;
+    return this;
+  }
+  public setTitle(title: string) {
+    if (this.element instanceof HTMLElement) this.element.title = title;
     return this;
   }
 
-  public setTitle(title: string) {
-    if (this.dom.element && this.dom.element instanceof HTMLElement) {
-      this.dom.element.title = title;
-    }
-    return this;
-  }
+  // ===== Style Management =====
 
   public setStyle(styles: Partial<CSSStyleDeclaration>) {
-    this.dom.styles.set(styles);
+    this.styles.set(styles);
+    return this;
+  }
+  public removeStyle(...keys: string[]) {
+    this.styles.remove(...keys);
     return this;
   }
 
-  public removeStyle(...keys: string[]) {
-    this.dom.styles.remove(...keys);
-    return this;
-  }
+  // ===== Visibility =====
 
   public show(animated = true, duration = 500) {
-    this.dom.visibility.show(animated, duration);
+    this.visibility.show(animated, duration);
     return this;
   }
-
   public hide(animated = true, duration = 500) {
-    this.dom.visibility.hide(animated, duration);
+    this.visibility.hide(animated, duration);
     return this;
-  }
-
-  public findParent<T extends BaseComponent, A extends unknown[] = []>(
-    Class: new (...arguments_: A) => T,
-  ): T | null {
-    let current = this.parent;
-    while (current) {
-      if (current instanceof Class) return current as T;
-      current = current.parent;
-    }
-    return null;
-  }
-
-  public findChild<T extends BaseComponent, A extends unknown[] = []>(
-    Class: new (...arguments_: A) => T,
-  ): T | null {
-    return this.dom.children.list.reduce<T | null>((acc, child) => {
-      if (acc) return acc;
-      if (child instanceof Class) return child as T;
-      return child.findChild(Class);
-    }, null);
   }
 }

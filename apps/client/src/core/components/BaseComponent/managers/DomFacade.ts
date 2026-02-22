@@ -1,67 +1,99 @@
 import type BaseComponent from '../BaseComponent';
 import type { Namespace } from '../BaseComponent.types';
 
-import ElementManager from './core/ElementManager';
-import ClassManager from './appearance/ClassManager';
-import StyleManager from './appearance/StyleManager';
-import AttributeManager from './behavior/AttributeManager';
-import EventManager from './behavior/EventManager';
-import ChildrenManager from './core/ChildrenManager';
-import VisibilityManager from './appearance/VisibilityManager';
-import ContentManager from './appearance/ContentManager';
+import {
+  ElementManager,
+  HierarchyManager,
+  ChildrenManager,
+  ClassManager,
+  StyleManager,
+  VisibilityManager,
+  ContentManager,
+  AttributeManager,
+  EventManager,
+} from '../managers';
 
 export default class DomFacade {
-  private elementManager: ElementManager;
-  private classManager: ClassManager;
-  private styleManager: StyleManager;
-  private attributeManager: AttributeManager;
-  private eventManager: EventManager;
-  private childrenManager: ChildrenManager;
-  private visibilityManager: VisibilityManager;
-  private contentManager: ContentManager;
+  private readonly core: {
+    element: ElementManager;
+    hierarchy: HierarchyManager;
+    children: ChildrenManager;
+  };
+
+  private readonly appearance: {
+    classes: ClassManager;
+    styles: StyleManager;
+    visibility: VisibilityManager;
+    content: ContentManager;
+  };
+
+  private readonly behavior: {
+    attributes: AttributeManager;
+    events: EventManager;
+  };
 
   constructor(owner: BaseComponent, tag = 'div', namespace?: Namespace) {
-    this.elementManager = new ElementManager(tag, namespace);
-    const element = this.elementManager.domElement;
+    const elementManager = new ElementManager(tag, namespace);
+    const element = elementManager.domElement;
 
-    this.contentManager = new ContentManager(element);
-    this.classManager = new ClassManager(element);
-    this.styleManager = new StyleManager(element);
-    this.attributeManager = new AttributeManager(element);
-    this.eventManager = new EventManager(element);
-    this.childrenManager = new ChildrenManager(owner, element);
-    this.visibilityManager = new VisibilityManager(element);
+    this.core = {
+      element: elementManager,
+      hierarchy: new HierarchyManager(owner),
+      children: new ChildrenManager(owner, element),
+    };
+
+    this.appearance = {
+      classes: new ClassManager(element),
+      styles: new StyleManager(element),
+      visibility: new VisibilityManager(element),
+      content: new ContentManager(element),
+    };
+
+    this.behavior = {
+      attributes: new AttributeManager(element),
+      events: new EventManager(element),
+    };
   }
+
+  // ===== Core =====
 
   get element() {
-    return this.elementManager.domElement;
+    return this.core.element.domElement;
   }
 
-  get classes() {
-    return this.classManager;
-  }
-
-  get styles() {
-    return this.styleManager;
-  }
-
-  get attributes() {
-    return this.attributeManager;
-  }
-
-  get events() {
-    return this.eventManager;
+  get hierarchy() {
+    return this.core.hierarchy;
   }
 
   get children() {
-    return this.childrenManager;
+    return this.core.children;
+  }
+
+  // ===== Appearance =====
+
+  get classes() {
+    return this.appearance.classes;
+  }
+
+  get styles() {
+    return this.appearance.styles;
   }
 
   get visibility() {
-    return this.visibilityManager;
+    return this.appearance.visibility;
   }
 
   get content() {
-    return this.contentManager;
+    return this.appearance.content;
+  }
+
+  // ===== Behavior =====
+
+  get attributes() {
+    return this.behavior.attributes;
+  }
+
+  get events() {
+    return this.behavior.events;
   }
 }

@@ -38,9 +38,7 @@ export default class AttributeManager {
       const has = this.element?.hasAttribute(key);
 
       if (force === undefined) {
-        has
-          ? this.element?.removeAttribute(key)
-          : this.element?.setAttribute(key, '');
+        has ? this.element?.removeAttribute(key) : this.element?.setAttribute(key, '');
       } else if (force) {
         this.element?.setAttribute(key, '');
       } else {

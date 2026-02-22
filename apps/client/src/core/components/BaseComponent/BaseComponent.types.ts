@@ -13,7 +13,7 @@ export type BaseComponentProps = {
   children?: BaseComponent[];
   listeners?: ListenersMap;
   attributes?: AttributesMap;
-  content?: string | number | Node;
+  content?: string | number;
   id?: string;
   title?: string;
 };

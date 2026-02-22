@@ -7,16 +7,11 @@ export default class ContentManager {
     this.element = element;
   }
 
-  public set(content: string | number | Node): this {
+  public set(content: string | number): this {
     if (!this.element) return this;
 
     this.clear();
-
-    if (content instanceof Node) {
-      this.element.appendChild(content);
-    } else {
-      this.element.textContent = String(content);
-    }
+    this.element.textContent = String(content);
 
     return this;
   }

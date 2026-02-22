@@ -2,7 +2,7 @@ import BaseComponent from './BaseComponent/BaseComponent';
 import type { InputComponentProps } from '../../types/components/InputComponent.types';
 
 export class InputComponent extends BaseComponent {
-  constructor({ type = 'text', name, placeholder, value, ...rest }: InputComponentProps) {
+  constructor({ type = 'text', name, placeholder, value, ...rest }: InputComponentProps = {}) {
     super({
       tag: 'input',
       ...rest,
@@ -23,7 +23,7 @@ export class InputComponent extends BaseComponent {
   }
 
   get value(): string {
-    return this.input.value || '';
+    return this.input.value;
   }
 
   get length(): number {
@@ -40,7 +40,7 @@ export class InputComponent extends BaseComponent {
     return this;
   }
 
-  public setType(type: string) {
+  public setType(type: HTMLInputElement['type']) {
     this.input.type = type;
     return this;
   }

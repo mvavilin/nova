@@ -3,4 +3,4 @@ import type { BaseComponentProps } from '../../core/components/BaseComponent/Bas
 export type FormComponentProps = {
   action?: string;
   method?: 'get' | 'post';
-} & BaseComponentProps;
+} & Omit<BaseComponentProps, 'tag'>;

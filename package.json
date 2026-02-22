@@ -40,7 +40,7 @@
     "packages/*"
   ],
   "validate-branch-name": {
-    "pattern": "^\\d+-(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)-[a-z0-9-]+$",
-    "errorMsg": "Branch name must follow pattern: <issue-number>-<type>-<description>. Example: 117-feat-add-login-form"
+    "pattern": "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)/\\d+-[a-z0-9-]+$",
+    "errorMsg": "Branch name must follow pattern: <type>/<issue-number>-<description>. Example: feat/117-add-login-form"
   }
 }

@@ -54,7 +54,7 @@ Prototype: [Classic game Codenames](<https://en.wikipedia.org/wiki/Codenames_(bo
 2. Players are randomly split into two teams, red and blue.
 3. One player from each team is the Spymaster, the other plays as the field agent. The roles are randomly assigned.
 4. During setup, 25 cards are randomly laid out in a 5x5 grid. Each card has a word (JS/TS concepts), and cards are face-up, so all players can see all words. But what is hidden is what each card represents: 9 cards represent red agents (red squares), other 9 cards represent blue agents (blue squares), one represents the assassin (black square), the rest 6 cards are innocent bystanders (beige squares).
-5. Spymasters see a “map” - which words belong to which team. Field agents see only 25 cards with words and try to guess their own.
+5. Spymasters see a “map” - the board's red/blue/black/beige colors cards. Field agents see only 25 cards with words and try to guess their own.
 
 ### Game process
 

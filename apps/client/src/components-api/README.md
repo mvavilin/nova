@@ -1,6 +1,6 @@
 # Components API
 
-Это документация по компонентам на базе `BaseComponent`. Этот базовый компонент является основой для всех остальных компонентов: кнопки, формы, поля ввода и контейнера.
+Это документация по компонентам на базе `BaseComponent`. Этот базовый компонент является основой для всех остальных компонентов: кнопки, формы, поля ввода, контейнера, заголовков и текстовых блоков.
 
 ---
 
@@ -116,13 +116,52 @@ console.log(container.getChildren());
 
 ---
 
+## HeadingComponent
+
+Компонент заголовка (h1–h6), наследует BaseComponent.
+
+### Методы:
+
+- `setLevel(level: 1 | 2 | 3 | 4 | 5 | 6): this` — меняет уровень заголовка.
+
+**Пример:**
+
+```ts
+const header = new HeadingComponent({ level: 2, content: 'Section Title' });
+header.setLevel(3);
+```
+
+---
+
+## TextComponent
+
+Компонент текста, наследует BaseComponent.
+
+### Методы:
+
+- `appendText(text: string | number): this` — добавляет текст в конец.
+- `prependText(text: string | number): this` — добавляет текст в начало.
+- `uppercase(): this` — делает текст заглавными буквами.
+- `lowercase(): this` — делает текст строчными буквами.
+- `capitalize(): this` — делает заглавными первые буквы слов.
+
+**Пример:**
+
+```ts
+const paragraph = new TextComponent({ content: 'hello world' });
+paragraph.capitalize().appendText('!');
+console.log(paragraph.content); // 'Hello World!'
+```
+
+---
+
 ## Общий пример создания формы
 
 ```ts
 // Создание контейнера формы
 const formContainer = new FormComponent({ method: 'post', action: '/submit' });
 
-// Поле ввода
+// Поля ввода
 const usernameInput = new InputComponent({
   name: 'username',
   placeholder: 'Username',
@@ -138,10 +177,14 @@ const passwordInput = new InputComponent({
 // Кнопка
 const submitButton = new ButtonComponent({ content: 'Login', type: 'submit' });
 
-// Добавляем поля и кнопку в форму
-formContainer.appendChildren([usernameInput, passwordInput, submitButton]);
+// Заголовок и текст
+const title = new HeadingComponent({ level: 1, content: 'Login Form' });
+const description = new TextComponent({ content: 'Please enter your credentials:' });
 
-// Добавляем обработчик отправки
+// Добавляем элементы в форму
+formContainer.appendChildren([title, description, usernameInput, passwordInput, submitButton]);
+
+// Обработчик отправки
 formContainer.setListeners({
   submit: (e) => {
     e.preventDefault();

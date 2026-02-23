@@ -6,7 +6,7 @@ export { default as ChildrenManager } from './core/children-manager';
 
 // ===== Appearance =====
 
-export { default as ClassManager } from './appearance/ClassManager';
+export { default as ClassManager } from './appearance/class-manager';
 export { default as StyleManager } from './appearance/style-manager';
 export { default as VisibilityManager } from './appearance/visibility-manager';
 export { default as ContentManager } from './appearance/content-manager';

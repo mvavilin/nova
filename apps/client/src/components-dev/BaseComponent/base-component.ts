@@ -1,5 +1,5 @@
 import type { BaseComponentProperties, ListenersMap, AttributesMap } from './base-component.types';
-import DomFacade from './managers/DomFacade';
+import DomFacade from './managers/dom-facade';
 
 export default class BaseComponent {
   private _dom: DomFacade;

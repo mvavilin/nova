@@ -8,7 +8,7 @@ export { default as ChildrenManager } from './core/children-manager';
 
 export { default as ClassManager } from './appearance/ClassManager';
 export { default as StyleManager } from './appearance/StyleManager';
-export { default as VisibilityManager } from './appearance/VisibilityManager';
+export { default as VisibilityManager } from './appearance/visibility-manager';
 export { default as ContentManager } from './appearance/ContentManager';
 
 // ===== Behavior =====

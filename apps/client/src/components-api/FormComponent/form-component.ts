@@ -1,7 +1,7 @@
 import BaseComponent from '../BaseComponent/base-component';
 import type { FormComponentProperties } from './form-component.types';
 
-export class FormComponent extends BaseComponent {
+export default class FormComponent extends BaseComponent {
   constructor({ method = 'get', action, ...rest }: FormComponentProperties = {}) {
     super({
       tag: 'form',

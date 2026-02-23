@@ -116,7 +116,7 @@ export default class BaseComponent {
     this._dom.classes.toggle(classes, force);
     return this;
   }
-  public hasClasses(classes: string[] | string): this {
+  public hasClasses(classes: string[] | string): boolean {
     return this._dom.classes.has(classes);
   }
 
@@ -134,7 +134,7 @@ export default class BaseComponent {
     this._dom.attributes.toggle(keyOrKeys, force);
     return this;
   }
-  public hasAttribute(key: string): this {
+  public hasAttribute(key: string): boolean | undefined {
     return this._dom.attributes.has(key);
   }
 

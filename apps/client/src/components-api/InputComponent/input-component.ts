@@ -1,7 +1,7 @@
 import BaseComponent from '../BaseComponent/base-component';
 import type { InputComponentProperties } from './input-component.types';
 
-export class InputComponent extends BaseComponent {
+export default class InputComponent extends BaseComponent {
   constructor({ type = 'text', name, placeholder, value, ...rest }: InputComponentProperties = {}) {
     super({
       tag: 'input',

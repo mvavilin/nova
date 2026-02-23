@@ -1,7 +1,7 @@
 import BaseComponent from '../BaseComponent/base-component';
 import type { ContainerComponentProperties } from './container-component.types';
 
-export class ContainerComponent extends BaseComponent {
+export default class ContainerComponent extends BaseComponent {
   constructor({ ...rest }: ContainerComponentProperties = {}) {
     super({
       tag: 'div',

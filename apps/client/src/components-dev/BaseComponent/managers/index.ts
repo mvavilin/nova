@@ -9,7 +9,7 @@ export { default as ChildrenManager } from './core/children-manager';
 export { default as ClassManager } from './appearance/ClassManager';
 export { default as StyleManager } from './appearance/style-manager';
 export { default as VisibilityManager } from './appearance/visibility-manager';
-export { default as ContentManager } from './appearance/ContentManager';
+export { default as ContentManager } from './appearance/content-manager';
 
 // ===== Behavior =====
 

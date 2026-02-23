@@ -1,0 +1,13 @@
+name: 🧪 Test
+description: Add or update tests
+title: 'test: '
+labels: ['tests']
+
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Test description
+      placeholder: 'Describe the tests to add or update'
+    validations:
+      required: true

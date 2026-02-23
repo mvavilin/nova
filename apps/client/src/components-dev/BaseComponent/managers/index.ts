@@ -1,7 +1,7 @@
 // ===== Core =====
 
 export { default as ElementManager } from './core/element-manager';
-export { default as HierarchyManager } from './core/HierarchyManager';
+export { default as HierarchyManager } from './core/hierarchy-manager';
 export { default as ChildrenManager } from './core/ChildrenManager';
 
 // ===== Appearance =====

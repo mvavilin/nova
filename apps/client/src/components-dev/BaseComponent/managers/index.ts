@@ -13,5 +13,5 @@ export { default as ContentManager } from './appearance/ContentManager';
 
 // ===== Behavior =====
 
-export { default as AttributeManager } from './behavior/AttributeManager';
+export { default as AttributeManager } from './behavior/attribute-manager';
 export { default as EventManager } from './behavior/event-manager';

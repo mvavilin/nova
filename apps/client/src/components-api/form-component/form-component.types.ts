@@ -1,4 +1,4 @@
-import type { BaseComponentProperties } from '../BaseComponent/base-component.types';
+import type { BaseComponentProperties } from '../base-component/base-component.types';
 
 export type FormComponentProperties = {
   action?: string;

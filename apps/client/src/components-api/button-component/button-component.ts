@@ -1,4 +1,4 @@
-import BaseComponent from '../BaseComponent/base-component';
+import BaseComponent from '../base-component/base-component';
 import type { ButtonComponentProperties } from './button-component.types';
 
 export default class ButtonComponent extends BaseComponent {

@@ -1,18 +1,21 @@
-import type { User } from '../models/user.js';
 import { Router, type NextFunction, type Request, type Response } from 'express';
 import { v4 as uuid } from 'uuid';
 import { parserUserDto } from '../models/parsers.js';
+import { prisma } from '../prisma/prisma.js';
 
-const users: User[] = [];
-
-const createUser = (req: Request, res: Response, next: NextFunction) => {
+const createUser = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userDto = parserUserDto(req.body);
     if (userDto) {
       const id = uuid();
-      const user: User = { id, login: userDto.login, password: userDto.password };
-      users.push(user);
-      res.status(201).json(user);
+      const user = await prisma.user.create({
+        data: {
+          id,
+          login: userDto.login,
+          password: userDto.password,
+        },
+      });
+      res.status(201).json({ id: user.id, login: user.login });
     } else {
       res.sendStatus(204);
     }
@@ -21,20 +24,26 @@ const createUser = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getAllUsers = (req: Request, res: Response, next: NextFunction) => {
+const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const userList = users.map((item) => ({ id: item.id, login: item.login }));
+    const users = await prisma.user.findMany();
+    const userList = users.map((item) => ({
+      id: item.id,
+      login: item.login,
+    }));
     res.json(userList);
   } catch (error) {
     next(error);
   }
 };
 
-const getUserById = (req: Request, res: Response, next: NextFunction) => {
+const getUserById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id;
     if (typeof id === 'string') {
-      const user = users.find((item) => item.id === id);
+      const user = await prisma.user.findUnique({
+        where: { id },
+      });
       if (user) {
         res.json({ id: user.id, login: user.login });
       } else {
@@ -48,13 +57,17 @@ const getUserById = (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const deleteUserById = (req: Request, res: Response, next: NextFunction) => {
+const deleteUserById = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id;
     if (typeof id === 'string') {
-      const userIndex = users.findIndex((item) => item.id === id);
-      if (userIndex !== -1) {
-        users.splice(userIndex, 1);
+      const user = await prisma.user.findUnique({
+        where: { id },
+      });
+      if (user) {
+        await prisma.user.delete({
+          where: { id },
+        });
         res.sendStatus(204);
       } else {
         res.sendStatus(404);

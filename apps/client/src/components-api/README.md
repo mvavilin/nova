@@ -1,6 +1,6 @@
 # Components API
 
-Это документация по компонентам на базе `BaseComponent`. Этот базовый компонент является основой для всех остальных компонентов: кнопки, формы, поля ввода, контейнера, заголовков, текстовых блоков, изображений и ссылок.
+Это документация по компонентам на базе `BaseComponent`. Этот базовый компонент является основой для всех остальных компонентов: кнопки, формы, поля ввода, контейнера, заголовков, текстовых блоков, изображений, ссылок и списков.
 
 ---
 
@@ -193,6 +193,27 @@ link.setRel('noopener noreferrer');
 
 ---
 
+## ListComponent
+
+Компонент списка (ul/ol), наследует BaseComponent.
+
+### Методы:
+
+- `setItems(items: (string | number)[]): this` — устанавливает массив элементов списка.
+- `addItem(item: string | number): this` — добавляет один элемент списка.
+- `removeItem(index: number): this` — удаляет элемент по индексу.
+- `clearItems(): this` — очищает все элементы списка.
+
+**Пример:**
+
+```ts
+const list = new ListComponent({ type: 'ul', items: ['Item 1', 'Item 2'] });
+list.addItem('Item 3');
+list.removeItem(0);
+```
+
+---
+
 ## Общий пример создания формы
 
 ```ts
@@ -229,6 +250,9 @@ const forgotLink = new LinkComponent({
   target: '_blank',
 });
 
+// Список
+const features = new ListComponent({ type: 'ul', items: ['Feature 1', 'Feature 2'] });
+
 // Добавляем элементы в форму
 formContainer.appendChildren([
   logo,
@@ -238,6 +262,7 @@ formContainer.appendChildren([
   passwordInput,
   submitButton,
   forgotLink,
+  features,
 ]);
 
 // Обработчик отправки

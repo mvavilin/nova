@@ -11,7 +11,7 @@ export default class ContainerComponent extends BaseComponent {
 
   private get container(): HTMLDivElement {
     if (!(this.element instanceof HTMLDivElement)) {
-      throw new TypeError('Element is not a div');
+      throw new TypeError('Element is not a container');
     }
     return this.element;
   }

@@ -1,6 +1,6 @@
 # Components API
 
-Это документация по компонентам на базе `BaseComponent`. Этот базовый компонент является основой для всех остальных компонентов: кнопки, формы, поля ввода, контейнера, заголовков и текстовых блоков.
+Это документация по компонентам на базе `BaseComponent`. Этот базовый компонент является основой для всех остальных компонентов: кнопки, формы, поля ввода, контейнера, заголовков, текстовых блоков и изображений.
 
 ---
 
@@ -100,7 +100,7 @@ console.log(usernameInput.isValid());
 
 ## ContainerComponent
 
-Компонент контейнера, наследует BaseComponent.
+Компонент контейнера, наследует BaseComponent. Может использовать разные теги (`div`, `section`, `article`, `main`, и др.).
 
 ### Методы:
 
@@ -109,7 +109,7 @@ console.log(usernameInput.isValid());
 **Пример:**
 
 ```ts
-const container = new ContainerComponent();
+const container = new ContainerComponent({ tag: 'section' });
 container.appendChildren([submitButton, usernameInput]);
 console.log(container.getChildren());
 ```
@@ -135,7 +135,7 @@ header.setLevel(3);
 
 ## TextComponent
 
-Компонент текста, наследует BaseComponent.
+Компонент текста с возможностью выбора тега (`p`, `span`, `div`, `h1`–`h6` и др.), наследует BaseComponent.
 
 ### Методы:
 
@@ -148,9 +148,28 @@ header.setLevel(3);
 **Пример:**
 
 ```ts
-const paragraph = new TextComponent({ content: 'hello world' });
+const paragraph = new TextComponent({ tag: 'p', content: 'hello world' });
 paragraph.capitalize().appendText('!');
 console.log(paragraph.content); // 'Hello World!'
+```
+
+---
+
+## ImageComponent
+
+Компонент изображения, наследует BaseComponent.
+
+### Методы:
+
+- `setSrc(source: string): this` — задает путь к изображению.
+- `setAlt(alt: string): this` — задает alt текст.
+- `setDimensions(width?: number | string, height?: number | string): this` — задает ширину и высоту.
+
+**Пример:**
+
+```ts
+const img = new ImageComponent({ source: '/logo.png', alt: 'Logo', width: 100, height: 50 });
+img.setSrc('/new-logo.png');
 ```
 
 ---
@@ -181,8 +200,18 @@ const submitButton = new ButtonComponent({ content: 'Login', type: 'submit' });
 const title = new HeadingComponent({ level: 1, content: 'Login Form' });
 const description = new TextComponent({ content: 'Please enter your credentials:' });
 
+// Логотип
+const logo = new ImageComponent({ source: '/logo.png', alt: 'Logo', width: 100, height: 50 });
+
 // Добавляем элементы в форму
-formContainer.appendChildren([title, description, usernameInput, passwordInput, submitButton]);
+formContainer.appendChildren([
+  logo,
+  title,
+  description,
+  usernameInput,
+  passwordInput,
+  submitButton,
+]);
 
 // Обработчик отправки
 formContainer.setListeners({

@@ -3,10 +3,28 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"No tests configured\""
+    "test": "echo \"No tests configured\"",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsx watch ./src/index.js"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.3.0",
+    "dotenv": "^16.0.3",
+    "express": "^5.2.1",
+    "install": "^0.13.0",
+    "npm": "^11.10.1",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "uuid": "^13.0.0"
+  }
 }

@@ -1,6 +1,6 @@
 # Components API
 
-Это документация по компонентам на базе `BaseComponent`. Этот базовый компонент является основой для всех остальных компонентов: кнопки, формы, поля ввода, контейнера, заголовков, текстовых блоков и изображений.
+Это документация по компонентам на базе `BaseComponent`. Этот базовый компонент является основой для всех остальных компонентов: кнопки, формы, поля ввода, контейнера, заголовков, текстовых блоков, изображений и ссылок.
 
 ---
 
@@ -174,6 +174,25 @@ img.setSrc('/new-logo.png');
 
 ---
 
+## LinkComponent
+
+Компонент ссылки, наследует BaseComponent.
+
+### Методы:
+
+- `setHref(href: string): this` — задает URL ссылки.
+- `setTarget(target: HTMLAnchorElement['target']): this` — задает, где открывать ссылку (`_self`, `_blank` и др.).
+- `setRel(related: string): this` — задает rel атрибут.
+
+**Пример:**
+
+```ts
+const link = new LinkComponent({ href: '/home', target: '_blank', content: 'Go Home' });
+link.setRel('noopener noreferrer');
+```
+
+---
+
 ## Общий пример создания формы
 
 ```ts
@@ -203,6 +222,13 @@ const description = new TextComponent({ content: 'Please enter your credentials:
 // Логотип
 const logo = new ImageComponent({ source: '/logo.png', alt: 'Logo', width: 100, height: 50 });
 
+// Ссылка
+const forgotLink = new LinkComponent({
+  href: '/forgot',
+  content: 'Forgot password?',
+  target: '_blank',
+});
+
 // Добавляем элементы в форму
 formContainer.appendChildren([
   logo,
@@ -211,6 +237,7 @@ formContainer.appendChildren([
   usernameInput,
   passwordInput,
   submitButton,
+  forgotLink,
 ]);
 
 // Обработчик отправки

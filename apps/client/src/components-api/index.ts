@@ -6,3 +6,4 @@ export { default as InputComponent } from './input-component/input-component';
 export { default as ButtonComponent } from './button-component/button-component';
 export { default as TextComponent } from './text-component/text-component';
 export { default as ImageComponent } from './image-component/image-component';
+export { default as LinkComponent } from './link-component/link-component';

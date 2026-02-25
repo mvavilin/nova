@@ -1,5 +1,5 @@
 import BaseComponent from '../../base/BaseComponent';
-import type { ImageComponentProperties } from './Image.types';
+import type { ImageComponentProperties } from './ImageComponent.types';
 
 export default class ImageComponent extends BaseComponent {
   constructor({ source = '', alt = '', width, height, ...rest }: ImageComponentProperties = {}) {

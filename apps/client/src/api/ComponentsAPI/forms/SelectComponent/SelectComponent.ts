@@ -1,5 +1,5 @@
 import BaseComponent from '../../base/BaseComponent';
-import type { SelectComponentProperties } from './Select.types';
+import type { SelectComponentProperties } from './SelectComponent.types';
 
 export default class SelectComponent extends BaseComponent {
   constructor({ value, options, multiple = false, ...rest }: SelectComponentProperties = {}) {

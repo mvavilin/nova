@@ -1,5 +1,5 @@
 import BaseComponent from '../../base/BaseComponent';
-import type { TextareaComponentProperties } from './Textarea.types';
+import type { TextareaComponentProperties } from './TextareaComponent.types';
 
 export default class TextareaComponent extends BaseComponent {
   constructor({ value, placeholder, rows, cols, ...rest }: TextareaComponentProperties = {}) {

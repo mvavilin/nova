@@ -1,4 +1,4 @@
-import InputComponent from '../Input/Input';
+import InputComponent from '../InputComponent/InputComponent';
 import type { BaseComponentProperties } from '../../base/BaseComponent.types';
 
 export type RadioComponentProperties = {

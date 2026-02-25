@@ -1,5 +1,5 @@
 import BaseComponent from '../../base/BaseComponent';
-import type { LinkComponentProperties } from './Link.types';
+import type { LinkComponentProperties } from './LinkComponent.types';
 
 export default class LinkComponent extends BaseComponent {
   constructor({ href = '#', target = '_self', rel, ...rest }: LinkComponentProperties = {}) {

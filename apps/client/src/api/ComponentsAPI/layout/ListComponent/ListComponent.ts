@@ -1,5 +1,5 @@
 import BaseComponent from '../../base/BaseComponent';
-import type { ListComponentProperties } from './List.types';
+import type { ListComponentProperties } from './ListComponent.types';
 
 export default class ListComponent extends BaseComponent {
   constructor({ type = 'ul', items, ...rest }: ListComponentProperties = {}) {

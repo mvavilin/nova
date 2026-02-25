@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import ButtonComponent from './Button';
+import ButtonComponent from './ButtonComponent';
 
 function getButtonElement(button: ButtonComponent): HTMLButtonElement {
   const element = button.element;

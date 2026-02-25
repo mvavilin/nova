@@ -1,5 +1,5 @@
-import TextComponent from '../Text/Text';
-import type { HeadingComponentProperties, HeadingLevel } from './Heading.types';
+import TextComponent from '../TextComponent/TextComponent';
+import type { HeadingComponentProperties, HeadingLevel } from './HeadingComponent.types';
 
 export default class HeadingComponent extends TextComponent {
   constructor({ level = 1, ...rest }: HeadingComponentProperties = {}) {

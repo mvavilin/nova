@@ -1,5 +1,5 @@
-import InputComponent from '../Input/Input';
-import type { CheckboxComponentProperties } from './Checkbox.types';
+import InputComponent from '../InputComponent/InputComponent';
+import type { CheckboxComponentProperties } from './CheckboxComponent.types';
 
 export default class CheckboxComponent extends InputComponent {
   constructor({ checked, ...rest }: CheckboxComponentProperties = {}) {

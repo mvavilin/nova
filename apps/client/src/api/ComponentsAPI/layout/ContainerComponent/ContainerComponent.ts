@@ -1,5 +1,5 @@
 import BaseComponent from '../../base/BaseComponent';
-import type { ContainerComponentProperties } from './Container.types';
+import type { ContainerComponentProperties } from './ContainerComponent.types';
 
 export default class ContainerComponent extends BaseComponent {
   constructor({ ...rest }: ContainerComponentProperties = {}) {

@@ -1,5 +1,5 @@
 import BaseComponent from '../../base/BaseComponent';
-import type { ButtonComponentProperties } from './Button.types';
+import type { ButtonComponentProperties } from './ButtonComponent.types';
 
 export default class ButtonComponent extends BaseComponent {
   constructor({ type = 'button', disabled, name, value, ...rest }: ButtonComponentProperties = {}) {

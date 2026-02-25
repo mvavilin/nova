@@ -1,5 +1,5 @@
 import BaseComponent from '../../base/BaseComponent';
-import type { InputComponentProperties } from './Input.types';
+import type { InputComponentProperties } from './InputComponent.types';
 
 export default class InputComponent extends BaseComponent {
   constructor({ type = 'text', name, placeholder, value, ...rest }: InputComponentProperties = {}) {

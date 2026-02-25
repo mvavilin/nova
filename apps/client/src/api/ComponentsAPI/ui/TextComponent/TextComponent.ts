@@ -1,5 +1,5 @@
 import BaseComponent from '../../base/BaseComponent';
-import type { TextComponentProperties } from './Text.types';
+import type { TextComponentProperties } from './TextComponent.types';
 
 export default class TextComponent extends BaseComponent {
   constructor({ tag = 'p', ...rest }: TextComponentProperties = {}) {

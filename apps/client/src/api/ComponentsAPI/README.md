@@ -300,7 +300,17 @@ checkbox.toggle();
 ## Общий пример создания формы
 
 ```ts
-import {} from 'ComponentsAPI';
+import {
+  FormComponent,
+  InputComponent,
+  ButtonComponent,
+  HeadingComponent,
+  TextComponent,
+  LinkComponent,
+  TextareaComponent,
+  SelectComponent,
+  CheckboxComponent,
+} from 'ComponentsAPI';
 
 const formContainer = new FormComponent({ method: 'post', action: '/submit' });
 

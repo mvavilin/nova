@@ -16,8 +16,6 @@ export default class SelectComponent extends BaseComponent {
     throw new TypeError('Element is not a select');
   }
 
-  // ===== Options Management =====
-
   public setOptions(options: { value: string; label: string; selected?: boolean }[]): this {
     this.clearOptions();
     for (const opt of options) this.addOption(opt.value, opt.label, !!opt.selected);
@@ -46,8 +44,6 @@ export default class SelectComponent extends BaseComponent {
     return this;
   }
 
-  // ===== Value Management =====
-
   public getValue(): string | string[] {
     if (this.select.multiple) {
       return [...this.select.selectedOptions].map((o) => o.value);
@@ -65,8 +61,6 @@ export default class SelectComponent extends BaseComponent {
     }
     return this;
   }
-
-  // ===== Multiple =====
 
   public isMultiple(): boolean {
     return this.select.multiple;

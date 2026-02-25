@@ -1,6 +1,6 @@
 # Components API
 
-Это документация по компонентам на базе `BaseComponent`. Этот базовый компонент является основой для всех остальных компонентов: кнопки, формы, поля ввода, контейнера, заголовков, текстовых блоков, изображений, ссылок и списков.
+Это документация по компонентам на базе `BaseComponent`. Этот базовый компонент является основой для всех остальных компонентов: кнопки, формы, поля ввода, контейнера, заголовков, текстовых блоков, изображений, ссылок, списков, текстовых областей, селектов, радио и чекбоксов.
 
 ---
 
@@ -35,10 +35,10 @@ const button = new BaseComponent({ tag: 'button', content: 'Click me', classes: 
 
 ### Методы:
 
-- `setType(type: HTMLButtonElement['type']): this` — задает тип кнопки (button, submit, reset).
-- `setDisabled(disabled: boolean): this` — делает кнопку неактивной.
-- `setName(name: string): this` — задает name.
-- `setValue(value: string): this` — задает value.
+- `setType(type: HTMLButtonElement['type']): this`
+- `setDisabled(disabled: boolean): this`
+- `setName(name: string): this`
+- `setValue(value: string): this`
 
 **Пример:**
 
@@ -55,11 +55,11 @@ submitButton.setDisabled(false);
 
 ### Методы:
 
-- `setAction(action: string): this` — задает action формы.
-- `setMethod(method: HTMLFormElement['method']): this` — задает метод (get, post).
-- `submit(): void` — отправка формы.
-- `reset(): void` — сброс формы.
-- `getFormData(): FormData` — получение данных формы.
+- `setAction(action: string): this`
+- `setMethod(method: HTMLFormElement['method']): this`
+- `submit(): void`
+- `reset(): void`
+- `getFormData(): FormData`
 
 **Пример:**
 
@@ -76,17 +76,17 @@ form.submit();
 
 ### Методы:
 
-- `setValue(value: string): this` — задает значение.
-- `setName(name: string): this` — задает name.
-- `setType(type: HTMLInputElement['type']): this` — задает тип input.
-- `setPlaceholder(placeholder: string): this` — задает placeholder.
-- `setDisabled(disabled: boolean): this` — отключение input.
-- `setRequired(required: boolean): this` — обязательное поле.
-- `isLengthBetween(min: number, max: number): boolean` — проверка длины.
-- `isValidByRegex(pattern: RegExp): boolean` — проверка по регулярке.
-- `isValid(): boolean` — проверка встроенной валидации.
-- `isEmpty(): boolean` — проверка на пустоту.
-- `clear(): this` — очистка значения.
+- `setValue(value: string): this`
+- `setName(name: string): this`
+- `setType(type: HTMLInputElement['type']): this`
+- `setPlaceholder(placeholder: string): this`
+- `setDisabled(disabled: boolean): this`
+- `setRequired(required: boolean): this`
+- `isLengthBetween(min: number, max: number): boolean`
+- `isValidByRegex(pattern: RegExp): boolean`
+- `isValid(): boolean`
+- `isEmpty(): boolean`
+- `clear(): this`
 
 **Пример:**
 
@@ -104,7 +104,7 @@ console.log(usernameInput.isValid());
 
 ### Методы:
 
-- `getChildren(): HTMLCollection` — получает DOM-детей контейнера.
+- `getChildren(): HTMLCollection`
 
 **Пример:**
 
@@ -122,7 +122,7 @@ console.log(container.getChildren());
 
 ### Методы:
 
-- `setLevel(level: 1 | 2 | 3 | 4 | 5 | 6): this` — меняет уровень заголовка.
+- `setLevel(level: 1 | 2 | 3 | 4 | 5 | 6): this`
 
 **Пример:**
 
@@ -139,11 +139,11 @@ header.setLevel(3);
 
 ### Методы:
 
-- `appendText(text: string | number): this` — добавляет текст в конец.
-- `prependText(text: string | number): this` — добавляет текст в начало.
-- `uppercase(): this` — делает текст заглавными буквами.
-- `lowercase(): this` — делает текст строчными буквами.
-- `capitalize(): this` — делает заглавными первые буквы слов.
+- `appendText(text: string | number): this`
+- `prependText(text: string | number): this`
+- `uppercase(): this`
+- `lowercase(): this`
+- `capitalize(): this`
 
 **Пример:**
 
@@ -161,9 +161,9 @@ console.log(paragraph.content); // 'Hello World!'
 
 ### Методы:
 
-- `setSrc(source: string): this` — задает путь к изображению.
-- `setAlt(alt: string): this` — задает alt текст.
-- `setDimensions(width?: number | string, height?: number | string): this` — задает ширину и высоту.
+- `setSrc(source: string): this`
+- `setAlt(alt: string): this`
+- `setDimensions(width?: number | string, height?: number | string): this`
 
 **Пример:**
 
@@ -180,9 +180,9 @@ img.setSrc('/new-logo.png');
 
 ### Методы:
 
-- `setHref(href: string): this` — задает URL ссылки.
-- `setTarget(target: HTMLAnchorElement['target']): this` — задает, где открывать ссылку (`_self`, `_blank` и др.).
-- `setRel(related: string): this` — задает rel атрибут.
+- `setHref(href: string): this`
+- `setTarget(target: HTMLAnchorElement['target']): this`
+- `setRel(related: string): this`
 
 **Пример:**
 
@@ -199,10 +199,10 @@ link.setRel('noopener noreferrer');
 
 ### Методы:
 
-- `setItems(items: (string | number)[]): this` — устанавливает массив элементов списка.
-- `addItem(item: string | number): this` — добавляет один элемент списка.
-- `removeItem(index: number): this` — удаляет элемент по индексу.
-- `clearItems(): this` — очищает все элементы списка.
+- `setItems(items: (string | number)[]): this`
+- `addItem(item: string | number): this`
+- `removeItem(index: number): this`
+- `clearItems(): this`
 
 **Пример:**
 
@@ -214,13 +214,94 @@ list.removeItem(0);
 
 ---
 
+## TextareaComponent
+
+Компонент текстовой области, наследует BaseComponent.
+
+### Методы:
+
+- `getValue(): string`
+- `setValue(value: string): this`
+- `setPlaceholder(placeholder: string): this`
+- `setRows(rows: number): this`
+- `setCols(cols: number): this`
+- `clear(): this`
+
+**Пример:**
+
+```ts
+const textarea = new TextareaComponent({ placeholder: 'Write here...', rows: 4, cols: 50 });
+textarea.setValue('Hello');
+```
+
+---
+
+## SelectComponent
+
+Компонент select, наследует BaseComponent.
+
+### Методы:
+
+- `setOptions(options: { value: string; label: string; selected?: boolean }[]): this`
+- `addOption(value: string, label: string, selected?: boolean): this`
+- `removeOption(value: string): this`
+- `clearOptions(): this`
+- `getValue(): string | string[]`
+- `setValue(value: string | string[]): this`
+- `isMultiple(): boolean`
+- `setMultiple(multiple: boolean): this`
+
+**Пример:**
+
+```ts
+const select = new SelectComponent({ options: [{ value: '1', label: 'One' }] });
+select.addOption('2', 'Two');
+```
+
+---
+
+## RadioComponent
+
+Компонент радио, наследует InputComponent.
+
+### Методы:
+
+- `isChecked(): boolean`
+- `setChecked(state: boolean): this`
+
+**Пример:**
+
+```ts
+const radio = new RadioComponent({ checked: true });
+radio.setChecked(false);
+```
+
+---
+
+## CheckboxComponent
+
+Компонент чекбокса, наследует InputComponent.
+
+### Методы:
+
+- `isChecked(): boolean`
+- `setChecked(state: boolean): this`
+- `toggle(): this`
+
+**Пример:**
+
+```ts
+const checkbox = new CheckboxComponent({ checked: false });
+checkbox.toggle();
+```
+
+---
+
 ## Общий пример создания формы
 
 ```ts
-// Создание контейнера формы
 const formContainer = new FormComponent({ method: 'post', action: '/submit' });
 
-// Поля ввода
 const usernameInput = new InputComponent({
   name: 'username',
   placeholder: 'Username',
@@ -232,40 +313,39 @@ const passwordInput = new InputComponent({
   type: 'password',
   required: true,
 });
-
-// Кнопка
 const submitButton = new ButtonComponent({ content: 'Login', type: 'submit' });
-
-// Заголовок и текст
 const title = new HeadingComponent({ level: 1, content: 'Login Form' });
 const description = new TextComponent({ content: 'Please enter your credentials:' });
-
-// Логотип
 const logo = new ImageComponent({ source: '/logo.png', alt: 'Logo', width: 100, height: 50 });
-
-// Ссылка
 const forgotLink = new LinkComponent({
   href: '/forgot',
   content: 'Forgot password?',
   target: '_blank',
 });
-
-// Список
 const features = new ListComponent({ type: 'ul', items: ['Feature 1', 'Feature 2'] });
+const comments = new TextareaComponent({ placeholder: 'Comments...', rows: 3, cols: 40 });
+const countrySelect = new SelectComponent({
+  options: [
+    { value: 'us', label: 'USA' },
+    { value: 'ca', label: 'Canada' },
+  ],
+});
+const newsletter = new CheckboxComponent({ checked: true });
 
-// Добавляем элементы в форму
 formContainer.appendChildren([
   logo,
   title,
   description,
   usernameInput,
   passwordInput,
+  comments,
+  countrySelect,
+  newsletter,
   submitButton,
   forgotLink,
   features,
 ]);
 
-// Обработчик отправки
 formContainer.setListeners({
   submit: (e) => {
     e.preventDefault();

@@ -5,4 +5,6 @@ export type TextareaComponentProperties = {
   placeholder?: string;
   rows?: number;
   cols?: number;
+  required?: boolean;
+  autocomplete?: 'on' | 'off';
 } & Omit<BaseComponentProperties, 'tag'>;

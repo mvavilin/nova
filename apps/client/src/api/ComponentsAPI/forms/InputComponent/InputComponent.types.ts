@@ -5,4 +5,6 @@ export type InputComponentProperties = {
   name?: string;
   placeholder?: string;
   value?: string;
+  required?: boolean;
+  autocomplete?: 'on' | 'off';
 } & Omit<BaseComponentProperties, 'tag'>;

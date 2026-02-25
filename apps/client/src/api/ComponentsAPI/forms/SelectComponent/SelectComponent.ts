@@ -2,13 +2,20 @@ import BaseComponent from '../../base/BaseComponent';
 import type { SelectComponentProperties } from './SelectComponent.types';
 
 export default class SelectComponent extends BaseComponent {
-  constructor({ value, options, multiple = false, ...rest }: SelectComponentProperties = {}) {
+  constructor({
+    value,
+    options,
+    autocomplete,
+    multiple = false,
+    ...rest
+  }: SelectComponentProperties = {}) {
     super({ tag: 'select', ...rest });
 
     this.setMultiple(multiple);
 
     if (options) this.setOptions(options);
     if (value !== undefined) this.setValue(value);
+    if (autocomplete !== undefined) this.setAutocomplete(autocomplete);
   }
 
   private get select(): HTMLSelectElement {
@@ -68,6 +75,11 @@ export default class SelectComponent extends BaseComponent {
 
   public setMultiple(multiple: boolean): this {
     this.select.multiple = multiple;
+    return this;
+  }
+
+  public setAutocomplete(autocomplete: 'on' | 'off'): this {
+    this.select.autocomplete = autocomplete;
     return this;
   }
 }

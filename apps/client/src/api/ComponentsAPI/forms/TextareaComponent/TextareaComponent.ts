@@ -2,7 +2,14 @@ import BaseComponent from '../../base/BaseComponent';
 import type { TextareaComponentProperties } from './TextareaComponent.types';
 
 export default class TextareaComponent extends BaseComponent {
-  constructor({ value, placeholder, rows, cols, ...rest }: TextareaComponentProperties = {}) {
+  constructor({
+    value,
+    placeholder,
+    autocomplete,
+    rows,
+    cols,
+    ...rest
+  }: TextareaComponentProperties = {}) {
     super({
       tag: 'textarea',
       ...rest,
@@ -12,6 +19,7 @@ export default class TextareaComponent extends BaseComponent {
     if (placeholder !== undefined) this.setPlaceholder(placeholder);
     if (rows !== undefined) this.setRows(rows);
     if (cols !== undefined) this.setCols(cols);
+    if (autocomplete !== undefined) this.setAutocomplete(autocomplete);
   }
 
   private get textarea(): HTMLTextAreaElement {
@@ -47,6 +55,11 @@ export default class TextareaComponent extends BaseComponent {
 
   public clear(): this {
     this.textarea.value = '';
+    return this;
+  }
+
+  public setAutocomplete(autocomplete: 'on' | 'off'): this {
+    this.textarea.autocomplete = autocomplete;
     return this;
   }
 }

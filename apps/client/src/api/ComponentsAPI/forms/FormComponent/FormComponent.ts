@@ -2,7 +2,7 @@ import BaseComponent from '../../base/BaseComponent';
 import type { FormComponentProperties } from './FormComponent.types';
 
 export default class FormComponent extends BaseComponent {
-  constructor({ method = 'get', action, ...rest }: FormComponentProperties = {}) {
+  constructor({ method = 'get', action, autocomplete, ...rest }: FormComponentProperties = {}) {
     super({
       tag: 'form',
       ...rest,
@@ -10,6 +10,7 @@ export default class FormComponent extends BaseComponent {
 
     if (method) this.setMethod(method);
     if (action) this.setAction(action);
+    if (autocomplete !== undefined) this.setAutocomplete(autocomplete);
   }
 
   private get form(): HTMLFormElement {
@@ -39,5 +40,10 @@ export default class FormComponent extends BaseComponent {
 
   public getFormData(): FormData {
     return new FormData(this.form);
+  }
+
+  public setAutocomplete(autocomplete: 'on' | 'off'): this {
+    this.form.autocomplete = autocomplete;
+    return this;
   }
 }

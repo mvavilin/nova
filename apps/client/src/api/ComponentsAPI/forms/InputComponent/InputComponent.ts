@@ -2,7 +2,14 @@ import BaseComponent from '../../base/BaseComponent';
 import type { InputComponentProperties } from './InputComponent.types';
 
 export default class InputComponent extends BaseComponent {
-  constructor({ type = 'text', name, placeholder, value, ...rest }: InputComponentProperties = {}) {
+  constructor({
+    type = 'text',
+    name,
+    placeholder,
+    value,
+    autocomplete,
+    ...rest
+  }: InputComponentProperties = {}) {
     super({
       tag: 'input',
       ...rest,
@@ -13,6 +20,7 @@ export default class InputComponent extends BaseComponent {
     if (name !== undefined) this.setName(name);
     if (placeholder !== undefined) this.setPlaceholder(placeholder);
     if (value !== undefined) this.setValue(value);
+    if (autocomplete !== undefined) this.setAutocomplete(autocomplete);
   }
 
   protected get input(): HTMLInputElement {
@@ -57,6 +65,11 @@ export default class InputComponent extends BaseComponent {
 
   public setRequired(required: boolean): this {
     this.input.required = required;
+    return this;
+  }
+
+  public setAutocomplete(autocomplete: 'on' | 'off'): this {
+    this.input.autocomplete = autocomplete;
     return this;
   }
 

@@ -1,6 +1,10 @@
 # Components API
 
-Это документация по компонентам на базе `BaseComponent`. Этот базовый компонент является основой для всех остальных компонентов: кнопки, формы, поля ввода, контейнера, заголовков, текстовых блоков, изображений, ссылок, списков, текстовых областей, селектов, радио и чекбоксов.
+`BaseComponent` - это базовый компонент проекта, он является основой для всех остальных компонентов: кнопки, формы, поля ввода, контейнера, заголовков, текстовых блоков, изображений, ссылок, списков, текстовых областей, селектов, радио и чекбоксов.
+
+> - [x] _Чекбоксы перед методами и свойствами используются для отметки
+>       покрытия тестами. Метод или свойство с отмеченным чекбоксом
+>       считается протестированным и безопасным для использования._
 
 ---
 
@@ -8,24 +12,48 @@
 
 Базовый компонент с поддержкой DOM, иерархии, событий, классов, атрибутов, контента и стилей.
 
-### Методы и примеры
-
-- **Конструктор:** создает компонент с заданными свойствами.
+- [ ] **Конструктор:** создает компонент с заданными свойствами.
 
 ```ts
-const button = new BaseComponent({ tag: 'button', content: 'Click me', classes: 'btn-primary' });
+const app = new BaseComponent({ tag: 'div', content: 'Hello!', classes: 'app-class', id: 'app' });
 ```
 
-- **element, parent, children, root, id, content** — свойства доступа к элементу, родителю, детям и содержимому.
-- **setParent, findParent, findChild, detach, destroy** — управление иерархией.
-- **setClasses, removeClasses, toggleClasses, hasClasses** — управление CSS классами.
-- **setAttributes, removeAttributes, toggleAttributes, hasAttribute** — управление атрибутами.
-- **setChildren, appendChildren, detachChildren, destroyChildren** — работа с дочерними компонентами.
-- **setListeners, removeListeners, addSubscriptions** — события.
-- **setContent, clearContent** — управление содержимым.
-- **setId, setTitle** — id и title.
-- **setStyle, removeStyle** — стили.
-- **show, hide** — управление видимостью.
+### Свойства и методы:
+
+- [ ] **element** --- свойства доступа к элементу, родителю, детям и содержимому.
+- [ ] **parent** --- свойства доступа к элементу, родителю, детям и содержимому.
+- [ ] **children** --- свойства доступа к элементу, родителю, детям и содержимому.
+- [ ] **root** --- свойства доступа к элементу, родителю, детям и содержимому.
+- [ ] **id** --- свойства доступа к элементу, родителю, детям и содержимому.
+- [ ] **content** --- свойства доступа к элементу, родителю, детям и содержимому.
+- [ ] **setParent** --- управление иерархией компонентов.
+- [ ] **findParent** --- управление иерархией компонентов.
+- [ ] **findChild** --- управление иерархией компонентов.
+- [ ] **detach** --- управление иерархией компонентов.
+- [ ] **destroy** --- управление иерархией компонентов.
+- [ ] **setClasses** --- управление CSS-классами элемента.
+- [ ] **removeClasses** --- управление CSS-классами элемента.
+- [ ] **toggleClasses** --- управление CSS-классами элемента.
+- [ ] **hasClasses** --- управление CSS-классами элемента.
+- [ ] **setAttributes** --- работа с HTML-атрибутами.
+- [ ] **removeAttributes** --- работа с HTML-атрибутами.
+- [ ] **toggleAttributes** --- работа с HTML-атрибутами.
+- [ ] **hasAttribute** --- работа с HTML-атрибутами.
+- [ ] **setChildren** --- управление дочерними компонентами.
+- [ ] **appendChildren** --- управление дочерними компонентами.
+- [ ] **detachChildren** --- управление дочерними компонентами.
+- [ ] **destroyChildren** --- управление дочерними компонентами.
+- [ ] **setListeners** --- управление событиями и подписками.
+- [ ] **removeListeners** --- управление событиями и подписками.
+- [ ] **addSubscriptions** --- управление событиями и подписками.
+- [ ] **setContent** --- изменение и очистка содержимого.
+- [ ] **clearContent** --- изменение и очистка содержимого.
+- [ ] **setId** --- установка id и title.
+- [ ] **setTitle** --- установка id и title.
+- [ ] **setStyle** --- добавление и удаление inline-стилей.
+- [ ] **removeStyle** --- добавление и удаление inline-стилей.
+- [ ] **show** --- управление видимостью элемента.
+- [ ] **hide** --- управление видимостью элемента.
 
 ---
 
@@ -35,15 +63,15 @@ const button = new BaseComponent({ tag: 'button', content: 'Click me', classes: 
 
 ### Методы:
 
-- `setType(type: HTMLButtonElement['type']): this`
-- `setDisabled(disabled: boolean): this`
-- `setName(name: string): this`
-- `setValue(value: string): this`
+- [x] `setType(type: HTMLButtonElement['type']): this` --- задает тип кнопки (button, submit, reset).
+- [x] `setDisabled(disabled: boolean): this` --- включает или отключает кнопку.
+- [x] `setName(name: string): this` --- устанавливает атрибут name.
+- [x] `setValue(value: string): this` --- устанавливает значение value.
 
 **Пример:**
 
 ```ts
-const submitButton = new ButtonComponent({ content: 'Submit', type: 'submit' });
+const submitButton = new ButtonComponent({ content: 'Login', type: 'submit' });
 submitButton.setDisabled(false);
 ```
 
@@ -55,11 +83,11 @@ submitButton.setDisabled(false);
 
 ### Методы:
 
-- `setAction(action: string): this`
-- `setMethod(method: HTMLFormElement['method']): this`
-- `submit(): void`
-- `reset(): void`
-- `getFormData(): FormData`
+- [ ] `setAction(action: string): this` --- задает URL отправки формы.
+- [ ] `setMethod(method: HTMLFormElement['method']): this` --- устанавливает HTTP-метод (get, post).
+- [ ] `submit(): void` --- программно отправляет форму.
+- [ ] `reset(): void` --- сбрасывает все поля формы.
+- [ ] `getFormData(): FormData` --- возвращает данные формы в виде FormData.
 
 **Пример:**
 
@@ -76,17 +104,17 @@ form.submit();
 
 ### Методы:
 
-- `setValue(value: string): this`
-- `setName(name: string): this`
-- `setType(type: HTMLInputElement['type']): this`
-- `setPlaceholder(placeholder: string): this`
-- `setDisabled(disabled: boolean): this`
-- `setRequired(required: boolean): this`
-- `isLengthBetween(min: number, max: number): boolean`
-- `isValidByRegex(pattern: RegExp): boolean`
-- `isValid(): boolean`
-- `isEmpty(): boolean`
-- `clear(): this`
+- [ ] `setValue(value: string): this` --- устанавливает значение поля.
+- [ ] `setName(name: string): this` --- задает атрибут name.
+- [ ] `setType(type: HTMLInputElement['type']): this` --- задает тип input (text, password и др.).
+- [ ] `setPlaceholder(placeholder: string): this` --- устанавливает placeholder.
+- [ ] `setDisabled(disabled: boolean): this` --- делает поле неактивным.
+- [ ] `setRequired(required: boolean): this` --- делает поле обязательным.
+- [ ] `isLengthBetween(min: number, max: number): boolean` --- проверяет длину значения.
+- [ ] `isValidByRegex(pattern: RegExp): boolean` --- валидирует значение по регулярному выражению.
+- [ ] `isValid(): boolean` --- проверяет встроенную HTML-валидацию.
+- [ ] `isEmpty(): boolean` --- проверяет, пустое ли поле.
+- [ ] `clear(): this` --- очищает значение.
 
 **Пример:**
 
@@ -100,11 +128,12 @@ console.log(usernameInput.isValid());
 
 ## ContainerComponent
 
-Компонент контейнера, наследует BaseComponent. Может использовать разные теги (`div`, `section`, `article`, `main`, и др.).
+Компонент контейнера, наследует BaseComponent. Может использовать разные
+теги (`div`, `section`, `article`, `main`, и др.).
 
 ### Методы:
 
-- `getChildren(): HTMLCollection`
+- [ ] `getChildren(): HTMLCollection` --- возвращает DOM-детей контейнера.
 
 **Пример:**
 
@@ -118,11 +147,11 @@ console.log(container.getChildren());
 
 ## HeadingComponent
 
-Компонент заголовка (h1–h6), наследует BaseComponent.
+Компонент заголовка (h1--h6), наследует BaseComponent.
 
 ### Методы:
 
-- `setLevel(level: 1 | 2 | 3 | 4 | 5 | 6): this`
+- [ ] `setLevel(level: 1 | 2 | 3 | 4 | 5 | 6): this` --- изменяет уровень заголовка.
 
 **Пример:**
 
@@ -135,15 +164,15 @@ header.setLevel(3);
 
 ## TextComponent
 
-Компонент текста с возможностью выбора тега (`p`, `span`, `div`, `h1`–`h6` и др.), наследует BaseComponent.
+Компонент текста с возможностью выбора тега (`p`, `span`, `div`, `h1`--`h6` и др.), наследует BaseComponent.
 
 ### Методы:
 
-- `appendText(text: string | number): this`
-- `prependText(text: string | number): this`
-- `uppercase(): this`
-- `lowercase(): this`
-- `capitalize(): this`
+- [ ] `appendText(text: string | number): this` --- добавляет текст в конец содержимого.
+- [ ] `prependText(text: string | number): this` --- добавляет текст в начало.
+- [ ] `uppercase(): this` --- переводит текст в верхний регистр.
+- [ ] `lowercase(): this` --- переводит текст в нижний регистр.
+- [ ] `capitalize(): this` --- делает заглавными первые буквы слов.
 
 **Пример:**
 
@@ -161,9 +190,9 @@ console.log(paragraph.content); // 'Hello World!'
 
 ### Методы:
 
-- `setSrc(source: string): this`
-- `setAlt(alt: string): this`
-- `setDimensions(width?: number | string, height?: number | string): this`
+- [ ] `setSrc(source: string): this` --- устанавливает путь к изображению.
+- [ ] `setAlt(alt: string): this` --- задает альтернативный текст.
+- [ ] `setDimensions(width?: number | string, height?: number | string): this` --- задает ширину и высоту.
 
 **Пример:**
 
@@ -180,9 +209,9 @@ img.setSrc('/new-logo.png');
 
 ### Методы:
 
-- `setHref(href: string): this`
-- `setTarget(target: HTMLAnchorElement['target']): this`
-- `setRel(related: string): this`
+- [ ] `setHref(href: string): this` --- устанавливает адрес ссылки.
+- [ ] `setTarget(target: HTMLAnchorElement['target']): this` --- задает способ открытия ссылки.
+- [ ] `setRel(related: string): this` --- устанавливает атрибут rel.
 
 **Пример:**
 
@@ -199,10 +228,10 @@ link.setRel('noopener noreferrer');
 
 ### Методы:
 
-- `setItems(items: (string | number)[]): this`
-- `addItem(item: string | number): this`
-- `removeItem(index: number): this`
-- `clearItems(): this`
+- [ ] `setItems(items: (string | number)[]): this` --- полностью заменяет элементы списка.
+- [ ] `addItem(item: string | number): this` --- добавляет новый элемент.
+- [ ] `removeItem(index: number): this` --- удаляет элемент по индексу.
+- [ ] `clearItems(): this` --- очищает список.
 
 **Пример:**
 
@@ -220,12 +249,12 @@ list.removeItem(0);
 
 ### Методы:
 
-- `getValue(): string`
-- `setValue(value: string): this`
-- `setPlaceholder(placeholder: string): this`
-- `setRows(rows: number): this`
-- `setCols(cols: number): this`
-- `clear(): this`
+- [ ] `getValue(): string` --- возвращает текущее значение.
+- [ ] `setValue(value: string): this` --- устанавливает текст.
+- [ ] `setPlaceholder(placeholder: string): this` --- задает placeholder.
+- [ ] `setRows(rows: number): this` --- устанавливает количество строк.
+- [ ] `setCols(cols: number): this` --- устанавливает количество колонок.
+- [ ] `clear(): this` --- очищает содержимое.
 
 **Пример:**
 
@@ -242,14 +271,14 @@ textarea.setValue('Hello');
 
 ### Методы:
 
-- `setOptions(options: { value: string; label: string; selected?: boolean }[]): this`
-- `addOption(value: string, label: string, selected?: boolean): this`
-- `removeOption(value: string): this`
-- `clearOptions(): this`
-- `getValue(): string | string[]`
-- `setValue(value: string | string[]): this`
-- `isMultiple(): boolean`
-- `setMultiple(multiple: boolean): this`
+- [ ] `setOptions(options: { value: string; label: string; selected?: boolean }[]): this` --- полностью заменяет список опций.
+- [ ] `addOption(value: string, label: string, selected?: boolean): this` --- добавляет новую опцию.
+- [ ] `removeOption(value: string): this` --- удаляет опцию по значению.
+- [ ] `clearOptions(): this` --- очищает все опции.
+- [ ] `getValue(): string | string[]` --- возвращает выбранное значение (или массив при multiple).
+- [ ] `setValue(value: string | string[]): this` --- устанавливает выбранное значение.
+- [ ] `isMultiple(): boolean` --- проверяет, включен ли множественный выбор.
+- [ ] `setMultiple(multiple: boolean): this` --- включает или отключает режим multiple.
 
 **Пример:**
 
@@ -266,8 +295,8 @@ select.addOption('2', 'Two');
 
 ### Методы:
 
-- `isChecked(): boolean`
-- `setChecked(state: boolean): this`
+- [ ] `isChecked(): boolean` --- проверяет, выбрана ли радиокнопка.
+- [ ] `setChecked(state: boolean): this` --- устанавливает состояние выбора.
 
 **Пример:**
 
@@ -284,9 +313,9 @@ radio.setChecked(false);
 
 ### Методы:
 
-- `isChecked(): boolean`
-- `setChecked(state: boolean): this`
-- `toggle(): this`
+- [ ] `isChecked(): boolean` --- проверяет, отмечен ли чекбокс.
+- [ ] `setChecked(state: boolean): this` --- устанавливает состояние.
+- [ ] `toggle(): this` --- переключает состояние чекбокса.
 
 **Пример:**
 

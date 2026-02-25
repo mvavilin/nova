@@ -62,6 +62,28 @@ export default [
 
       // ограничивает функции максимум 40 строками (исключая пустые строки и комментарии)
       'max-lines-per-function': ['error', { max: 40, skipBlankLines: true, skipComments: true }],
+      'unicorn/filename-case': [
+        'error',
+        {
+          cases: {
+            camelCase: true,
+            pascalCase: true,
+          },
+        },
+      ],
+      'unicorn/prevent-abbreviations': [
+        'error',
+        {
+          allowList: {
+            acc: true,
+            env: true,
+            i: true,
+            j: true,
+            props: true,
+            Props: true,
+          },
+        },
+      ],
     },
     linterOptions: {
       noInlineConfig: true, // запрещает отключение правил через комментарии

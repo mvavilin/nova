@@ -17,9 +17,6 @@ export type ContainerTag =
   | 'summary'
   | 'dialog';
 
-export type ContainerComponentProperties<T extends ContainerTag = 'div'> = Omit<
-  BaseComponentProperties,
-  'tag'
-> & {
-  tag?: T;
-};
+export type ContainerComponentProperties = {
+  tag?: ContainerTag;
+} & Omit<BaseComponentProperties, 'tag'>;

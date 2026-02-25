@@ -15,7 +15,7 @@ export default class InputComponent extends BaseComponent {
     if (value !== undefined) this.setValue(value);
   }
 
-  private get input(): HTMLInputElement {
+  protected get input(): HTMLInputElement {
     if (!(this.element instanceof HTMLInputElement)) {
       throw new TypeError('Element is not an input');
     }

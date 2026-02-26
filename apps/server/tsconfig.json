@@ -2,6 +2,7 @@
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     "outDir": "./dist",
+    "rootDir": ".",
     "module": "nodenext",
     "target": "esnext",
     "types": [],
@@ -9,6 +10,9 @@
     "declaration": true,
     "declarationMap": true,
     "isolatedModules": true,
-    "moduleResolution": "nodenext"
+    "noPropertyAccessFromIndexSignature": false,
+    "moduleResolution": "nodenext",
+    "noEmit": false,
+    "rewriteRelativeImportExtensions": true
   }
 }

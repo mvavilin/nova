@@ -133,7 +133,7 @@ console.log(usernameInput.isValid());
 
 ### Методы:
 
-- [ ] `getChildren(): HTMLCollection` --- возвращает DOM-детей контейнера.
+- [x] `getChildren(): HTMLCollection` --- возвращает DOM-детей контейнера.
 
 **Пример:**
 

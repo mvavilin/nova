@@ -13,4 +13,4 @@ export const RegisterDtoSchema = z.object({
   password: z.string(),
 });
 
-export type RegisterDto = z.infer<typeof LoginDtoSchema>;
+export type RegisterDto = z.infer<typeof RegisterDtoSchema>;

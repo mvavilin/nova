@@ -1,9 +1,11 @@
 import { ContainerComponent } from '../../api/ComponentsAPI';
+import Test from '../Test/Test';
 import type { AppProperties } from './App.types';
 
 export default class App extends ContainerComponent {
   constructor({ ...rest }: AppProperties = {}) {
     super({
+      id: 'app',
       ...rest,
     });
 
@@ -18,6 +20,7 @@ export default class App extends ContainerComponent {
   }
 
   private render(): void {
-    console.log(this.app);
+    this.setChildren(new Test());
+    console.log('Render - App');
   }
 }

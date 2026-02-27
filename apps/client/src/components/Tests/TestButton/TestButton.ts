@@ -19,7 +19,7 @@ export default class TestButton extends ButtonComponent {
     this.setListeners({
       click: (): void => {
         appStore.dispatch({
-          type: 'CHANGE_HEADER_COLOR',
+          type: 'CLICK_ON_CHANGE_COLOR_BUTTON',
           payload: 'some info',
         });
       },

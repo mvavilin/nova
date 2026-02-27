@@ -1,6 +1,6 @@
 export interface Action {
   type: string;
-  payload?: unknown;
+  payload?: string;
 }
 
 export type Reducer<State> = (state: State, action: Action) => State;

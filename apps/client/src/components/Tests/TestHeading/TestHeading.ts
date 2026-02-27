@@ -22,7 +22,7 @@ export default class TestHeading extends HeadingComponent {
   }
 
   private changeColor(action: Action): void {
-    if (action.type !== 'CHANGE_HEADER_COLOR') return;
+    if (action.type !== 'CLICK_ON_CHANGE_COLOR_BUTTON') return;
 
     if (this.hasClasses('test-heading-purple')) {
       this.replaceClasses('test-heading-purple', 'test-heading-green');

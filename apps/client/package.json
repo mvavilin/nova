@@ -11,10 +11,12 @@
     "lint:fix": "eslint \"**/*.{ts,tsx,js}\" --fix",
     "format": "prettier --write \"**/*.{ts,tsx,md,js,json}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,js,json}\"",
-    "test": "vitest run"
+    "test": "vitest run",
+    "style": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch"
   },
   "devDependencies": {
     "@repo/eslint-config": "^0.0.0",
+    "@tailwindcss/cli": "^4.2.1",
     "@tailwindcss/vite": "^4.2.0",
     "jsdom": "^28.1.0",
     "tailwindcss": "^4.2.0",

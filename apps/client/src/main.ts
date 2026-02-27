@@ -1,4 +1,7 @@
 import 'input.css';
-import { createRegisterForm } from './pages/RegistrationPage';
+import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 
-document.body.prepend(createRegisterForm());
+const registrationPage = new RegistrationPage();
+if (registrationPage.element) {
+  document.body.prepend(registrationPage.element);
+}

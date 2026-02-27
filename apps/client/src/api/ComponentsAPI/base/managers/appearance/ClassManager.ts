@@ -8,7 +8,7 @@ export default class ClassManager {
   }
 
   private normalize(classes: string | string[]): string[] {
-    return Array.isArray(classes) ? classes : [classes];
+    return Array.isArray(classes) ? classes : classes.split(' ');
   }
 
   private get classList(): DOMTokenList | null {

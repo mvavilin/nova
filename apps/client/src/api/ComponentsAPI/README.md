@@ -52,8 +52,8 @@ const app = new BaseComponent({ tag: 'div', content: 'Hello!', classes: 'app-cla
 - [ ] **setTitle** --- установка id и title.
 - [ ] **setStyle** --- добавление и удаление inline-стилей.
 - [ ] **removeStyle** --- добавление и удаление inline-стилей.
-- [ ] **show** --- управление видимостью элемента.
-- [ ] **hide** --- управление видимостью элемента.
+- [x] **show** --- управление видимостью элемента.
+- [x] **hide** --- управление видимостью элемента.
 
 ---
 
@@ -322,6 +322,23 @@ radio.setChecked(false);
 ```ts
 const checkbox = new CheckboxComponent({ checked: false });
 checkbox.toggle();
+```
+
+---
+
+## LabelComponent
+
+Компонент label, наследует BaseComponent.
+
+### Методы:
+
+- [x] `setFor(): string` --- добавляет атрибут for.
+
+**Пример:**
+
+```ts
+const label = new LabelComponent({ htmlFor: 'name' });
+checkbox.setFor('surname');
 ```
 
 ---

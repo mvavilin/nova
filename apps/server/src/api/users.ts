@@ -2,11 +2,12 @@ import { Router, type NextFunction, type Request, type Response } from 'express'
 import { v4 as uuid } from 'uuid';
 import { prisma } from '../prisma/prisma.js';
 import { HttpStatus } from '../models/api.types.ts';
-import { LoginDtoSchema } from '../models/user.ts';
+import { UserDtoSchema } from '../models/user.ts';
+import * as argon from 'argon2';
 
 const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const userDto = LoginDtoSchema.safeParse(req.body);
+    const userDto = UserDtoSchema.safeParse(req.body);
 
     if (!userDto.success) {
       res.sendStatus(HttpStatus.BAD_REQUEST);
@@ -24,12 +25,13 @@ const createUser = async (req: Request, res: Response, next: NextFunction): Prom
     }
 
     const id = uuid();
+    const hash = await argon.hash(password);
     user = await prisma.user.create({
       data: {
         id,
         email,
         userName,
-        password,
+        password: hash,
       },
     });
     res

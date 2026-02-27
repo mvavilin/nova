@@ -3,7 +3,7 @@ import { v4 as uuid } from 'uuid';
 import { parserUserDto } from '../models/parsers.js';
 import { prisma } from '../prisma/prisma.js';
 
-const createUser = async (req: Request, res: Response, next: NextFunction) => {
+const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const userDto = parserUserDto(req.body);
     if (userDto) {
@@ -24,7 +24,7 @@ const createUser = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
+const getAllUsers = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const users = await prisma.user.findMany();
     const userList = users.map((item) => ({
@@ -37,7 +37,7 @@ const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const getUserById = async (req: Request, res: Response, next: NextFunction) => {
+const getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const id = req.params.id;
     if (typeof id === 'string') {
@@ -57,7 +57,7 @@ const getUserById = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const deleteUserById = async (req: Request, res: Response, next: NextFunction) => {
+const deleteUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const id = req.params.id;
     if (typeof id === 'string') {

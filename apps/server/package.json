@@ -7,7 +7,11 @@
   "scripts": {
     "test": "echo \"No tests configured\"",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "lint": "npx eslint src",
+    "lint:fix": "eslint \"**/*.{ts,tsx,js}\" --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,md,js,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,js,json}\"",
+    "start": "node ./dist/src/index.js",
     "dev": "tsx watch ./src/index.js",
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:generate": "npx prisma generate",
@@ -17,6 +21,8 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@repo/typescript-config": "^0.0.0",
+    "@repo/eslint-config": "^0.0.0",
     "@types/express": "^5.0.6",
     "@types/node": "^25.3.0",
     "@types/pg": "^8.16.0",

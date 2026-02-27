@@ -5,6 +5,7 @@ import { prisma } from '../prisma/prisma.ts';
 import * as argon from 'argon2';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
+import { getUserWithoutPassword } from '../utils/getUserWithoutPassword.ts';
 
 const login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
@@ -32,7 +33,8 @@ const login = async (req: Request, res: Response, next: NextFunction): Promise<v
 
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET_KEY || '');
     res.setHeader('auth_token', token);
-    res.status(HttpStatus.OK).send({ id: user.id, email: user.email, userName: user.userName });
+    const output = getUserWithoutPassword(user);
+    res.status(HttpStatus.OK).send(output);
   } catch (error) {
     next(error);
   }

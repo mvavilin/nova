@@ -1,4 +1,4 @@
-import { ContainerComponent } from '@/api/ComponentsAPI';
+import { ContainerComponent } from '../../api/ComponentsAPI';
 import type { AppProperties } from './App.types';
 
 export default class App extends ContainerComponent {

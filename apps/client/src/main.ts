@@ -1,4 +1,13 @@
-console.log('main');
+import App from './components/App/App';
+
+const app = new App();
+app.hide(false);
+
+if (app.element) document.body.append(app.element);
+
+window.addEventListener('load', () => {
+  app.show();
+});
 
 // ===== StateAPI Tests =====
 

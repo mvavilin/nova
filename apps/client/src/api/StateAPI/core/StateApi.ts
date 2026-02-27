@@ -20,7 +20,7 @@ export default class StateApi<State> {
     this.dispatcher.dispatch(action);
   }
 
-  public subscribe(listener: () => void): () => void {
+  public subscribe(listener: (action: Action) => void): () => void {
     return this.store.subscribe(listener);
   }
 

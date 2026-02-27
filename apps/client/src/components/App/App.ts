@@ -1,5 +1,5 @@
 import { ContainerComponent } from '../../api/ComponentsAPI';
-import Test from '../Test/Test';
+import TestContainer from '../Tests/TestContainer/TestContainer';
 import type { AppProperties } from './App.types';
 
 export default class App extends ContainerComponent {
@@ -12,15 +12,8 @@ export default class App extends ContainerComponent {
     this.render();
   }
 
-  private get app(): HTMLDivElement {
-    if (!(this.element instanceof HTMLDivElement)) {
-      throw new TypeError('Element is not a container');
-    }
-    return this.element;
-  }
-
   private render(): void {
-    this.setChildren(new Test());
+    this.setChildren(new TestContainer());
     console.log('Render - App');
   }
 }

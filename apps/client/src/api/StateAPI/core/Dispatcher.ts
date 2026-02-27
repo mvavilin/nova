@@ -18,6 +18,6 @@ export default class Dispatcher<State> {
     for (const reducer of this.reducers) {
       newState = reducer(newState, action);
     }
-    this.store.setState(newState);
+    this.store.setState(newState, action);
   }
 }

@@ -29,6 +29,9 @@ export * from './forms/FormComponent/FormComponent.types';
 export { default as InputComponent } from './forms/InputComponent/InputComponent';
 export * from './forms/InputComponent/InputComponent.types';
 
+export { default as LabelComponent } from './forms/LabelComponent/LabelComponent';
+export * from './forms/LabelComponent/LabelComponent.types';
+
 export { default as CheckboxComponent } from './forms/CheckboxComponent/CheckboxComponent';
 export * from './forms/CheckboxComponent/CheckboxComponent.types';
 

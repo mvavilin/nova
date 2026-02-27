@@ -1,30 +1,19 @@
-export interface LoginUserDto {
+export interface LoginDto {
   login: string;
   password: string;
 }
 
-export interface CreateUserDto {
-  login: string;
-  password: string;
+export interface RegisterDto {
   email: string;
-  avatarUrl?: string;
+  password: string;
 }
 
-export interface UpdateUserDto {
-  oldPassword: string;
-  newPassword: string;
-  oldEmail: string;
-  newEmail: string;
-  oldAvatarUrl?: string;
-  newAvatarUrl?: string;
-}
-
-export interface UserEntity {
+export interface User {
   id: string;
-  login: string;
+  username: string;
   password: string;
   email: string;
   avatarUrl?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  preferredLanguage?: 'ru' | 'en';
+  theme?: 'light' | 'dark';
 }

@@ -1,15 +1,19 @@
-import { StateAPI, counterReducer } from './api/StateAPI';
+console.log('main');
 
-const state = { count: 0 };
+// ===== StateAPI Tests =====
 
-const api = new StateAPI(state);
+// import { StateAPI, counterReducer } from './api/StateAPI';
 
-api.addReducer(counterReducer);
+// const state = { count: 0 };
 
-api.subscribe(() => {
-  console.log('State changed:', api.getState());
-});
+// const api = new StateAPI(state);
 
-api.dispatch({ type: 'INCREMENT' });
-api.dispatch({ type: 'INCREMENT' });
-api.dispatch({ type: 'DECREMENT' });
+// api.addReducer(counterReducer);
+
+// api.subscribe(() => {
+//   console.log('State changed:', api.getState());
+// });
+
+// api.dispatch({ type: 'INCREMENT' });
+// api.dispatch({ type: 'INCREMENT' });
+// api.dispatch({ type: 'DECREMENT' });

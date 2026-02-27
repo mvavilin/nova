@@ -1,19 +1,19 @@
 import { Router, type NextFunction, type Request, type Response } from 'express';
 import { v4 as uuid } from 'uuid';
-import { parserUserDto } from '../models/parsers.js';
 import { prisma } from '../prisma/prisma.js';
 import { HttpStatus } from '../models/api.types.ts';
+import { LoginDtoSchema } from '../models/user.ts';
 
 const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const userDto = parserUserDto(req.body);
+    const userDto = LoginDtoSchema.safeParse(req.body);
 
-    if (!userDto) {
+    if (!userDto.success) {
       res.sendStatus(HttpStatus.BAD_REQUEST);
       return;
     }
 
-    const { email, login, password } = userDto;
+    const { email, userName, password } = userDto.data;
 
     let user = await prisma.user.findFirst({
       where: { email },
@@ -28,11 +28,13 @@ const createUser = async (req: Request, res: Response, next: NextFunction): Prom
       data: {
         id,
         email,
-        login,
+        userName,
         password,
       },
     });
-    res.status(HttpStatus.CREATED).json({ id: user.id, email: user.email, login: user.login });
+    res
+      .status(HttpStatus.CREATED)
+      .json({ id: user.id, email: user.email, userName: user.userName });
   } catch (error) {
     next(error);
   }
@@ -44,7 +46,7 @@ const getAllUsers = async (_req: Request, res: Response, next: NextFunction): Pr
     const userList = users.map((item) => ({
       id: item.id,
       email: item.email,
-      login: item.login,
+      userName: item.userName,
     }));
     res.json(userList);
   } catch (error) {
@@ -66,7 +68,7 @@ const getUserById = async (req: Request, res: Response, next: NextFunction): Pro
     });
 
     if (user) {
-      res.json({ id: user.id, email: user.email, login: user.login });
+      res.json({ id: user.id, email: user.email, userName: user.userName });
     } else {
       res.sendStatus(HttpStatus.NOT_FOUND);
     }

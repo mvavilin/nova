@@ -8,11 +8,13 @@ const createUser = async (req: Request, res: Response, next: NextFunction): Prom
     const userDto = parserUserDto(req.body);
     if (userDto) {
       const id = uuid();
+      const { email, login, password } = userDto;
       const user = await prisma.user.create({
         data: {
           id,
-          login: userDto.login,
-          password: userDto.password,
+          email,
+          login,
+          password,
         },
       });
       res.status(201).json({ id: user.id, login: user.login });
@@ -29,6 +31,7 @@ const getAllUsers = async (_req: Request, res: Response, next: NextFunction): Pr
     const users = await prisma.user.findMany();
     const userList = users.map((item) => ({
       id: item.id,
+      email: item.email,
       login: item.login,
     }));
     res.json(userList);
@@ -45,7 +48,7 @@ const getUserById = async (req: Request, res: Response, next: NextFunction): Pro
         where: { id },
       });
       if (user) {
-        res.json({ id: user.id, login: user.login });
+        res.json({ id: user.id, email: user.email, login: user.login });
       } else {
         res.sendStatus(404);
       }

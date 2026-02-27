@@ -1,6 +1,6 @@
 import { Router, type NextFunction, type Request, type Response } from 'express';
 import { LoginDtoSchema } from '../models/auth.ts';
-import { HttpStatus } from '../models/api.types.ts';
+import { HttpStatus, ServerConstants } from '../models/api.types.ts';
 import { prisma } from '../prisma/prisma.ts';
 import * as argon from 'argon2';
 import jwt from 'jsonwebtoken';
@@ -31,7 +31,8 @@ const login = async (req: Request, res: Response, next: NextFunction): Promise<v
       return;
     }
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET_KEY || '');
+    const secretKey = process.env.JWT_SECRET_KEY || ServerConstants.DEFAULT_JWT_SECRET_KEY;
+    const token = jwt.sign({ userId: user.id }, secretKey, {});
     res.setHeader('auth_token', token);
     const output = getUserWithoutPassword(user);
     res.status(HttpStatus.OK).send(output);

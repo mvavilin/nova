@@ -15,3 +15,8 @@ export enum HttpStatus {
   CONFLICT = 409,
   INTERNAL_SERVER_ERROR = 500,
 }
+
+export enum ServerConstants {
+  DEFAULT_PORT = 3000,
+  DEFAULT_JWT_SECRET_KEY = 'secret123123',
+}

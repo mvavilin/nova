@@ -7,9 +7,11 @@ export function parserUserDto(value: unknown): UserDto | null {
       'login' in object &&
       typeof object.login === 'string' &&
       'password' in object &&
-      typeof object.password === 'string'
+      typeof object.password === 'string' &&
+      'email' in object &&
+      typeof object.email === 'string'
     ) {
-      return { login: object.login, password: object.password };
+      return { login: object.login, password: object.password, email: object.email };
     }
   }
 

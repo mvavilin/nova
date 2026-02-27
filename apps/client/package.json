@@ -11,7 +11,7 @@
     "lint:fix": "eslint \"**/*.{ts,tsx,js}\" --fix",
     "format": "prettier --write \"**/*.{ts,tsx,md,js,json}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,js,json}\"",
-    "test": "echo \"No tests configured\""
+    "test": "vitest run"
   },
   "devDependencies": {
     "@repo/eslint-config": "^0.0.0",

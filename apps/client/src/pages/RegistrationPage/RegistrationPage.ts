@@ -21,6 +21,9 @@ import {
 import { inputEmailInfo, inputNameInfo, inputPasswordInfo } from '../../constants/input.constants';
 import type { inputBlockType } from '@/types/registration.types';
 import { checkForm } from '@/utils/validateForm';
+import { saveStorageData } from '@/utils/localStorage';
+import { register } from '@/api/auth.api';
+import { localStorageProps } from '@/constants/localStorage.constants';
 
 export default class RegistrationPage extends BaseComponent {
   private inputArray: InputComponent[] = [];
@@ -103,8 +106,22 @@ export default class RegistrationPage extends BaseComponent {
 
     return container;
   }
-  private onSubmit(event: Event): void {
+
+  private async onSubmit(event: Event): Promise<void> {
     event.preventDefault();
-    console.log(222);
+    const [username, email, password] = this.inputArray.map((input) => input.value);
+    if (!username || !email || !password) return;
+
+    try {
+      const { user, token } = await register({ username, email, password });
+
+      if (user && token) {
+        console.log(user, token);
+        saveStorageData(localStorageProps.token, token);
+        saveStorageData(localStorageProps.user, user);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 }

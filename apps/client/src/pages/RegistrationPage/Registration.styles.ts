@@ -2,7 +2,7 @@ export const sectionStyles =
   'relative w-screen h-screen bg-[url("src/assets/bg-sky.png")] bg-center bg-cover bg-no-repeat';
 
 export const formStyles =
-  'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-88 p-8 md:w-98 md:p-10 bg-gray/85 srounded-xl flex flex-col justify-center items-center gap-4 m-0';
+  'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-88 p-8 md:w-98 md:p-10 bg-gray/85 rounded-xl flex flex-col justify-center items-center gap-4 m-0';
 
 export const titleStyle = 'mb-4 text-4xl font-bold text-yellow font-brand';
 

@@ -1,1 +1,2 @@
+npx turbo run test
 npx lint-staged

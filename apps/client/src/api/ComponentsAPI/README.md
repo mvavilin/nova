@@ -328,6 +328,23 @@ checkbox.toggle();
 
 ---
 
+## LabelComponent
+
+Компонент label, наследует BaseComponent.
+
+### Методы:
+
+- [x] `setFor(): string` --- добавляет атрибут for.
+
+**Пример:**
+
+```ts
+const label = new LabelComponent({ htmlFor: 'name' });
+checkbox.setFor('surname');
+```
+
+---
+
 ## Общий пример создания формы
 
 ```ts

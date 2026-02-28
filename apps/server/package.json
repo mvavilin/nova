@@ -7,7 +7,11 @@
   "scripts": {
     "test": "echo \"No tests configured\"",
     "build": "tsc",
-    "start": "node dist/index.js",
+    "lint": "npx eslint src",
+    "lint:fix": "eslint \"**/*.{ts,tsx,js}\" --fix",
+    "format": "prettier --write \"**/*.{ts,tsx,md,js,json}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,md,js,json}\"",
+    "start": "node ./dist/src/index.js",
     "dev": "tsx watch ./src/index.js",
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:generate": "npx prisma generate",
@@ -17,11 +21,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@repo/eslint-config": "^0.0.0",
+    "@repo/typescript-config": "^0.0.0",
     "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.3.0",
     "@types/pg": "^8.16.0",
-    "dotenv": "^16.0.3",
-    "express": "^5.2.1",
     "install": "^0.13.0",
     "npm": "^11.10.1",
     "prisma": "^7.4.1",
@@ -32,7 +37,12 @@
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.1",
     "@prisma/client": "^7.4.1",
+    "argon2": "^0.44.0",
+    "dotenv": "^16.6.1",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.18.0",
-    "uuid": "^13.0.0"
+    "uuid": "^13.0.0",
+    "zod": "^4.3.6"
   }
 }

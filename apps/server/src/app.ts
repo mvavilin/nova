@@ -1,18 +1,21 @@
-import express, { Router, type Request, type Response } from 'express';
+import express, { type Request, type Response } from 'express';
 import { createServer } from 'node:http';
 import { userRouter } from './api/users.js';
-import { errorHandler } from './middlewares/errorHandler.js';
+import { errorHandler } from './middlewares/errorHandler.ts';
+import { Endpoints } from './models/api.types.ts';
+import { authRouter } from './api/auth.ts';
 
 const app = express();
 const server = createServer(app);
 
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
+app.get(Endpoints.BASE, (_req: Request, res: Response) => {
   res.send('Hello world');
 });
 
-app.use('/api/users', userRouter);
+app.use(Endpoints.USERS, userRouter);
+app.use(Endpoints.AUTH, authRouter);
 
 app.use(errorHandler);
 

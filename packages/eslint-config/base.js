@@ -81,6 +81,8 @@ export default [
             j: true,
             props: true,
             Props: true,
+            req: true,
+            res: true,
           },
         },
       ],

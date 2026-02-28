@@ -1,0 +1,8 @@
+{
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "env": ["PORT", "DATABASE_URL", "JWT_SECRET_KEY"]
+    }
+  }
+}

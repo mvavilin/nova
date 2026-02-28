@@ -11,7 +11,6 @@ export default class StateApi<State> {
     this.dispatcher = new Dispatcher(this.store);
   }
 
-  // --- Reducers ---
   public addReducer(reducer: Reducer<State>): void {
     this.dispatcher.addReducer(reducer);
   }
@@ -20,7 +19,6 @@ export default class StateApi<State> {
     this.dispatcher.removeReducer(reducer);
   }
 
-  // --- Middleware ---
   public addMiddleware(mw: Middleware<State>): void {
     this.dispatcher.addMiddleware(mw);
   }
@@ -29,10 +27,7 @@ export default class StateApi<State> {
     this.dispatcher.removeMiddleware(mw);
   }
 
-  // --- Dispatch / Subscribe / GetState ---
   public dispatch(action: Action): void {
-    // Мы запускаем async dispatch, но не ждём его.
-    // Ошибки логируем, чтобы они не "висели" в Promise
     void this.dispatcher.dispatch(action).catch((error) => {
       console.error('[StateApi dispatch error]:', error);
     });

@@ -1,12 +1,12 @@
 import { ButtonComponent } from '@/api/ComponentsAPI';
-import type { RegButtonProperties } from './RegButton.types';
+import type { BackButtonProperties } from './BackButton.types';
 import store from '@/store/store';
-import { WelcomePageActionType } from '@/store/actions/welcomePage';
+import { RegPageActionType } from '@/store/actions/regPage';
 
-export default class RegButton extends ButtonComponent {
-  constructor({ ...rest }: RegButtonProperties = {}) {
+export default class BackButton extends ButtonComponent {
+  constructor({ ...rest }: BackButtonProperties = {}) {
     super({
-      id: 'reg-button',
+      id: 'back-button',
       classes:
         'px-6 py-2 rounded-lg bg-violet-100 text-black font-medium transition duration-200 ease-in-out hover:bg-purple-200 active:scale-95 cursor-pointer',
       ...rest,
@@ -16,11 +16,11 @@ export default class RegButton extends ButtonComponent {
   }
 
   private render(): void {
-    this.setContent('REGISTRATION');
+    this.setContent('BACK');
     this.setListeners({
       click: (): void => {
         store.dispatch({
-          type: WelcomePageActionType.GO_TO_REG_PAGE,
+          type: RegPageActionType.GO_TO_WELCOME_PAGE,
           payload: { empty: 'some payload' },
         });
       },

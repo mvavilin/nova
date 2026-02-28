@@ -1,4 +1,3 @@
-// localStorageMiddleware.ts
 import type { Middleware, Action } from 'api/StateAPI';
 
 export default function localStorageMiddleware<State>(key: string): Middleware<State> {
@@ -11,7 +10,7 @@ export default function localStorageMiddleware<State>(key: string): Middleware<S
   }): (next: (action: Action) => void) => (action: Action) => void {
     function nextMiddleware(next: (action: Action) => void): (action: Action) => void {
       function handleAction(action: Action): void {
-        next(action); // сначала редьюсеры обновляют state
+        next(action);
         try {
           const state = getState();
           localStorage.setItem(key, JSON.stringify(state));
@@ -23,6 +22,5 @@ export default function localStorageMiddleware<State>(key: string): Middleware<S
     }
     return nextMiddleware;
   }
-
   return middleware;
 }

@@ -43,16 +43,13 @@ export default class Dispatcher<State> {
 
       const mw = middlewares[index];
       if (mw) {
-        // Middleware может быть async
         await mw({
           getState: () => store.getState(),
           dispatch: this.dispatch.bind(this),
         })(next)(act);
       } else {
-        // После всех middleware — редьюсеры
         let newState = store.getState();
         for (const reducer of reducers) {
-          // Поддержка редьюсеров, которые могут быть sync или async
           const result = reducer(newState, act);
           newState = result instanceof Promise ? await result : result;
         }

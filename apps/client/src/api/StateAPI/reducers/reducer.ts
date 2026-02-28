@@ -1,7 +1,7 @@
-import type { AppState } from '@/components/Tests/appState/appState.types';
-import type { Action } from '../../../api/StateAPI';
+import type { AppState } from '../../../components/Tests/appState/AppState.types';
+import type { Action } from '..';
 
-export function userReducer(state: AppState, action: Action): AppState {
+export function appReducer(state: AppState, action: Action): AppState {
   switch (action.type) {
     case 'SET_USERNAME': {
       return { ...state, username: action.payload || '' };

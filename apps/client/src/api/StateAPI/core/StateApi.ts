@@ -1,4 +1,3 @@
-// ./apps/client/src/api/StateAPI/core/StateAPI.ts
 import Store from './Store';
 import Dispatcher from './Dispatcher';
 import type { Reducer, Action } from '../types';
@@ -20,7 +19,7 @@ export default class StateApi<State> {
     this.dispatcher.dispatch(action);
   }
 
-  public subscribe(listener: (action: Action) => void): () => void {
+  public subscribe(listener: (state: State, action: Action) => void): () => void {
     return this.store.subscribe(listener);
   }
 

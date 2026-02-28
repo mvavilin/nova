@@ -1,4 +1,4 @@
-import type { AppState } from './appState.types';
+import type { AppState } from './AppState.types';
 
 const initialState: AppState = {
   id: '0',

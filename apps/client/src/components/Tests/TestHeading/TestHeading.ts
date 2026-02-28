@@ -2,6 +2,7 @@ import { HeadingComponent } from '../../../api/ComponentsAPI';
 import type { TestHeadingProperties } from './TestHeading.types';
 import appStore from '../appState/appStore';
 import type { Action } from '@/api/StateAPI';
+import type { AppState } from '../appState/AppState.types';
 
 export default class TestHeading extends HeadingComponent {
   constructor({ ...rest }: TestHeadingProperties = {}) {
@@ -11,7 +12,7 @@ export default class TestHeading extends HeadingComponent {
       ...rest,
     });
 
-    this.addSubscriptions([appStore.subscribe((action) => this.changeColor(action))]);
+    this.addSubscriptions([appStore.subscribe((state, action) => this.changeColor(state, action))]);
 
     this.render();
   }
@@ -21,7 +22,7 @@ export default class TestHeading extends HeadingComponent {
     this.setStyle({ color: 'purple' });
   }
 
-  private changeColor(action: Action): void {
+  private changeColor(_state: AppState, action: Action): void {
     if (action.type !== 'CLICK_ON_CHANGE_COLOR_BUTTON') return;
 
     if (this.hasClasses('test-heading-purple')) {

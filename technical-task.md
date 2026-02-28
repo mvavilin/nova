@@ -57,6 +57,8 @@
     - 4.2. [🔐 Статусы пользователя и маршрутизация](#42-статусы-пользователя-и-маршрутизация)
         - 4.2.1. [Статусная модель пользователя](#421-статусная-модель-пользователя)
         - 4.2.2. [Матрица доступности страниц](#422-матрица-доступности-страниц)
+        - 4.2.3. [Таблица переходов между статусами](#423-таблица-переходов-между-статусами)
+        - 4.2.4. [Порядок выхода из системы (logout)](#424-порядок-выхода-из-системы-logout)
     - 4.3. [🎲 Основные механики](#43-основные-механики)
         - 4.3.1. [🏠 Создание и управление комнатами](#431-создание-и-управление-комнатами)
         - 4.3.2. [👥 Распределение команд и ролей](#432-распределение-команд-и-ролей)
@@ -100,7 +102,9 @@
     - 8.1. [📖 Глоссарий терминов](#81-глоссарий-терминов)
     - 8.2. [📚 Список концептов для банка вопросов](#82-список-концептов-для-банка-вопросов)
     - 8.3. [❓ Примеры вопросов](#83-примеры-вопросов)
-    - 8.4. [🔀 Схема взаимодействия страниц](#84-схема-взаимодействия)
+    - 8.4. [🔀 Схема взаимодействия страниц](#84-схема-взаимодействия-страниц)
+        - 8.4.1. [📍 Карта страниц приложения](#841-карта-страниц-приложения)
+        - 8.4.2. [📍 Граф навигации](#842-граф-навигации)
     - 8.5. [🗺️ Схема навигации и статусы пользователя](#85-схема-навигации-и-статусы-пользователя)
 
 </details>
@@ -392,10 +396,119 @@ Junior Frontend-разработчики (студенты, выпускники
 ### 4.2. 🔐 Статусы пользователя и маршрутизация
 
 #### 4.2.1. Статусная модель пользователя
-*Будет заполнено*
+```ts
+// тип роли в игре
+type Team = 'RED' | 'BLUE';
+
+// тип игровой роли
+type GameRole = 'SPYMASTER' | 'OPERATIVE';
+
+// статусная модель пользователя
+type UserStatus = 
+  | { type: 'UNAUTHORIZED' }                                   // неавторизован
+  | { 
+      type: 'AUTHORIZED'; 
+      subStatus: AuthorizedSubStatus;                          // подстатус
+      context?: StatusContext;                                 // контекст состояния
+    };
+
+// допустимые подстатусы авторизованного пользователя
+type AuthorizedSubStatus = 
+  | 'IN_LOBBY'        // в лобби, выбирает режим
+  | 'IN_ROOM'         // в комнате ожидания
+  | 'IN_GAME'         // в мультиплеерной игре
+  | 'IN_SOLO_GAME'    // в соло-игре
+  | 'IN_RESULTS'      // на странице результатов
+  | 'IN_PROFILE';     // в профиле
+
+// контекст статуса (дополнительные данные)
+interface StatusContext {
+  // идентификаторы
+  roomCode?: string;           // код комнаты (например, "js-masters-42")
+  gameId?: string;             // id текущей мультиплеерной игры
+  soloGameId?: string;         // id текущей соло-игры
+  resultId?: string;           // id просматриваемых результатов
+  
+  // ролевая информация
+  team?: Team;                 // текущая команда (RED/BLUE)
+  role?: GameRole;             // текущая роль (SPYMASTER/OPERATIVE)
+}
+```
+
+Вот исправленная матрица с подробным перечислением:
 
 #### 4.2.2. Матрица доступности страниц
-*Будет заполнено*
+
+| статус | разрешенные страницы | запрещенные страницы | редирект при нарушении |
+|--------|---------------------|---------------------|----------------------|
+| **🟥 UNAUTHORIZED** | • 👋 `/` (welcome)<br>• 🔑 `/login`<br>• 📝 `/register` | • 🏨 `/lobby`<br>• 🚪 `/room/*`<br>• 🎯 `/game/*`<br>• 🧪 `/solo`<br>• 🧪 `/solo/play`<br>• 📊 `/results/*`<br>• 👤 `/profile` | 🔒 `/login` |
+| **🟧 IN_LOBBY** | • 🏨 `/lobby` (текущая)<br>• 👤 `/profile` (viewProfile)<br>• 🧪 `/solo` (startSolo, если есть)<br>• 🚪 `/room/:code` (createRoom / joinRoom)<br>• 🧪 `/solo/play` (start) | • 👋 `/` (только для гостей)<br>• 🎯 `/game/*`<br>• 📊 `/results/*` | 🏨 `/lobby` |
+| **🟧 IN_ROOM** | • 🚪 `/room/:code` (текущая)<br>• 🏨 `/lobby` (exit)<br>• 👤 `/profile` (viewProfile, только до старта)<br>• 🎯 `/game/:code` (start) | • 👋 `/`<br>• другие комнаты 🚪 `/room/*`<br>• 🎯 `/game/*` (кроме своей)<br>• 🧪 `/solo/*`<br>• 📊 `/results/*` | текущий 🚪 `/room/:code` |
+| **🟩 IN_GAME** | • 🎯 `/game/:code` (текущая)<br>• 🚪 `/room/:code` (exit)<br>• 🏨 `/lobby` (exit → confirmLeave)<br>• 📊 `/results/:gameId` (finish) | • 👋 `/`<br>• другие игры 🎯 `/game/*`<br>• 🚪 `/room/*` (кроме своей)<br>• 🧪 `/solo/*`<br>• 👤 `/profile`<br>• 📊 `/results/*` (до finish) | текущий 🎯 `/game/:code` |
+| **🟩 IN_SOLO_SETUP** ⭐ | • 🧪 `/solo` (текущая)<br>• 🏨 `/lobby` (exit)<br>• 🧪 `/solo/play` (start) | • 👋 `/`<br>• 🚪 `/room/*`<br>• 🎯 `/game/*`<br>• 📊 `/results/*`<br>• 👤 `/profile` | 🧪 `/solo` |
+| **🟩 IN_SOLO_GAME** | • 🧪 `/solo/play` (текущая)<br>• 🏨 `/lobby` (exit)<br>• 📊 `/results/:gameId` (finish) | • 👋 `/`<br>• 🚪 `/room/*`<br>• 🎯 `/game/*`<br>• 🧪 `/solo` (во время игры)<br>• 👤 `/profile`<br>• 📊 `/results/*` (до finish) | текущий 🧪 `/solo/play` |
+| **🟦 IN_RESULTS** | • 📊 `/results/:gameId` (текущая)<br>• 🏨 `/lobby` (backToLobby)<br>• 🚪 `/room/:code` (rematch)<br>• 👤 `/profile` (viewProfile) | • 👋 `/`<br>• 🎯 `/game/*`<br>• 🧪 `/solo/*`<br>• другие 📊 `/results/*` | 📊 `/results/:gameId` |
+| **🟪 IN_PROFILE** | • 👤 `/profile` (текущая)<br>• 🏨 `/lobby` (backToLobby) | • 👋 `/`<br>• 🚪 `/room/*`<br>• 🎯 `/game/*`<br>• 🧪 `/solo/*`<br>• 📊 `/results/*` | 👤 `/profile` |
+
+> ⭐ – строка актуальна только при наличии отдельной страницы `/solo`
+
+#### 4.2.3. Таблица переходов между статусами
+
+| текущий статус | событие | новый статус | обновление контекста |
+|----------------|---------|--------------|---------------------|
+| `🟥 UNAUTHORIZED` | 🔐 `login()` | `🟧 AUTHORIZED: IN_LOBBY` | `{ }` |
+| `🟥 UNAUTHORIZED` | 📝 `register()` | `🟧 AUTHORIZED: IN_LOBBY` | `{ }` |
+| `🟧 IN_LOBBY` | ➕ `createRoom(settings)` | `🟧 AUTHORIZED: IN_ROOM` | `{ roomCode, roomSettings }` |
+| `🟧 IN_LOBBY` | 🔑 `joinRoom(code)` | `🟧 AUTHORIZED: IN_ROOM` | `{ roomCode }` |
+| `🟧 IN_LOBBY` | 🧪 `startSolo` | `🟩 AUTHORIZED: IN_SOLO_SETUP` ⭐ | `{ }` |
+| `🟧 IN_LOBBY` | 🧪 `startSolo` (без `/solo`) | `🟩 AUTHORIZED: IN_SOLO_GAME` | `{ soloGameId, settings }` |
+| `🟧 IN_LOBBY` | 👤 `viewProfile` | `🟪 AUTHORIZED: IN_PROFILE` | `{ }` |
+| `🟧 IN_ROOM` | 👑 `setRole(team, role)` | `🟧 AUTHORIZED: IN_ROOM` | `{ ..., team, role }` |
+| `🟧 IN_ROOM` | 🚀 `start` | `🟩 AUTHORIZED: IN_GAME` | `{ ..., gameId }` |
+| `🟧 IN_ROOM` | 🚪 `exit` | `🟧 AUTHORIZED: IN_LOBBY` | `{ }` |
+| `🟩 IN_GAME` | 🃏 `guessOwnCard` | `🟩 AUTHORIZED: IN_GAME` | `+ ❓ CheckPhaseModal` |
+| `🟩 IN_GAME` | 🏁 `gameFinished` | `🟩 AUTHORIZED: IN_GAME` | `+ 🏆 GameOverModal` |
+| `🟩 IN_GAME` | 📊 `finish` | `🟦 AUTHORIZED: IN_RESULTS` | `{ resultId, gameId }` |
+| `🟩 IN_GAME` | 🚪 `exit` | `🟧 AUTHORIZED: IN_ROOM` | `{ roomCode }` |
+| `🟩 IN_SOLO_SETUP` ⭐ | ▶️ `start` | `🟩 AUTHORIZED: IN_SOLO_GAME` | `{ soloGameId, settings }` |
+| `🟩 IN_SOLO_SETUP` ⭐ | 🚪 `exit` | `🟧 AUTHORIZED: IN_LOBBY` | `{ }` |
+| `🟩 IN_SOLO_GAME` | 🃏 `guessOwnCard` | `🟩 AUTHORIZED: IN_SOLO_GAME` | `+ ❓ CheckPhaseModal` |
+| `🟩 IN_SOLO_GAME` | 🏁 `gameFinished` | `🟩 AUTHORIZED: IN_SOLO_GAME` | `+ 🏆 GameOverModal` |
+| `🟩 IN_SOLO_GAME` | 📊 `finish` | `🟦 AUTHORIZED: IN_RESULTS` | `{ resultId, soloGameId }` |
+| `🟩 IN_SOLO_GAME` | 🚪 `exit` | `🟧 AUTHORIZED: IN_LOBBY` | `{ }` |
+| `🟦 IN_RESULTS` | 🔙 `backToLobby` | `🟧 AUTHORIZED: IN_LOBBY` | `{ }` |
+| `🟦 IN_RESULTS` | 🔄 `rematch` | `🟧 AUTHORIZED: IN_ROOM` | `{ roomCode }` |
+| `🟦 IN_RESULTS` | 👤 `viewProfile` | `🟪 AUTHORIZED: IN_PROFILE` | `{ }` |
+| `🟪 IN_PROFILE` | 🔙 `backToLobby` | `🟧 AUTHORIZED: IN_LOBBY` | `{ }` |
+| `*` | 🚪 `logout` | `🟥 UNAUTHORIZED` | `{ }` |
+| `*` | ⏱️ `tokenExpired` | `🟥 UNAUTHORIZED` | `{ }` |
+
+> ⭐ – строки актуальны только при наличии отдельной страницы `/solo`
+
+#### 4.2.4. Порядок выхода из системы (logout)
+
+```mermaid
+flowchart LR
+    A[🟧 IN_LOBBY] -->|logout| Z[🟥 UNAUTHORIZED]
+    B[🟧 IN_ROOM] -->|logout| Z
+    C[🟩 IN_GAME] -->|logout| Z
+    D[🟩 IN_SOLO_SETUP] -->|logout| Z
+    E[🟩 IN_SOLO_GAME] -->|logout| Z
+    F[🟦 IN_RESULTS] -->|logout| Z
+    G[🟪 IN_PROFILE] -->|logout| Z
+    
+    Z -->|редирект| H[👋 /]
+    
+    style A fill:#fff3e0
+    style B fill:#fff3e0
+    style C fill:#e8f5e8
+    style D fill:#e8f5e8
+    style E fill:#e8f5e8
+    style F fill:#e3f2fd
+    style G fill:#f3e5f5
+    style Z fill:#ffe5e5
+    style H fill:#e1f5fe
+```
 
 ### 4.3. 🎲 Основные механики
 
@@ -567,14 +680,17 @@ graph TD
     
     Lobby --> Room
     Lobby --> SoloSetup
-    Lobby --> SoloGame
     Lobby --> Profile
     
-    SoloSetup -.->|запуск| SoloGame
-    SoloGame --> Results
+    SoloSetup -->|start| SoloGame
+    SoloGame -->|finish| Results
+    SoloGame -->|exit| Lobby
     
-    Room --> Game
-    Game --> Results
+    Room -->|start| Game
+    Room -->|exit| Lobby
+    
+    Game -->|finish| Results
+    Game -->|exit| Room
     
     Results --> Lobby
     Results --> Room
@@ -582,14 +698,14 @@ graph TD
     
     Profile --> Lobby
 
-    %% Выход (из любой точки)
-    Lobby -.->|🚪 logout| Welcome
-    Room -.->|🚪 logout| Welcome
-    Game -.->|🚪 logout| Welcome
-    SoloSetup -.->|🚪 logout| Welcome
-    SoloGame -.->|🚪 logout| Welcome
-    Results -.->|🚪 logout| Welcome
-    Profile -.->|🚪 logout| Welcome
+    %% Выход из системы (из любой точки)
+    Lobby -.->|logout| Welcome
+    Room -.->|logout| Welcome
+    Game -.->|logout| Welcome
+    SoloSetup -.->|logout| Welcome
+    SoloGame -.->|logout| Welcome
+    Results -.->|logout| Welcome
+    Profile -.->|logout| Welcome
 
     %% Применение стилей
     class Welcome,Login,Register auth;
@@ -600,4 +716,90 @@ graph TD
 ```
 
 ### 8.5. 🗺️ Схема навигации и статусы пользователя
-*Будет заполнено*
+```mermaid
+stateDiagram-v2
+    [*] --> UNAUTHORIZED
+    
+    state UNAUTHORIZED {
+        [*] --> Landing
+        Landing --> Login
+        Landing --> Register
+    }
+    
+    UNAUTHORIZED --> AUTHORIZED: успешная авторизация
+    
+    state AUTHORIZED {
+        [*] --> IN_LOBBY
+        
+        state IN_LOBBY {
+            [*] --> LobbyPage
+            LobbyPage --> CreateRoomModal
+            LobbyPage --> JoinRoomModal
+            LobbyPage --> SoloSetupModal
+        }
+        
+        IN_LOBBY --> IN_ROOM: joinRoom(roomCode)
+        IN_LOBBY --> IN_SOLO_GAME: startSoloGame()
+        IN_LOBBY --> IN_PROFILE: viewProfile()
+        
+        state IN_ROOM {
+            [*] --> RoomPage
+            
+            state роли_в_комнате {
+                [*] --> neutral
+                neutral --> redTeam: выбрать команду
+                neutral --> blueTeam: выбрать команду
+                redTeam --> spymasterRed: выбрать роль
+                redTeam --> operativeRed: выбрать роль
+                blueTeam --> spymasterBlue: выбрать роль
+                blueTeam --> operativeBlue: выбрать роль
+            }
+        }
+        
+        IN_ROOM --> IN_GAME: gameStart()
+        IN_ROOM --> IN_LOBBY: leaveRoom()
+        
+        state IN_GAME {
+            [*] --> GamePage
+            
+            state роли_в_игре {
+                [*] --> SPYMASTER_RED
+                [*] --> OPERATIVE_RED
+                [*] --> SPYMASTER_BLUE
+                [*] --> OPERATIVE_BLUE
+            }
+            
+            GamePage --> CheckPhaseModal: guessOwnCard()
+            GamePage --> GameOverModal: gameFinished()
+        }
+        
+        IN_GAME --> IN_RESULTS: gameEnd(winner)
+        
+        state IN_SOLO_GAME {
+            [*] --> SoloGamePage
+            SoloGamePage --> CheckPhaseModal
+            SoloGamePage --> GameOverModal
+        }
+        
+        IN_SOLO_GAME --> IN_RESULTS: gameEnd()
+        
+        state IN_RESULTS {
+            [*] --> ResultsPage
+        }
+        
+        IN_RESULTS --> IN_LOBBY: backToLobby()
+        IN_RESULTS --> IN_PROFILE: viewProfile()
+        IN_RESULTS --> IN_ROOM: rematch()
+        
+        state IN_PROFILE {
+            [*] --> ProfilePage
+        }
+        
+        IN_PROFILE --> IN_LOBBY: backToLobby()
+    }
+    
+    AUTHORIZED --> UNAUTHORIZED: logout / tokenExpired
+```
+
+> _Референс Схема навигации по страницам игры.drawio.pdf @sergeyado_
+

@@ -1,24 +1,42 @@
 import { Router, type NextFunction, type Request, type Response } from 'express';
 import { v4 as uuid } from 'uuid';
-import { parserUserDto } from '../models/parsers.js';
 import { prisma } from '../prisma/prisma.js';
+import { HttpStatus } from '../models/api.types.ts';
+import * as argon from 'argon2';
+import { getUserWithoutPassword } from '../utils/getUserWithoutPassword.ts';
+import { RegisterDtoSchema } from '../models/auth.ts';
 
 const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
-    const userDto = parserUserDto(req.body);
-    if (userDto) {
-      const id = uuid();
-      const user = await prisma.user.create({
-        data: {
-          id,
-          login: userDto.login,
-          password: userDto.password,
-        },
-      });
-      res.status(201).json({ id: user.id, login: user.login });
-    } else {
-      res.sendStatus(204);
+    const userDto = RegisterDtoSchema.safeParse(req.body);
+
+    if (!userDto.success) {
+      res.sendStatus(HttpStatus.BAD_REQUEST);
+      return;
     }
+
+    const { email, username, password } = userDto.data;
+
+    let user = await prisma.user.findFirst({
+      where: { email },
+    });
+    if (user) {
+      res.sendStatus(HttpStatus.CONFLICT);
+      return;
+    }
+
+    const id = uuid();
+    const hash = await argon.hash(password);
+    user = await prisma.user.create({
+      data: {
+        id,
+        email,
+        username,
+        password: hash,
+      },
+    });
+    const output = getUserWithoutPassword(user);
+    res.status(HttpStatus.CREATED).json(output);
   } catch (error) {
     next(error);
   }
@@ -27,10 +45,10 @@ const createUser = async (req: Request, res: Response, next: NextFunction): Prom
 const getAllUsers = async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const users = await prisma.user.findMany();
-    const userList = users.map((item) => ({
-      id: item.id,
-      login: item.login,
-    }));
+    const userList = users.map((item) => {
+      const output = getUserWithoutPassword(item);
+      return output;
+    });
     res.json(userList);
   } catch (error) {
     next(error);
@@ -40,17 +58,21 @@ const getAllUsers = async (_req: Request, res: Response, next: NextFunction): Pr
 const getUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const id = req.params.id;
-    if (typeof id === 'string') {
-      const user = await prisma.user.findUnique({
-        where: { id },
-      });
-      if (user) {
-        res.json({ id: user.id, login: user.login });
-      } else {
-        res.sendStatus(404);
-      }
+
+    if (typeof id !== 'string') {
+      res.sendStatus(HttpStatus.BAD_REQUEST);
+      return;
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id },
+    });
+
+    if (user) {
+      const output = getUserWithoutPassword(user);
+      res.json(output);
     } else {
-      res.sendStatus(404);
+      res.sendStatus(HttpStatus.NOT_FOUND);
     }
   } catch (error) {
     next(error);
@@ -60,21 +82,23 @@ const getUserById = async (req: Request, res: Response, next: NextFunction): Pro
 const deleteUserById = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {
     const id = req.params.id;
-    if (typeof id === 'string') {
-      const user = await prisma.user.findUnique({
-        where: { id },
-      });
-      if (user) {
-        await prisma.user.delete({
-          where: { id },
-        });
-        res.sendStatus(204);
-      } else {
-        res.sendStatus(404);
-      }
-    } else {
-      res.sendStatus(404);
+    if (typeof id !== 'string') {
+      res.sendStatus(HttpStatus.BAD_REQUEST);
+      return;
     }
+
+    const user = await prisma.user.findUnique({
+      where: { id },
+    });
+    if (!user) {
+      res.sendStatus(HttpStatus.NOT_FOUND);
+      return;
+    }
+
+    await prisma.user.delete({
+      where: { id },
+    });
+    res.sendStatus(HttpStatus.NO_CONTENT);
   } catch (error) {
     next(error);
   }

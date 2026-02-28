@@ -9,11 +9,14 @@
   --color-yellow: #fcee0a;
   --color-gray: #64696c;
   --color-red: #ff0000;
+  --color-dark-red: #cf0000;
   --color-green: #00ff00;
   --color-gray-blue: #6f919b;
   /* --color-hover: #9d8f8e; */
   /* --color-hover: #de8a32; */
   --color-soothing-green: #708b58;
+  --color-light-disabled: #bbbbbb;
+  --color-dark-disabled: #808080;
 }
 
 @layer base {

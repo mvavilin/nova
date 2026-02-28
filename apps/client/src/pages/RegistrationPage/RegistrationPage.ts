@@ -8,26 +8,24 @@ import {
   LabelComponent,
   TextComponent,
 } from '@/api/ComponentsAPI';
+import {
+  sectionStyles,
+  formStyles,
+  titleStyle,
+  containerStyles,
+  inputStyles,
+  labelStyles,
+  buttonStyles,
+  spanStyles,
+} from './Registration.styles';
 import { inputEmailInfo, inputNameInfo, inputPasswordInfo } from '../../constants/input.constants';
 import type { inputBlockType } from '@/types/registration.types';
-
-const sectionStyles =
-  'relative w-screen h-screen bg-[url("src/assets/bg-sky.png")] bg-center bg-cover bg-no-repeat';
-
-const formStyles =
-  'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 p-12 md:w-96 md:p-14 bg-gray/85 rounded-xl flex flex-col justify-center items-center gap-6 m-0';
-
-const titleStyle = 'text-3xl font-bold text-yellow font-brand';
-const containerStyles = 'w-full flex flex-col self-center gap-2';
-const inputStyles =
-  'p-2 bg-white/40 border border-solid border-black rounded-md hover:cursor-pointer hover:transition-colors hover:duration-300 focus:border-yellow outline-none';
-
-const labelStyles = 'uppercase font-medium';
-const buttonStyles =
-  'bg-gray-blue w-36 h-9 rounded-md font-medium hover:cursor-pointer hover:bg-soothing-green hover:transition-colors hover:duration-300';
-const spanStyles = 'text-red';
+import { checkForm } from '@/utils/validateForm';
 
 export default class RegistrationPage extends BaseComponent {
+  private inputArray: InputComponent[] = [];
+  private buttonSubmit: ButtonComponent | null = null;
+
   constructor() {
     super({ tag: 'section', classes: sectionStyles });
     this.render();
@@ -36,40 +34,67 @@ export default class RegistrationPage extends BaseComponent {
   private render(): void {
     const form = new FormComponent({ classes: formStyles });
     const title = new HeadingComponent({ level: 1, classes: titleStyle, content: 'Sign up' });
-    const inputName = this.createInputContainer(inputNameInfo);
-    const inputEmail = this.createInputContainer(inputEmailInfo);
-    const inputPassword = this.createInputContainer(inputPasswordInfo);
-
-    const buttonSubmit = new ButtonComponent({
+    const inputNameBlock = this.createInputBlock(inputNameInfo);
+    const inputEmailBlock = this.createInputBlock(inputEmailInfo);
+    const inputPasswordBlock = this.createInputBlock(inputPasswordInfo);
+    this.buttonSubmit = new ButtonComponent({
       classes: buttonStyles,
       content: 'Submit',
       type: 'submit',
     });
-    form.appendChildren([title, inputName, inputEmail, inputPassword, buttonSubmit]);
+    this.buttonSubmit.setAttributes({ disabled: true });
+    form.appendChildren([
+      title,
+      inputNameBlock,
+      inputEmailBlock,
+      inputPasswordBlock,
+      this.buttonSubmit,
+    ]);
     this.appendChildren(form);
   }
 
-  private createInputContainer(options: inputBlockType): ContainerComponent {
-    const { id, type, name, placeholder, autocomplete, minLength, maxLength, labelText } = {
-      ...options,
-    };
+  private createInputBlock(options: inputBlockType): ContainerComponent {
     const container = new ContainerComponent({ classes: containerStyles });
+    const label = new LabelComponent({
+      classes: labelStyles,
+      content: options.labelText,
+      htmlFor: options.id,
+    });
+    const span = new TextComponent({ tag: 'span', classes: spanStyles });
+
     const input = new InputComponent({
-      id,
-      type,
-      name,
-      placeholder,
-      autocomplete,
+      id: options.id,
+      type: options.type,
+      name: options.name,
+      placeholder: options.placeholder,
+      autocomplete: options.autocomplete,
       classes: inputStyles,
     });
-    if (minLength && maxLength) {
-      input.setAttributes({ minLength, maxLength });
+
+    if (options.minLength && options.maxLength) {
+      input.setAttributes({ minLength: options.minLength, maxLength: options.maxLength });
     }
-    const label = new LabelComponent({ classes: labelStyles, content: labelText, htmlFor: id });
-    const span = new TextComponent({ tag: 'span', content: 'Error', classes: spanStyles });
-    if (container instanceof ContainerComponent) {
-      container.appendChildren([label, input, span]);
-    }
+    this.inputArray.push(input);
+
+    input.setListeners({
+      input: (event: Event) => {
+        event.preventDefault();
+        if (!input.isValidByRegex(options.pattern) || !input.isValid()) {
+          input.removeClasses('focus:border-yellow');
+          input.setClasses('border-red focus:border-red');
+          span.setContent(options.errorMessage);
+          checkForm(this.inputArray, this.buttonSubmit);
+        } else {
+          input.removeClasses('border-red focus:border-red');
+          input.setClasses('focus:border-yellow');
+          span.setContent('');
+          checkForm(this.inputArray, this.buttonSubmit);
+        }
+      },
+    });
+
+    container.appendChildren([label, input, span]);
+
     return container;
   }
 }

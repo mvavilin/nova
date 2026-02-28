@@ -6,5 +6,7 @@ export type inputBlockType = {
   autocomplete: 'on' | 'off';
   minLength?: string;
   maxLength?: string;
+  pattern: RegExp;
+  errorMessage: string;
   labelText: string;
 };

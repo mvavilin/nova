@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import TestButton from './TestButton';
+import RegButton from './RegButton';
 
-describe('Test button creation', () => {
+describe('Registration button creation', () => {
   it('creates a button element', () => {
-    const button = new TestButton();
+    const button = new RegButton();
 
     expect(button.element?.tagName).toBe('BUTTON');
   });

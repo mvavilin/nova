@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import TestHeading from './TestHeading';
+import WelcomeHeading from './WelcomeHeading';
 
-describe('Test heading creation', () => {
+describe('Welcome heading creation', () => {
   it('creates a h1 element', () => {
-    const heading = new TestHeading();
+    const heading = new WelcomeHeading();
 
     expect(heading.element?.tagName).toBe('H1');
   });

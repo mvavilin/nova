@@ -1,11 +1,12 @@
+import WelcomePage from '@/pages/WelcomePage/WelcomePage';
 import { ContainerComponent } from '../../api/ComponentsAPI';
-import TestContainer from '../Tests/TestContainer/TestContainer';
 import type { AppProperties } from './App.types';
 
 export default class App extends ContainerComponent {
   constructor({ ...rest }: AppProperties = {}) {
     super({
       id: 'app',
+      // classes: 'flex items-center justify-center h-screen',
       ...rest,
     });
 
@@ -13,7 +14,7 @@ export default class App extends ContainerComponent {
   }
 
   private render(): void {
-    this.setChildren(new TestContainer());
     console.log('Render - App');
+    this.appendChildren(new WelcomePage());
   }
 }

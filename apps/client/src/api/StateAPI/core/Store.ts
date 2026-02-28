@@ -1,4 +1,4 @@
-import type { Action } from '../types';
+import type { Action } from '../types/types';
 
 export default class Store<State> {
   private state: State;
@@ -13,7 +13,6 @@ export default class Store<State> {
   }
 
   public setState(newState: State, action: Action): void {
-    if (newState === this.state) return;
     this.state = newState;
     for (const listener of this.listeners) listener(this.state, action);
   }

@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import TestContainer from './TestContainer';
+import WelcomePage from './WelcomePage';
 
-describe('Test container creation', () => {
+describe('WelcomePage container creation', () => {
   it('creates a div element', () => {
-    const container = new TestContainer();
+    const container = new WelcomePage();
 
     expect(container.element?.tagName).toBe('DIV');
   });

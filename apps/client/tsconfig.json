@@ -12,6 +12,7 @@
       "@router/*": ["router/*"],
       "@utils": ["utils"],
       "@types": ["types"],
+      "@types/*": ["types/*"],
       "@state/*": ["state/*"]
     }
   },

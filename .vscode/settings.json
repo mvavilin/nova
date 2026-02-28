@@ -3,7 +3,6 @@
   "editor.formatOnSave": true,
   "editor.formatOnPaste": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-
   //Controls whitespaces/tabs, rendering whitespaces
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
@@ -11,15 +10,12 @@
   "editor.renderWhitespace": "selection",
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
-
   // Controls how lines should wrap
   "editor.wordWrap": "bounded",
   "editor.wrappingIndent": "same",
   "editor.wordWrapColumn": 100,
-
   //Controls remembered suggestion selections
   "editor.suggestSelection": "recentlyUsed",
-
   //For more convenient use
   "editor.scrollBeyondLastLine": true,
   "editor.smoothScrolling": true,
@@ -29,13 +25,11 @@
   "editor.minimap.enabled": false,
   "workbench.tree.indent": 10,
   "workbench.list.smoothScrolling": true,
-
   //For autoClosingTags and updating HTML tags while editing.
   "editor.linkedEditing": true,
   "html.autoClosingTags": true,
   "javascript.autoClosingTags": true,
   "typescript.autoClosingTags": true,
-
   //Prettier settings
   "prettier.tabWidth": 2,
   "prettier.bracketSameLine": true,
@@ -46,5 +40,10 @@
   "prettier.semi": true,
   "prettier.useTabs": false,
   "prettier.endOfLine": "auto",
-  "prettier.printWidth": 100
+  "prettier.printWidth": 100,
+  "eslint.workingDirectories": [
+    {
+      "mode": "auto"
+    }
+  ]
 }

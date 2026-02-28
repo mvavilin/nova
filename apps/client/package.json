@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "@repo/eslint-config": "^0.0.0",
+    "@tailwindcss/cli": "^4.2.1",
     "@tailwindcss/vite": "^4.2.0",
     "jsdom": "^28.1.0",
     "tailwindcss": "^4.2.0",

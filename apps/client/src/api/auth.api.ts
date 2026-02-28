@@ -14,7 +14,7 @@ const MOCK_USER: User = {
 };
 const MOCK_TOKEN = '123456789';
 
-// 3. Публичная функция
+// 3. Публичная функция регистрации
 export async function register(userData: RegisterDto): Promise<AuthResult> {
   // Mock implementation
   if (USE_MOCK) {
@@ -23,7 +23,7 @@ export async function register(userData: RegisterDto): Promise<AuthResult> {
   }
 
   // Real implementation
-  const response = await fetch(`${baseEndpoints.LOCAL_BASE}${Endpoints.REGISTRATION}`, {
+  const response = await fetch(`${baseEndpoints.DEPLOY_BASE}${Endpoints.REGISTRATION}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',

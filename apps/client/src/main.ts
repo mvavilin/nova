@@ -1,7 +1,7 @@
 import 'input.css';
-import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
+import App from './app/app';
 
-const registrationPage = new RegistrationPage();
-if (registrationPage.element) {
-  document.body.prepend(registrationPage.element);
+export const app = new App();
+if (app.element) {
+  document.body.prepend(app.element);
 }

@@ -25,6 +25,9 @@ import { saveStorageData } from '@/utils/localStorage';
 import { register } from '@/api/auth.api';
 import { localStorageProps } from '@/constants/localStorage.constants';
 
+const inputFocusedClass = 'focus:border-yellow';
+const inputInvalidClass = 'border-red focus:border-red';
+
 export default class RegistrationPage extends BaseComponent {
   private inputArray: InputComponent[] = [];
   private buttonSubmit: ButtonComponent | null = null;
@@ -89,14 +92,14 @@ export default class RegistrationPage extends BaseComponent {
       input: (event: Event) => {
         event.preventDefault();
         if (!input.isValidByRegex(options.pattern) || !input.isValid()) {
-          input.removeClasses('focus:border-yellow');
-          input.setClasses('border-red focus:border-red');
+          input.removeClasses(inputFocusedClass);
+          input.setClasses(inputInvalidClass);
           span.setContent(options.errorMessage);
           checkForm(this.inputArray, this.buttonSubmit);
         } else {
-          input.removeClasses('border-red focus:border-red');
-          input.setClasses('focus:border-yellow');
-          span.setContent('');
+          input.removeClasses(inputInvalidClass);
+          input.setClasses(inputFocusedClass);
+          span.clearContent();
           checkForm(this.inputArray, this.buttonSubmit);
         }
       },
@@ -116,7 +119,6 @@ export default class RegistrationPage extends BaseComponent {
       const { user, token } = await register({ username, email, password });
 
       if (user && token) {
-        console.log(user, token);
         saveStorageData(localStorageProps.token, token);
         saveStorageData(localStorageProps.user, user);
       }

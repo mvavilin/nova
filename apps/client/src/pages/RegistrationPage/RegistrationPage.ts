@@ -37,12 +37,15 @@ export default class RegistrationPage extends BaseComponent {
     const inputNameBlock = this.createInputBlock(inputNameInfo);
     const inputEmailBlock = this.createInputBlock(inputEmailInfo);
     const inputPasswordBlock = this.createInputBlock(inputPasswordInfo);
+
     this.buttonSubmit = new ButtonComponent({
       classes: buttonStyles,
       content: 'Submit',
       type: 'submit',
     });
     this.buttonSubmit.setAttributes({ disabled: true });
+    this.buttonSubmit.setListeners({ click: (event: Event) => this.onSubmit(event) });
+
     form.appendChildren([
       title,
       inputNameBlock,
@@ -50,6 +53,9 @@ export default class RegistrationPage extends BaseComponent {
       inputPasswordBlock,
       this.buttonSubmit,
     ]);
+
+    form.setListeners({ submit: (event: Event) => this.onSubmit(event) });
+
     this.appendChildren(form);
   }
 
@@ -96,5 +102,9 @@ export default class RegistrationPage extends BaseComponent {
     container.appendChildren([label, input, span]);
 
     return container;
+  }
+  private onSubmit(event: Event): void {
+    event.preventDefault();
+    console.log(222);
   }
 }

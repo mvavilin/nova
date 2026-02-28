@@ -11,8 +11,7 @@
     "lint:fix": "eslint \"**/*.{ts,tsx,js}\" --fix",
     "format": "prettier --write \"**/*.{ts,tsx,md,js,json}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,js,json}\"",
-    "test": "vitest run",
-    "style": "npx tailwindcss -i ./src/input.css -o ./dist/output.css --watch"
+    "test": "vitest run"
   },
   "devDependencies": {
     "@repo/eslint-config": "^0.0.0",

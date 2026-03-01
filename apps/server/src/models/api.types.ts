@@ -19,4 +19,5 @@ export enum HttpStatus {
 export enum ServerConstants {
   DEFAULT_PORT = 3000,
   DEFAULT_JWT_SECRET_KEY = 'secret123123',
+  DEFAULT_FRONTEND_URL = 'http://localhost:5173',
 }

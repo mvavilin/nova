@@ -35,6 +35,7 @@ const login = async (req: Request, res: Response, next: NextFunction): Promise<v
     const secretKey = process.env.JWT_SECRET_KEY || ServerConstants.DEFAULT_JWT_SECRET_KEY;
     const token = jwt.sign({ userId: user.id }, secretKey, {});
     res.setHeader('auth_token', token);
+    res.setHeader('Access-Control-Expose-Headers', 'auth_token');
     const output = getUserWithoutPassword(user);
     res.status(HttpStatus.OK).send(output);
   } catch (error) {
@@ -68,6 +69,7 @@ const register = async (req: Request, res: Response, next: NextFunction): Promis
     const secretKey = process.env.JWT_SECRET_KEY || ServerConstants.DEFAULT_JWT_SECRET_KEY;
     const token = jwt.sign({ userId: user.id }, secretKey, {});
     res.setHeader('auth_token', token);
+    res.setHeader('Access-Control-Expose-Headers', 'auth_token');
     const output = getUserWithoutPassword(user);
     res.status(HttpStatus.OK).send(output);
   } catch (error) {

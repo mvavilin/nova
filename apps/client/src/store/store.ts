@@ -1,17 +1,15 @@
 import StateAPI from '../api/StateAPI';
 import initialState from './initialState';
-import localStorageMiddleware from './middlewares/localStorage';
+import localStorageAfterware from './afterwares/localStorage';
 import regPageReducer from './reducers/regPage';
 
 import welcomePageReducer from './reducers/welcomePage';
-import loggerMiddleware from '@/store/middlewares/storeLogger';
+import loggerAfterware from '@/store/afterwares/storeLogger';
 
 const store = new StateAPI(initialState);
 
-store.addReducer(welcomePageReducer);
-store.addReducer(regPageReducer);
+store.addReducer(regPageReducer, welcomePageReducer);
 
-store.addMiddleware(loggerMiddleware());
-store.addMiddleware(localStorageMiddleware('store'));
+store.addAfterware(loggerAfterware(), localStorageAfterware('store'));
 
 export default store;

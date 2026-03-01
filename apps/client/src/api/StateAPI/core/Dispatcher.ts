@@ -1,62 +1,55 @@
-import type { Action, Reducer, Middleware } from '../types/types';
+import type { Action, Reducer, Afterware } from '../types/types';
 import Store from './Store';
 
-export default class Dispatcher<State> {
-  private store: Store<State>;
-  private reducers: Reducer<State>[] = [];
-  private middlewares: Middleware<State>[] = [];
+export default class Dispatcher<State, A extends Action = Action> {
+  private store: Store<State, A>;
+  private reducers: Reducer<State, A>[] = [];
+  private afterwares: Afterware<State, A>[] = [];
 
-  constructor(store: Store<State>) {
+  private queue: Promise<void> = Promise.resolve();
+
+  constructor(store: Store<State, A>) {
     this.store = store;
   }
 
-  /** --- Reducers --- */
-  public addReducer(reducer: Reducer<State> | Reducer<State>[]): void {
-    if (Array.isArray(reducer)) {
-      this.reducers.push(...reducer);
-    } else {
-      this.reducers.push(reducer);
-    }
+  public addReducer(...reducers: Reducer<State, A>[]): void {
+    this.reducers.push(...reducers);
   }
 
-  public removeReducer(reducer: Reducer<State>): void {
+  public removeReducer(reducer: Reducer<State, A>): void {
     this.reducers = this.reducers.filter((r) => r !== reducer);
   }
 
-  /** --- Middleware --- */
-  public addMiddleware(mw: Middleware<State>): void {
-    this.middlewares.push(mw);
+  public addAfterware(...afterwares: Afterware<State, A>[]): void {
+    this.afterwares.push(...afterwares);
   }
 
-  public removeMiddleware(mw: Middleware<State>): void {
-    this.middlewares = this.middlewares.filter((m) => m !== mw);
+  public removeAfterware(mw: Afterware<State, A>): void {
+    this.afterwares = this.afterwares.filter((m) => m !== mw);
   }
 
-  /** --- Dispatch --- */
-  public async dispatch(action: Action): Promise<void> {
-    const { middlewares, reducers, store } = this;
+  public dispatch(action: A): Promise<void> {
+    this.queue = this.queue.then(() => this.process(action));
+    return this.queue;
+  }
 
-    let index = -1;
+  private async process(action: A): Promise<void> {
+    const previousState = this.store.getState();
 
-    const next = async (act: Action): Promise<void> => {
-      index += 1;
+    let nextState = previousState;
 
-      const mw = middlewares[index];
-      if (mw) {
-        await mw({
-          getState: () => store.getState(),
-          dispatch: this.dispatch.bind(this),
-        })(next)(act);
-      } else {
-        let newState = store.getState();
-        for (const reducer of reducers) {
-          const result = reducer(newState, act);
-          newState = result instanceof Promise ? await result : result;
-        }
-        store.setState(newState, act);
-      }
-    };
+    for (const reducer of this.reducers) {
+      nextState = reducer(nextState, action);
+    }
 
-    await next(action);
+    this.store.setState(nextState, action);
+
+    for (const afterware of this.afterwares) {
+      await afterware({
+        prevState: previousState,
+        nextState,
+        action,
+      });
+    }
   }
 }

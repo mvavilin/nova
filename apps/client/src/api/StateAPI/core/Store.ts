@@ -1,8 +1,8 @@
 import type { Action } from '../types/types';
 
-export default class Store<State> {
+export default class Store<State, A extends Action = Action> {
   private state: State;
-  private listeners: ((state: State, action: Action) => void)[] = [];
+  private listeners: ((state: State, action: A) => void)[] = [];
 
   constructor(initialState: State) {
     this.state = initialState;
@@ -12,18 +12,19 @@ export default class Store<State> {
     return this.state;
   }
 
-  public setState(newState: State, action: Action): void {
+  public setState(newState: State, action: A): void {
     this.state = newState;
-    for (const listener of this.listeners) listener(this.state, action);
+
+    for (const listener of this.listeners) {
+      listener(this.state, action);
+    }
   }
 
-  public subscribe(listener: (state: State, action: Action) => void): () => void {
+  public subscribe(listener: (state: State, action: A) => void): () => void {
     this.listeners.push(listener);
 
-    const unsubscribe = (): void => {
+    return () => {
       this.listeners = this.listeners.filter((l) => l !== listener);
     };
-
-    return unsubscribe;
   }
 }

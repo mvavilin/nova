@@ -25,6 +25,8 @@ export default class App extends ContainerComponent {
       const { page } = JSON.parse(store);
       if (page === 'welcome') welcome.show();
       if (page === 'registration') reg.show();
+    } else {
+      welcome.show();
     }
 
     this.appendChildren([welcome, reg]);

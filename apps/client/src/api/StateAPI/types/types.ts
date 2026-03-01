@@ -7,7 +7,8 @@ export interface Action<Type extends string = string, P = Payload> {
 
 export type Reducer<State, A extends Action = Action> = (state: State, action: A) => State;
 
-export type Middleware<State> = (store: {
-  getState: () => State;
-  dispatch: (action: Action) => void;
-}) => (next: (action: Action) => void) => (action: Action) => void;
+export type Afterware<State, A extends Action = Action> = (context: {
+  prevState: Readonly<State>;
+  nextState: Readonly<State>;
+  action: A;
+}) => void | Promise<void>;

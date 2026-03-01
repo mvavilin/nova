@@ -1,45 +1,45 @@
 import Store from './core/Store';
 import Dispatcher from './core/Dispatcher';
-import type { Reducer, Action, Middleware } from './types/types';
+import type { Reducer, Action, Afterware } from './types/types';
 
-export default class StateApi<State> {
-  private store: Store<State>;
-  private dispatcher: Dispatcher<State>;
+export default class StateApi<State, A extends Action = Action> {
+  private store: Store<State, A>;
+  private dispatcher: Dispatcher<State, A>;
 
   constructor(initialState: State) {
-    this.store = new Store(initialState);
-    this.dispatcher = new Dispatcher(this.store);
+    this.store = new Store<State, A>(initialState);
+    this.dispatcher = new Dispatcher<State, A>(this.store);
   }
 
-  public addReducer(reducer: Reducer<State>): void {
-    this.dispatcher.addReducer(reducer);
+  public addReducer(...reducers: Reducer<State, A>[]): void {
+    this.dispatcher.addReducer(...reducers);
   }
 
-  public removeReducer(reducer: Reducer<State>): void {
+  public removeReducer(reducer: Reducer<State, A>): void {
     this.dispatcher.removeReducer(reducer);
   }
 
-  public addMiddleware(mw: Middleware<State>): void {
-    this.dispatcher.addMiddleware(mw);
+  public addAfterware(...afterwares: Afterware<State, A>[]): void {
+    this.dispatcher.addAfterware(...afterwares);
   }
 
-  public removeMiddleware(mw: Middleware<State>): void {
-    this.dispatcher.removeMiddleware(mw);
+  public removeAfterware(mw: Afterware<State, A>): void {
+    this.dispatcher.removeAfterware(mw);
   }
 
-  public dispatch(action: Action): void {
-    void this.dispatcher.dispatch(action).catch((error) => {
+  public dispatch(action: A): Promise<void> {
+    return this.dispatcher.dispatch(action).catch((error) => {
       console.error('[StateApi dispatch error]:', error);
     });
   }
 
-  public subscribe(listener: (state: State, action: Action) => void): () => void {
+  public subscribe(listener: (state: State, action: A) => void): () => void {
     return this.store.subscribe(listener);
   }
 
-  public getState(): State {
+  public getState(): Readonly<State> {
     return this.store.getState();
   }
 }
 
-export type { Reducer, Action, Middleware } from './types/types';
+export type { Reducer, Action, Afterware } from './types/types';

@@ -46,5 +46,6 @@
   "prettier.semi": true,
   "prettier.useTabs": false,
   "prettier.endOfLine": "auto",
-  "prettier.printWidth": 100
+  "prettier.printWidth": 100,
+  "cSpell.words": ["Afterware", "afterwares"]
 }

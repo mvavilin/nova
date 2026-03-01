@@ -5,6 +5,7 @@ export const PAGES_CONFIG = {
   LOBBY_PAGE: { id: 'lobby', label: 'Lobby' },
   ROOM_PAGE: { id: 'room', label: 'Room' },
   GAME_PAGE: { id: 'game', label: 'Game' },
+  SOLO_SETUP_PAGE: { id: 'soloSetup', label: 'Solo Setup' },
   SOLO_GAME_PAGE: { id: 'soloGame', label: 'Solo Game' },
   RESULTS_PAGE: { id: 'results', label: 'Results' },
   PROFILE_PAGE: { id: 'profile', label: 'Profile' },

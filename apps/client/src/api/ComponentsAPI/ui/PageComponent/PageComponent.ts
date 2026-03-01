@@ -4,11 +4,9 @@ import type { PageProperties } from '@ComponentsAPI/ui/PageComponent/PageCompone
 export default abstract class Page extends BaseComponent {
   protected constructor({ pageId = '', classes = [], ...rest }: PageProperties = {}) {
     super({
+      ...rest,
       id: pageId,
       classes: ['page', ...classes],
-      ...rest,
     });
   }
-
-  public build = (): HTMLElement | SVGElement | null => this.element;
 }

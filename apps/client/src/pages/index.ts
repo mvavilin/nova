@@ -1,6 +1,10 @@
 import Page from '@ComponentsAPI/ui/PageComponent/PageComponent';
 import HeadingComponent from '@ComponentsAPI/ui/HeadingComponent/HeadingComponent';
+import ButtonComponent from '@ComponentsAPI/ui/ButtonComponent/ButtonComponent';
 import { PAGES_CONFIG } from '@constants';
+
+import { router } from '@/main';
+import { PATHS } from '@router/router.constants';
 
 export class WelcomePage extends Page {
   constructor() {
@@ -26,7 +30,17 @@ export class RegisterPage extends Page {
 export class LobbyPage extends Page {
   constructor() {
     const { id, label } = PAGES_CONFIG.LOBBY_PAGE;
-    super({ pageId: id, children: [new HeadingComponent({ level: 1, content: label })] });
+    super({
+      pageId: id,
+      children: [
+        new HeadingComponent({ level: 1, content: label }),
+        new ButtonComponent({
+          listeners: {
+            click: (): void => router.navigate(PATHS.LOGIN.url()),
+          },
+        }),
+      ],
+    });
   }
 }
 
@@ -41,6 +55,16 @@ export class GamePage extends Page {
   constructor() {
     const { id, label } = PAGES_CONFIG.GAME_PAGE;
     super({ pageId: id, children: [new HeadingComponent({ level: 1, content: label })] });
+  }
+}
+
+export class SoloSetupPage extends Page {
+  constructor() {
+    const { id, label } = PAGES_CONFIG.SOLO_SETUP_PAGE;
+    super({
+      pageId: id,
+      children: [new HeadingComponent({ level: 1, content: label })],
+    });
   }
 }
 

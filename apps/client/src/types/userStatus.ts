@@ -1,3 +1,5 @@
+import { AuthStatus } from '@state/auth/auth.types';
+
 enum Team {
   RED = 'RED',
   BLUE = 'BLUE',
@@ -28,8 +30,8 @@ export interface StatusContext {
 }
 
 export enum UserType {
-  UNAUTHORIZED = 'UNAUTHORIZED',
-  AUTHORIZED = 'AUTHORIZED',
+  UNAUTHORIZED = AuthStatus.UNAUTHORIZED,
+  AUTHORIZED = AuthStatus.AUTHORIZED,
 }
 
 export type UserStatus =

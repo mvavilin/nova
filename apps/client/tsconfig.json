@@ -6,6 +6,7 @@
     "paths": {
       "@/*": ["*"],
       "@api/*": ["api/*"],
+      "@app/*": ["app/*"],
       "@ComponentsAPI": ["api/ComponentsAPI"],
       "@ComponentsAPI/*": ["api/ComponentsAPI/*"],
       "@components": ["components"],

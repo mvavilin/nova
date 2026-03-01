@@ -3,10 +3,28 @@ import type { Listener } from '@state/auth/auth.types';
 
 export class AuthState {
   private currentStatus: UserStatus = { type: UserType.UNAUTHORIZED };
+  // private currentStatus: UserStatus = {
+  //   type: UserType.AUTHORIZED,
+  //   subStatus: AuthorizedSubStatus.IN_LOBBY,
+  //   context: {},
+  // };
+  // private currentStatus: UserStatus = {
+  //   type: UserType.AUTHORIZED,
+  //   subStatus: AuthorizedSubStatus.IN_ROOM,
+  //   context: { roomCode: 'ABCD1234' },
+  // };
   private listeners = new Set<Listener>();
 
   public get userStatus(): UserStatus {
     return this.currentStatus;
+  }
+
+  public get authorizedContext(): {
+    subStatus: AuthorizedSubStatus;
+    context?: StatusContext;
+  } | null {
+    if (this.currentStatus.type === UserType.AUTHORIZED) return this.currentStatus;
+    return null;
   }
 
   public setUserStatus(newStatus: UserStatus): void {
@@ -16,7 +34,6 @@ export class AuthState {
 
   public subscribe(listener: Listener): () => void {
     this.listeners.add(listener);
-    listener(this.currentStatus);
     return () => this.listeners.delete(listener);
   }
 

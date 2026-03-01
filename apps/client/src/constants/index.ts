@@ -1,1 +1,1 @@
-console.log('Hello, world!');
+export { PAGES_CONFIG } from '@constants/pages';

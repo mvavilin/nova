@@ -34,6 +34,7 @@ export default class VisibilityManager {
     if (animated && this.element instanceof HTMLElement) {
       this.element.style.transition = `opacity ${duration}ms`;
       this.element.style.opacity = '0';
+      this.element.style.transitionTimingFunction = 'ease-in-out';
 
       setTimeout(() => {
         this.element?.setAttribute('hidden', 'true');
@@ -43,6 +44,7 @@ export default class VisibilityManager {
       if (this.element instanceof HTMLElement) {
         this.element.style.opacity = '0';
         this.element.style.transition = '';
+        this.element.style.transitionTimingFunction = '';
       }
     }
 

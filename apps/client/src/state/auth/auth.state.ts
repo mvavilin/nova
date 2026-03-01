@@ -1,5 +1,4 @@
-import type { StatusContext, UserStatus } from '@types';
-import { AuthorizedSubStatus, UserType } from '@types';
+import { type StatusContext, type UserStatus, AuthorizedSubStatus, UserType } from '@types';
 import type { Listener } from '@state/auth/auth.types';
 
 export class AuthState {

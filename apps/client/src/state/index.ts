@@ -1,1 +1,1 @@
-export { AuthState } from '@state/auth/auth.state';
+export { authState } from '@state/auth/auth.state';

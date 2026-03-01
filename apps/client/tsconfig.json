@@ -7,13 +7,17 @@
       "@/*": ["*"],
       "@api/*": ["api/*"],
       "@ComponentsAPI": ["api/ComponentsAPI"],
+      "@ComponentsAPI/*": ["api/ComponentsAPI/*"],
       "@components": ["components"],
+      "@constants": ["constants"],
+      "@constants/*": ["constants/*"],
       "@pages": ["pages"],
       "@router/*": ["router/*"],
       "@utils": ["utils"],
       "@types": ["types"],
       "@types/*": ["types/*"],
-      "@state/*": ["state/*"]
+      "@state/*": ["state/*"],
+      "@state": ["state"]
     }
   },
   "include": ["src", "vite.config.ts", "vitest.config.ts"]

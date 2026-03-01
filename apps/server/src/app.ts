@@ -2,11 +2,21 @@ import express, { type Request, type Response } from 'express';
 import { createServer } from 'node:http';
 import { userRouter } from './api/users.js';
 import { errorHandler } from './middlewares/errorHandler.ts';
-import { Endpoints } from './models/api.types.ts';
+import { Endpoints, ServerConstants } from './models/api.types.ts';
 import { authRouter } from './api/auth.ts';
+import cors from 'cors';
+import 'dotenv/config';
 
 const app = express();
 const server = createServer(app);
+
+const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+  })
+);
 
 app.use(express.json());
 

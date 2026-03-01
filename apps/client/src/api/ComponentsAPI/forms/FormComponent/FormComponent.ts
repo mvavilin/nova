@@ -1,0 +1,49 @@
+import BaseComponent from '../../base/BaseComponent';
+import type { FormComponentProperties } from './FormComponent.types';
+
+export default class FormComponent extends BaseComponent {
+  constructor({ method = 'get', action, autocomplete, ...rest }: FormComponentProperties = {}) {
+    super({
+      tag: 'form',
+      ...rest,
+    });
+
+    if (method) this.setMethod(method);
+    if (action) this.setAction(action);
+    if (autocomplete !== undefined) this.setAutocomplete(autocomplete);
+  }
+
+  private get form(): HTMLFormElement {
+    if (!(this.element instanceof HTMLFormElement)) {
+      throw new TypeError('Element is not a form');
+    }
+    return this.element;
+  }
+
+  public setAction(action: string): this {
+    this.form.action = action;
+    return this;
+  }
+
+  public setMethod(method: HTMLFormElement['method']): this {
+    this.form.method = method;
+    return this;
+  }
+
+  public submit(): void {
+    this.form.submit();
+  }
+
+  public reset(): void {
+    this.form.reset();
+  }
+
+  public getFormData(): FormData {
+    return new FormData(this.form);
+  }
+
+  public setAutocomplete(autocomplete: 'on' | 'off'): this {
+    this.form.autocomplete = autocomplete;
+    return this;
+  }
+}

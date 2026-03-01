@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  postgres:
+    env_file: .env
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=mydb
+    ports:
+      - 5432:5432
+    restart: on-failure
+    networks:
+      - my_net
+networks:
+  my_net:
+    driver: bridge

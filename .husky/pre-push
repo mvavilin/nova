@@ -1,0 +1,2 @@
+npx turbo run test
+npm run check-branch

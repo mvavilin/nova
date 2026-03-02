@@ -1,131 +1,296 @@
 # StateAPI
 
-`StateAPI` — это простая система управления состоянием для фронтенд-приложений. Она позволяет централизованно хранить состояние, обрабатывать действия через редьюсеры и выполнять побочные эффекты через послеобработчики (afterwares). Подходит для работы с синхронизацией состояния через сервер, веб-сокеты и локальное хранилище.
+StateAPI — это система управления состоянием приложения.
+
+Если объяснить совсем просто:
+
+- В приложении есть **состояние (state)** — объект с данными.
+- Есть **действия (actions)** — события, которые что-то хотят изменить.
+- Есть **редьюсеры (reducers)** — единственное место, где состояние реально меняется.
+- Есть **middleware** — логика до изменения состояния.
+- Есть **afterware** — логика после изменения состояния.
+
+StateAPI делает этот процесс строгим, предсказуемым и контролируемым.
 
 ---
 
-## Основные концепции
+# Зачем это вообще нужно?
 
-### Store
+В любом более-менее сложном приложении появляются проблемы:
 
-Хранит текущее состояние и уведомляет подписчиков при его изменении.
+- данные меняются в разных местах
+- сложно понять, кто изменил состояние
+- async-запросы вызывают хаос
+- UI обновляется непредсказуемо
+
+StateAPI решает это так:
+
+- состояние хранится в одном месте
+- его нельзя изменить напрямую
+- всё изменение проходит через единую цепочку
+- можно контролировать async-логику
+
+---
+
+# Главная идея
+
+Состояние изменяется только через dispatch.
+
+Нельзя сделать так:
 
 ```ts
-const store = new StateAPI({ count: 0 });
-store.subscribe((state, action) => {
-  console.log('Новое состояние:', state);
+state.page = 'welcome' ❌
+```
+
+Можно только так:
+
+```ts
+stateApi.dispatch({ type: 'GO_TO_WELCOME_PAGE' });
+```
+
+После этого запускается строгая цепочка:
+
+```
+dispatch(action)
+    ↓
+middleware (до изменения состояния)
+    ↓
+reducer (изменение состояния)
+    ↓
+store.setState()
+    ↓
+subscribers (UI обновляется)
+    ↓
+afterware (побочные эффекты)
+```
+
+Каждый этап отвечает за своё.
+
+---
+
+# Что происходит шаг за шагом
+
+## 1️⃣ dispatch(action)
+
+Вы отправляете действие:
+
+```ts
+await stateApi.dispatch({
+  type: 'FETCH_USER',
+  payload: { id: 1 },
 });
 ```
 
-### Action
+dispatch всегда возвращает Promise.
 
-Объект, описывающий событие, которое меняет состояние.
+Все dispatch выполняются последовательно — внутри есть очередь.
+Это значит:
+
+- новый dispatch не начнётся, пока не завершится предыдущий.
+
+Это защищает от гонок состояний.
+
+---
+
+## 2️⃣ Middleware (до изменения состояния)
+
+Middleware — это функции, которые выполняются до reducer.
+
+Они могут:
+
+- делать fetch
+- модифицировать action
+- прерывать цепочку
+- вызывать next(action)
+- не вызывать next (и тем самым остановить процесс)
+
+Пример:
 
 ```ts
-type Action = {
-  type: string;
-  payload?: Record<string, unknown>;
-};
-
-const incrementAction: Action = { type: 'INCREMENT', payload: { amount: 1 } };
-```
-
-### Reducer
-
-Функция, которая изменяет состояние на основе действия.
-
-```ts
-const counterReducer: Reducer<{ count: number }> = (state, action) => {
-  switch (action.type) {
-    case 'INCREMENT':
-      return { ...state, count: state.count + (action.payload?.amount as number) };
-    default:
-      return state;
+stateApi.addMiddleware(async ({ action, next }) => {
+  if (action.type === 'FETCH_USER') {
+    const data = await fetch('/api/user').then((r) => r.json());
+    action.payload = { user: data };
   }
-};
 
-store.addReducer(counterReducer);
+  await next(action);
+});
 ```
 
-### Afterware
+Важно:
 
-Побочные эффекты после изменения состояния (например, логирование или сохранение в localStorage).
+- Middleware НЕ должен менять state напрямую.
+- Он работает только через action.
+
+---
+
+## 3️⃣ Reducer (единственное место изменения состояния)
+
+Reducer — это чистая функция:
 
 ```ts
-const loggerAfterware: Afterware<{ count: number }> = ({ prevState, nextState, action }) => {
-  console.log('Action:', action.type);
-  console.log('Prev:', prevState, 'Next:', nextState);
-};
+function userReducer(state, action) {
+  if (action.type === 'FETCH_USER') {
+    return { ...state, user: action.payload.user };
+  }
 
-store.addAfterware(loggerAfterware);
+  return state;
+}
+```
+
+Reducer:
+
+- получает старое состояние
+- возвращает новое
+- не делает async
+- не делает побочных эффектов
+- не мутирует state
+
+Нельзя:
+
+```ts
+state.user = ... ❌
+```
+
+Можно только:
+
+```ts
+return { ...state, user: ... } ✅
 ```
 
 ---
 
-## Примеры использования
+## 4️⃣ Store обновляет состояние
 
-### Изменение состояния
+После выполнения всех reducers:
 
 ```ts
-store.dispatch({ type: 'INCREMENT', payload: { amount: 2 } });
+store.setState(nextState, action);
 ```
 
-### Подписка и отписка
+Store:
+
+- сохраняет новое состояние
+- уведомляет всех подписчиков
+
+---
+
+## 5️⃣ Subscribers (UI обновляется)
+
+Подписки вызываются автоматически:
 
 ```ts
-const unsubscribe = store.subscribe((state, action) => {
-  console.log('Обновленное состояние:', state);
+stateApi.subscribe((state, action) => {
+  document.getElementById('page').textContent = state.page;
 });
-
-// Чтобы отписаться
-unsubscribe();
 ```
 
-### Синхронизация с сервером (fetch)
+UI реагирует на изменение состояния.
+
+Вам не нужно вручную "перерисовывать" приложение.
+
+---
+
+## 6️⃣ Afterware (после обновления состояния)
+
+Afterware запускается после того, как состояние уже изменилось.
+
+Он подходит для:
+
+- логирования
+- localStorage
+- WebSocket
+- аналитики
+- отправки на сервер
+
+Пример:
 
 ```ts
-const serverAfterware: Afterware<{ data: any }> = async ({ nextState, action }) => {
-  if (action.type === 'FETCH_DATA') {
-    const response = await fetch('/api/data');
-    const data = await response.json();
-    store.dispatch({ type: 'SET_DATA', payload: { data } });
-  }
-};
-
-store.addAfterware(serverAfterware);
-```
-
-### Работа с WebSocket
-
-```ts
-const ws = new WebSocket('wss://example.com/socket');
-
-ws.onmessage = (event) => {
-  const message = JSON.parse(event.data);
-  store.dispatch({ type: 'SOCKET_MESSAGE', payload: message });
-};
-
-const socketAfterware: Afterware<any> = ({ action }) => {
-  if (action.type === 'SEND_SOCKET') {
-    ws.send(JSON.stringify(action.payload));
-  }
-};
-
-store.addAfterware(socketAfterware);
-```
-
-### Сохранение состояния в localStorage
-
-```ts
-const localStorageAfterware: Afterware<any> = ({ nextState }) => {
+stateApi.addAfterware(async ({ nextState }) => {
   localStorage.setItem('appState', JSON.stringify(nextState));
+});
+```
+
+Важно:
+
+Afterware НЕ может менять state.
+
+Он только реагирует.
+
+---
+
+# Типизация
+
+```ts
+export interface Action<Type extends string = string, P = Record<string, unknown>> {
+  type: Type;
+  payload?: P;
+}
+```
+
+Пример состояния:
+
+```ts
+type AppState = {
+  page: string;
+  user?: { id: number; name: string };
 };
 
-store.addAfterware(localStorageAfterware);
+const stateApi = new StateApi<AppState>({ page: 'home' });
 ```
 
 ---
 
-## Итог
+# Что можно и что нельзя
 
-`StateAPI` предоставляет простую и мощную архитектуру для управления состоянием, редьюсерами и побочными эффектами, поддерживает серверные запросы, WebSocket и хранение локально. Все действия централизованно обрабатываются через dispatch, а подписчики получают обновленное состояние автоматически.
+## Можно
+
+- добавлять несколько reducers
+- добавлять несколько middleware
+- добавлять несколько afterware
+- делать async внутри middleware
+- подписываться на изменения
+
+## Нельзя
+
+- менять state напрямую
+- делать побочные эффекты внутри reducer
+- мутировать состояние
+- запускать dispatch вне очереди
+
+---
+
+# Когда использовать
+
+Подходит:
+
+- SPA
+- игры
+- сложные async-процессы
+- WebSocket-приложения
+- проекты с большим количеством логики
+
+Не нужен:
+
+- для маленьких форм
+- для простых лендингов
+
+---
+
+# Итоговая модель
+
+StateAPI — это способ сказать:
+
+> Состояние меняется только через строгий и контролируемый процесс.
+
+Это даёт:
+
+- предсказуемость
+- прозрачность
+- контроль
+- масштабируемость
+- чистую архитектуру
+
+Без магии.
+Без скрытых изменений.
+Без сторонних зависимостей.

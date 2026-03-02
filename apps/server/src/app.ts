@@ -7,12 +7,19 @@ import { authRouter } from './api/auth.ts';
 import cors from 'cors';
 import 'dotenv/config';
 import { Server } from 'socket.io';
+import { authMiddleware } from './middlewares/authMiddleware.ts';
+
+const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+  cors: {
+    origin: FRONTEND_URL,
+    methods: ['GET', 'POST'],
+  },
+});
 
-const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
 app.use(
   cors({
     origin: FRONTEND_URL,
@@ -30,6 +37,8 @@ app.use(Endpoints.USERS, userRouter);
 app.use('', authRouter);
 
 app.use(errorHandler);
+
+io.use(authMiddleware);
 
 io.on('connection', (socket) => {
   console.log('connection', socket.id);

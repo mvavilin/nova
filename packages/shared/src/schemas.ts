@@ -17,3 +17,8 @@ export const UserSchema = z.object({
   username: z.string(),
   password: z.string(),
 });
+
+export const WSHandshakeAuthSchema = z.object({
+  auth_token: z.string(),
+  session_token: z.optional(z.string()),
+});

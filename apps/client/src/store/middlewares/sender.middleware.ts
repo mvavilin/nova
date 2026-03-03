@@ -11,7 +11,7 @@ export default function sender<State>(): Middleware<State, Actions> {
 
       // если нужно изменить action, то только через next
       // но лучше вообще не менять таким образом
-      // создавайте новый dispatch()
+      // не создавайте новый dispatch()
 
       const newAction = {
         ...context.action,

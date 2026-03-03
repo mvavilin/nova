@@ -6,9 +6,24 @@
     "baseUrl": "./src",
     "paths": {
       "@/*": ["*"],
+      "@api/*": ["api/*"],
+      "@app/*": ["app/*"],
+      "@ComponentsAPI": ["api/ComponentsAPI/index.ts"],
+      "@ComponentsAPI/*": ["api/ComponentsAPI/*"],
       "@components": ["components"],
+      "@components/*": ["components/*"],
+      "@constants": ["constants"],
+      "@constants/*": ["constants/*"],
+      "@pages/*": ["pages/*"],
       "@pages": ["pages"],
-      "@utils": ["utils"]
+      "@router/*": ["router/*"],
+      "@utils": ["utils"],
+      "@types": ["types"],
+      "@types/*": ["types/*"],
+      "@state/*": ["state/*"],
+      "@state": ["state"],
+      "@store/*": ["store/*"],
+      "@store": ["store"]
     }
   },
   "include": ["src", "vite.config.ts", "vitest.config.ts"]

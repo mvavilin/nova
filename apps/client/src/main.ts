@@ -1,11 +1,15 @@
-import App from './components/App/App';
-import './index.css';
+import '@/index.css';
+import '@/input.css';
+import App from '@components/App/App';
+import Router from '@/router/router';
 
 const app = new App();
-app.hide(false);
-
 if (app.element) document.body.append(app.element);
 
+export const router = new Router(app);
+router.init();
+
+app.hide(false);
 window.addEventListener('load', () => {
-  app.show(true, 1000);
+  app.show(true, 500);
 });

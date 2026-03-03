@@ -1,7 +1,5 @@
-import WelcomePage from '@/pages/WelcomePage/WelcomePage';
-import { ContainerComponent } from '../../api/ComponentsAPI';
-import type { AppProperties } from './App.types';
-import RegPage from '@/pages/RegPage/RegPage';
+import { ContainerComponent } from '@ComponentsAPI';
+import type { AppProperties } from '@components/App/App.types';
 
 export default class App extends ContainerComponent {
   constructor({ ...rest }: AppProperties = {}) {
@@ -10,25 +8,5 @@ export default class App extends ContainerComponent {
       classes: 'flex items-center justify-center h-screen bg-gray-100',
       ...rest,
     });
-
-    this.render();
-  }
-
-  private render(): void {
-    console.log('Render - App');
-    const welcome = new WelcomePage().hide(false);
-    const reg = new RegPage().hide(false);
-
-    const store = localStorage.getItem('store');
-
-    if (store) {
-      const { page } = JSON.parse(store);
-      if (page === 'welcome') welcome.show();
-      if (page === 'registration') reg.show();
-    } else {
-      welcome.show();
-    }
-
-    this.appendChildren([welcome, reg]);
   }
 }

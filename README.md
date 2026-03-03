@@ -25,6 +25,7 @@ Prototype: [Classic game Codenames](<https://en.wikipedia.org/wiki/Codenames_(bo
 - Tailwind
 
 ## Link to the deployment
+
 https://nova-codenames-client.vercel.app/
 
 ## Setup

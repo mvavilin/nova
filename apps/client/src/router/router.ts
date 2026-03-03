@@ -16,6 +16,7 @@ export default class Router {
   constructor(container: BaseComponent) {
     this.container = container;
     this.routes = ROUTES;
+
     authState.subscribe(() => this.render());
   }
 

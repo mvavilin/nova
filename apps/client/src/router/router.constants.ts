@@ -1,7 +1,5 @@
 import {
-  WelcomePage,
   LoginPage,
-  RegisterPage,
   LobbyPage,
   RoomPage,
   GamePage,
@@ -13,6 +11,8 @@ import {
 import { AuthorizedSubStatus } from '@types';
 import { type Route } from '@router/router.types';
 import { Access } from '@router/router.enums';
+import RegPage from '@pages/RegPage/RegPage';
+import WelcomePage from '@pages/WelcomePage/WelcomePage';
 
 export const PATHS = {
   HOME: {
@@ -60,7 +60,7 @@ export const PATHS = {
 export const ROUTES: Route[] = [
   { path: PATHS.HOME.pattern, page: WelcomePage, access: Access.PUBLIC },
   { path: PATHS.LOGIN.pattern, page: LoginPage, access: Access.UNAUTHORIZED },
-  { path: PATHS.REGISTER.pattern, page: RegisterPage, access: Access.UNAUTHORIZED },
+  { path: PATHS.REGISTER.pattern, page: RegPage, access: Access.UNAUTHORIZED },
   {
     path: PATHS.LOBBY.pattern,
     page: LobbyPage,

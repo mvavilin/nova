@@ -1,17 +1,20 @@
 {
-  "extends": "@repo/typescript-config/base.json",
+  "extends": "../../packages/typescript-config/base.json",
   "compilerOptions": {
+    "target": "ES2021",
     "types": ["vite/client"],
     "baseUrl": "./src",
     "paths": {
       "@/*": ["*"],
       "@api/*": ["api/*"],
       "@app/*": ["app/*"],
-      "@ComponentsAPI": ["api/ComponentsAPI"],
+      "@ComponentsAPI": ["api/ComponentsAPI/index.ts"],
       "@ComponentsAPI/*": ["api/ComponentsAPI/*"],
       "@components": ["components"],
+      "@components/*": ["components/*"],
       "@constants": ["constants"],
       "@constants/*": ["constants/*"],
+      "@pages/*": ["pages/*"],
       "@pages": ["pages"],
       "@router/*": ["router/*"],
       "@utils": ["utils"],

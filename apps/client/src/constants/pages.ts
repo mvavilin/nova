@@ -1,7 +1,7 @@
 export const PAGES_CONFIG = {
   WELCOME_PAGE: { id: 'welcome', label: 'Welcome' },
   LOGIN_PAGE: { id: 'login', label: 'Login' },
-  REGISTER_PAGE: { id: 'register', label: 'Register' },
+  REGISTER_PAGE: { id: 'registeration', label: 'Registeration' },
   LOBBY_PAGE: { id: 'lobby', label: 'Lobby' },
   ROOM_PAGE: { id: 'room', label: 'Room' },
   GAME_PAGE: { id: 'game', label: 'Game' },

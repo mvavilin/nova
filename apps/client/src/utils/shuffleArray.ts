@@ -1,4 +1,4 @@
-export function shuffle(array: string[]): string[] {
+export function shuffle(array: (string | undefined)[]): (string | undefined)[] {
   const shuffledArray = [...array];
   for (let i = shuffledArray.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));

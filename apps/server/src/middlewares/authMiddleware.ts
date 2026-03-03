@@ -12,10 +12,10 @@ export const authMiddleware = async (
   try {
     const token: unknown =
       socket.handshake.auth?.auth_token || socket.handshake.headers?.auth_token;
-    const auth_token = z.string().parse(token);
+    const authToken = z.string().parse(token);
 
     const secretKey = process.env.JWT_SECRET_KEY || ServerConstants.DEFAULT_JWT_SECRET_KEY;
-    const payload = jwt.verify(auth_token, secretKey);
+    const payload = jwt.verify(authToken, secretKey);
 
     const userId = typeof payload === 'string' ? '' : payload.userId;
     const user = await prisma.user.findUnique({ where: { id: userId } });

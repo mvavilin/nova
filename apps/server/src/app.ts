@@ -8,6 +8,7 @@ import cors from 'cors';
 import 'dotenv/config';
 import { Server } from 'socket.io';
 import { authMiddleware } from './middlewares/authMiddleware.ts';
+import { sessionMiddleware } from './middlewares/sessionMiddleware.ts';
 
 const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
 
@@ -39,9 +40,18 @@ app.use('', authRouter);
 app.use(errorHandler);
 
 io.use(authMiddleware);
+io.use(sessionMiddleware);
 
 io.on('connection', (socket) => {
-  console.log('connection', socket.id);
+  if (socket.data.isReconnect) {
+    console.log('reconnect', socket.data.sessionToken);
+    socket.emit('session:token', { sessionToken: socket.data.sessionToken });
+  } else {
+    setTimeout(() => {
+      console.log('connect', socket.data.sessionToken);
+      socket.emit('session:token', { sessionToken: socket.data.sessionToken });
+    });
+  }
 });
 
 export default server;

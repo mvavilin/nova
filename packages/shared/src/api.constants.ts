@@ -1,6 +1,7 @@
 export enum Endpoints {
   BASE = '/',
-  AUTH = '/api/auth',
+  LOGIN = '/api/auth/login',
+  REGISTRATION = '/api/auth/register',
   USERS = '/api/users',
 }
 
@@ -20,4 +21,9 @@ export enum ServerConstants {
   DEFAULT_PORT = 3000,
   DEFAULT_JWT_SECRET_KEY = 'secret123123',
   DEFAULT_FRONTEND_URL = 'http://localhost:5173',
+}
+
+export enum ServerUrl {
+  LOCAL_BASE = 'http://localhost:3000',
+  DEPLOY_BASE = 'https://nova-codenames-server.onrender.com',
 }

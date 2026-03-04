@@ -1,10 +1,10 @@
 import { Router, type NextFunction, type Request, type Response } from 'express';
 import { v4 as uuid } from 'uuid';
 import { prisma } from '../prisma/prisma.js';
-import { HttpStatus } from '../models/api.types.ts';
+import { HttpStatus } from '@repo/shared/src/api.constants.ts';
 import * as argon from 'argon2';
 import { getUserWithoutPassword } from '../utils/getUserWithoutPassword.ts';
-import { RegisterDtoSchema } from '../models/auth.ts';
+import { RegisterDtoSchema } from '@repo/shared/src/schemas/auth.ts';
 
 const createUser = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   try {

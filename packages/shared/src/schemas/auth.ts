@@ -1,11 +1,9 @@
-import z from 'zod';
+import * as z from 'zod';
 
 export const LoginDtoSchema = z.object({
   email: z.string(),
   password: z.string(),
 });
-
-export type LoginDto = z.infer<typeof LoginDtoSchema>;
 
 export const RegisterDtoSchema = z.object({
   email: z.string(),
@@ -13,4 +11,7 @@ export const RegisterDtoSchema = z.object({
   password: z.string(),
 });
 
-export type RegisterDto = z.infer<typeof RegisterDtoSchema>;
+export const WSHandshakeAuthSchema = z.object({
+  auth_token: z.string(),
+  session_token: z.optional(z.string()),
+});

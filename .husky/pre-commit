@@ -1,2 +1,3 @@
+npm run check-types
 npx turbo run test
 npx lint-staged

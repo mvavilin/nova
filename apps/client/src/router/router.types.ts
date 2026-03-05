@@ -7,5 +7,5 @@ export interface Route {
   path: RegExp;
   page: new (parameters: Record<string, string>) => BaseComponent;
   access: Access;
-  allowedSubStatuses?: SubStatus[];
+  allowedSubStatuses?: (SubStatus | null)[];
 }

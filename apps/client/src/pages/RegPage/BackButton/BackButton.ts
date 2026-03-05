@@ -1,6 +1,6 @@
 import { ButtonComponent } from '@/api/ComponentsAPI';
 import type { BackButtonProperties } from './BackButton.types';
-import store from '@/store/store';
+import store from '@/store/clientUserStore';
 import { RegistrationActions } from '@/store/actions/registration.actions';
 
 export default class BackButton extends ButtonComponent {

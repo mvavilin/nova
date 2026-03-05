@@ -13,7 +13,9 @@ const MOCK_USER: ClientUser = {
   email: 'ivan.petrov@example.com',
   password: 'P@ssw0rd!',
   avatarUrl: 'https://example.com/avatars/ivan.png',
-  status: { status: Status.AUTHORIZED, subStatus: SubStatus.IN_LOBBY, context: {} },
+  status: Status.AUTHORIZED,
+  subStatus: SubStatus.IN_LOBBY,
+  context: {},
   language: Language.RU,
   theme: Theme.DARK,
 };

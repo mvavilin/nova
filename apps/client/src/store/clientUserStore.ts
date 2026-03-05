@@ -12,11 +12,11 @@ import storageAfterware from './afterwares/storage.afterware';
 import type { ClientUser } from '@types';
 import type { Actions } from './types/action.types';
 
-const store = new StateAPI<ClientUser, Actions>(ClientUserState);
+const clientUserStore = new StateAPI<ClientUser, Actions>(ClientUserState);
 
-store.addReducer(registrationReducer, welcomeReducer);
+clientUserStore.addReducer(registrationReducer, welcomeReducer);
 
-store.addMiddleware(senderMiddleware(), fetcherMiddleware());
-store.addAfterware(loggerAfterware(), storageAfterware('store'));
+clientUserStore.addMiddleware(senderMiddleware(), fetcherMiddleware());
+clientUserStore.addAfterware(loggerAfterware(), storageAfterware('store'));
 
-export default store;
+export default clientUserStore;

@@ -4,16 +4,17 @@ import type Page from '@ComponentsAPI/ui/PageComponent/PageComponent';
 import type App from '@components/App/App';
 
 import { Access } from '@router/router.enums';
-import { ROUTES, PATHS } from '@router/router.constants';
-
-import { ClientUserState } from '@state';
+import { ROUTES } from '@router/router.constants';
+import { PAGES } from '@constants';
 
 import { NotFoundPage } from '@pages';
+
+import clientUserStore from '@store/clientUserStore';
 
 export default class Router {
   private app: App;
   private routes = ROUTES;
-  private lastAllowedPath = PATHS.HOME.url();
+  private lastAllowedPath = PAGES.WELCOME.url();
 
   constructor(app: App) {
     this.app = app;
@@ -21,6 +22,11 @@ export default class Router {
 
   public init(): void {
     globalThis.addEventListener('popstate', () => this.render());
+
+    clientUserStore.subscribe(() => {
+      this.render();
+    });
+
     this.render();
   }
 
@@ -34,7 +40,7 @@ export default class Router {
     }
 
     if (!this.checkAccess(route)) {
-      this.navigate(this.lastAllowedPath);
+      this.redirect(this.lastAllowedPath);
       return;
     }
 
@@ -43,13 +49,14 @@ export default class Router {
   }
 
   private checkAccess(route: Route): boolean {
-    const { status: userStatus } = ClientUserState;
+    const clientUser = clientUserStore.getState();
+
     const accessCheck: Record<Access, () => boolean> = {
       [Access.PUBLIC]: () => true,
-      [Access.UNAUTHORIZED]: () => userStatus.status === Status.UNAUTHORIZED,
+      [Access.UNAUTHORIZED]: () => clientUser.status === Status.UNAUTHORIZED,
       [Access.AUTHORIZED]: () =>
-        userStatus.status === Status.AUTHORIZED &&
-        (!route.allowedSubStatuses || route.allowedSubStatuses.includes(userStatus.subStatus)),
+        clientUser.status === Status.AUTHORIZED &&
+        (!route.allowedSubStatuses || route.allowedSubStatuses.includes(clientUser.subStatus)),
     };
 
     return accessCheck[route.access]();
@@ -61,7 +68,7 @@ export default class Router {
     return match ? new route.page(parameters) : new NotFoundPage();
   }
 
-  public navigate(path: string): void {
+  public redirect(path: string): void {
     if (globalThis.location.pathname === path) return;
     globalThis.history.pushState({}, '', path);
     this.render();

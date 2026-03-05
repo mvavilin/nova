@@ -1,6 +1,6 @@
 import { TextComponent } from '@/api/ComponentsAPI';
 import type { RegTextProperties } from './RegText.types';
-import store from '@/store/store';
+import store from '@/store/clientUserStore';
 import type { Actions } from '@/store/types/action.types';
 import type { State } from '@/store/types/state.types';
 import { RegistrationActions } from '@/store/actions/registration.actions';

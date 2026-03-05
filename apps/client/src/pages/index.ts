@@ -1,17 +1,17 @@
 import Page from '@ComponentsAPI/ui/PageComponent/PageComponent';
 import HeadingComponent from '@ComponentsAPI/ui/HeadingComponent/HeadingComponent';
-import { PAGES_CONFIG } from '@constants';
+import { PAGES } from '@constants';
 
 export class LoginPage extends Page {
   constructor() {
-    const { id, label } = PAGES_CONFIG.LOGIN_PAGE;
+    const { id, label } = PAGES.LOGIN;
     super({ pageId: id, children: [new HeadingComponent({ level: 1, content: label })] });
   }
 }
 
 export class LobbyPage extends Page {
   constructor() {
-    const { id, label } = PAGES_CONFIG.LOBBY_PAGE;
+    const { id, label } = PAGES.LOBBY;
     super({
       pageId: id,
       children: [new HeadingComponent({ level: 1, content: label })],
@@ -21,21 +21,21 @@ export class LobbyPage extends Page {
 
 export class RoomPage extends Page {
   constructor() {
-    const { id, label } = PAGES_CONFIG.ROOM_PAGE;
+    const { id, label } = PAGES.ROOM;
     super({ pageId: id, children: [new HeadingComponent({ level: 1, content: label })] });
   }
 }
 
 export class GamePage extends Page {
   constructor() {
-    const { id, label } = PAGES_CONFIG.GAME_PAGE;
+    const { id, label } = PAGES.GAME;
     super({ pageId: id, children: [new HeadingComponent({ level: 1, content: label })] });
   }
 }
 
 export class SoloSetupPage extends Page {
   constructor() {
-    const { id, label } = PAGES_CONFIG.SOLO_SETUP_PAGE;
+    const { id, label } = PAGES.SOLO_SETUP;
     super({
       pageId: id,
       children: [new HeadingComponent({ level: 1, content: label })],
@@ -45,28 +45,28 @@ export class SoloSetupPage extends Page {
 
 export class SoloGamePage extends Page {
   constructor() {
-    const { id, label } = PAGES_CONFIG.SOLO_GAME_PAGE;
+    const { id, label } = PAGES.SOLO_GAME;
     super({ pageId: id, children: [new HeadingComponent({ level: 1, content: label })] });
   }
 }
 
 export class ResultsPage extends Page {
   constructor() {
-    const { id, label } = PAGES_CONFIG.RESULTS_PAGE;
+    const { id, label } = PAGES.RESULTS;
     super({ pageId: id, children: [new HeadingComponent({ level: 1, content: label })] });
   }
 }
 
 export class ProfilePage extends Page {
   constructor() {
-    const { id, label } = PAGES_CONFIG.PROFILE_PAGE;
+    const { id, label } = PAGES.PROFILE;
     super({ pageId: id, children: [new HeadingComponent({ level: 1, content: label })] });
   }
 }
 
 export class NotFoundPage extends Page {
   constructor() {
-    const { id, label } = PAGES_CONFIG.NOT_FOUND_PAGE;
+    const { id, label } = PAGES.NOT_FOUND;
     super({ pageId: id, children: [new HeadingComponent({ level: 1, content: label })] });
   }
 }

@@ -6,7 +6,9 @@ export const ClientUserState: ClientUser = {
   email: '',
   password: '',
   avatarUrl: '',
-  status: { status: Status.UNAUTHORIZED },
+  status: Status.UNAUTHORIZED,
+  subStatus: null,
+  context: {},
   language: Language.RU,
   theme: Theme.LIGHT,
 };
@@ -21,7 +23,9 @@ export const ClientUserState: ClientUser = {
 //   email: 'ivan.petrov@example.com',
 //   password: 'P@ssw0rd!',
 //   avatarUrl: 'https://example.com/avatars/ivan.png',
-//   status: { status: Status.AUTHORIZED, subStatus: SubStatus.IN_LOBBY, context: {} },
+//   status: Status.AUTHORIZED,
+//   subStatus: SubStatus.IN_LOBBY,
+//   context: {},
 //   language: Language.RU,
 //   theme: Theme.DARK,
 // };
@@ -32,11 +36,9 @@ export const ClientUserState: ClientUser = {
 //   email: 'maria.sidorova@example.com',
 //   password: 'S3cur3P@ss!',
 //   avatarUrl: 'https://example.com/avatars/maria.png',
-//   status: {
-//     status: Status.AUTHORIZED,
-//     subStatus: SubStatus.IN_ROOM,
-//     context: { roomCode: 'ABCD1234' },
-//   },
+//   status: Status.AUTHORIZED,
+//   subStatus: SubStatus.IN_ROOM,
+//   context: { roomCode: 'ABCD1234' },
 //   language: Language.RU,
 //   theme: Theme.LIGHT,
 // };

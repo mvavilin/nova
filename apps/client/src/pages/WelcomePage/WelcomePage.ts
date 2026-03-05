@@ -3,7 +3,7 @@ import type { WelcomePageProperties } from './WelcomePage.types';
 import LoginButton from '@/pages/WelcomePage/LoginButton/LoginButton';
 import WelcomeHeading from './WelcomeHeading/WelcomeHeading';
 import type { Action } from '@/api/StateAPI';
-import store from '@/store/store';
+import store from '@/store/clientUserStore';
 import RegButton from './RegButton/RegButton';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
 import type { State } from '@/store/types/state.types';

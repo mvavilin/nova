@@ -1,6 +1,6 @@
 import { ButtonComponent } from '@/api/ComponentsAPI';
 import type { FetchButtonProperties } from './FetchButton.types';
-import store from '@/store/store';
+import store from '@/store/clientUserStore';
 import { RegistrationActions } from '@/store/actions/registration.actions';
 
 export default class FetchButton extends ButtonComponent {

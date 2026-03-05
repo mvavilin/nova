@@ -5,7 +5,7 @@ import RegHeading from './RegHeading/RegHeading';
 import type { State } from '@/store/types/state.types';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
 import type { Action } from '@/api/StateAPI';
-import store from '@/store/store';
+import store from '@/store/clientUserStore';
 import { RegistrationActions } from '@/store/actions/registration.actions';
 import SendButton from './SendButton/SendButton';
 import FetchButton from './FetchButton/FetchButton';

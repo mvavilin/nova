@@ -36,7 +36,3 @@ export interface Context {
   team?: Team;
   role?: GameRole;
 }
-
-export type ClientUserStatus =
-  | { status: Status.UNAUTHORIZED }
-  | { status: Status.AUTHORIZED; subStatus: SubStatus; context?: Context };

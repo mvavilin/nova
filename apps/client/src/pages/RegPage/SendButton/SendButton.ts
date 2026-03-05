@@ -1,6 +1,6 @@
 import { ButtonComponent } from '@/api/ComponentsAPI';
 import type { SendButtonProperties } from './SendButton.types';
-import store from '@/store/store';
+import store from '@/store/clientUserStore';
 import { RegistrationActions } from '@/store/actions/registration.actions';
 
 export default class SendButton extends ButtonComponent {

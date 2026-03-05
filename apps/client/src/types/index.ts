@@ -7,10 +7,4 @@ export {
   type ClientUser,
 } from '@/types/clientUser';
 
-export {
-  SubStatus,
-  AuthStatus,
-  Status,
-  type Context,
-  type ClientUserStatus,
-} from '@/types/clientUserStatus';
+export { SubStatus, AuthStatus, Status, type Context } from '@/types/clientUserStatus';

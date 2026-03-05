@@ -1,5 +1,5 @@
 import { type User } from '@repo/shared/src/types';
-import { type ClientUserStatus } from '@types';
+import { Status, SubStatus, type Context } from '@types';
 
 export interface LoginDto {
   email: string;
@@ -29,7 +29,9 @@ export enum Theme {
 
 export interface ClientUser extends User {
   avatarUrl: string;
-  status: ClientUserStatus;
+  status: Status;
+  subStatus: SubStatus | null;
+  context: Context;
   language: Language;
   theme: Theme;
 }

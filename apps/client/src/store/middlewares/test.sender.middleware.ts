@@ -1,10 +1,10 @@
 import type { Middleware } from '@/api/StateAPI/types/types';
 import type { Actions } from '@/store/types/action.types';
-import { RegistrationActions } from '../actions/registration.actions';
+import { TestActions } from '../actions/test.actions';
 
 export default function sender<State>(): Middleware<State, Actions> {
   return async function middleware(context) {
-    if (context.action.type === RegistrationActions.SEND_DATA) {
+    if (context.action.type === TestActions.SEND_DATA) {
       if (!context.action.payload) {
         return context.next(context.action);
       }

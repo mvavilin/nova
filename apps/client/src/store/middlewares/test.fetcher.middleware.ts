@@ -1,10 +1,10 @@
 import type { Middleware } from '@/api/StateAPI/types/types';
-import { RegistrationActions } from '../actions/registration.actions';
+import { TestActions } from '../actions/test.actions';
 import type { Actions } from '../types/action.types';
 
 export default function fetcher<State>(): Middleware<State, Actions> {
   return async function middleware(context) {
-    if (context.action.type === RegistrationActions.FETCH_DATA) {
+    if (context.action.type === TestActions.FETCH_DATA) {
       const randomInt = (min: number, max: number): number =>
         Math.floor(Math.random() * (max - min + 1)) + min;
 
@@ -24,7 +24,7 @@ export default function fetcher<State>(): Middleware<State, Actions> {
         // если нужно добавить action, то через next
         // лучше не создавайте новый store.dispatch() можно отхватить рекурсию
         return context.next({
-          type: RegistrationActions.FETCH_SUCCESS,
+          type: TestActions.FETCH_SUCCESS,
           payload: { title },
         });
       } catch (error) {

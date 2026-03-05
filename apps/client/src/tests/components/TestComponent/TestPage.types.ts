@@ -1,3 +1,3 @@
 import type { ContainerComponentProperties } from '@/api/ComponentsAPI';
 
-export type RegPageProperties = {} & ContainerComponentProperties;
+export type TestPageProperties = {} & ContainerComponentProperties;

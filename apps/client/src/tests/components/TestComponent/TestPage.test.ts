@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import RegPage from './RegPage';
+import RegPage from './TestPage';
 
 describe('Reg page container creation', () => {
   it('creates a div element', () => {

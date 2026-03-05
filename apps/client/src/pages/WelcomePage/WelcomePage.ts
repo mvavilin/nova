@@ -7,7 +7,7 @@ import store from '@/store/store';
 import RegButton from './RegButton/RegButton';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
 import type { State } from '@/store/types/state.types';
-import { RegistrationActions } from '@/store/actions/registration.actions';
+import { RegistrationActions } from '@/store/actions/test.actions';
 
 export default class WelcomePage extends ContainerComponent {
   constructor({ ...rest }: WelcomePageProperties = {}) {

@@ -1,9 +1,9 @@
 import { describe, it, expect } from 'vitest';
-import RegText from './RegText';
+import TestText from './TestText';
 
-describe('Reg Text creation', () => {
+describe('Test Text creation', () => {
   it('creates a p element', () => {
-    const heading = new RegText();
+    const heading = new TestText();
 
     expect(heading.element?.tagName).toBe('P');
   });

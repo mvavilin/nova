@@ -6,7 +6,7 @@ import type { Action } from '@/api/StateAPI';
 import store from '@/store/clientUserStore';
 import RegButton from './RegButton/RegButton';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
-import type { State } from '@/store/types/state.types';
+import type { ClientUser } from '@types';
 import { RegistrationActions } from '@/store/actions/registration.actions';
 
 export default class WelcomePage extends ContainerComponent {
@@ -29,13 +29,13 @@ export default class WelcomePage extends ContainerComponent {
     this.appendChildren([new WelcomeHeading(), new RegButton(), new LoginButton()]);
   }
 
-  private hidePage(_state: State, action: Action): void {
+  private hidePage(_state: ClientUser, action: Action): void {
     if (action.type === WelcomeActions.GO_TO_REGISTRATION_PAGE) {
       this.hide(true, 500);
     }
   }
 
-  private showPage(_state: State, action: Action): void {
+  private showPage(_state: ClientUser, action: Action): void {
     if (action.type === RegistrationActions.GO_TO_WELCOME_PAGE) {
       setTimeout(() => {
         this.show(true, 500);

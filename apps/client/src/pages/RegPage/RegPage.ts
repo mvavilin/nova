@@ -2,7 +2,7 @@ import { ContainerComponent } from '@/api/ComponentsAPI';
 import type { RegPageProperties } from './RegPage.types';
 import BackButton from '@/pages/RegPage/BackButton/BackButton';
 import RegHeading from './RegHeading/RegHeading';
-import type { State } from '@/store/types/state.types';
+import type { ClientUser } from '@types';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
 import type { Action } from '@/api/StateAPI';
 import store from '@/store/clientUserStore';
@@ -37,7 +37,7 @@ export default class RegPage extends ContainerComponent {
     ]);
   }
 
-  private showPage(_state: State, action: Action): void {
+  private showPage(_state: ClientUser, action: Action): void {
     if (action.type === WelcomeActions.GO_TO_REGISTRATION_PAGE) {
       setTimeout(() => {
         this.show(true, 500);
@@ -45,7 +45,7 @@ export default class RegPage extends ContainerComponent {
     }
   }
 
-  private hidePage(_state: State, action: Action): void {
+  private hidePage(_state: ClientUser, action: Action): void {
     if (action.type === RegistrationActions.GO_TO_WELCOME_PAGE) {
       this.hide(true, 500);
     }

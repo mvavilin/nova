@@ -8,7 +8,7 @@ import {
   ResultsPage,
   ProfilePage,
 } from '@pages';
-import { AuthorizedSubStatus } from '@types';
+import { SubStatus } from '@types';
 import { type Route } from '@router/router.types';
 import { Access } from '@router/router.enums';
 import RegistrationPage from '@pages/RegistrationPage/RegistrationPage';
@@ -65,42 +65,42 @@ export const ROUTES: Route[] = [
     path: PATHS.LOBBY.pattern,
     page: LobbyPage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_LOBBY, AuthorizedSubStatus.IN_PROFILE],
+    allowedSubStatuses: [SubStatus.IN_LOBBY, SubStatus.IN_PROFILE],
   },
   {
     path: PATHS.ROOM.pattern,
     page: RoomPage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_ROOM],
+    allowedSubStatuses: [SubStatus.IN_ROOM],
   },
   {
     path: PATHS.GAME.pattern,
     page: GamePage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_GAME],
+    allowedSubStatuses: [SubStatus.IN_GAME],
   },
   {
     path: PATHS.SOLO_SETUP.pattern,
     page: SoloSetupPage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_SOLO_SETUP],
+    allowedSubStatuses: [SubStatus.IN_SOLO_SETUP],
   },
   {
     path: PATHS.SOLO_PLAY.pattern,
     page: SoloGamePage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_SOLO_GAME],
+    allowedSubStatuses: [SubStatus.IN_SOLO_GAME],
   },
   {
     path: PATHS.RESULTS.pattern,
     page: ResultsPage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_RESULTS],
+    allowedSubStatuses: [SubStatus.IN_RESULTS],
   },
   {
     path: PATHS.PROFILE.pattern,
     page: ProfilePage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_PROFILE, AuthorizedSubStatus.IN_LOBBY],
+    allowedSubStatuses: [SubStatus.IN_PROFILE, SubStatus.IN_LOBBY],
   },
 ];

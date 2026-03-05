@@ -1,5 +1,5 @@
 import StateAPI from '../api/StateAPI';
-import initialState from './initialState';
+import { ClientUserState } from '@state';
 
 import senderMiddleware from './middlewares/sender.middleware';
 import fetcherMiddleware from './middlewares/fetcher.middleware';
@@ -9,10 +9,10 @@ import welcomeReducer from './reducers/welcome.reducer';
 
 import loggerAfterware from '@/store/afterwares/logger.afterware';
 import storageAfterware from './afterwares/storage.afterware';
-import type { State } from './types/state.types';
+import type { ClientUser } from '@types';
 import type { Actions } from './types/action.types';
 
-const store = new StateAPI<State, Actions>(initialState);
+const store = new StateAPI<ClientUser, Actions>(ClientUserState);
 
 store.addReducer(registrationReducer, welcomeReducer);
 

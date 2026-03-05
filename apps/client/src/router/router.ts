@@ -1,4 +1,4 @@
-import { UserType } from '@types';
+import { Status } from '@types';
 import type { Route } from '@router/router.types';
 import type Page from '@ComponentsAPI/ui/PageComponent/PageComponent';
 import type App from '@components/App/App';
@@ -6,7 +6,7 @@ import type App from '@components/App/App';
 import { Access } from '@router/router.enums';
 import { ROUTES, PATHS } from '@router/router.constants';
 
-import { UserState } from '@store/initialState';
+import { ClientUserState } from '@state';
 
 import { NotFoundPage } from '@pages';
 
@@ -43,12 +43,12 @@ export default class Router {
   }
 
   private checkAccess(route: Route): boolean {
-    const { status: userStatus } = UserState;
+    const { status: userStatus } = ClientUserState;
     const accessCheck: Record<Access, () => boolean> = {
       [Access.PUBLIC]: () => true,
-      [Access.UNAUTHORIZED]: () => userStatus.type === UserType.UNAUTHORIZED,
+      [Access.UNAUTHORIZED]: () => userStatus.status === Status.UNAUTHORIZED,
       [Access.AUTHORIZED]: () =>
-        userStatus.type === UserType.AUTHORIZED &&
+        userStatus.status === Status.AUTHORIZED &&
         (!route.allowedSubStatuses || route.allowedSubStatuses.includes(userStatus.subStatus)),
     };
 

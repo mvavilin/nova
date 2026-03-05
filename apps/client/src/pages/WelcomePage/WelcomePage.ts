@@ -30,7 +30,7 @@ export default class WelcomePage extends ContainerComponent {
   }
 
   private hidePage(_state: State, action: Action): void {
-    if (action.type === WelcomeActions.GO_TO_REGISTRATION_PAGE) {
+    if (action.type === WelcomeActions.GO_TO_REGISTRATION1_PAGE) {
       this.hide(true, 500);
     }
   }

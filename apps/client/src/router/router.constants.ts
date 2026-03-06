@@ -18,7 +18,7 @@ import { PAGES } from '@constants';
 export const ROUTES: Route[] = [
   { path: PAGES.WELCOME.pattern, page: WelcomePage, access: Access.PUBLIC },
   { path: PAGES.LOGIN.pattern, page: LoginPage, access: Access.UNAUTHORIZED },
-  { path: PAGES.REGISTERATION.pattern, page: RegistrationPage, access: Access.UNAUTHORIZED },
+  { path: PAGES.REGISTRATION.pattern, page: RegistrationPage, access: Access.UNAUTHORIZED },
   {
     path: PAGES.LOBBY.pattern,
     page: LobbyPage,

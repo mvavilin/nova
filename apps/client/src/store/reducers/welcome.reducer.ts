@@ -12,7 +12,7 @@ export default function welcomePageReducer<State>(state: State, action: Action):
     }
 
     case WelcomeActions.GO_TO_REGISTRATION_PAGE: {
-      updateUrl(PAGES.REGISTERATION.url());
+      updateUrl(PAGES.REGISTRATION.url());
 
       return { ...state };
     }

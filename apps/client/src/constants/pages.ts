@@ -11,11 +11,11 @@ export const PAGES = {
     pattern: /^\/login$/,
     url: () => '/login',
   },
-  REGISTERATION: {
-    id: 'registeration',
-    label: 'Registeration',
-    pattern: /^\/registeration$/,
-    url: () => '/registeration',
+  REGISTRATION: {
+    id: 'registration',
+    label: 'Registration',
+    pattern: /^\/registration$/,
+    url: () => '/registration',
   },
   LOBBY: {
     id: 'lobby',

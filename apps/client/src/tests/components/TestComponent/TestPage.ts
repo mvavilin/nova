@@ -1,10 +1,10 @@
-import { ContainerComponent } from '@/api/ComponentsAPI';
+import { PageComponent } from '@ComponentsAPI';
 import type { TestPageProperties } from './TestPage.types';
 import TestHeading from './TestHeading/TestHeading';
 import TestButton from './TestButton/TestButton';
 import TestText from './TestText/TestText';
 
-export default class TestPage extends ContainerComponent {
+export default class TestPage extends PageComponent {
   constructor({ ...rest }: TestPageProperties = {}) {
     super({
       id: 'test-page',

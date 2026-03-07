@@ -51,3 +51,6 @@ export * from './layout/ContainerComponent/ContainerComponent.types';
 
 export { default as ListComponent } from './layout/ListComponent/ListComponent';
 export * from './layout/ListComponent/ListComponent.types';
+
+export { default as PageComponent } from './layout/PageComponent/PageComponent';
+export * from './layout/PageComponent/PageComponent.types';

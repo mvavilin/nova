@@ -1,14 +1,20 @@
 import type { Action } from 'api/StateAPI';
 import { WelcomeActions } from '../actions/welcome.actions';
+import { PAGES } from '@constants';
+import { updateUrl } from '@utils';
 
 export default function welcomePageReducer<State>(state: State, action: Action): State {
   switch (action.type) {
     case WelcomeActions.GO_TO_LOGIN_PAGE: {
-      return { ...state, page: 'login' };
+      updateUrl(PAGES.LOGIN.url());
+
+      return { ...state };
     }
 
-    case WelcomeActions.GO_TO_TEST_PAGE: {
-      return { ...state, page: 'registration' };
+    case WelcomeActions.GO_TO_REGISTRATION_PAGE: {
+      updateUrl(PAGES.REGISTRATION.url());
+
+      return { ...state };
     }
 
     default: {

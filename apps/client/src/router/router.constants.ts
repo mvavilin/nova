@@ -8,99 +8,57 @@ import {
   ResultsPage,
   ProfilePage,
 } from '@pages';
-import { AuthorizedSubStatus } from '@types';
+import { SubStatus } from '@types';
 import { type Route } from '@router/router.types';
 import { Access } from '@router/router.enums';
 import RegistrationPage from '@pages/RegistrationPage/RegistrationPage';
 import WelcomePage from '@pages/WelcomePage/WelcomePage';
-
-export const PATHS = {
-  HOME: {
-    pattern: /^\/$/,
-    url: () => '/',
-  },
-  LOGIN: {
-    pattern: /^\/login$/,
-    url: () => '/login',
-  },
-  REGISTER: {
-    pattern: /^\/registeration$/,
-    url: () => '/registeration',
-  },
-  LOBBY: {
-    pattern: /^\/lobby$/,
-    url: () => '/lobby',
-  },
-  ROOM: {
-    pattern: /^\/room\/(?<code>[^/]+)$/,
-    url: (code: string) => `/room/${code}`,
-  },
-  GAME: {
-    pattern: /^\/game\/(?<code>[^/]+)$/,
-    url: (code: string) => `/game/${code}`,
-  },
-  SOLO_SETUP: {
-    pattern: /^\/solo$/,
-    url: () => '/solo',
-  },
-  SOLO_PLAY: {
-    pattern: /^\/solo\/play$/,
-    url: () => '/solo/play',
-  },
-  RESULTS: {
-    pattern: /^\/results\/(?<gameId>[^/]+)$/,
-    url: (gameId: string) => `/results/${gameId}`,
-  },
-  PROFILE: {
-    pattern: /^\/profile$/,
-    url: () => '/profile',
-  },
-} as const;
+import { PAGES } from '@constants';
 
 export const ROUTES: Route[] = [
-  { path: PATHS.HOME.pattern, page: WelcomePage, access: Access.PUBLIC },
-  { path: PATHS.LOGIN.pattern, page: LoginPage, access: Access.UNAUTHORIZED },
-  { path: PATHS.REGISTER.pattern, page: RegistrationPage, access: Access.UNAUTHORIZED },
+  { path: PAGES.WELCOME.pattern, page: WelcomePage, access: Access.PUBLIC },
+  { path: PAGES.LOGIN.pattern, page: LoginPage, access: Access.UNAUTHORIZED },
+  { path: PAGES.REGISTRATION.pattern, page: RegistrationPage, access: Access.UNAUTHORIZED },
   {
-    path: PATHS.LOBBY.pattern,
+    path: PAGES.LOBBY.pattern,
     page: LobbyPage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_LOBBY, AuthorizedSubStatus.IN_PROFILE],
+    allowedSubStatuses: [SubStatus.IN_LOBBY, SubStatus.IN_PROFILE],
   },
   {
-    path: PATHS.ROOM.pattern,
+    path: PAGES.ROOM.pattern,
     page: RoomPage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_ROOM],
+    allowedSubStatuses: [SubStatus.IN_ROOM],
   },
   {
-    path: PATHS.GAME.pattern,
+    path: PAGES.GAME.pattern,
     page: GamePage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_GAME],
+    allowedSubStatuses: [SubStatus.IN_GAME],
   },
   {
-    path: PATHS.SOLO_SETUP.pattern,
+    path: PAGES.SOLO_SETUP.pattern,
     page: SoloSetupPage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_SOLO_SETUP],
+    allowedSubStatuses: [SubStatus.IN_SOLO_SETUP],
   },
   {
-    path: PATHS.SOLO_PLAY.pattern,
+    path: PAGES.SOLO_GAME.pattern,
     page: SoloGamePage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_SOLO_GAME],
+    allowedSubStatuses: [SubStatus.IN_SOLO_GAME],
   },
   {
-    path: PATHS.RESULTS.pattern,
+    path: PAGES.RESULTS.pattern,
     page: ResultsPage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_RESULTS],
+    allowedSubStatuses: [SubStatus.IN_RESULTS],
   },
   {
-    path: PATHS.PROFILE.pattern,
+    path: PAGES.PROFILE.pattern,
     page: ProfilePage,
     access: Access.AUTHORIZED,
-    allowedSubStatuses: [AuthorizedSubStatus.IN_PROFILE, AuthorizedSubStatus.IN_LOBBY],
+    allowedSubStatuses: [SubStatus.IN_PROFILE, SubStatus.IN_LOBBY],
   },
 ];

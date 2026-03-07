@@ -11,6 +11,8 @@ export const inputNameInfo: inputBlockType = {
   pattern: /^[a-za-яёA-ZА-ЯЁ0-9-]+$/,
   errorMessage: `•\u00A0Minimum length is 2, maximum length is 20. •\u00A0Only English and Russian letters, digits and hyphen are allowed.`,
   labelText: 'Name',
+  // TODO: тестовые данные, удалить в продакшене
+  value: 'Test',
 };
 
 export const inputEmailInfo: inputBlockType = {
@@ -24,6 +26,8 @@ export const inputEmailInfo: inputBlockType = {
   pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
   errorMessage: `•\u00A0Minimum length is 6, maximum length is 30. •\u00A0Please enter a valid email address (e.g., name@domain.com).`,
   labelText: 'Email',
+  // TODO: тестовые данные, удалить в продакшене
+  value: 'test@mail.ru',
 };
 
 export const inputPasswordInfo: inputBlockType = {
@@ -38,4 +42,6 @@ export const inputPasswordInfo: inputBlockType = {
   errorMessage: `•\u00A0Minimum length is 6, maximum length is 12.
     •\u00A0Password must contain one capital English or Russian letter and one special character.`,
   labelText: 'Password',
+  // TODO: тестовые данные, удалить в продакшене
+  value: 'Test1*',
 };

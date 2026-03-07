@@ -1,5 +1,5 @@
 import type { RegisterDto, ClientUser, AuthResult } from '@types';
-import { Status, SubStatus, Language, Theme } from '@types';
+import { AuthStatus, SubStatus, Language, Theme } from '@types';
 import { baseEndpoints, Endpoints } from './api.types';
 import { delay } from './helpers.api';
 
@@ -13,7 +13,7 @@ const MOCK_USER: ClientUser = {
   email: 'ivan.petrov@example.com',
   password: 'P@ssw0rd!',
   avatarUrl: 'https://example.com/avatars/ivan.png',
-  status: Status.AUTHORIZED,
+  authStatus: AuthStatus.AUTHORIZED,
   subStatus: SubStatus.IN_LOBBY,
   context: {},
   language: Language.RU,

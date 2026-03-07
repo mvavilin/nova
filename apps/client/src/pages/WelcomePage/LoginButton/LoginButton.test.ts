@@ -1,4 +1,10 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import { mockClientUserStore } from '@__mocks__/store/clientUserStore.mock';
+
+vi.mock('@store/clientUserStore', () => ({
+  clientUserStore: mockClientUserStore,
+}));
+
 import LoginButton from './LoginButton';
 
 describe('Login button creation', () => {

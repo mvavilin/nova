@@ -24,7 +24,9 @@
       "@state": ["state"],
       "@store/*": ["store/*"],
       "@store": ["store"],
-      "@utils/*": ["utils/*"]
+      "@utils/*": ["utils/*"],
+      "@assets/*": ["assets/*"],
+      "@__mocks__/*": ["__mocks__/*"]
     }
   },
   "include": ["src", "vite.config.ts", "vitest.config.ts"]

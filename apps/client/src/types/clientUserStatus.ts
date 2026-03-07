@@ -1,3 +1,8 @@
+export enum AuthStatus {
+  UNAUTHORIZED = 'UNAUTHORIZED',
+  AUTHORIZED = 'AUTHORIZED',
+}
+
 export enum SubStatus {
   IN_LOBBY = 'IN_LOBBY',
   IN_ROOM = 'IN_ROOM',
@@ -6,16 +11,6 @@ export enum SubStatus {
   IN_SOLO_GAME = 'IN_SOLO_GAME',
   IN_RESULTS = 'IN_RESULTS',
   IN_PROFILE = 'IN_PROFILE',
-}
-
-export enum AuthStatus {
-  UNAUTHORIZED = 'UNAUTHORIZED',
-  AUTHORIZED = 'AUTHORIZED',
-}
-
-export enum Status {
-  UNAUTHORIZED = AuthStatus.UNAUTHORIZED,
-  AUTHORIZED = AuthStatus.AUTHORIZED,
 }
 
 enum Team {

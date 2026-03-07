@@ -9,4 +9,5 @@ export type inputBlockType = {
   pattern: RegExp;
   errorMessage: string;
   labelText: string;
+  value: string;
 };

@@ -1,6 +1,6 @@
 import { ButtonComponent } from '@/api/ComponentsAPI';
 import type { RegButtonProperties } from './RegButton.types';
-import clientUserStore from '@store/clientUserStore';
+import { clientUserStore } from '@store/clientUserStore';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
 
 export default class RegButton extends ButtonComponent {

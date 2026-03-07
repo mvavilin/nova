@@ -1,7 +1,7 @@
 import { ButtonComponent } from '@/api/ComponentsAPI';
 import type { LoginButtonProperties } from './LoginButton.types';
-import store from '@/store/clientUserStore';
-import { WelcomeActions } from '@/store/actions/welcome.actions';
+import { clientUserStore } from '@store/clientUserStore';
+import { WelcomeActions } from '@store/actions/welcome.actions';
 
 export default class LoginButton extends ButtonComponent {
   constructor({ ...rest }: LoginButtonProperties = {}) {
@@ -19,7 +19,7 @@ export default class LoginButton extends ButtonComponent {
     this.setContent('LOGIN');
     this.setListeners({
       click: (): void => {
-        store.dispatch({
+        clientUserStore.dispatch({
           type: WelcomeActions.GO_TO_LOGIN_PAGE,
         });
       },

@@ -1,4 +1,4 @@
-import { Status } from '@types';
+import { AuthStatus } from '@types';
 import type { Route } from '@router/router.types';
 import type Page from '@ComponentsAPI/layout/PageComponent/PageComponent';
 import type App from '@components/App/App';
@@ -9,7 +9,7 @@ import { PAGES } from '@constants';
 
 import { NotFoundPage } from '@pages';
 
-import clientUserStore from '@store/clientUserStore';
+import { clientUserStore } from '@store/clientUserStore';
 
 export default class Router {
   private app: App;
@@ -22,11 +22,6 @@ export default class Router {
 
   public init(): void {
     globalThis.addEventListener('popstate', () => this.render());
-
-    clientUserStore.subscribe(() => {
-      this.render();
-    });
-
     this.render();
   }
 
@@ -51,11 +46,13 @@ export default class Router {
   private checkAccess(route: Route): boolean {
     const clientUser = clientUserStore.getState();
 
+    if (!clientUser) return false;
+
     const accessCheck: Record<Access, () => boolean> = {
       [Access.PUBLIC]: () => true,
-      [Access.UNAUTHORIZED]: () => clientUser.status === Status.UNAUTHORIZED,
+      [Access.UNAUTHORIZED]: () => clientUser.authStatus === AuthStatus.UNAUTHORIZED,
       [Access.AUTHORIZED]: () =>
-        clientUser.status === Status.AUTHORIZED &&
+        clientUser.authStatus === AuthStatus.AUTHORIZED &&
         (!route.allowedSubStatuses || route.allowedSubStatuses.includes(clientUser.subStatus)),
     };
 

@@ -24,6 +24,8 @@ import { checkForm } from '@/utils/validateForm';
 import { saveStorageData } from '@/utils/localStorage';
 import { register } from '@/api/auth.api';
 import { localStorageProps } from '@/constants/localStorage.constants';
+import { clientUserStore } from '@/store/clientUserStore';
+import { RegistrationActions } from '@/store/actions/registration.actions';
 
 const inputFocusedClass = 'focus:border-yellow';
 const inputInvalidClass = 'border-red focus:border-red';
@@ -81,6 +83,8 @@ export default class RegistrationPage extends BaseComponent {
       placeholder: options.placeholder,
       autocomplete: options.autocomplete,
       classes: inputStyles,
+      // TODO: тестовые данные, удалить в продакшене
+      value: options.value,
     });
 
     if (options.minLength && options.maxLength) {
@@ -121,6 +125,7 @@ export default class RegistrationPage extends BaseComponent {
       if (user && token) {
         saveStorageData(localStorageProps.token, token);
         saveStorageData(localStorageProps.user, user);
+        clientUserStore.dispatch({ type: RegistrationActions.REGISTER_USER });
       }
     } catch (error) {
       console.error(error);

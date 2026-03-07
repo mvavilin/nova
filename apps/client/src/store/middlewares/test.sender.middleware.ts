@@ -1,5 +1,5 @@
 import type { Middleware } from '@/api/StateAPI/types/types';
-import type { Actions } from '@/store/types/action.types';
+import type { Actions } from '@/store/types/action';
 import { TestActions } from '../actions/test.actions';
 
 export default function sender<State>(): Middleware<State, Actions> {

@@ -1,14 +1,11 @@
 import { Access } from '@api/RouterAPI/router.types';
-import { Status } from '@types';
-import clientUserStore from '@store/clientUserStore';
+import store from '@store/store';
 
 export const isRouteAccessible = (access: Access): boolean => {
-  const clientUser = clientUserStore.getState();
-
   const accessCheck: Record<Access, () => boolean> = {
     [Access.PUBLIC]: () => true,
-    [Access.UNAUTHORIZED]: () => clientUser.status === Status.UNAUTHORIZED,
-    [Access.AUTHORIZED]: () => clientUser.status === Status.AUTHORIZED,
+    [Access.UNAUTHORIZED]: () => store.getState().authStatus === false,
+    [Access.AUTHORIZED]: () => store.getState().authStatus === true,
   };
 
   return accessCheck[access]();

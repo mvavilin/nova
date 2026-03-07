@@ -3,10 +3,10 @@ import type { WelcomePageProperties } from './WelcomePage.types';
 import LoginButton from '@/pages/WelcomePage/LoginButton/LoginButton';
 import WelcomeHeading from './WelcomeHeading/WelcomeHeading';
 import type { Action } from '@/api/StateAPI';
-import clientUserStore from '@store/clientUserStore';
+import store from '@store/store';
 import RegButton from './RegButton/RegButton';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
-import type { ClientUser } from '@types';
+import type { State } from '@store/types/state';
 import { TestActions } from '@/store/actions/test.actions';
 
 export default class WelcomePage extends ContainerComponent {
@@ -18,8 +18,8 @@ export default class WelcomePage extends ContainerComponent {
     });
 
     this.addSubscriptions([
-      clientUserStore.subscribe((state, action) => this.showPage(state, action)),
-      clientUserStore.subscribe((state, action) => this.hidePage(state, action)),
+      store.subscribe((state, action) => this.showPage(state, action)),
+      store.subscribe((state, action) => this.hidePage(state, action)),
     ]);
 
     this.render();
@@ -29,13 +29,13 @@ export default class WelcomePage extends ContainerComponent {
     this.appendChildren([new WelcomeHeading(), new RegButton(), new LoginButton()]);
   }
 
-  private hidePage(_state: ClientUser, action: Action): void {
+  private hidePage(_state: State, action: Action): void {
     if (action.type === WelcomeActions.GO_TO_TEST_PAGE) {
       this.hide(true, 500);
     }
   }
 
-  private showPage(_state: ClientUser, action: Action): void {
+  private showPage(_state: State, action: Action): void {
     if (action.type === TestActions.GO_TO_WELCOME_PAGE) {
       setTimeout(() => {
         this.show(true, 500);

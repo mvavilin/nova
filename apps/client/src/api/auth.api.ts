@@ -1,5 +1,4 @@
-import type { RegisterDto, ClientUser, AuthResult } from '@types';
-import { Status, SubStatus, Language, Theme } from '@types';
+import type { RegisterDto, User, AuthResult } from '@/types/user.types';
 import { baseEndpoints, Endpoints } from './api.types';
 import { delay } from './helpers.api';
 
@@ -7,17 +6,11 @@ import { delay } from './helpers.api';
 const USE_MOCK = import.meta.env['VITE_USE_MOCK'] === 'true';
 
 // 2. Мок-данные
-const MOCK_USER: ClientUser = {
-  id: '12345',
-  username: 'ivan_petrov',
-  email: 'ivan.petrov@example.com',
-  password: 'P@ssw0rd!',
-  avatarUrl: 'https://example.com/avatars/ivan.png',
-  status: Status.AUTHORIZED,
-  subStatus: SubStatus.IN_LOBBY,
-  context: {},
-  language: Language.RU,
-  theme: Theme.DARK,
+const MOCK_USER: User = {
+  id: 'usr_a1b2c3d4',
+  username: 'Alice',
+  email: 'alice101@example.com',
+  password: 'W!123456',
 };
 const MOCK_TOKEN = '123456789';
 

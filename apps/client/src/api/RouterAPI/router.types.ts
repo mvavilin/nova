@@ -1,10 +1,9 @@
 import type BaseComponent from '@ComponentsAPI/base/BaseComponent';
-import { AuthStatus } from '@types';
 
 export enum Access {
   PUBLIC = 'PUBLIC',
-  UNAUTHORIZED = AuthStatus.UNAUTHORIZED,
-  AUTHORIZED = AuthStatus.AUTHORIZED,
+  UNAUTHORIZED = 'UNAUTHORIZED',
+  AUTHORIZED = 'AUTHORIZED',
 }
 
 export interface Route {

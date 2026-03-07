@@ -2,7 +2,7 @@
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": ".",
+    "rootDir": "../../../",
     "module": "nodenext",
     "target": "esnext",
     "types": [],
@@ -14,5 +14,6 @@
     "moduleResolution": "nodenext",
     "noEmit": false,
     "rewriteRelativeImportExtensions": true
-  }
+  },
+  "include": ["../../packages/shared", "."]
 }

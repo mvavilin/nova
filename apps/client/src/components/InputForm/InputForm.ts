@@ -6,8 +6,8 @@ import type { FormType } from '../BaseForm/BaseFormTypes';
 import type { FieldName, InputBlockProps } from './InputForm.type';
 import { FormActions } from '@/store/actions/baseForm.actions';
 import type { Action } from '@/api/StateAPI';
-import type { State } from '@/store/types/state.types';
-import store from '@/store/store';
+import type { ClientUser } from '@/types';
+import clientUserStore from '@/store/clientUserStore';
 
 export default class InputForm extends ContainerComponent {
   private formId: FormType;
@@ -70,8 +70,8 @@ export default class InputForm extends ContainerComponent {
     const value = event.target.value;
     const isValid = this.pattern.test(value) && value.length >= Number(event.target.minLength);
     const errorMessage = isValid ? '' : this.errorMessage;
-
-    store.dispatch({
+    console.log(clientUserStore);
+    clientUserStore.dispatch({
       type: FormActions.FORM_UPDATE_FIELD,
       payload: {
         formId: this.formId,
@@ -85,13 +85,13 @@ export default class InputForm extends ContainerComponent {
 
   private addSubscribe(): void {
     this.addSubscriptions([
-      store.subscribe((state, action) => this.updateInputForm(state, action)),
+      clientUserStore.subscribe((state, action) => this.updateInputForm(state, action)),
     ]);
   }
 
-  private updateInputForm(_state: State, action: Action): void {
+  private updateInputForm(_state: ClientUser, action: Action): void {
     if (action.type === FormActions.FORM_UPDATE_FIELD) {
-      const formState = store.getState()[this.formId];
+      const formState = clientUserStore.getState()[this.formId];
       const fieldState = formState.fields[this.fieldName];
 
       if (!fieldState) return;

@@ -1,7 +1,10 @@
 export {
-  AuthorizedSubStatus,
-  UserType,
-  type StatusContext,
-  AuthStatus,
-  type UserStatus,
-} from '@/types/userStatus';
+  type LoginDto,
+  type RegisterDto,
+  type AuthResult,
+  Language,
+  Theme,
+  type ClientUser,
+} from '@/types/clientUser';
+
+export { SubStatus, AuthStatus, Status, type Context } from '@/types/clientUserStatus';

@@ -1,6 +1,10 @@
 import { Router, type NextFunction, type Request, type Response } from 'express';
-import { LoginDtoSchema, RegisterDtoSchema } from '../models/auth.ts';
-import { HttpStatus, ServerConstants } from '../models/api.types.ts';
+import { LoginDtoSchema, RegisterDtoSchema } from '../../../../packages/shared/src/schemas/auth.ts';
+import {
+  Endpoints,
+  HttpStatus,
+  ServerConstants,
+} from '../../../../packages/shared/src/api.constants.ts';
 import { prisma } from '../prisma/prisma.ts';
 import * as argon from 'argon2';
 import jwt from 'jsonwebtoken';
@@ -79,7 +83,7 @@ const register = async (req: Request, res: Response, next: NextFunction): Promis
 
 const authRouter = Router();
 
-authRouter.post('/login', login);
-authRouter.post('/register', register);
+authRouter.post(Endpoints.LOGIN, login);
+authRouter.post(Endpoints.REGISTRATION, register);
 
 export { authRouter };

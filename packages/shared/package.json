@@ -2,5 +2,11 @@
   "name": "@repo/shared",
   "version": "0.0.1",
   "private": true,
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@repo/typescript-config": "^0.0.0"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
+  }
 }

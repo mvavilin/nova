@@ -1,1 +1,1 @@
-export { PAGES_CONFIG } from '@constants/pages';
+export { PAGES } from '@constants/pages';

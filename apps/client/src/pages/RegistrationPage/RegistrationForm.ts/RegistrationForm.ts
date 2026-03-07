@@ -40,7 +40,5 @@ export default class RegistrationForm extends BaseForm {
       inputArray: [nameInput, emailInput, passwordInput],
       buttonSubmit: submitButton,
     });
-
-    // this.appendChildren([title, nameInput, emailInput, passwordInput, submitButton]);
   }
 }

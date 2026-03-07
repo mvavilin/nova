@@ -24,7 +24,7 @@ export default class Router {
     globalThis.addEventListener('popstate', () => this.render());
 
     clientUserStore.subscribe(() => {
-      this.render();
+      // this.render();
     });
 
     this.render();

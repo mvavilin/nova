@@ -8,6 +8,7 @@ import RegButton from './RegButton/RegButton';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
 import type { ClientUser } from '@types';
 import { TestActions } from '@/store/actions/test.actions';
+import LangButton from './LangButton/LangButton';
 
 export default class WelcomePage extends ContainerComponent {
   constructor({ ...rest }: WelcomePageProperties = {}) {
@@ -26,7 +27,12 @@ export default class WelcomePage extends ContainerComponent {
   }
 
   private render(): void {
-    this.appendChildren([new WelcomeHeading(), new RegButton(), new LoginButton()]);
+    this.appendChildren([
+      new WelcomeHeading(),
+      new RegButton(),
+      new LoginButton(),
+      new LangButton(),
+    ]);
   }
 
   private hidePage(_state: ClientUser, action: Action): void {

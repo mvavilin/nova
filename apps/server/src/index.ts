@@ -1,6 +1,6 @@
 import server from './app.js';
 import 'dotenv/config';
-import { ServerConstants } from '@repo/shared/src/api.constants.ts';
+import { ServerConstants } from '../../../packages/shared/src/api.constants.ts';
 
 const port = process.env.PORT || ServerConstants.DEFAULT_PORT;
 

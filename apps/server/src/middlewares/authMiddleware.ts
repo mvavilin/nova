@@ -2,7 +2,7 @@ import type { ExtendedError, Socket } from 'socket.io';
 import * as z from 'zod';
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
-import { ServerConstants } from '@repo/shared/src/api.constants.ts';
+import { ServerConstants } from '../../../../packages/shared/src/api.constants.ts';
 import { prisma } from '../prisma/prisma.ts';
 
 export const authMiddleware = async (

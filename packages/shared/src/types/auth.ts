@@ -1,5 +1,5 @@
 import * as z from 'zod';
-import type { LoginDtoSchema, RegisterDtoSchema, WSHandshakeAuthSchema } from '../schemas/auth';
+import type { LoginDtoSchema, RegisterDtoSchema, WSHandshakeAuthSchema } from '../schemas/auth.ts';
 
 export type LoginDto = z.infer<typeof LoginDtoSchema>;
 

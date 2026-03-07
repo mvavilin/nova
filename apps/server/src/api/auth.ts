@@ -1,6 +1,10 @@
 import { Router, type NextFunction, type Request, type Response } from 'express';
-import { LoginDtoSchema, RegisterDtoSchema } from '@repo/shared/src/schemas/auth.ts';
-import { Endpoints, HttpStatus, ServerConstants } from '@repo/shared/src/api.constants.ts';
+import { LoginDtoSchema, RegisterDtoSchema } from '../../../../packages/shared/src/schemas/auth.ts';
+import {
+  Endpoints,
+  HttpStatus,
+  ServerConstants,
+} from '../../../../packages/shared/src/api.constants.ts';
 import { prisma } from '../prisma/prisma.ts';
 import * as argon from 'argon2';
 import jwt from 'jsonwebtoken';

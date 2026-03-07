@@ -3,11 +3,11 @@ import type { WelcomePageProperties } from './WelcomePage.types';
 import LoginButton from '@/pages/WelcomePage/LoginButton/LoginButton';
 import WelcomeHeading from './WelcomeHeading/WelcomeHeading';
 import type { Action } from '@/api/StateAPI';
-import store from '@/store/clientUserStore';
+import clientUserStore from '@store/clientUserStore';
 import RegButton from './RegButton/RegButton';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
 import type { ClientUser } from '@types';
-import { RegistrationActions } from '@/store/actions/registration.actions';
+import { TestActions } from '@/store/actions/test.actions';
 
 export default class WelcomePage extends ContainerComponent {
   constructor({ ...rest }: WelcomePageProperties = {}) {
@@ -18,8 +18,8 @@ export default class WelcomePage extends ContainerComponent {
     });
 
     this.addSubscriptions([
-      store.subscribe((state, action) => this.showPage(state, action)),
-      store.subscribe((state, action) => this.hidePage(state, action)),
+      clientUserStore.subscribe((state, action) => this.showPage(state, action)),
+      clientUserStore.subscribe((state, action) => this.hidePage(state, action)),
     ]);
 
     this.render();
@@ -30,13 +30,13 @@ export default class WelcomePage extends ContainerComponent {
   }
 
   private hidePage(_state: ClientUser, action: Action): void {
-    if (action.type === WelcomeActions.GO_TO_REGISTRATION_PAGE) {
+    if (action.type === WelcomeActions.GO_TO_TEST_PAGE) {
       this.hide(true, 500);
     }
   }
 
   private showPage(_state: ClientUser, action: Action): void {
-    if (action.type === RegistrationActions.GO_TO_WELCOME_PAGE) {
+    if (action.type === TestActions.GO_TO_WELCOME_PAGE) {
       setTimeout(() => {
         this.show(true, 500);
       }, 500);

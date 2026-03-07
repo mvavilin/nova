@@ -6,16 +6,15 @@
   "type": "module",
   "scripts": {
     "test": "echo \"No tests configured\"",
-    "build": "tsc",
+    "build": "rm -rf dist && tsc",
     "lint": "npx eslint src",
     "lint:fix": "eslint \"**/*.{ts,tsx,js}\" --fix",
     "format": "prettier --write \"**/*.{ts,tsx,md,js,json}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,js,json}\"",
-    "start": "node ./dist/src/index.js",
+    "start": "node ./dist/Nova-Codenames/apps/server/src/index.js",
     "dev": "tsx watch ./src/index.js",
     "prisma:migrate": "npx prisma migrate dev --name init",
-    "prisma:generate": "npx prisma generate",
-    "start:deploy": "node ./dist/src/index.js"
+    "prisma:generate": "npx prisma generate"
   },
   "keywords": [],
   "author": "",

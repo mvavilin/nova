@@ -3,13 +3,15 @@ import { TranslationKeys } from '../translationKeys';
 
 const welcomePage = {
   [Language.EN]: {
+    [TranslationKeys.ABOUT]: 'About',
     [TranslationKeys.LOGIN]: 'Log In',
-    [TranslationKeys.LANGUAGE]: 'RU',
+    [TranslationKeys.LANGUAGE]: 'Ru',
     [TranslationKeys.REGISTRATION]: 'Sign In',
   },
   [Language.RU]: {
+    [TranslationKeys.ABOUT]: 'Об игре',
     [TranslationKeys.LOGIN]: 'Войти',
-    [TranslationKeys.LANGUAGE]: 'EN',
+    [TranslationKeys.LANGUAGE]: 'En',
     [TranslationKeys.REGISTRATION]: 'Регистрация',
   },
 };

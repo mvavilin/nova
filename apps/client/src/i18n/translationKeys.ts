@@ -1,4 +1,5 @@
 export const TranslationKeys = {
+  ABOUT: 'about',
   LOGIN: 'login',
   LANGUAGE: 'language',
   REGISTRATION: 'registration',

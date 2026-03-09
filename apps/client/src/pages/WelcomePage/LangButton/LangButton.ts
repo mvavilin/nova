@@ -12,7 +12,7 @@ export default class LangButton extends ButtonComponent {
     super({
       id: 'language-button',
       classes:
-        'px-6 py-2 rounded-lg bg-violet-100 text-black font-medium transition duration-200 ease-in-out hover:bg-purple-200 active:scale-95 cursor-pointer',
+        'font-main font-normal text-2xl leading-[0.83] underline text-center text-[var(--color-white)] cursor-pointer transition-colors duration-200 hover:text-[var(--color-yellow)] min-h-[78px] px-[20px]',
       ...rest,
     });
 

@@ -28,7 +28,12 @@ export default class WelcomePage extends ContainerComponent {
   }
 
   private render(): void {
-    const header = new ContainerComponent({ tag: 'header', classes: 'w-full max-w-[1440px]' });
+    const header = new ContainerComponent({
+      tag: 'header',
+      classes: 'flex justify-end w-full max-w-[1440px]',
+    });
+    const nav = new ContainerComponent({ tag: 'nav', classes: 'flex' });
+    header.appendChildren(nav);
     header.appendChildren(new LangButton());
 
     const container = new ContainerComponent({ classes: 'flex flex-col w-full max-w-[1440px]' });

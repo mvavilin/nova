@@ -1,13 +1,14 @@
-@import 'tailwindcss';
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Orbitron:wght@400..900&display=swap');
+@import 'tailwindcss';
 
 @theme {
   --font-brand: 'Orbitron', sans-serif;
   --font-primary: 'Inter', sans-serif;
-  --color-brand: #fcee0a; /*yellow*/
+  --color-brand: #ffd700; /*yellow*/
   --color-primary: #64696c; /*gray*/
   --color-dark-red: #cf0000;
   --color-gray-blue: #6f919b;
+  --color-steel: #38485f;
   /* --color-hover: #9d8f8e; */
   /* --color-hover: #de8a32; */
   --color-soothing-green: #708b58;
@@ -22,5 +23,5 @@
   }
 }
 @utility disabled-state {
-  @apply pointer-events-none disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed;
+  @apply pointer-events-none disabled:bg-gray-200 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed;
 }

@@ -10,9 +10,8 @@ export const formInputText = {
     placeholderPassword: 'Enter your password...',
     errorMessageName: `•\u00A0Minimum length is 2, maximum length is 20. •\u00A0Only English and Russian letters, digits and hyphen are allowed.`,
     errorMessageEmail: `•\u00A0Minimum length is 6, maximum length is 30. •\u00A0Please enter a valid email address (e.g., name@domain.com).`,
-    errorMessagePassword: `•\u00A0Minimum length is 6, maximum length is 12.
-    •\u00A0Password must contain one capital English letter and one special character.
-    •\u00A0Russian letters are not allowed.`,
+    errorMessagePassword:
+      '•\u00A0Minimum length is 6, maximum length is 12.\n •\u00A0Password must contain one capital English letter and one special character.\n •\u00A0Russian letters are not allowed.',
   },
   ru: {
     labelName: 'Имя',
@@ -21,11 +20,9 @@ export const formInputText = {
     placeholderName: 'Введите имя...',
     placeholderEmail: 'Введите email...',
     placeholderPassword: 'Введите пароль...',
-    errorMessageName: `•\u00A0Минимальная длина 2, максимальная длина 20. •\u00A0Допускаются только английские и русские буквы, цифры и дефис.`,
-    errorMessageEmail: `•\u00A0Минимальная длина 6, максимальная длина 30. •\u00A0Пожалуйста введите валидный email (например, name@domain.com).`,
-    errorMessagePassword: `•\u00A0Минимальная длина 6, максимальная длина 12.
-    •\u00A0Пароль должен содержать одну заглавную английскую букву и один спецсимвол.
-    •\u00A0Русские буквы не допускаются.`,
+    errorMessageName: `•\u00A0Минимальная длина 2, максимальная длина 20.\n •\u00A0Допускаются только английские и русские буквы, цифры и дефис.`,
+    errorMessageEmail: `•\u00A0Минимальная длина 6, максимальная длина 30.\n •\u00A0Пожалуйста введите валидный email (например, name@domain.com).`,
+    errorMessagePassword: `•\u00A0Минимальная длина 6, максимальная длина 12.\n •\u00A0Пароль должен содержать одну заглавную английскую букву и один спецсимвол.\n •\u00A0Русские буквы не допускаются.`,
   },
 };
 

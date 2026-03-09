@@ -29,14 +29,15 @@ export default class InputForm extends ContainerComponent {
 
   private render(parameters: InputBlockProps): void {
     const label = new LabelComponent({
-      classes: 'uppercase font-medium',
+      classes: 'uppercase text-sm font-medium',
       content: parameters.labelText,
       htmlFor: parameters.id,
     });
 
     this.span = new TextComponent({
       tag: 'span',
-      classes: 'h-14 text-black text-xs md:text-sm font-medium transition-opacity duration-200',
+      classes:
+        'h-16 whitespace-pre-line text-dark-red text-xs font-medium transition-opacity duration-200',
     });
 
     this.input = new InputComponent({
@@ -46,7 +47,7 @@ export default class InputForm extends ContainerComponent {
       placeholder: parameters.placeholder,
       autocomplete: parameters.autocomplete,
       classes:
-        'px-3 py-2 bg-white/40 border border-solid border-black rounded-md outline-none transition-colors duration-300 hover:cursor-pointer hover:bg-white/60 focus:border-yellow-500',
+        'px-3 py-2 bg-white/40 border border-solid border-black rounded-md outline-none transition-colors duration-300 hover:cursor-pointer hover:bg-white/60 focus:border-yellow-400',
     });
 
     if (parameters.minLength && parameters.maxLength) {

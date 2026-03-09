@@ -3,7 +3,9 @@ import { formHeadingText } from './RegistrationHeading.constants';
 
 export default class RegistrationHeading extends HeadingComponent {
   constructor() {
-    super({ classes: 'mb-4 text-3xl font-bold text-brand font-brand' });
+    super({
+      classes: 'mb-4 text-2xl font-bold text-steel drop-shadow-sm font-brand',
+    });
     this.render();
   }
   private render(): void {

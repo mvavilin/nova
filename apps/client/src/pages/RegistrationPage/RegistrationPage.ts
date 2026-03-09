@@ -6,7 +6,7 @@ export default class RegistrationPage extends ContainerComponent {
     super({
       tag: 'section',
       classes:
-        'relative w-screen h-screen bg-[url("src/assets/bg-sky.png")] bg-center bg-cover bg-no-repeat',
+        'relative w-screen h-screen bg-[url("src/assets/bg-1.png")] bg-center bg-cover bg-no-repeat',
     });
 
     this.render();

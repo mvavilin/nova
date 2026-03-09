@@ -11,9 +11,6 @@ const MOCK_USER: User = {
   username: 'Alice',
   email: 'alice101@example.com',
   password: 'W!123456',
-  registration: { fields: {}, isFormValid: false },
-  login: { fields: {}, isFormValid: false },
-  profile: { fields: {}, isFormValid: false },
 };
 const MOCK_TOKEN = '123456789';
 

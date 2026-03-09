@@ -1,32 +1,32 @@
 import StateAPI from '../api/StateAPI';
 import { initialState } from '@/store/initialstate';
 
-import senderMiddleware from './middlewares/test.sender.middleware';
-import fetcherMiddleware from './middlewares/test.fetcher.middleware';
+import testSenderMiddleware from './middlewares/test.sender.middleware';
+import testFetcherMiddleware from './middlewares/test.fetcher.middleware';
+import formFetcherMiddleware from './middlewares/form.fetcher.middleware';
 
 import testReducer from './reducers/test.reducer';
 import welcomeReducer from './reducers/welcome.reducer';
-import registrationPageReducer from '@store/reducers/registration.reducer';
 import baseFormReducer from './reducers/baseForm.reducer';
 
 import loggerAfterware from '@store/afterwares/logger.afterware';
-import storageAfterware from './afterwares/storage.afterware';
+// import storageAfterware from './afterwares/storage.afterware';
 import welcomePageAfterware from '@store/afterwares/welcome.afterware';
-import registrationPageAfterware from '@store/afterwares/registration.afterware';
+import formAfterware from './afterwares/form.afterware';
 
 import type { State } from '@/store/types/state.types';
-import type { Actions } from './types/action.types';
+import type { AppActions } from './types/action.types';
 
-const store = new StateAPI<State, Actions>(initialState);
+const store = new StateAPI<State, AppActions>(initialState);
 
-store.addReducer(testReducer, welcomeReducer, registrationPageReducer, baseFormReducer);
+store.addReducer(testReducer, welcomeReducer, baseFormReducer);
 
-store.addMiddleware(senderMiddleware(), fetcherMiddleware());
+store.addMiddleware(testSenderMiddleware(), testFetcherMiddleware(), formFetcherMiddleware());
 store.addAfterware(
   loggerAfterware(),
-  storageAfterware('store'),
+  // storageAfterware('store'),
   welcomePageAfterware(),
-  registrationPageAfterware()
+  formAfterware()
 );
 
 export default store;

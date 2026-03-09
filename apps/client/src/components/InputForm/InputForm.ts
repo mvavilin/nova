@@ -2,11 +2,11 @@ import { InputComponent } from '@/api/ComponentsAPI';
 import { ContainerComponent } from '@/api/ComponentsAPI';
 import { LabelComponent } from '@/api/ComponentsAPI';
 import { TextComponent } from '@/api/ComponentsAPI';
+import { FormActions } from '@/store/actions/form.actions';
 import type { FormType } from '../BaseForm/BaseFormTypes';
 import type { FieldName, InputBlockProps } from './InputForm.type';
-import { FormActions } from '@/store/actions/baseForm.actions';
 import type { Action } from '@/api/StateAPI';
-import type { User } from '@/types/user.types';
+import type { State } from '@/store/types/state.types';
 import store from '@/store/store';
 
 export default class InputForm extends ContainerComponent {
@@ -70,15 +70,14 @@ export default class InputForm extends ContainerComponent {
     const value = event.target.value;
     const isValid = this.pattern.test(value) && value.length >= Number(event.target.minLength);
     const errorMessage = isValid ? '' : this.errorMessage;
-    console.log(store);
     store.dispatch({
       type: FormActions.FORM_UPDATE_FIELD,
       payload: {
         formId: this.formId,
         fieldName: this.fieldName,
-        value: value,
-        isValid: isValid,
-        errorMessage: errorMessage,
+        value,
+        isValid,
+        errorMessage,
       },
     });
   }
@@ -89,7 +88,7 @@ export default class InputForm extends ContainerComponent {
     ]);
   }
 
-  private updateInputForm(_state: User, action: Action): void {
+  private updateInputForm(_state: State, action: Action): void {
     if (action.type === FormActions.FORM_UPDATE_FIELD) {
       const formState = store.getState()[this.formId];
       const fieldState = formState.fields[this.fieldName];
@@ -98,11 +97,13 @@ export default class InputForm extends ContainerComponent {
       if (fieldState.isChanged) {
         if (!(this.input && this.span)) return;
         this.input.toggleClasses('border-red-500', !fieldState.isValid);
-        // this.input.toggleClasses('border-black', fieldState.isValid);
+        this.input.toggleClasses('focus:border-yellow-500', fieldState.isValid);
         this.span.setContent(fieldState.isValid ? '' : fieldState.error);
       }
     }
   }
+
+  //Для возможности изменения инпутов через состояние формы
   public getFieldName(): FieldName {
     return this.fieldName;
   }
@@ -110,6 +111,7 @@ export default class InputForm extends ContainerComponent {
   public updateStatus(isValid: boolean, error: string): void {
     if (!this.input || !this.span) return;
     this.input.toggleClasses('border-red-500', !isValid);
+    this.input.toggleClasses('focus:border-yellow-500', isValid);
     this.span.setContent(isValid ? '' : error);
   }
 }

@@ -3,6 +3,7 @@ import type { BaseFormProps, FormType } from './BaseFormTypes';
 import store from '@/store/store';
 import type InputForm from '../InputForm/InputForm';
 import type RegistrationHeading from '@/pages/RegistrationPage/RegistrationHeading/RegistartionHeading';
+import { FormActions } from '@/store/actions/form.actions';
 
 export default class BaseForm extends FormComponent {
   private formId: FormType;
@@ -28,36 +29,32 @@ export default class BaseForm extends FormComponent {
   private init(): void {
     this.appendChildren([this.title, ...this.inputArray, this.buttonSubmit]);
 
-    store.subscribe(() => this.updateUI());
+    this.addSubscriptions([store.subscribe(() => this.updateUI())]);
 
     this.setListeners({
       submit: (event: Event) => {
         event.preventDefault();
-        console.log(555);
         this.handleSubmit();
       },
     });
 
-    this.buttonSubmit.setListeners({
-      submit: (event: Event) => {
-        event.preventDefault();
-        console.log(555);
-        this.handleSubmit();
-      },
-    });
     this.updateUI();
   }
 
   private updateUI(): void {
-    // 1. Достаем состояние конкретной формы по formId (registration | login | profile)
     const state = store.getState()[this.formId];
     if (!state) return;
-    // 2. Управляем кнопкой через флаг isFormValid
+
     const isValid = state.isFormValid;
-    this.buttonSubmit.setAttributes({ disabled: isValid ? 'false' : 'true' });
+    if (isValid) {
+      this.buttonSubmit.removeAttributes('disabled');
+    } else {
+      this.buttonSubmit.setAttributes({ disabled: 'disabled' });
+    }
+
     this.buttonSubmit.toggleClasses('disabled-state', !isValid);
 
-    // 3. (Опционально) Если нужно синхронизировать инпуты "снаружи"
+    //Для изменения инпутов через состояние формы
     for (const input of this.inputArray) {
       const fieldName = input.getFieldName();
       const fieldData = state.fields[fieldName];
@@ -71,7 +68,7 @@ export default class BaseForm extends FormComponent {
   public getFormInputValues(): Record<string, string> {
     const { fields } = store.getState()[this.formId];
     const data: Record<string, string> = {};
-    // Собираем только значения (values) из всех полей
+
     for (const [key, field] of Object.entries(fields)) {
       if (field) {
         data[key] = field.value;
@@ -84,7 +81,10 @@ export default class BaseForm extends FormComponent {
     if (!store.getState()[this.formId].isFormValid) return;
 
     const data = this.getFormInputValues();
-    console.log(`Submit ${this.formId}:`, data);
-    // Здесь обычно диспатчится бизнес-экшен (например, SEND_DATA)
+
+    store.dispatch({
+      type: FormActions.FETCH_DATA,
+      payload: { formId: this.formId, formData: data },
+    });
   }
 }

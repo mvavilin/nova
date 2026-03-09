@@ -8,10 +8,10 @@ const mockInitialState: State = {
   password: null,
   authStatus: false,
   avatarUrl: null,
+  language: Language.RU,
   registration: { fields: {}, isFormValid: false },
   login: { fields: {}, isFormValid: false },
   profile: { fields: {}, isFormValid: false },
-  language: Language.RU,
 };
 
 export default mockInitialState;

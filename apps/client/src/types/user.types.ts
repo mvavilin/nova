@@ -1,5 +1,3 @@
-import type { FormState } from '@/components/BaseForm/BaseFormTypes';
-
 export interface LoginDto {
   email: string;
   password: string;
@@ -19,9 +17,6 @@ export interface User {
   avatarUrl?: string | null;
   preferredLanguage?: 'ru' | 'en';
   theme?: 'light' | 'dark';
-  registration: FormState;
-  login: FormState;
-  profile: FormState;
 }
 
 export interface AuthResult {

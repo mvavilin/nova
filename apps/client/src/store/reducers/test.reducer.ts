@@ -1,7 +1,7 @@
 import { TestActions } from '../actions/test.actions';
-import type { Actions } from '../types/action.types';
+import type { AppActions } from '../types/action.types';
 
-export default function regPageReducer<State>(state: State, action: Actions): State {
+export default function regPageReducer<State>(state: State, action: AppActions): State {
   switch (action.type) {
     case TestActions.GO_TO_WELCOME_PAGE: {
       return { ...state, page: 'welcome' };

@@ -1,7 +1,7 @@
 import express, { type Request, type Response } from 'express';
 import { createServer } from 'node:http';
 import { userRouter } from './api/users.js';
-import { errorHandler } from './ws/errorHandler.ts';
+import { errorHandler } from './api/errorHandler.ts';
 import { Endpoints, ServerConstants } from '../../../packages/shared/src/api.constants.ts';
 import { authRouter } from './api/auth.ts';
 import cors from 'cors';

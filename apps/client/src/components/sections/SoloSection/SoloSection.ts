@@ -8,7 +8,7 @@ export default class SoloSection extends BaseComponent {
   private playButton: Button;
 
   constructor() {
-    super({ classes: `${SECTION_CLASSES} col-span-2` });
+    super({ classes: SECTION_CLASSES.SOLO_SECTION });
 
     this.heading = new SectionHeading({ title: 'Тренировка с AI-капитаном' });
 

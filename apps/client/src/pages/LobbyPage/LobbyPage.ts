@@ -6,10 +6,10 @@ import {
   CreateRoomSection,
   JoinRoomSection,
   PublicRoomsSection,
-} from '@pages/LobbyPage/components';
+} from '@components/sections';
 
-const LOBBY_PAGE_CLASSES = `w-full h-full flex flex-col items-center justify-start gap-10 px-20 py-10 bg-cover bg-center font-text`;
-const MAIN_CLASSES = `w-full h-full grid grid-rows-[auto_auto_1fr] grid-cols-2 gap-5 text-white rounded`;
+const LOBBY_PAGE_CLASSES = `w-full h-full flex flex-col items-center justify-start gap-5 px-20 py-5 bg-cover bg-center font-text`;
+const MAIN_CLASSES = `w-full h-full grid grid-cols-2 grid-rows-[auto_1fr] gap-5 text-white rounded`;
 
 export default class LobbyPage extends ContainerComponent {
   private main: ContainerComponent;

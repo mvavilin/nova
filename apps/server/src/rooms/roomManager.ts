@@ -1,5 +1,9 @@
-import type { Player } from '../../../../packages/shared/src/types/room.ts';
-import type { Room } from './room.ts';
+import type {
+  Player,
+  RoomPreview,
+  RoomSettings,
+} from '../../../../packages/shared/src/types/room.ts';
+import { Room } from './room.ts';
 
 export class RoomManager {
   private lobby: Player[] = [];
@@ -10,6 +14,17 @@ export class RoomManager {
     if (!player) {
       this.lobby.push({ userId, username });
     }
-    console.log(this.lobby);
+  }
+
+  public createRoom(settings: RoomSettings): {
+    payload: RoomPreview;
+    recipients: string[];
+  } {
+    const room = new Room(settings);
+    this.rooms.push(room);
+
+    const roomPreview = room.getRoomPreview();
+    const recipients = this.lobby.map((player) => player.userId);
+    return { payload: roomPreview, recipients };
   }
 }

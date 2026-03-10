@@ -6,7 +6,8 @@ type ClientEvent =
 
 type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
-  | { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } };
+  | { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } }
+  | { type: 'room:created'; payload: { roomPreview: RoomPreview } };
 
 type EventName<T> = T extends { type: infer K } ? K : never;
 

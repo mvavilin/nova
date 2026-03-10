@@ -10,14 +10,19 @@ import { Server } from 'socket.io';
 import { authMiddleware } from './ws/authMiddleware.ts';
 import { sessionMiddleware } from './ws/sessionMiddleware.ts';
 import { RoomManager } from './rooms/roomManager.ts';
+import { setupSocketHandlers } from './ws/socketHandlers.ts';
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from '../../../packages/shared/src/socketEvents.ts';
 
-const socketIdMap = new Map<string, Set<string>>();
+export const socketIdMap = new Map<string, Set<string>>();
 
 const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
 
 const app = express();
 const server = createServer(app);
-const io = new Server(server, {
+const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
   cors: {
     origin: FRONTEND_URL,
     methods: ['GET', 'POST'],
@@ -52,11 +57,9 @@ io.on('connection', (socket) => {
     console.log('reconnect', socket.data.sessionToken);
     socket.emit('session:token', { sessionToken: socket.data.sessionToken });
   } else {
-    setTimeout(() => {
-      console.log('connect', socket.data.sessionToken);
-      socket.emit('session:token', { sessionToken: socket.data.sessionToken });
-      roomManager.addPlayerToLobby(userId, username);
-    });
+    console.log('connect', socket.data.sessionToken);
+    socket.emit('session:token', { sessionToken: socket.data.sessionToken });
+    roomManager.addPlayerToLobby(userId, username);
   }
   if (!socketIdMap.has(userId)) {
     socketIdMap.set(userId, new Set());
@@ -70,6 +73,8 @@ io.on('connection', (socket) => {
     }
     console.log(`disconnect ${socket.data.sessionToken}`);
   });
+
+  setupSocketHandlers(io, socket, roomManager);
 });
 
 export default server;

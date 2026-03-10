@@ -5,10 +5,11 @@ import type {
 } from '../../../../packages/shared/src/socketEvents.ts';
 import type { RoomManager } from '../rooms/roomManager.ts';
 import { socketIdMap } from '../app.ts';
+import type { SocketData } from '../types/types.ts';
 
 export function setupSocketHandlers(
   io: Server<ClientToServerEvents, ServerToClientEvents>,
-  socket: Socket<ClientToServerEvents>,
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>,
   roomManager: RoomManager
 ): void {
   const userId = socket.data.userId;
@@ -18,9 +19,7 @@ export function setupSocketHandlers(
     for (const recipient of recipients) {
       const idSet = socketIdMap.get(recipient);
       if (idSet) {
-        for (const socketId of idSet) {
-          io.to(socketId).emit('room:created', { roomPreview: payload });
-        }
+        io.to([...idSet]).emit('room:created', { roomPreview: payload });
       }
     }
   });
@@ -29,9 +28,7 @@ export function setupSocketHandlers(
     const { payload } = roomManager.getRoomPreviews();
     const idSet = socketIdMap.get(userId);
     if (idSet) {
-      for (const socketId of idSet) {
-        io.to(socketId).emit('room:send-list', { roomPreviews: payload });
-      }
+      io.to([...idSet]).emit('room:send-list', { roomPreviews: payload });
     }
   });
 }

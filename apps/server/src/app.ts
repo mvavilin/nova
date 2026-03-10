@@ -6,7 +6,7 @@ import { Endpoints, ServerConstants } from '../../../packages/shared/src/api.con
 import { authRouter } from './api/auth.ts';
 import cors from 'cors';
 import 'dotenv/config';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { authMiddleware } from './ws/authMiddleware.ts';
 import { sessionMiddleware } from './ws/sessionMiddleware.ts';
 import { RoomManager } from './rooms/roomManager.ts';
@@ -15,6 +15,7 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../../packages/shared/src/socketEvents.ts';
+import type { SocketData } from './types/types.ts';
 
 export const socketIdMap = new Map<string, Set<string>>();
 
@@ -51,30 +52,33 @@ app.use(errorHandler);
 io.use(authMiddleware);
 io.use(sessionMiddleware);
 
-io.on('connection', (socket) => {
-  const { userId, username } = socket.data;
-  if (socket.data.isReconnect) {
-    console.log('reconnect', socket.data.sessionToken);
-    socket.emit('session:token', { sessionToken: socket.data.sessionToken });
-  } else {
-    console.log('connect', socket.data.sessionToken);
-    socket.emit('session:token', { sessionToken: socket.data.sessionToken });
-    roomManager.addPlayerToLobby(userId, username);
-  }
-  if (!socketIdMap.has(userId)) {
-    socketIdMap.set(userId, new Set());
-  }
-  socketIdMap.get(userId)?.add(socket.id);
-
-  socket.on('disconnect', () => {
-    const idSet = socketIdMap.get(userId);
-    if (idSet) {
-      idSet.delete(socket.id);
+io.on(
+  'connection',
+  (socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>) => {
+    const { userId, username } = socket.data;
+    if (socket.data.isReconnect) {
+      console.log('reconnect', socket.data.sessionToken);
+      socket.emit('session:token', { sessionToken: socket.data.sessionToken });
+    } else {
+      console.log('connect', socket.data.sessionToken);
+      socket.emit('session:token', { sessionToken: socket.data.sessionToken });
+      roomManager.addPlayerToLobby(userId, username);
     }
-    console.log(`disconnect ${socket.data.sessionToken}`);
-  });
+    if (!socketIdMap.has(userId)) {
+      socketIdMap.set(userId, new Set());
+    }
+    socketIdMap.get(userId)?.add(socket.id);
 
-  setupSocketHandlers(io, socket, roomManager);
-});
+    socket.on('disconnect', () => {
+      const idSet = socketIdMap.get(userId);
+      if (idSet) {
+        idSet.delete(socket.id);
+      }
+      console.log(`disconnect ${socket.data.sessionToken}`);
+    });
+
+    setupSocketHandlers(io, socket, roomManager);
+  }
+);
 
 export default server;

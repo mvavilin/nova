@@ -1,11 +1,15 @@
 import type { ExtendedError, Socket } from 'socket.io';
-import type { SessionRecord } from '../types/types.ts';
+import type { SessionRecord, SocketData } from '../types/types.ts';
 import { v4 as uuid } from 'uuid';
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from '../../../../packages/shared/src/socketEvents.ts';
 
 const sessions = new Map<string, SessionRecord>();
 
 export const sessionMiddleware = async (
-  socket: Socket,
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>,
   next: (error?: ExtendedError | undefined) => void
 ): Promise<void> => {
   try {

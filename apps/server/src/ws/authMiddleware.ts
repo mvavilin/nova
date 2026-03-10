@@ -4,9 +4,14 @@ import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import { ServerConstants } from '../../../../packages/shared/src/api.constants.ts';
 import { prisma } from '../prisma/prisma.ts';
+import type {
+  ClientToServerEvents,
+  ServerToClientEvents,
+} from '../../../../packages/shared/src/socketEvents.ts';
+import type { SocketData } from '../types/types.ts';
 
 export const authMiddleware = async (
-  socket: Socket,
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>,
   next: (error?: ExtendedError | undefined) => void
 ): Promise<void> => {
   try {

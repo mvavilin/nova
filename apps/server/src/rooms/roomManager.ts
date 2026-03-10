@@ -27,4 +27,9 @@ export class RoomManager {
     const recipients = this.lobby.map((player) => player.userId);
     return { payload: roomPreview, recipients };
   }
+
+  public getRoomPreviews(): { payload: RoomPreview[] } {
+    const roomPreviews = this.rooms.map((room) => room.getRoomPreview());
+    return { payload: roomPreviews };
+  }
 }

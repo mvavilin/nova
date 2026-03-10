@@ -11,6 +11,8 @@ export function setupSocketHandlers(
   socket: Socket<ClientToServerEvents>,
   roomManager: RoomManager
 ): void {
+  const userId = socket.data.userId;
+
   socket.on('room:create', ({ settings }) => {
     const { payload, recipients } = roomManager.createRoom(settings);
     for (const recipient of recipients) {
@@ -19,6 +21,16 @@ export function setupSocketHandlers(
         for (const socketId of idSet) {
           io.to(socketId).emit('room:created', { roomPreview: payload });
         }
+      }
+    }
+  });
+
+  socket.on('room:ask-list', () => {
+    const { payload } = roomManager.getRoomPreviews();
+    const idSet = socketIdMap.get(userId);
+    if (idSet) {
+      for (const socketId of idSet) {
+        io.to(socketId).emit('room:send-list', { roomPreviews: payload });
       }
     }
   });

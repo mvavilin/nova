@@ -4,7 +4,8 @@ type ClientEvent =
   | { type: 'room:create'; payload: { settings: RoomSettings } }
   | { type: 'room:ask-list' }
   | { type: 'room:search'; payload: { name: string | undefined } }
-  | { type: 'room:join'; payload: { roomId: string } };
+  | { type: 'room:join'; payload: { roomId: string } }
+  | { type: 'room:leave' };
 
 type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
@@ -13,6 +14,7 @@ type ServerEvent =
   | { type: 'room:state'; payload: { roomInfo: RoomInfo } }
   | { type: 'room:update-review'; payload: { roomPreview: RoomPreview } }
   | { type: 'room:player-joined'; payload: { player: Player } }
+  | { type: 'room:player-left'; payload: { player: Player } }
   | { type: 'error'; payload: { code: ErrorCode } };
 
 export type ErrorCode = 'ROOM_NOT_FOUND' | 'ROOM_FULL' | 'INVALID_ACTION';

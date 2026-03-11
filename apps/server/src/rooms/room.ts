@@ -53,4 +53,12 @@ export class Room {
   public addPlayer(player: Player): void {
     this.players.push(player);
   }
+
+  public getPlayer(userId: string): Player | undefined {
+    return this.players.find((player) => player.userId === userId);
+  }
+
+  public removePlayer(userId: string): void {
+    this.players = this.players.filter((player) => player.userId !== userId);
+  }
 }

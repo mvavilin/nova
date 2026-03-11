@@ -17,7 +17,7 @@ export class RoomManager {
     }
   }
 
-  private removePlayerFromLobby(userId: string): void {
+  public removePlayerFromLobby(userId: string): void {
     this.lobby = this.lobby.filter((player) => player.userId !== userId);
   }
 
@@ -64,5 +64,30 @@ export class RoomManager {
     }
 
     return { error: 'INVALID_ACTION' };
+  }
+
+  public leaveRoom(userId: string):
+    | {
+        payload: RoomPreview;
+        player: Player;
+        lobbyRecipients: string[];
+        roomRecipients: string[];
+      }
+    | { error: ErrorCode } {
+    const room = this.rooms.find((room) => room.getPlayerIds().includes(userId));
+
+    if (room) {
+      const player = room.getPlayer(userId);
+      if (player) {
+        this.addPlayerToLobby(player);
+        room.removePlayer(userId);
+        const roomRecipients = room.getPlayerIds();
+        const lobbyRecipients = this.lobby.map((player) => player.userId);
+
+        return { payload: room.getRoomPreview(), player, lobbyRecipients, roomRecipients };
+      }
+    }
+
+    return { error: 'ROOM_NOT_FOUND' };
   }
 }

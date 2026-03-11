@@ -10,7 +10,7 @@ import { Server, Socket } from 'socket.io';
 import { authMiddleware } from './ws/authMiddleware.ts';
 import { sessionMiddleware } from './ws/sessionMiddleware.ts';
 import { RoomManager } from './rooms/roomManager.ts';
-import { setupSocketHandlers } from './ws/socketHandlers.ts';
+import { roomLeaveHandler, setupSocketHandlers } from './ws/socketHandlers.ts';
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
@@ -73,8 +73,13 @@ io.on(
       const idSet = socketIdMap.get(userId);
       if (idSet) {
         idSet.delete(socket.id);
+
+        if (idSet.size === 0) {
+          // roomManager.leaveRoom(userId);
+          roomLeaveHandler(io, socket, roomManager);
+          roomManager.removePlayerFromLobby(userId);
+        }
       }
-      console.log(`disconnect ${socket.data.sessionToken}`);
     });
 
     setupSocketHandlers(io, socket, roomManager);

@@ -22,7 +22,7 @@ export default class LoginButton extends ButtonComponent {
   }
 
   private render(): void {
-    this.setContent(t(TranslationKeys.LOGIN));
+    this.setContent(t(TranslationKeys.WELCOME_LOGIN));
     this.setListeners({
       click: (): void => {
         store.dispatch({
@@ -34,7 +34,7 @@ export default class LoginButton extends ButtonComponent {
 
   private switchLanguage(_state: State, action: Action): void {
     if (action.type === WelcomeActions.SWITCH_LANGUAGE) {
-      this.setContent(t(TranslationKeys.LOGIN));
+      this.setContent(t(TranslationKeys.WELCOME_LOGIN));
     }
   }
 }

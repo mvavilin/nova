@@ -1,8 +1,9 @@
 export const TranslationKeys = {
-  ABOUT: 'about',
-  LOGIN: 'login',
-  LANGUAGE: 'language',
-  REGISTRATION: 'registration',
+  WELCOME_ABOUT: 'about',
+  WELCOME_LOGIN: 'login',
+  WELCOME_LANGUAGE: 'language',
+  WELCOME_REGISTRATION: 'registration',
+  WELCOME_DESCRIPTION: 'description',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];

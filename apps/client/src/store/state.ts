@@ -1,12 +1,10 @@
-import type { State } from '@store/types/state.types';
+import type { State } from '@/store/types/state';
 import { Language } from '@types';
 
 export const initialState: State = {
   id: null,
   username: null,
-  password: null,
   email: null,
-  avatarUrl: null,
   authStatus: false,
   language: Language.RU,
   registration: { fields: {}, isFormValid: false },

@@ -1,5 +1,5 @@
 import { TestActions } from '../actions/test.actions';
-import type { AppActions } from '../types/action.types';
+import type { AppActions } from '../types/action';
 
 export default function regPageReducer<State>(state: State, action: AppActions): State {
   switch (action.type) {

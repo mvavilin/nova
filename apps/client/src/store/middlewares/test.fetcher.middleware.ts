@@ -1,6 +1,6 @@
 import type { Middleware } from '@/api/StateAPI/types/types';
 import { TestActions } from '../actions/test.actions';
-import type { AppActions } from '../types/action.types';
+import type { AppActions } from '../types/action';
 
 export default function fetcher<State>(): Middleware<State, AppActions> {
   return async function middleware(context) {

@@ -4,7 +4,7 @@ import store from '@store/store';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
 import { t } from '@/i18n';
 import { TranslationKeys } from '@/i18n/translationKeys';
-import type { State } from '@store/types/state.types';
+import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 
 export default class LangButton extends ButtonComponent {

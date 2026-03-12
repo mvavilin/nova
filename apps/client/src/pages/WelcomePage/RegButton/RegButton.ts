@@ -3,7 +3,7 @@ import type { RegButtonProperties } from './RegButton.types';
 import store from '@store/store';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
 import { TranslationKeys } from '@/i18n/translationKeys';
-import type { State } from '@store/types/state.types';
+import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 import { t } from '@/i18n';
 

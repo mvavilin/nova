@@ -1,7 +1,7 @@
 import { HeadingComponent } from '@/api/ComponentsAPI';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
-import type { State } from '@/store/types/state.types';
+import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 import store from '@/store/store';
 import { FormActions } from '@/store/actions/form.actions';

@@ -3,7 +3,7 @@ import store from '@store/store';
 import { FormActions } from '@/store/actions/form.actions';
 import { t } from '@/i18n';
 import { TranslationKeys } from '@/i18n/translationKeys';
-import type { State } from '@store/types/state.types';
+import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 
 export default class RegistrationLangButton extends ButtonComponent {

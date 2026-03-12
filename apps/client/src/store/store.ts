@@ -14,8 +14,8 @@ import loggerAfterware from '@store/afterwares/logger.afterware';
 import welcomePageAfterware from '@store/afterwares/welcome.afterware';
 import formAfterware from './afterwares/form.afterware';
 
-import type { State } from '@/store/types/state.types';
-import type { AppActions } from './types/action.types';
+import type { State } from '@/store/types/state';
+import type { AppActions } from './types/action';
 
 const store = new StateAPI<State, AppActions>(initialState);
 

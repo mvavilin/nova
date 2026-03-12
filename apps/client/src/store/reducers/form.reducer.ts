@@ -1,6 +1,6 @@
-import type { State } from '../types/state.types';
+import type { State } from '../types/state';
 import { FormActions } from '../actions/form.actions';
-import type { AppActions } from '../types/action.types';
+import type { AppActions } from '../types/action';
 import type { FieldName } from '@/components/InputForm/InputForm.type';
 import type { FieldState } from '@/components/BaseForm/BaseFormTypes';
 import store from '../store';

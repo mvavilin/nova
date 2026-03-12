@@ -6,7 +6,7 @@ import { FormActions } from '@/store/actions/form.actions';
 import type { FormType } from '../BaseForm/BaseFormTypes';
 import type { FieldName, InputBlockProps } from './InputForm.type';
 import type { Action } from '@/api/StateAPI';
-import type { State } from '@/store/types/state.types';
+import type { State } from '@/store/types/state';
 import store from '@/store/store';
 import { t } from '@/i18n';
 import type { TranslationKey } from '@/i18n/translationKeys';

@@ -1,6 +1,6 @@
 import type { Middleware } from '@/api/StateAPI/types/types';
 import { FormActions } from '../actions/form.actions';
-import type { AppActions } from '../types/action.types';
+import type { AppActions } from '../types/action';
 // import {ServerUrl, Endpoints} from "@repo/shared",
 
 const Endpoints = {

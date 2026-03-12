@@ -1,7 +1,7 @@
 import type { ButtonComponent } from '@/api/ComponentsAPI';
 import type { FieldName } from '../InputForm/InputForm.type';
 import type InputForm from '../InputForm/InputForm';
-import type RegistrationHeading from '@/pages/RegistrationPage/RegistrationHeading/RegistartionHeading';
+import type RegistrationHeading from '@/pages/RegistrationPage/RegistrationHeading/RegistrationHeading';
 import type { User } from '@/types/user.types';
 
 export type FormType = 'registration' | 'login' | 'profile';
@@ -39,10 +39,10 @@ export interface UpdateFieldPayload {
 
 export interface FormFetchDataPayload {
   formId: FormType;
-  formData: FormData;
+  formData: FormFields;
 }
 
-export interface FormData {
+export interface FormFields {
   username?: string;
   email?: string;
   password?: string;

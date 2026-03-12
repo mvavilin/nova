@@ -2,7 +2,7 @@ import { ButtonComponent, FormComponent } from '@/api/ComponentsAPI';
 import type { BaseFormProps, FormType } from './BaseFormTypes';
 import store from '@/store/store';
 import type InputForm from '../InputForm/InputForm';
-import type RegistrationHeading from '@/pages/RegistrationPage/RegistrationHeading/RegistartionHeading';
+import type RegistrationHeading from '@/pages/RegistrationPage/RegistrationHeading/RegistrationHeading';
 import { FormActions } from '@/store/actions/form.actions';
 
 export default class BaseForm extends FormComponent {
@@ -46,11 +46,8 @@ export default class BaseForm extends FormComponent {
     if (!state) return;
 
     const isValid = state.isFormValid;
-    if (isValid) {
-      this.buttonSubmit.removeAttributes('disabled');
-    } else {
-      this.buttonSubmit.setAttributes({ disabled: 'disabled' });
-    }
+    if (isValid) this.buttonSubmit.removeAttributes('disabled');
+    else this.buttonSubmit.setAttributes({ disabled: 'disabled' });
 
     this.buttonSubmit.toggleClasses('disabled-state', !isValid);
 

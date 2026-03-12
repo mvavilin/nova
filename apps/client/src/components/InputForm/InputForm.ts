@@ -125,5 +125,6 @@ export default class InputForm extends ContainerComponent {
     if (!this.input || !this.span) return;
     this.input.toggleClasses('border-red-500', !isValid);
     this.input.toggleClasses('focus:border-yellow-500', isValid);
+    this.span.setContent(isValid ? '' : t(this.errorKey));
   }
 }

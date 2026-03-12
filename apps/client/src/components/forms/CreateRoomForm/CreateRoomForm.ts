@@ -4,7 +4,7 @@ import { PlayerCountField, RoomNameField } from '@components/fields';
 import { CREATE_ROOM_FORM_CONFIG as CONFIG } from '@constants/forms';
 
 export default class CreateRoomForm extends FormComponent {
-  private playerCount: string | null = null;
+  private playerCount: string = CONFIG.PLAYERS.DEFAULT;
   private roomName: string | null = null;
 
   constructor() {

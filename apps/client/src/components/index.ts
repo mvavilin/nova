@@ -4,3 +4,5 @@ export { default as ProfileSection } from '@components/ProfileSection/ProfileSec
 export { default as Avatar } from '@components/Avatar/Avatar';
 export { default as ExitButton } from '@components/ExitButton/ExitButton';
 export { default as SectionHeading } from '@components/SectionHeading/SectionHeading';
+export { default as RoomsTable } from '@components/RoomsTable/RoomsTable';
+export { default as RoomRow } from '@components/RoomRow/RoomRow';

@@ -1,5 +1,5 @@
 import { BaseComponent, HeadingComponent } from '@ComponentsAPI';
-import { SectionHeading } from '@components';
+import { RoomsTable, SectionHeading } from '@components';
 import { SECTION_CLASSES } from '@constants/styles';
 import { SearchRoomForm } from '@components/forms';
 
@@ -15,6 +15,6 @@ export default class PublicRoomsSection extends BaseComponent {
   }
 
   private render(): void {
-    this.appendChildren([this.heading, new SearchRoomForm()]);
+    this.appendChildren([this.heading, new SearchRoomForm(), new RoomsTable()]);
   }
 }

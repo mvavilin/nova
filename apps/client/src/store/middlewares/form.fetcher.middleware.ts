@@ -1,6 +1,7 @@
 import type { Middleware } from '@/api/StateAPI/types/types';
 import { FormActions } from '../actions/form.actions';
 import type { AppActions } from '../types/action';
+import type { AuthResponse } from '@/types/user.types';
 // import {ServerUrl, Endpoints} from "@repo/shared",
 
 const Endpoints = {
@@ -47,9 +48,9 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
 
         console.log(response);
         const token = response.headers.get(AuthToken);
-        const user = await response.json();
+        const user: unknown = await response.json();
 
-        if ('username' in user && 'email' in user && 'id' in user) {
+        if (isValidAuthResponse(user)) {
           return context.next({
             type: FormActions.FETCH_SUCCESS,
             payload: { user, token },
@@ -65,4 +66,17 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
 
     return context.next(context.action);
   };
+}
+
+function isValidAuthResponse(data: unknown): data is AuthResponse {
+  if (typeof data !== 'object' || data === null) return false;
+
+  return (
+    'id' in data &&
+    typeof data.id === 'string' &&
+    'username' in data &&
+    typeof data.username === 'string' &&
+    'email' in data &&
+    typeof data.email === 'string'
+  );
 }

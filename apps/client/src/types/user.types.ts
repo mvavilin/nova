@@ -23,3 +23,9 @@ export interface AuthResult {
   user: User;
   token: string | null;
 }
+
+export interface AuthResponse {
+  id: string | null;
+  username: string | null;
+  email: string | null;
+}

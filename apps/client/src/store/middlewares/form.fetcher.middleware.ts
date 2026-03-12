@@ -49,12 +49,14 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
         const token = response.headers.get(AuthToken);
         const user = await response.json();
 
-        // если нужно добавить action, то через next
-        // лучше не создавайте новый store.dispatch() можно отхватить рекурсию
-        return context.next({
-          type: FormActions.FETCH_SUCCESS,
-          payload: { user, token },
-        });
+        if ('username' in user && 'email' in user && 'id' in user) {
+          return context.next({
+            type: FormActions.FETCH_SUCCESS,
+            payload: { user, token },
+          });
+        } else {
+          console.error('The received data is incorrect');
+        }
       } catch (error) {
         console.error('Fetch failed:', error);
         return context.next(context.action);

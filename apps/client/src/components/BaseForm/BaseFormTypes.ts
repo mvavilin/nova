@@ -2,7 +2,7 @@ import type { ButtonComponent } from '@/api/ComponentsAPI';
 import type { FieldName } from '../InputForm/InputForm.type';
 import type InputForm from '../InputForm/InputForm';
 import type RegistrationHeading from '@/pages/RegistrationPage/RegistrationHeading/RegistrationHeading';
-import type { User } from '@/types/user.types';
+import type { AuthResponse } from '@/types/user.types';
 
 export type FormType = 'registration' | 'login' | 'profile';
 
@@ -49,6 +49,6 @@ export interface FormFields {
 }
 
 export interface FormFetchSuccessPayload {
-  user: User;
+  user: AuthResponse;
   token: string | null;
 }

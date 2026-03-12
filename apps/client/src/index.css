@@ -1,1 +1,35 @@
 @import 'tailwindcss';
+
+@font-face {
+  font-family: 'Star Jedi';
+  src: url('./assets/fonts/starjedi_cyrillic.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('./assets/fonts/Inter-VariableFont_opsz\,wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-brand: 'Star Jedi', sans-serif;
+  --font-main: 'Inter', sans-serif;
+  --color-brand: #ffd700; /*yellow*/
+  --color-primary: #64696c; /*gray*/
+}
+
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--color-black);
+  }
+}
+
+@utility disabled-state {
+  @apply pointer-events-none disabled:bg-gray-200 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed;
+}

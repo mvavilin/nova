@@ -10,11 +10,11 @@ export interface RegisterDto {
 }
 
 export interface User {
-  id: string;
-  username: string;
-  password: string;
-  email: string;
-  avatarUrl?: string;
+  id: string | null;
+  username: string | null;
+  password: string | null;
+  email: string | null;
+  avatarUrl?: string | null;
   preferredLanguage?: 'ru' | 'en';
   theme?: 'light' | 'dark';
 }
@@ -22,4 +22,10 @@ export interface User {
 export interface AuthResult {
   user: User;
   token: string | null;
+}
+
+export interface AuthResponse {
+  id: string;
+  username: string;
+  email: string;
 }

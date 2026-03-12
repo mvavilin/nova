@@ -1,10 +1,10 @@
-export function saveStorageData<T>(key: string, data: T): void {
+export function saveLocalStorageData<T>(key: string, data: T): void {
   if (data) {
     localStorage.setItem(key, JSON.stringify(data));
   }
 }
 
-export function getStorageData<T>(key: string): T | null {
+export function getLocalStorageData<T>(key: string): T | null {
   const data = localStorage.getItem(key);
   if (!data) return null;
 
@@ -16,6 +16,6 @@ export function getStorageData<T>(key: string): T | null {
   }
 }
 
-export function removeStorageData(key: string): void {
+export function removeLocalStorageData(key: string): void {
   localStorage.removeItem(key);
 }

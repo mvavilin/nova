@@ -2,7 +2,7 @@ import { ButtonComponent } from '@/api/ComponentsAPI';
 import type { LoginButtonProperties } from './LoginButton.types';
 import store from '@store/store';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
-import type { State } from '@store/types/state';
+import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';

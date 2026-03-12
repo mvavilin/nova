@@ -1,8 +1,8 @@
 import type { Middleware } from '@/api/StateAPI/types/types';
 import { TestActions } from '../actions/test.actions';
-import type { Actions } from '../types/action';
+import type { AppActions } from '../types/action';
 
-export default function fetcher<State>(): Middleware<State, Actions> {
+export default function fetcher<State>(): Middleware<State, AppActions> {
   return async function middleware(context) {
     if (context.action.type === TestActions.FETCH_DATA) {
       const randomInt = (min: number, max: number): number =>

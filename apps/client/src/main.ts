@@ -1,4 +1,4 @@
-import '@/input.css';
+import 'index.css';
 import App from '@components/App/App';
 import Router from '@api/RouterAPI/router';
 

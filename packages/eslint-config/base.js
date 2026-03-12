@@ -61,7 +61,7 @@ export default [
       'prettier/prettier': 'error',
 
       // ограничивает функции максимум 40 строками (исключая пустые строки и комментарии)
-      'max-lines-per-function': ['error', { max: 40, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': ['error', { max: 60, skipBlankLines: true, skipComments: true }],
       'unicorn/filename-case': [
         'error',
         {

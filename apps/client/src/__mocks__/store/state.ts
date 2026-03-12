@@ -1,4 +1,4 @@
-import { type State } from '@store/types/state';
+import { type State } from '@/store/types/state';
 import { Language } from '@types';
 
 const mockInitialState: State = {
@@ -7,6 +7,9 @@ const mockInitialState: State = {
   email: null,
   authStatus: false,
   language: Language.RU,
+  registration: { fields: {}, isFormValid: false },
+  login: { fields: {}, isFormValid: false },
+  profile: { fields: {}, isFormValid: false },
 };
 
 export default mockInitialState;

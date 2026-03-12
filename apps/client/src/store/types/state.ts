@@ -1,4 +1,5 @@
-import type { Language } from '@types';
+import type { FormState } from '@/components/BaseForm/BaseFormTypes';
+import { Language } from '@/types';
 
 export type State = {
   id: string | null;
@@ -6,4 +7,7 @@ export type State = {
   email: string | null;
   authStatus: boolean;
   language: Language;
+  registration: FormState;
+  login: FormState;
+  profile: FormState;
 };

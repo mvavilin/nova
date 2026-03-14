@@ -1,4 +1,4 @@
-import type { State } from '@store/types/state';
+import type { State } from '@/store/types/state';
 import { Language } from '@types';
 
 export const initialState: State = {

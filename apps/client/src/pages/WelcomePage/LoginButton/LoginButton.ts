@@ -11,7 +11,8 @@ export default class LoginButton extends ButtonComponent {
   constructor({ ...rest }: LoginButtonProperties = {}) {
     super({
       id: 'login-button',
-      classes: 'px-6 py-2 rounded-lg bg-gray-200 text-black font-medium cursor-pointer',
+      classes:
+        'font-brand px-6 py-2 text-[var(--color-dark)] rounded-lg bg-[var(--color-light)] font-medium transition duration-200 ease-in-out active:scale-95 cursor-pointer justify-self-center text-xs md:text-base',
       ...rest,
     });
 
@@ -21,7 +22,7 @@ export default class LoginButton extends ButtonComponent {
   }
 
   private render(): void {
-    this.setContent(t(TranslationKeys.LOGIN));
+    this.setContent(t(TranslationKeys.WELCOME_LOGIN));
     this.setListeners({
       click: (): void => {
         store.dispatch({
@@ -33,7 +34,7 @@ export default class LoginButton extends ButtonComponent {
 
   private switchLanguage(_state: State, action: Action): void {
     if (action.type === WelcomeActions.SWITCH_LANGUAGE) {
-      this.setContent(t(TranslationKeys.LOGIN));
+      this.setContent(t(TranslationKeys.WELCOME_LOGIN));
     }
   }
 }

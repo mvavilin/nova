@@ -6,11 +6,11 @@ vi.mock('@store/store', () => ({
   default: mockStore,
 }));
 
-import RegButton from './RegButton';
+import RegistrationButton from './RegistrationButton';
 
 describe('Registration button creation', () => {
   it('creates a button element', () => {
-    const button = new RegButton();
+    const button = new RegistrationButton();
 
     expect(button.element?.tagName).toBe('BUTTON');
   });

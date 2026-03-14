@@ -3,7 +3,12 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
-  server: { open: true },
+  server: {
+    open: true,
+    // watch: {
+    //   usePolling: true,
+    // },
+  },
 
   plugins: [tsconfigPaths(), tailwindcss()],
 });

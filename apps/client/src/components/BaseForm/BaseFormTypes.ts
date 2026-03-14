@@ -3,6 +3,7 @@ import type { FieldName } from '../InputForm/InputForm.type';
 import type InputForm from '../InputForm/InputForm';
 import type RegistrationHeading from '@/pages/RegistrationPage/RegistrationHeading/RegistrationHeading';
 import type { AuthResponse } from '@/types/user.types';
+import type { Overlay } from '../ui';
 
 export type FormType = 'registration' | 'login' | 'profile';
 
@@ -40,6 +41,8 @@ export interface UpdateFieldPayload {
 export interface FormFetchDataPayload {
   formId: FormType;
   formData: FormFields;
+  loader: Overlay;
+  onFinished: () => void;
 }
 
 export interface FormFields {

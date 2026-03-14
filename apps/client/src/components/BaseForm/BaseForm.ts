@@ -4,12 +4,15 @@ import store from '@/store/store';
 import type InputForm from '../InputForm/InputForm';
 import type RegistrationHeading from '@/pages/RegistrationPage/RegistrationHeading/RegistrationHeading';
 import { FormActions } from '@/store/actions/form.actions';
+import { Overlay } from '../ui';
+import Loader from '../ui/Loader/Loader';
 
 export default class BaseForm extends FormComponent {
   private formId: FormType;
   protected title: RegistrationHeading;
   protected inputArray: InputForm[];
   protected buttonSubmit: ButtonComponent;
+  protected isSubmiting = false;
 
   constructor(parameters: BaseFormProps) {
     super({
@@ -75,13 +78,25 @@ export default class BaseForm extends FormComponent {
   }
 
   private handleSubmit(): void {
-    if (!store.getState()[this.formId].isFormValid) return;
+    if (this.isSubmiting || !store.getState()[this.formId].isFormValid) return;
+
+    this.isSubmiting = true;
+
+    const loaderOverlay = new Overlay(new Loader());
+    loaderOverlay.show();
 
     const data = this.getFormInputValues();
 
     store.dispatch({
       type: FormActions.FETCH_DATA,
-      payload: { formId: this.formId, formData: data },
+      payload: {
+        formId: this.formId,
+        formData: data,
+        loader: loaderOverlay,
+        onFinished: () => {
+          this.isSubmiting = false;
+        },
+      },
     });
   }
 }

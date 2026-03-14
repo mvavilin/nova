@@ -29,7 +29,8 @@
       "@__mocks__/*": ["__mocks__/*"],
       "@__mocks__": ["__mocks__"],
       "@styles": ["constants/styles"],
-      "@app": ["main"]
+      "@app": ["main"],
+      "@shared/*": ["../../../packages/shared/src/*"]
     }
   },
   "include": ["src", "vite.config.ts", "vitest.config.ts", "tailwind.config.ts"]

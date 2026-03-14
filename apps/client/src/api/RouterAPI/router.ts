@@ -18,6 +18,9 @@ export default class Router {
   }
 
   private render(): void {
+    const children = this.app.children;
+    for (const child of children) child.destroy();
+
     const path = globalThis.location.pathname;
     const route = this.routes.find((route) => route.path.test(path));
 

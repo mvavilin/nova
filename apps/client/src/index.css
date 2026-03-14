@@ -16,9 +16,12 @@
   font-display: swap;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@200..900&display=swap');
+
 @theme {
   --font-brand: 'Star Jedi', sans-serif;
   --font-main: 'Inter', sans-serif;
+  --font-text: 'Inconsolata', monospace;
   --color-brand: #ffd700; /*yellow*/
   --color-primary: #64696c; /*gray*/
   --color-light: #ffffff;

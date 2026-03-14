@@ -25,11 +25,12 @@
       "@store/*": ["store/*"],
       "@store": ["store"],
       "@utils/*": ["utils/*"],
+      "@assets/*": ["assets/*"],
       "@__mocks__/*": ["__mocks__/*"],
+      "@__mocks__": ["__mocks__"],
       "@styles": ["constants/styles"],
-      "@app": ["main"],
-      "@assets/*": ["assets/*"]
+      "@app": ["main"]
     }
   },
-  "include": ["src", "vite.config.ts", "vitest.config.ts"]
+  "include": ["src", "vite.config.ts", "vitest.config.ts", "tailwind.config.ts"]
 }

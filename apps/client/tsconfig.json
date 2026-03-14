@@ -27,7 +27,9 @@
       "@utils/*": ["utils/*"],
       "@assets/*": ["assets/*"],
       "@__mocks__/*": ["__mocks__/*"],
-      "@__mocks__": ["__mocks__"]
+      "@__mocks__": ["__mocks__"],
+      "@styles": ["constants/styles"],
+      "@app": ["main"]
     }
   },
   "include": ["src", "vite.config.ts", "vitest.config.ts", "tailwind.config.ts"]

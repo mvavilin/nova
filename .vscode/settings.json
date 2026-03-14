@@ -15,7 +15,7 @@
   "editor.wrappingIndent": "same",
   "editor.wordWrapColumn": 100,
   //Controls remembered suggestion selections
-  "editor.suggestSelection": "recentlyUsed",
+  "editor.suggestSelection": "first",
   //For more convenient use
   "editor.scrollBeyondLastLine": true,
   "editor.smoothScrolling": true,
@@ -46,5 +46,5 @@
       "mode": "auto"
     }
   ],
-  "cSpell.words": ["Afterware", "afterwares"]
+  "cSpell.words": ["Мультиплеерная", "Afterware", "afterwares", "Codenames"]
 }

@@ -44,3 +44,4 @@ export const TABLE_CLASSES = {
     },
   },
 };
+export const ANIMATION_DURATION = 300;

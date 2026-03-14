@@ -6,8 +6,7 @@ import { NotFoundPage } from '@pages';
 export default class Router {
   private app: App;
   private routes = ROUTES;
-  private lastAllowedPath = URLS.LOBBY();
-  // private lastAllowedPath = URLS.WELCOME();
+  private lastAllowedPath = URLS.WELCOME();
 
   constructor(app: App) {
     this.app = app;
@@ -19,6 +18,9 @@ export default class Router {
   }
 
   private render(): void {
+    const children = this.app.children;
+    for (const child of children) child.destroy();
+
     const path = globalThis.location.pathname;
     const route = this.routes.find((route) => route.path.test(path));
 

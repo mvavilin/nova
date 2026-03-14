@@ -1,5 +1,5 @@
 import type { Action } from 'api/StateAPI';
-import { type State } from '@store/types/state';
+import { type State } from '@/store/types/state';
 import { Language } from '@types';
 import { WelcomeActions } from '../actions/welcome.actions';
 

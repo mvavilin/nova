@@ -1,9 +1,8 @@
-import '@/index.css';
-import '@/input.css';
+import 'index.css';
 import App from '@components/App/App';
 import Router from '@api/RouterAPI/router';
 
-const app = new App();
+export const app = new App();
 if (app.element) document.body.append(app.element);
 
 export const router = new Router(app);

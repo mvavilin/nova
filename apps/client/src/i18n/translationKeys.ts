@@ -18,6 +18,9 @@ export const TranslationKeys = {
   REGISTRATION_TITLE: 'registrationTitle',
   REGISTRATION_SUBMIT_BTN: 'registrationSubmitBtn',
   REGISTRATION_LANG_BTN: 'registrationLangBtn',
+  LOGIN_TITLE: 'loginTitle',
+  LOGIN_SUBMIT_BTN: 'loginSubmitBtn',
+  LOGIN_LANG_BTN: 'loginLangBtn',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];

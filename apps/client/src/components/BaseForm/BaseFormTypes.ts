@@ -1,14 +1,13 @@
-import type { ButtonComponent } from '@/api/ComponentsAPI';
+import type { ButtonComponent, HeadingComponent } from '@/api/ComponentsAPI';
 import type { FieldName } from '../InputForm/InputForm.type';
 import type InputForm from '../InputForm/InputForm';
-import type RegistrationHeading from '@/pages/RegistrationPage/RegistrationHeading/RegistrationHeading';
 import type { AuthResponse } from '@/types/user.types';
 
 export type FormType = 'registration' | 'login' | 'profile';
 
 export interface BaseFormProps {
   formId: FormType;
-  title: RegistrationHeading;
+  title: HeadingComponent;
   inputArray: InputForm[];
   buttonSubmit: ButtonComponent;
 }

@@ -1,15 +1,14 @@
-import { ButtonComponent, FormComponent } from '@/api/ComponentsAPI';
+import { ButtonComponent, FormComponent, HeadingComponent } from '@/api/ComponentsAPI';
 import type { BaseFormProps, FormType } from './BaseFormTypes';
 import store from '@/store/store';
 import type InputForm from '../InputForm/InputForm';
-import type RegistrationHeading from '@/pages/RegistrationPage/RegistrationHeading/RegistrationHeading';
 import { FormActions } from '@/store/actions/form.actions';
 import { Overlay } from '../ui';
 import Loader from '../ui/Loader/Loader';
 
 export default class BaseForm extends FormComponent {
   private formId: FormType;
-  protected title: RegistrationHeading;
+  protected title: HeadingComponent;
   protected inputArray: InputForm[];
   protected buttonSubmit: ButtonComponent;
   protected isSubmiting = false;
@@ -18,7 +17,7 @@ export default class BaseForm extends FormComponent {
     super({
       method: 'post',
       classes:
-        'w-91 p-8 bg-white/65 rounded-xl flex flex-col justify-center items-center gap-2 m-0',
+        'w-91 p-8 bg-white/65 rounded-xl my-auto flex flex-col justify-center items-center gap-2 m-0',
     });
 
     this.formId = parameters.formId;

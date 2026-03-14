@@ -48,11 +48,11 @@ export default function formReducer(state: State, action: AppActions): State {
         email: action.payload.user.email,
         username: action.payload.user.username,
         registration: {
-          fields: {
-            username: { value: '', isValid: false, isChanged: false },
-            email: { value: '', isValid: false, isChanged: false },
-            password: { value: '', isValid: false, isChanged: false },
-          },
+          fields: {},
+          isFormValid: false,
+        },
+        login: {
+          fields: {},
           isFormValid: false,
         },
       };

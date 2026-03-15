@@ -2,6 +2,7 @@ import type { Middleware } from '@/api/StateAPI/types/types';
 import { FormActions } from '../actions/form.actions';
 import type { AppActions } from '../types/action';
 import type { AuthResponse } from '@/types/user.types';
+import type { Overlay } from '@/components/ui';
 // import {ServerUrl, Endpoints} from "@repo/shared",
 
 const Endpoints = {
@@ -26,8 +27,13 @@ const AuthToken = 'auth_token';
 export default function fetcher<State>(): Middleware<State, AppActions> {
   return async function middleware(context) {
     if (context.action.type === FormActions.FETCH_DATA) {
+      let currentLoader: Overlay | null = null;
+      let onFinishedFunction: () => void = () => {};
       try {
-        const { formId, formData } = context.action.payload;
+        const { formId, formData, loader, onFinished } = context.action.payload;
+        currentLoader = loader;
+        onFinishedFunction = onFinished;
+
         const endpoint = FORM_ENDPOINTS[formId];
         if (!endpoint) {
           console.error(`No endpoint found for form: ${formId}`);
@@ -61,6 +67,11 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
       } catch (error) {
         console.error('Fetch failed:', error);
         return context.next(context.action);
+      } finally {
+        currentLoader?.hide();
+        if (typeof onFinishedFunction === 'function') {
+          onFinishedFunction();
+        }
       }
     }
 

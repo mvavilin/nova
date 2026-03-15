@@ -2,6 +2,8 @@ import { Socket, io } from 'socket.io-client';
 import type { ServerToClientEvents, ClientToServerEvents } from '@repo/shared/src/socketEvents';
 import { showErrorToast } from '@utils';
 import { SOCKET_ERROR_MESSAGES } from '@api/SocketClientAPI/socket.constants';
+import store from '@/store/store';
+import { SocketActionTypes } from '@/store/actions/socket.actions';
 
 export default abstract class BaseSocketClient {
   protected socket: Socket<ServerToClientEvents, ClientToServerEvents>;
@@ -40,13 +42,14 @@ export default abstract class BaseSocketClient {
     }
   }
 
-  public connect(authToken: string, sessionToken: string = ''): void {
-    try {
-      this.socket.auth = { auth_token: authToken, session_token: sessionToken };
-      this.socket.connect();
-    } catch (error) {
-      showErrorToast(error, SOCKET_ERROR_MESSAGES.CONNECT);
-    }
+  public connect(authToken: string): void {
+    this.socket.auth = { auth_token: authToken };
+
+    this.socket.on('connect_error', (error) => {
+      store.dispatch({ type: SocketActionTypes.SOCKET_AUTH_FAILED, payload: { error } });
+    });
+
+    this.socket.connect();
   }
 
   public disconnect(): void {

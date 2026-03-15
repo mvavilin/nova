@@ -6,8 +6,8 @@ import { NotFoundPage } from '@pages';
 export default class Router {
   private app: App;
   private routes = ROUTES;
-  private lastAllowedPath = URLS.LOBBY();
-  // private lastAllowedPath = URLS.WELCOME();
+  // private lastAllowedPath = URLS.LOBBY();
+  private lastAllowedPath = URLS.WELCOME();
 
   constructor(app: App) {
     this.app = app;

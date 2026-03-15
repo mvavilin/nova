@@ -1,11 +1,10 @@
 import type { Player, RoomInfo, RoomPreview } from '@repo/shared/src/types/room';
-import { ServerUrl } from '@repo/shared/src/api.constants';
 import { type ErrorCode, ServerEventType } from '@repo/shared/src/socketEvents';
 import { showErrorToast } from '@utils';
 import { BaseSocketClient } from '@api/SocketClientAPI';
 import { SOCKET_ERROR_MESSAGES } from '@api/SocketClientAPI/socket.constants';
 
-class SocketClient extends BaseSocketClient {
+export default class SocketClient extends BaseSocketClient {
   constructor(serverUrl: string) {
     super(serverUrl);
   }
@@ -74,7 +73,3 @@ class SocketClient extends BaseSocketClient {
     }
   }
 }
-
-const socketClient = new SocketClient(ServerUrl.DEPLOY_BASE);
-
-export default socketClient;

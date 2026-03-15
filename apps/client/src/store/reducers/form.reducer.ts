@@ -7,6 +7,7 @@ import store from '../store';
 import { saveSessionStorageData } from '@/utils/sessionStorage';
 import { sessionStorageProps } from '@/constants/sessionStorage.constants';
 import { Language } from '@/types';
+import { SocketActionTypes } from '../actions/socket.actions';
 
 export default function formReducer(state: State, action: AppActions): State {
   switch (action.type) {
@@ -35,10 +36,13 @@ export default function formReducer(state: State, action: AppActions): State {
     }
 
     case FormActions.FETCH_SUCCESS: {
-      store.dispatch({ type: FormActions.GO_TO_LOBBY_PAGE });
-
       if (action.payload.token) {
         saveSessionStorageData(sessionStorageProps.authToken, action.payload.token);
+
+        store.dispatch({
+          type: SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN,
+          payload: { authToken: action.payload.token },
+        });
       }
 
       return {
@@ -51,10 +55,7 @@ export default function formReducer(state: State, action: AppActions): State {
           fields: {},
           isFormValid: false,
         },
-        login: {
-          fields: {},
-          isFormValid: false,
-        },
+        login: { fields: {}, isFormValid: false },
       };
     }
 

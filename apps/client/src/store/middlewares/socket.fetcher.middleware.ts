@@ -8,8 +8,7 @@ import { URLS } from '@RouterAPI/router.constants';
 import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
 import { SocketActionTypes } from '@actions';
 
-import { SocketClient } from '@SocketClientAPI';
-import { ServerUrl } from '@repo/shared/src/api.constants';
+import { socketClient } from '@SocketClientAPI';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
@@ -19,7 +18,6 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
 
         if (authToken === null) throw new Error('Authorization token not found');
 
-        const socketClient = new SocketClient(ServerUrl.DEPLOY_BASE);
         socketClient.connect(authToken);
 
         socketClient.onSessionToken(({ sessionToken }) => {

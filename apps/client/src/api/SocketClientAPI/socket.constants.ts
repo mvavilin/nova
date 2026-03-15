@@ -8,7 +8,8 @@ export const SOCKET_ERROR_MESSAGES = {
   ON_SESSION_TOKEN: 'Error in onSessionToken',
   ON_ERROR: 'Error in onError',
   EMIT: 'Emit error',
-  CONNECT: 'Socket connection error',
+  CONNECT_ERROR: 'Socket connection error',
   DISCONNECT: 'Socket disconnect error',
   OFF: 'Socket unsubscribe error',
+  GENERAL_ERROR: 'General socket error',
 } as const;

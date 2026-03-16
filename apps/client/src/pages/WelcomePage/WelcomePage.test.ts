@@ -6,6 +6,12 @@ vi.mock('@store/store', () => ({
   default: mockStore,
 }));
 
+vi.mock('@/api/RouterAPI/router', () => ({
+  default: class {
+    public init(): void {}
+  },
+}));
+
 import WelcomePage from './WelcomePage';
 
 describe('WelcomePage container creation', () => {

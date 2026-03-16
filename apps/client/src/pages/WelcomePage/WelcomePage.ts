@@ -11,6 +11,10 @@ import LangButton from './LangButton/LangButton';
 import AboutButton from './AboutButton/AboutButton';
 import GameDescription from './GameDescription/GameDescription';
 import LobbyButton from './LobbyButton/LobbyButton';
+import { Button, Modal } from '@/components/ui';
+import GameRules from './GameRules/GameRules';
+import { TranslationKeys } from '@/i18n/translationKeys';
+import { t } from '@/i18n';
 
 export default class WelcomePage extends ContainerComponent {
   constructor({ ...rest }: WelcomePageProperties = {}) {
@@ -53,7 +57,31 @@ export default class WelcomePage extends ContainerComponent {
 
   private showGameRules(_state: State, action: Action): void {
     if (action.type === WelcomeActions.SHOW_GAME_RULES) {
-      alert('Modal Window with Game Rules');
+      const modal = new Modal({
+        children: [new GameRules()],
+        isClosable: true,
+      });
+
+      modal.setClasses(
+        '!px-0 !py-0 rounded-lg !bg-[var(--color-dark)] border border-[var(--color-brand)]'
+      );
+
+      const close = modal.children[1];
+      if (close) {
+        close.destroyChildren();
+        close.setContent('📌');
+      }
+
+      modal.appendChildren(
+        new Button({
+          label: t(TranslationKeys.GAME_RULES_CLOSE_BTN),
+          classes:
+            'mb-6 mx-auto !bg-[var(--color-brand)] hover:!bg-[var(--color-accent)] !font-brand !text-[var(--color-dark)] transition-colors duration-200',
+          onClick: (): Modal => modal.hide(),
+        })
+      );
+
+      modal.show();
     }
   }
 

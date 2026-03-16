@@ -65,7 +65,14 @@ io.on(
     } else {
       const status = roomManager.getStatus(userId);
       if (status) {
-        socket.emit('session:reconnect', { userStatus: status });
+        const { userStatus, player, recipients } = status;
+        socket.emit('session:reconnect', { userStatus });
+        for (const recipient of recipients) {
+          const socketId = socketIdMap.get(recipient);
+          if (socketId) {
+            io.to(socketId).emit('session:player-reconnect', { player });
+          }
+        }
       } else {
         socket.emit('session:connect');
         roomManager.addPlayerToLobby({ userId, username });

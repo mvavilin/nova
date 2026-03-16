@@ -26,6 +26,10 @@ export class RoomManager {
     return this.lobby.map((player) => player.userId);
   }
 
+  private getPlayer(userId: string): Player | undefined {
+    return this.lobby.find((player) => player.userId === userId);
+  }
+
   public createRoom(settings: RoomSettings): {
     payload: RoomPreview;
     recipients: string[];
@@ -96,11 +100,24 @@ export class RoomManager {
     return { error: 'ROOM_NOT_FOUND' };
   }
 
-  public getStatus(userId: string): UserStatus | undefined {
-    if (this.getLobbyIds().includes(userId)) return 'IN_LOBBY';
+  public getStatus(
+    userId: string
+  ): { userStatus: UserStatus; player: Player; recipients: string[] } | undefined {
+    if (this.getLobbyIds().includes(userId)) {
+      const player = this.getPlayer(userId);
+      if (player) {
+        return { userStatus: 'IN_LOBBY', player, recipients: [] };
+      }
+    }
 
     for (const room of this.rooms) {
-      if (room.getPlayerIds().includes(userId)) return 'IN_ROOM';
+      if (room.getPlayerIds().includes(userId)) {
+        const player = room.getPlayer(userId);
+        const recipients = room.getPlayerIds().filter((item) => item !== userId);
+        if (player) {
+          return { userStatus: 'IN_ROOM', player, recipients };
+        }
+      }
     }
 
     return;

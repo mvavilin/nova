@@ -17,8 +17,9 @@ export const SECTION_CLASSES = {
 export const FORM_CLASSES = {
   FORM: `w-full flex flex-col gap-2`,
   INPUT_CONTAINER: `flex flex-col gap-2 w-full`,
-  INPUT_ROW: `flex gap-2 items-center`,
+  INPUT_ROW: `flex gap-2 items-center relative`,
   INPUT: `flex-[2]`,
+  INPUT_INVAVLID: 'outline outline-1 outline-red-600',
   BUTTON: `flex-[1]`,
   LABEL: `w-full block font-bold`,
 } as const;

@@ -1,5 +1,13 @@
 import type { Player, RoomInfo, RoomPreview, RoomSettings } from './types/room.ts';
 
+export enum ClientEventType {
+  ROOM_CREATE = 'room:create',
+  ROOM_ASK_LIST = 'room:ask-list',
+  ROOM_SEARCH = 'room:search',
+  ROOM_JOIN = 'room:join',
+  ROOM_LEAVE = 'room:leave',
+}
+
 export enum ServerEventType {
   SESSION_TOKEN = 'session:token',
   ROOM_SEND_LIST = 'room:send-list',
@@ -9,6 +17,14 @@ export enum ServerEventType {
   ROOM_PLAYER_JOINED = 'room:player-joined',
   ROOM_PLAYER_LEFT = 'room:player-left',
   ERROR = 'error',
+  CONNECT_ERROR = 'connect_error',
+  CONNECT = 'connect',
+}
+
+export enum SocketErrorCode {
+  ROOM_NOT_FOUND = 'ROOM_NOT_FOUND',
+  ROOM_FULL = 'ROOM_FULL',
+  INVALID_ACTION = 'INVALID_ACTION',
 }
 
 type ClientEvent =

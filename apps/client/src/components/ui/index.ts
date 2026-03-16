@@ -6,3 +6,4 @@ export { default as RadioItem } from '@components/ui/RadioItem/RadioItem';
 export { default as RadioGroup } from '@components/ui/RadioGroup/RadioGroup';
 export { default as Overlay } from '@components/ui/Overlay/Overlay';
 export { default as Modal } from '@components/ui/Modal/Modal';
+export { default as WarningMessage } from '@components/ui/WarningMessage/WarningMessage';

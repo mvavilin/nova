@@ -1,36 +1,34 @@
-import StateAPI from '../api/StateAPI';
-import { initialState } from '@/store/initialState';
+import StateAPI from '@StateAPI';
+import { initialState } from '@initialState';
+import { localStorageProps } from '@constants/localStorage.constants';
+import { getLocalStorageData } from '@utils';
 
-import testSenderMiddleware from './middlewares/test.sender.middleware';
-import testFetcherMiddleware from './middlewares/test.fetcher.middleware';
-import formFetcherMiddleware from './middlewares/form.fetcher.middleware';
+import type { State } from '@State';
+import type { AppActions } from '@AppActions';
 
-import testReducer from './reducers/test.reducer';
-import welcomeReducer from './reducers/welcome.reducer';
-import formReducer from './reducers/form.reducer';
-
-import loggerAfterware from '@store/afterwares/logger.afterware';
-import welcomePageAfterware from '@store/afterwares/welcome.afterware';
-import formAfterware from './afterwares/form.afterware';
-
-import type { State } from '@/store/types/state';
-import type { AppActions } from './types/action';
-import { localStorageProps } from '@/constants/localStorage.constants';
-import { getLocalStorageData } from '@/utils/localStorage';
+import { testReducer, welcomeReducer, formReducer, socketReducer, appReducer } from '@reducers';
+import {
+  testSenderMiddleware,
+  testFetcherMiddleware,
+  formFetcherMiddleware,
+  socketMiddleware,
+} from '@middlewares';
+import { loggerAfterware, welcomePageAfterware, socketAfterware, appAfterware } from '@afterwares';
 
 function loadState(): State {
   const saved = getLocalStorageData<Partial<State>>(localStorageProps.store);
-
-  return {
-    ...initialState,
-    ...saved,
-  };
+  return { ...initialState, ...saved };
 }
 
 const store = new StateAPI<State, AppActions>(loadState());
 
-store.addReducer(testReducer, welcomeReducer, formReducer);
-store.addMiddleware(testSenderMiddleware(), testFetcherMiddleware(), formFetcherMiddleware());
-store.addAfterware(loggerAfterware(), welcomePageAfterware(), formAfterware());
+store.addReducer(testReducer, welcomeReducer, formReducer, socketReducer, appReducer);
+store.addMiddleware(
+  testSenderMiddleware(),
+  testFetcherMiddleware(),
+  formFetcherMiddleware(),
+  socketMiddleware()
+);
+store.addAfterware(loggerAfterware(), welcomePageAfterware(), socketAfterware(), appAfterware());
 
 export default store;

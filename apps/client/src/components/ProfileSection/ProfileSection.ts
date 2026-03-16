@@ -1,29 +1,44 @@
-import { BaseComponent, TextComponent } from '@api/ComponentsAPI';
-import { Avatar } from '@components';
+import store from '@store';
+import { BaseComponent, TextComponent } from '@ComponentsAPI';
 
 const PROFILE_SECTION_CLASSES = `flex items-center gap-5 justify-end cursor-pointer`;
 const USER_NAME_CLASSES = `text-xl font-bold`;
 
 type ProfileSectionProperties = {
-  name?: string;
+  name: string | null;
 };
 
 const DEFAULT_PROFILE_NAME = 'Пользователь';
 
 export default class ProfileSection extends BaseComponent {
-  constructor({ name }: ProfileSectionProperties = {}) {
-    super({
-      tag: 'section',
-      classes: PROFILE_SECTION_CLASSES,
+  private nameComponent: TextComponent;
+  private unsubscribe: () => void;
+
+  constructor({ name }: ProfileSectionProperties) {
+    super({ tag: 'section', classes: PROFILE_SECTION_CLASSES });
+
+    this.nameComponent = new TextComponent({
+      content: name || DEFAULT_PROFILE_NAME,
+      classes: USER_NAME_CLASSES,
     });
 
-    this.render(name || DEFAULT_PROFILE_NAME);
+    this.appendChildren([this.nameComponent]);
+
+    this.unsubscribe = store.subscribe(this.handleStoreUpdate);
   }
 
-  private render(userName: string): void {
-    this.appendChildren([
-      new TextComponent({ content: userName, classes: USER_NAME_CLASSES }),
-      new Avatar(),
-    ]);
+  private handleStoreUpdate = (): void => {
+    const stateName = store.getState().username;
+    this.setName(stateName);
+  };
+
+  public setName(name: string | null): void {
+    const newName = name || DEFAULT_PROFILE_NAME;
+    this.nameComponent.setContent(newName);
+  }
+
+  public override destroy(): this {
+    this.unsubscribe();
+    return this;
   }
 }

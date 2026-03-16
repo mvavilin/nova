@@ -1,4 +1,5 @@
-import { BaseComponent, HeadingComponent } from '@api/ComponentsAPI';
+import store from '@store';
+import { BaseComponent, HeadingComponent } from '@ComponentsAPI';
 import { Logo, ProfileSection, ExitButton } from '@components';
 import { TITLE_CLASSES } from '@constants/styles';
 
@@ -15,7 +16,10 @@ export default class Header extends BaseComponent {
   }
 
   private render(): void {
-    this.userMenu.appendChildren([new ProfileSection(), new ExitButton()]);
+    this.userMenu.appendChildren([
+      new ProfileSection({ name: store.getState().username }),
+      new ExitButton(),
+    ]);
 
     this.appendChildren([
       new Logo(),

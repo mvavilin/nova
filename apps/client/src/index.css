@@ -38,3 +38,23 @@
 @utility disabled-state {
   @apply pointer-events-none disabled:bg-gray-200 disabled:text-gray-400 disabled:border-gray-200 disabled:cursor-not-allowed;
 }
+
+@layer base {
+  ::-webkit-scrollbar {
+    @apply w-[10px] h-[10px];
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #64696c;
+    @apply rounded-[10px];
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-white rounded-[10px] border-2 border-solid;
+    border-color: #64696c;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply cursor-pointer;
+  }
+}

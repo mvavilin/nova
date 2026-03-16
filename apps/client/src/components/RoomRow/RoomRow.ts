@@ -4,18 +4,21 @@ import { JoinButton } from '@components';
 import { TABLE_CLASSES } from '@constants/styles';
 
 export default class RoomRow extends BaseComponent {
+  private _room: RoomPreview;
   private nameTd: BaseComponent;
   private playersTd: BaseComponent;
   private statusTd: BaseComponent;
   private actionTd: BaseComponent;
   private joinButton: JoinButton | null = null;
 
-  constructor(private room: RoomPreview) {
+  constructor(room: RoomPreview) {
     super({ tag: 'tr', id: room.id, classes: TABLE_CLASSES.TBODY.TR });
+
+    this._room = room;
 
     this.nameTd = new BaseComponent({
       tag: 'td',
-      content: room.name,
+      content: this.room.name,
       classes: TABLE_CLASSES.TBODY.TD.FIRST,
     });
 
@@ -27,7 +30,7 @@ export default class RoomRow extends BaseComponent {
 
     this.statusTd = new BaseComponent({
       tag: 'td',
-      content: ROOM_STATUS_RU[room.status],
+      content: ROOM_STATUS_RU[this.room.status],
       classes: TABLE_CLASSES.TBODY.TD.BASE,
     });
 
@@ -39,22 +42,17 @@ export default class RoomRow extends BaseComponent {
     this.render();
   }
 
+  public get room(): RoomPreview {
+    return this._room;
+  }
+
   private render(): void {
     this.syncJoinButton();
-
     this.appendChildren([this.nameTd, this.playersTd, this.statusTd, this.actionTd]);
   }
 
   private get playersText(): string {
     return `${this.room.playerCount}/${this.room.maxPlayers}`;
-  }
-
-  public getRoomId(): string {
-    return this.room.id;
-  }
-
-  public removeRoom(): void {
-    this.destroy();
   }
 
   public updateField<K extends keyof RoomPreview>(key: K, value: RoomPreview[K]): void {
@@ -65,7 +63,6 @@ export default class RoomRow extends BaseComponent {
   public updatePlayers(count: number): void {
     this.room.playerCount = count;
     this.playersTd.setContent(this.playersText);
-
     this.syncJoinButton();
   }
 
@@ -81,7 +78,7 @@ export default class RoomRow extends BaseComponent {
     if (this.joinButton) return;
 
     this.joinButton = new JoinButton({ roomId: this.room.id, isCustom: true });
-    this.actionTd?.appendChildren(this.joinButton);
+    this.actionTd.appendChildren(this.joinButton);
   }
 
   private removeJoinButton(): void {

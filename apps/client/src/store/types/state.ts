@@ -1,5 +1,5 @@
-import type { FormState } from '@/components/BaseForm/BaseFormTypes';
-import { Language } from '@/types';
+import type { FormState } from '@components/BaseForm/BaseFormTypes';
+import { Language, type RoomPreview } from '@types';
 
 export type State = {
   id: string | null;
@@ -10,4 +10,5 @@ export type State = {
   registration: FormState;
   login: FormState;
   profile: FormState;
+  rooms: RoomPreview[];
 };

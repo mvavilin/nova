@@ -1,3 +1,5 @@
+import { SocketActionTypes } from '@actions';
+import store from '@store';
 import { Button } from '@components/ui';
 
 const JOIN_BUTTON_CLASSES = 'text-xs bg-green-600 hover:bg-green-700 mx-auto';
@@ -12,7 +14,9 @@ export default class JoinButton extends Button {
     super({
       classes: isCustom ? JOIN_BUTTON_CLASSES : '',
       label: 'Вступить',
-      onClick: () => console.log('join room', roomId),
+      onClick: () => {
+        store.dispatch({ type: SocketActionTypes.SOCKET_JOIN_ROOM, payload: { roomId } });
+      },
     });
   }
 }

@@ -1,7 +1,10 @@
 import type { Player, RoomInfo, RoomPreview } from '@repo/shared/src/types/room';
-import { ServerEventType } from '@repo/shared/src/socketEvents';
-import { BaseSocketClient } from '@api/SocketClientAPI';
+import { ServerEventType, type ErrorCode } from '@repo/shared/src/socketEvents';
 import { ServerUrl } from '@repo/shared/src/api.constants';
+
+import { BaseSocketClient } from '@SocketClientAPI';
+import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
+import { showErrorToast } from '@utils';
 
 class SocketClient extends BaseSocketClient {
   constructor(serverUrl: string) {
@@ -34,6 +37,14 @@ class SocketClient extends BaseSocketClient {
 
   public onSessionToken(handler: (payload: { sessionToken: string }) => void): void {
     this.socket.on(ServerEventType.SESSION_TOKEN, handler);
+  }
+
+  public onError(handler: (payload: { code: ErrorCode }) => void): void {
+    try {
+      this.socket.on(ServerEventType.ERROR, handler);
+    } catch (error) {
+      showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
+    }
   }
 }
 

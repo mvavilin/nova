@@ -7,7 +7,7 @@ interface InputTextProperties extends InputComponentProperties {
   onChange?: (value: string) => void;
 }
 
-const INPUT_CLASSES = `w-full rounded bg-white px-3 py-1 text-black placeholder:text-gray-400 shadow-sm transition-colors focus:outline-none focus:ring-1 focus:ring-black disabled:cursor-not-allowed disabled:opacity-50`;
+const INPUT_CLASSES = `w-full rounded bg-white px-3 py-1 text-black placeholder:text-gray-400 transition-colors focus:outline-none focus:ring-1 focus:ring-black disabled:cursor-not-allowed disabled:opacity-50`;
 
 export default class InputText extends InputComponent {
   private warningMessage = new WarningMessage('Поле не может быть пустым');

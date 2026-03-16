@@ -26,11 +26,11 @@ const UNDO_BUTTON_CLASSES = {
   [MessageType.WARNING]: '!bg-amber-600 !hover:bg-amber-700',
 } as const;
 const MESSAGE__CLASSES = `flex-1 truncate text-sm`;
-const TOAST_ICON: Record<MessageType, Icon> = {
-  [MessageType.SUCCESS]: new Icon({ url: ICON.CIRCLE_CHECK }),
-  [MessageType.INFO]: new Icon({ url: ICON.INFO }),
-  [MessageType.ERROR]: new Icon({ url: ICON.CIRCLE_ALERT }),
-  [MessageType.WARNING]: new Icon({ url: ICON.TRIANGLE_ALERT }),
+const TOAST_ICON_URL: Record<MessageType, string> = {
+  [MessageType.SUCCESS]: ICON.CIRCLE_CHECK,
+  [MessageType.INFO]: ICON.INFO,
+  [MessageType.ERROR]: ICON.CIRCLE_ALERT,
+  [MessageType.WARNING]: ICON.TRIANGLE_ALERT,
 };
 const TOAST_DISPLAY_DURATION = ANIMATION_DURATION * 10;
 
@@ -40,7 +40,7 @@ export default class Toast extends BaseComponent {
   constructor({ type, message, onUndo }: ToastProperties) {
     super({ classes: `${TOAST_CLASSES.BASE} ${TOAST_CLASSES[type]}` });
 
-    this.appendChildren(TOAST_ICON[type]);
+    this.appendChildren(new Icon({ url: TOAST_ICON_URL[type] }));
     this.appendChildren(new TextComponent({ content: message, classes: MESSAGE__CLASSES }));
     this.appendChildren(
       new Button({

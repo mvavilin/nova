@@ -1,5 +1,5 @@
-import type { State } from '@/store/types/state';
-import { Language } from '@/types';
+import type { State } from '@State';
+import { Language } from '@types';
 
 export const initialState: State = {
   id: null,
@@ -23,4 +23,5 @@ export const initialState: State = {
     isFormValid: false,
   },
   profile: { fields: {}, isFormValid: false },
+  rooms: [],
 };

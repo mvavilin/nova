@@ -15,6 +15,8 @@ export default class PublicRoomsSection extends BaseComponent {
   }
 
   private render(): void {
-    this.appendChildren([this.heading, new SearchRoomForm(), new RoomsTable()]);
+    const roomsTable = new RoomsTable();
+
+    this.appendChildren([this.heading, new SearchRoomForm(roomsTable), roomsTable]);
   }
 }

@@ -1,5 +1,7 @@
+import { ContainerComponent, FormComponent } from '@ComponentsAPI';
+import store from '@store';
+import { SocketActionTypes } from '@actions';
 import { FORM_CLASSES } from '@constants/styles';
-import { ContainerComponent, FormComponent } from '@api/ComponentsAPI';
 import { InputText, Button, FieldLabel } from '@components/ui';
 
 export default class JoinRoomForm extends FormComponent {
@@ -22,13 +24,18 @@ export default class JoinRoomForm extends FormComponent {
       name: 'roomID',
       placeholder: 'ID комнаты',
       classes: FORM_CLASSES.INPUT,
+      listeners: {
+        input: (): void => {
+          this.roomInput.isEmpty();
+        },
+      },
     });
 
     this.joinRoomButton = new Button({
       label: 'Присоединиться',
       classes: FORM_CLASSES.BUTTON,
-      onClick: (): void => {
-        console.log('Join Room:', this.roomInput.value);
+      listeners: {
+        click: (): void => this.handleJoinRoom(),
       },
     });
 
@@ -48,5 +55,17 @@ export default class JoinRoomForm extends FormComponent {
 
   private render(): void {
     this.appendChildren([this.inputContainer]);
+  }
+
+  private handleJoinRoom(): void {
+    if (this.roomInput.isEmpty()) return;
+
+    const roomId = this.roomInput.value?.trim();
+    if (!roomId) return;
+
+    store.dispatch({
+      type: SocketActionTypes.SOCKET_JOIN_ROOM,
+      payload: { roomId },
+    });
   }
 }

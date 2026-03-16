@@ -2,7 +2,7 @@ import type {
   FormFetchDataPayload,
   FormFetchSuccessPayload,
   UpdateFieldPayload,
-} from '@/components/BaseForm/BaseFormTypes';
+} from '@/components/BaseForm/BaseForm.types';
 
 export enum FormActions {
   FORM_UPDATE_FIELD = 'FORM/UPDATE_FIELD',

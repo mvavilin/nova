@@ -1,5 +1,5 @@
 import type { TranslationKey } from '@/i18n/translationKeys';
-import type { FormType } from '../BaseForm/BaseFormTypes';
+import type { FormType } from '../BaseForm/BaseForm.types';
 
 export type FieldName = 'username' | 'email' | 'password';
 

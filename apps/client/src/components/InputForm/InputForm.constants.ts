@@ -1,4 +1,4 @@
-import type { FieldName, InputFieldProps } from './InputForm.type';
+import type { FieldName, InputFieldProps } from './InputForm.types';
 import { TranslationKeys } from '@/i18n/translationKeys';
 
 export const formInputValues: Record<FieldName, InputFieldProps> = {

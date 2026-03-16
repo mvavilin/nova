@@ -1,8 +1,8 @@
 import type { State } from '../types/state';
 import { FormActions } from '../actions/form.actions';
 import type { AppActions } from '../types/action';
-import type { FieldName } from '@/components/InputForm/InputForm.type';
-import type { FieldState } from '@/components/BaseForm/BaseFormTypes';
+import type { FieldName } from '@/components/InputForm/InputForm.types';
+import type { FieldState } from '@/components/BaseForm/BaseForm.types';
 import store from '../store';
 import { saveSessionStorageData } from '@/utils/sessionStorage';
 import { sessionStorageProps } from '@/constants/sessionStorage.constants';

@@ -1,5 +1,5 @@
 import type { ButtonComponent, HeadingComponent } from '@/api/ComponentsAPI';
-import type { FieldName } from '../InputForm/InputForm.type';
+import type { FieldName } from '../InputForm/InputForm.types';
 import type InputForm from '../InputForm/InputForm';
 import type { AuthResponse } from '@/types/user.types';
 import type { Overlay } from '../ui';

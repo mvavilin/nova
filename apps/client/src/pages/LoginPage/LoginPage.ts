@@ -1,5 +1,5 @@
 import { ContainerComponent } from '@/api/ComponentsAPI';
-import LoginForm from './LoginForm.ts/LoginForm';
+import LoginForm from './LoginForm/LoginForm';
 import LoginLangButton from './LoginLangButton/LoginLangButton';
 
 export default class LoginPage extends ContainerComponent {

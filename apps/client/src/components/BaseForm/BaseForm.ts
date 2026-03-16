@@ -1,5 +1,5 @@
 import { ButtonComponent, FormComponent, HeadingComponent } from '@/api/ComponentsAPI';
-import type { BaseFormProps, FormType } from './BaseFormTypes';
+import type { BaseFormProps, FormType } from './BaseForm.types';
 import store from '@/store/store';
 import type InputForm from '../InputForm/InputForm';
 import { FormActions } from '@/store/actions/form.actions';

@@ -7,7 +7,7 @@ export default class LoginPage extends ContainerComponent {
     super({
       tag: 'section',
       classes:
-        'relative w-screen h-screen px-10 py-5 flex flex-col justify-beetween items-center bg-[url("src/assets/images/bg-vehicle-1.webp")] bg-center bg-cover bg-no-repeat',
+        'relative w-screen h-screen px-10 py-5 flex flex-col justify-beetween items-center bg-[url(/src/assets/backgrounds/bg-vehicle-1.webp)] bg-center bg-cover bg-no-repeat',
     });
 
     this.render();

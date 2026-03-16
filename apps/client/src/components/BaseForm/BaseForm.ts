@@ -6,6 +6,8 @@ import { FormActions } from '@/store/actions/form.actions';
 import { Overlay } from '../ui';
 import Loader from '../ui/Loader/Loader';
 
+const messageToUser = 'Sending data to server...';
+
 export default class BaseForm extends FormComponent {
   private formId: FormType;
   protected title: HeadingComponent;
@@ -82,6 +84,7 @@ export default class BaseForm extends FormComponent {
     this.isSubmiting = true;
 
     const loaderOverlay = new Overlay(new Loader());
+    const loaderOverlay = new Overlay(new Loader(messageToUser));
     loaderOverlay.show();
 
     const data = this.getFormInputValues();

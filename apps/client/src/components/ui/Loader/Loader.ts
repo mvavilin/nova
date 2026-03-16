@@ -9,20 +9,26 @@ const spinnerStyle =
 
 export default class Loader extends ContainerComponent {
   private overlay: Overlay;
-  private message: TextComponent;
+  private message?: TextComponent;
   private spinner: BaseComponent;
 
-  constructor() {
+  constructor(message?: string) {
     super({ classes: containerStyle });
 
-    this.message = new TextComponent({
-      classes: messageStyle,
-      content: 'Trying to connect to server...',
-    });
+    const children: BaseComponent[] = [];
+
+    if (message) {
+      this.message = new TextComponent({
+        classes: messageStyle,
+        content: message,
+      });
+      children.push(this.message);
+    }
 
     this.spinner = new ContainerComponent({ classes: spinnerStyle });
+    children.push(this.spinner);
 
-    this.appendChildren([this.message, this.spinner]);
+    this.appendChildren(children);
 
     this.overlay = new Overlay(this);
   }

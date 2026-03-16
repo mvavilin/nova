@@ -1,5 +1,16 @@
 import type { Player, RoomInfo, RoomPreview, RoomSettings } from './types/room.ts';
 
+export enum ServerEventType {
+  SESSION_TOKEN = 'session:token',
+  ROOM_SEND_LIST = 'room:send-list',
+  ROOM_CREATED = 'room:created',
+  ROOM_STATE = 'room:state',
+  ROOM_UPDATE_PREVIEW = 'room:update-review',
+  ROOM_PLAYER_JOINED = 'room:player-joined',
+  ROOM_PLAYER_LEFT = 'room:player-left',
+  ERROR = 'error',
+}
+
 type ClientEvent =
   | { type: 'room:create'; payload: { settings: RoomSettings } }
   | { type: 'room:ask-list' }

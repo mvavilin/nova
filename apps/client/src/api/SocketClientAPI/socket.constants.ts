@@ -1,0 +1,14 @@
+export const SOCKET_ERROR_MESSAGES = {
+  ON_ROOM_CREATED: 'Error in onRoomCreated',
+  ON_ROOM_UPDATED: 'Error in onRoomUpdated',
+  ON_ROOM_STATE: 'Error in onRoomState',
+  ON_PLAYER_JOINED: 'Error in onPlayerJoined',
+  ON_PLAYER_LEFT: 'Error in onPlayerLeft',
+  ON_ROOM_LIST: 'Error in onRoomList',
+  ON_SESSION_TOKEN: 'Error in onSessionToken',
+  ON_ERROR: 'Error in onError',
+  EMIT: 'Emit error',
+  CONNECT: 'Socket connection error',
+  DISCONNECT: 'Socket disconnect error',
+  OFF: 'Socket unsubscribe error',
+} as const;

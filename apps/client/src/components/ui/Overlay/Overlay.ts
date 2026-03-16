@@ -3,7 +3,7 @@ import { app } from '@app';
 import { ANIMATION_DURATION } from '@styles';
 
 const OVERLAY_CLASSES =
-  'fixed inset-0 bg-black/60 z-50 flex items-center justify-center pointer-events-auto select-none';
+  'fixed inset-0 bg-black/6a0 z-50 flex items-center justify-center pointer-events-auto select-none';
 
 export default class Overlay extends BaseComponent {
   constructor(child?: BaseComponent) {

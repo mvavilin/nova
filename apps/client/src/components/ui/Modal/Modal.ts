@@ -12,7 +12,7 @@ interface ModalProperties {
 }
 
 export default class Modal extends BaseComponent {
-  private overlay: Overlay;
+  public overlay: Overlay;
 
   constructor({ children, isClosable = true }: ModalProperties) {
     super({ classes: MODAL_CLASSES, children });

@@ -21,12 +21,16 @@ export const socketIdMap = new Map<string, string>();
 const timerMap = new Map<string, NodeJS.Timeout>();
 
 const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
+const FRONTEND_URL_BACKUP = process.env.FRONTEND_URL_BACKUP;
+const originForCors = [FRONTEND_URL];
+if (typeof FRONTEND_URL_BACKUP === 'string' && FRONTEND_URL_BACKUP !== FRONTEND_URL)
+  originForCors.push(FRONTEND_URL_BACKUP);
 
 const app = express();
 const server = createServer(app);
 const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
   cors: {
-    origin: FRONTEND_URL,
+    origin: originForCors,
     methods: ['GET', 'POST'],
   },
 });
@@ -34,7 +38,7 @@ const roomManager = new RoomManager();
 
 app.use(
   cors({
-    origin: FRONTEND_URL,
+    origin: originForCors,
     credentials: true,
   })
 );

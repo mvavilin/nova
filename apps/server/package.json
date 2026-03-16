@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"No tests configured\"",
+    "test": "vitest run",
     "build": "rm -rf dist && tsc",
     "lint": "npx eslint src",
     "lint:fix": "eslint \"**/*.{ts,tsx,js}\" --fix",
@@ -33,7 +33,8 @@
     "prisma": "^7.4.1",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vitest": "^4.1.0"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.1",

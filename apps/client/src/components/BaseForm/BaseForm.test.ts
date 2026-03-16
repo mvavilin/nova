@@ -1,5 +1,12 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-// 1. Мокаем стор перед импортом BaseForm
+import store from '@/store/store';
+import BaseForm from './BaseForm';
+import mockInitialState from '@__mocks__/store/state';
+import { HeadingComponent, ButtonComponent } from '@/api/ComponentsAPI';
+import type { BaseFormProps } from './BaseForm.types';
+import { FormActions } from '@/store/actions/form.actions';
+
+// 1. Мокаем стор
 vi.mock('@/store/store', () => ({
   default: {
     getState: vi.fn(),
@@ -16,14 +23,6 @@ vi.mock('../ui', () => ({
   },
 }));
 vi.mock('../ui/Loader/Loader', () => ({ default: class {} }));
-
-import store from '@/store/store';
-import BaseForm from './BaseForm';
-import mockInitialState from '@__mocks__/store/state';
-import { HeadingComponent, ButtonComponent } from '@/api/ComponentsAPI';
-import type { BaseFormProps } from './BaseForm.types';
-import { FormActions } from '@/store/actions/form.actions';
-
 const getStateMock = vi.mocked(store.getState);
 const dispatchMock = vi.mocked(store.dispatch);
 

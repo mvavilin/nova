@@ -6,19 +6,14 @@ import { Endpoints, ServerConstants } from '../../../packages/shared/src/api.con
 import { authRouter } from './api/auth.ts';
 import cors from 'cors';
 import 'dotenv/config';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import { authMiddleware } from './ws/authMiddleware.ts';
-import { RoomManager } from './rooms/roomManager.ts';
-import { setupSocketHandlers } from './ws/socketHandlers.ts';
 import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../../packages/shared/src/socketEvents.ts';
-import { RECONNECT_MAX_TIME, type SocketData } from './types/types.ts';
+import { setupConnection } from './ws/socketHandlers/sessionHandlers.ts';
 import { sessionMiddleware } from './ws/sessionMiddleware.ts';
-
-export const socketIdMap = new Map<string, string>();
-const timerMap = new Map<string, NodeJS.Timeout>();
 
 const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
 const FRONTEND_URL_BACKUP = process.env.FRONTEND_URL_BACKUP;
@@ -28,13 +23,12 @@ if (typeof FRONTEND_URL_BACKUP === 'string' && FRONTEND_URL_BACKUP !== FRONTEND_
 
 const app = express();
 const server = createServer(app);
-const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
+export const io = new Server<ClientToServerEvents, ServerToClientEvents>(server, {
   cors: {
     origin: originForCors,
     methods: ['GET', 'POST'],
   },
 });
-const roomManager = new RoomManager();
 
 app.use(
   cors({
@@ -57,76 +51,6 @@ app.use(errorHandler);
 io.use(authMiddleware);
 io.use(sessionMiddleware);
 
-io.on(
-  'connection',
-  (socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>) => {
-    const { userId, username } = socket.data;
-
-    const userSocketCount = [...io.sockets.sockets].filter(
-      (s) => s[1].data.userId === userId
-    ).length;
-
-    if (userSocketCount > 1) {
-      socket.emit('error', { code: 'ALREADY_ONLINE' });
-      socket.disconnect();
-    } else {
-      const status = roomManager.getStatus(userId, username);
-      const { userStatus, player, recipients } = status;
-      socket.emit('session:connect', { userStatus });
-      socket.emit('session:token', { sessionToken: socket.data.sessionToken });
-      for (const recipient of recipients) {
-        const socketId = socketIdMap.get(recipient);
-        if (socketId) {
-          io.to(socketId).emit('session:player-connected', { player });
-        }
-      }
-      clearTimeout(timerMap.get(userId));
-      timerMap.delete(userId);
-      console.log('connect', userId);
-    }
-
-    socketIdMap.set(userId, socket.id);
-
-    socket.on('disconnect', () => {
-      console.log('disconnect', userId);
-
-      const status = roomManager.getStatus(userId, username);
-      const { player, recipients } = status;
-      for (const recipient of recipients) {
-        const socketId = socketIdMap.get(recipient);
-        if (socketId) {
-          io.to(socketId).emit('session:player-disconnected', { player });
-        }
-      }
-
-      timerMap.set(
-        userId,
-        setTimeout(() => {
-          for (const recipient of recipients) {
-            const socketId = socketIdMap.get(recipient);
-            if (socketId) {
-              io.to(socketId).emit('session:player-exit', { player });
-            }
-          }
-
-          const response = roomManager.leaveRoom(userId);
-          if ('payload' in response) {
-            const { payload, lobbyRecipients } = response;
-            for (const recipient of lobbyRecipients) {
-              const socketId = socketIdMap.get(recipient);
-              if (socketId) {
-                io.to(socketId).emit('room:update-review', { roomPreview: payload });
-              }
-            }
-            roomManager.removePlayerFromLobby(userId);
-          }
-          timerMap.delete(userId);
-        }, RECONNECT_MAX_TIME)
-      );
-    });
-
-    setupSocketHandlers(io, socket, roomManager);
-  }
-);
+setupConnection();
 
 export default server;

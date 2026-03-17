@@ -45,13 +45,13 @@ export class RoomManager {
     return { payload: roomPreview, recipients };
   }
 
-  public getRoomPreviews(name?: string): { payload: RoomPreview[] } {
+  public getRoomPreviews(name?: string): RoomPreview[] {
     let roomPreviews = this.rooms.map((room) => room.getRoomPreview());
     if (name) {
       const regExp = new RegExp(name, 'i');
       roomPreviews = roomPreviews.filter((preview) => regExp.test(preview.name));
     }
-    return { payload: roomPreviews };
+    return roomPreviews;
   }
 
   public joinToRoom(

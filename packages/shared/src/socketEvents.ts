@@ -38,7 +38,7 @@ type ClientEvent =
   | { type: 'room:ask-room-info' }
   | { type: 'session:ask-status' };
 
-type ServerEvent =
+export type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
   | { type: 'session:connect'; payload: { userStatus: UserStatus } }
   | { type: 'session:player-connected'; payload: { player: Player } }

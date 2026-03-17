@@ -471,6 +471,23 @@ The main disadvantage is that socket.io requires an authentication token during 
       
     </details>
 
+  - **Get the status on request from the client**
+    <details>
+ 
+      - Request to server
+   
+      ```
+        { type: 'session:ask-status' }
+      ```
+ 
+      - Response to the user who sent the request
+
+      ```
+        { type: 'session:send-status'; payload: { userStatus: UserStatus } }
+      ```
+      
+    </details>
+
   - **The outdated content will be removed in the future**
     <details>
       

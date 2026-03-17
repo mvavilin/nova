@@ -73,6 +73,7 @@ io.on(
       const status = roomManager.getStatus(userId, username);
       const { userStatus, player, recipients } = status;
       socket.emit('session:connect', { userStatus });
+      socket.emit('session:token', { sessionToken: socket.data.sessionToken });
       for (const recipient of recipients) {
         const socketId = socketIdMap.get(recipient);
         if (socketId) {

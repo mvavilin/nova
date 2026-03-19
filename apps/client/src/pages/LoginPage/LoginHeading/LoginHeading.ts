@@ -4,7 +4,7 @@ import { t } from '@/i18n';
 import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 import store from '@/store/store';
-import { CommonAppActionTypes } from '@/store/actions';
+import { AppActionTypes } from '@/store/actions';
 
 export default class LoginHeading extends HeadingComponent {
   constructor() {
@@ -25,7 +25,7 @@ export default class LoginHeading extends HeadingComponent {
   }
 
   private switchLanguage(_state: State, action: Action): void {
-    if (action.type === CommonAppActionTypes.SWITCH_LANGUAGE) {
+    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.setContent(t(TranslationKeys.LOGIN_TITLE));
     }
   }

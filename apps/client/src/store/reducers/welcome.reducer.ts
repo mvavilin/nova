@@ -1,7 +1,7 @@
 import type { Action } from 'api/StateAPI';
 import { type State } from '@/store/types/state';
 import { WelcomeActions } from '../actions/welcome.actions';
-import { CommonAppActionTypes } from '../actions';
+import { AppActionTypes } from '../actions';
 
 export default function welcomePageReducer(state: State, action: Action): State {
   switch (action.type) {
@@ -13,7 +13,7 @@ export default function welcomePageReducer(state: State, action: Action): State 
       return { ...state };
     }
 
-    case CommonAppActionTypes.SWITCH_LANGUAGE: {
+    case AppActionTypes.SWITCH_LANGUAGE: {
       return { ...state };
     }
 

@@ -1,7 +1,7 @@
 import { Button } from '@components/ui';
 import ICONS from '@assets/icons';
 import store from '@store';
-import { CommonAppActionTypes } from '@actions';
+import { AppActionTypes } from '@actions';
 
 const EXIT_BUTTON_CLASSES = `w-10 h-10 bg-transparent hover:bg-white/10`;
 
@@ -10,7 +10,7 @@ export default class ExitButton extends Button {
     super({
       classes: EXIT_BUTTON_CLASSES,
       iconUrl: ICONS.EXIT,
-      listeners: { click: () => store.dispatch({ type: CommonAppActionTypes.EXIT_APP }) },
+      listeners: { click: () => store.dispatch({ type: AppActionTypes.EXIT_APP }) },
     });
   }
 }

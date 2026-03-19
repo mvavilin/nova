@@ -6,7 +6,7 @@ import store from '../store';
 import { saveSessionStorageData } from '@/utils/sessionStorage';
 import { sessionStorageProps } from '@/constants/sessionStorage.constants';
 import { SocketActionTypes } from '../actions/socket.actions';
-import { CommonAppActionTypes } from '../actions';
+import { AppActionTypes } from '../actions';
 import type { AppActions } from '../types';
 
 export default function formReducer(state: State, action: AppActions): State {
@@ -63,7 +63,7 @@ export default function formReducer(state: State, action: AppActions): State {
       return { ...state };
     }
 
-    case CommonAppActionTypes.SWITCH_LANGUAGE: {
+    case AppActionTypes.SWITCH_LANGUAGE: {
       return { ...state };
     }
 

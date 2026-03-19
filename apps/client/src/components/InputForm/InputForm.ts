@@ -10,7 +10,7 @@ import type { State } from '@/store/types/state';
 import store from '@/store/store';
 import { t } from '@/i18n';
 import type { TranslationKey } from '@/i18n/translationKeys';
-import { CommonAppActionTypes } from '@/store/actions';
+import { AppActionTypes } from '@/store/actions';
 
 export default class InputForm extends ContainerComponent {
   private formId: FormType;
@@ -98,7 +98,7 @@ export default class InputForm extends ContainerComponent {
 
   private updateInputForm(_state: State, action: Action): void {
     const isFieldUpdate = action.type === FormActionTypes.FORM_UPDATE_FIELD;
-    const isLanguageSwitch = action.type === CommonAppActionTypes.SWITCH_LANGUAGE;
+    const isLanguageSwitch = action.type === AppActionTypes.SWITCH_LANGUAGE;
     if (isFieldUpdate || isLanguageSwitch) {
       const formState = store.getState()[this.formId];
       const fieldState = formState.fields[this.fieldName];

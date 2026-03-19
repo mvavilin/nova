@@ -6,7 +6,7 @@ import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
-import { CommonAppActionTypes } from '@/store/actions';
+import { AppActionTypes } from '@/store/actions';
 
 export default class LoginButton extends ButtonComponent {
   constructor({ ...rest }: LoginButtonProperties = {}) {
@@ -34,7 +34,7 @@ export default class LoginButton extends ButtonComponent {
   }
 
   private switchLanguage(_state: State, action: Action): void {
-    if (action.type === CommonAppActionTypes.SWITCH_LANGUAGE) {
+    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.setContent(t(TranslationKeys.WELCOME_LOGIN));
     }
   }

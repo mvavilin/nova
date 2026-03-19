@@ -1,10 +1,10 @@
 import type { WelcomePageActions } from '@actions/welcome.actions';
 
-import type { TestPageActions, FormActions, SocketActions, CommonAppActions } from '@actions';
+import type { TestPageActions, FormActions, SocketActions, LocalAppActions } from '@actions';
 
 export type AppActions =
   | WelcomePageActions
   | TestPageActions
   | FormActions
   | SocketActions
-  | CommonAppActions;
+  | LocalAppActions;

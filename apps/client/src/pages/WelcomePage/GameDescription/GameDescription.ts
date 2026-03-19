@@ -5,7 +5,7 @@ import { t } from '@/i18n';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import type { State } from '@store/types/state';
 import type { Action } from '@/api/StateAPI';
-import { CommonAppActionTypes } from '@/store/actions';
+import { AppActionTypes } from '@/store/actions';
 
 export default class GameDescription extends TextComponent {
   constructor({ ...rest }: GameDescriptionProperties = {}) {
@@ -26,7 +26,7 @@ export default class GameDescription extends TextComponent {
   }
 
   private switchLanguage(_state: State, action: Action): void {
-    if (action.type === CommonAppActionTypes.SWITCH_LANGUAGE) {
+    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.setContent(t(TranslationKeys.WELCOME_DESCRIPTION));
     }
   }

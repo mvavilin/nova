@@ -12,9 +12,11 @@ export default class Header extends BaseComponent {
 
     super({
       tag: 'header',
-      classes: `${HEADER_CLASSES} grid-cols-${cols}`,
+      classes: HEADER_CLASSES,
       children: items,
       ...rest,
     });
+
+    this.setStyle({ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` });
   }
 }

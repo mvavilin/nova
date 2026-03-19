@@ -1,6 +1,6 @@
 import { type RoomPreview, ROOM_PREVIEW_FIELDS } from '@types';
 import { BaseComponent } from '@ComponentsAPI';
-import { RoomRow } from '@components';
+import { RoomRow } from '@pages/LobbyPage/components';
 import { TABLE_CLASSES, HEADER_TITLES } from '@constants/styles';
 import store from '@store';
 import { socketClient } from '@SocketClientAPI';

@@ -1,7 +1,8 @@
 import { BaseComponent, HeadingComponent } from '@ComponentsAPI';
-import { RoomsTable, SectionHeading } from '@components';
 import { SECTION_CLASSES } from '@constants/styles';
-import { SearchRoomForm } from '@components/forms';
+import { SectionHeading } from '@components';
+import { RoomsTable } from '@pages/LobbyPage/components';
+import { SearchRoomForm } from '@pages/LobbyPage/components/forms';
 
 export default class PublicRoomsSection extends BaseComponent {
   private heading: HeadingComponent;

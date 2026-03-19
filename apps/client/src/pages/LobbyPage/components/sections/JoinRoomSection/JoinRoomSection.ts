@@ -1,7 +1,7 @@
 import { BaseComponent, HeadingComponent } from '@ComponentsAPI';
 import { SectionHeading } from '@components';
 import { SECTION_CLASSES } from '@constants/styles';
-import { JoinRoomForm } from '@components/forms';
+import { JoinRoomForm } from '@pages/LobbyPage/components/forms';
 
 export default class JoinRoomSection extends BaseComponent {
   private heading: HeadingComponent;

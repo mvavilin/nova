@@ -1,6 +1,6 @@
 import { ROOM_STATUS_RU, type RoomPreview, ROOM_PREVIEW_FIELDS } from '@types';
 import { BaseComponent } from '@ComponentsAPI';
-import { JoinButton } from '@components';
+import { JoinButton } from '@pages/LobbyPage/components';
 import { TABLE_CLASSES } from '@constants/styles';
 
 export default class RoomRow extends BaseComponent {

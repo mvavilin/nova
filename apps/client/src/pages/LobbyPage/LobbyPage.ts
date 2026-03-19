@@ -1,12 +1,14 @@
 import { ContainerComponent, HeadingComponent } from '@api/ComponentsAPI';
-import { Header, UserMenu } from '@components';
+import { Header } from '@components';
+import { UserMenu } from '@pages/LobbyPage/components';
+
 import { LOBBY_PAGE_BACKGROUND } from '@assets/backgrounds';
 import {
   SoloSection,
   CreateRoomSection,
   JoinRoomSection,
   PublicRoomsSection,
-} from '@components/sections';
+} from '@pages/LobbyPage/components/sections';
 import { TITLE_CLASSES } from '@constants/styles';
 
 const LOBBY_PAGE_CLASSES = `w-full h-full flex flex-col items-center justify-start gap-5 px-20 py-5 bg-cover bg-center font-text`;

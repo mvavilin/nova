@@ -1,6 +1,7 @@
 import store from '@store';
 import { BaseComponent } from '@ComponentsAPI';
-import { ProfileSection, ExitButton } from '@components';
+import { ProfileSection } from '@pages/LobbyPage/components';
+import { ExitButton } from '@components';
 
 const USER_MENU_CLASSES = `flex items-center justify-end gap-4 justify-self-end`;
 

@@ -4,7 +4,7 @@ import { SocketActionTypes } from '@actions';
 
 import { FORM_CLASSES } from '@constants/styles';
 import { CREATE_ROOM_FORM_CONFIG as CONFIG } from '@constants/forms';
-import { PlayerCountField, RoomNameField } from '@components/fields';
+import { PlayerCountField, RoomNameField } from '@pages/LobbyPage/components/fields';
 
 export default class CreateRoomForm extends FormComponent {
   private maxPlayers: string = CONFIG.PLAYERS.DEFAULT;

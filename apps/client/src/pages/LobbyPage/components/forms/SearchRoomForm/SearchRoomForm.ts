@@ -1,7 +1,7 @@
 import { FORM_CLASSES } from '@constants/styles';
 import { ContainerComponent, FormComponent } from '@api/ComponentsAPI';
 import { InputText, Button, FieldLabel } from '@components/ui';
-import { RoomsTable } from '@components';
+import { RoomsTable } from '@pages/LobbyPage/components';
 
 export default class SearchRoomForm extends FormComponent {
   private roomLabel: FieldLabel;

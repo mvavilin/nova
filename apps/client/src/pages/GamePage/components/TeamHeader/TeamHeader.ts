@@ -53,7 +53,7 @@ export default class TeamHeader extends ContainerComponent {
     const header = new HeadingComponent({
       level: 2,
       content: this.title,
-      classes: TEAM_HEADER_CLASSES.HEADER_COLOR[this.team],
+      classes: `${TEAM_HEADER_CLASSES.HEADER} ${TEAM_HEADER_CLASSES.HEADER_COLOR[this.team]}`,
     });
 
     const operatives = this.players.filter((player) => player.role === Role.OPERATIVE);

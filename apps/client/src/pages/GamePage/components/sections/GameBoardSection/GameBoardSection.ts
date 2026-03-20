@@ -2,12 +2,12 @@ import { blueTeam, redTeam } from '@__mocks__';
 
 import { BaseComponent, ContainerComponent } from '@ComponentsAPI';
 import { SECTION_CLASSES } from '@constants/styles';
-import { TeamHeader } from '@pages/GamePage/components';
+import { Tablo, TeamHeader, Timer } from '@pages/GamePage/components';
 
 const HEADER_CLASSES = {
   CONTAINER: 'grid grid-cols-3 items-center w-full',
   LEFT: 'justify-self-start',
-  CENTER: 'justify-self-center',
+  CENTER: 'w-full flex flex-col gap-2 justify-start items-center self-start',
   RIGHT: 'justify-self-end',
 };
 
@@ -29,8 +29,8 @@ export default class GameBoardSection extends BaseComponent {
   private render(): void {
     const leftColumn = new TeamHeader({ ...blueTeam, classes: HEADER_CLASSES.LEFT });
     const centerColumn = new ContainerComponent({
-      content: 'Счет',
       classes: HEADER_CLASSES.CENTER,
+      children: [new Tablo(), new Timer(30, true)],
     });
     const rightColumn = new TeamHeader({ ...redTeam, classes: HEADER_CLASSES.RIGHT });
 

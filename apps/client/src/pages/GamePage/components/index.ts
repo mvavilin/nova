@@ -5,3 +5,5 @@ export { default as LogMessageComponent } from '@pages/GamePage/components/LogMe
 export { default as logOutput } from '@pages/GamePage/components/LogOutput/LogOutput';
 
 export { default as TeamHeader } from '@pages/GamePage/components/TeamHeader/TeamHeader';
+
+export { default as Tablo } from '@pages/GamePage/components/Tablo/Tablo';

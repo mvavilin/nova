@@ -5,10 +5,10 @@ import { GAME_PAGE_BACKGROUND } from '@assets/backgrounds';
 
 import { TITLE_CLASSES } from '@constants/styles';
 import { Timer } from '@pages/GamePage/components';
-import { LogChatSection } from '@pages/GamePage/components/sections';
+import { GameBoardSection, LogChatSection } from '@pages/GamePage/components/sections';
 
 const GAME_PAGE_CLASSES = `w-full h-full flex flex-col items-center justify-start gap-5 px-20 py-5 bg-cover bg-right font-text`;
-const MAIN_CLASSES = `w-full h-full grid grid-cols-2 grid-cols-[1fr_3fr] gap-5 text-white rounded`;
+const MAIN_CLASSES = `w-full h-full grid grid-cols-2 grid-cols-[3fr_1fr] gap-5 text-white rounded`;
 
 export default class GamePage extends ContainerComponent {
   private main: ContainerComponent;
@@ -24,7 +24,7 @@ export default class GamePage extends ContainerComponent {
   }
 
   private render(): void {
-    this.main.appendChildren([new LogChatSection()]);
+    this.main.appendChildren([new GameBoardSection(), new LogChatSection()]);
 
     this.appendChildren([
       new Header({

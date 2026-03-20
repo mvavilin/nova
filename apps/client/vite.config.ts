@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   server: {
-    open: true,
+    // open: true,
     // watch: {
     //   usePolling: true,
     // },

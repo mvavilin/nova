@@ -31,4 +31,13 @@ window.addEventListener('load', () => app.show(true, 500));
 //   question: `Какие три состояния есть у объектов Promise? И в какой последовательности они обычно сменяют друг друга?`,
 // }).show();
 
+// import { AnswerRatingModal } from '@pages/GamePage/components';
+
+// new AnswerRatingModal({
+//   topic: `Promise`,
+//   question: `Какие три состояния есть у объектов Promise? И в какой последовательности они обычно сменяют друг друга?`,
+//   answer: `pending (ожидание) и fulfilled (выполнено успешно) или rejected (выполнено с ошибкой). Из pending промис может перейти либо в fulfilled, либо в rejected. Обратного пути нет.`,
+//   possibleAnswer: `Объект Promise в JavaScript может находиться в одном из трех состояний: pending (ожидание, начальное состояние), fulfilled (выполнено успешно) или rejected (выполнено с ошибкой), при этом переход всегда осуществляется из pending либо в fulfilled, либо в rejected, после чего состояние навсегда остается неизменным.`,
+// }).show();
+
 export { app, router };

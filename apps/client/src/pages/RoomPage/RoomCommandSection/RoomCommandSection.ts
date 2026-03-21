@@ -5,7 +5,7 @@ import RoomCommandButtons from '../RoomCommandButtons/RoomCommandButtons';
 
 const sectionStyle = {
   container:
-    'w-[40%] flex flex-col flex-wrap gap-8 justify-between items-center text-white text-lg p-5',
+    'w-[45%] min-[950px]:w-[40%] min-w-[350px] shrink-0 flex flex-col flex-wrap gap-8 justify-between items-center text-white text-lg p-5',
   containerRed: 'bg-gradient-to-br from-red-600/25 to-white/25 rounded',
   containerBlue: 'bg-gradient-to-br from-cyan-600/25 to-white/25 rounded',
   titleRed: 'text-2xl text-red-500 font-bold',

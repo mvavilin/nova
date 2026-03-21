@@ -3,12 +3,12 @@ import type { RoomInfoProps } from './RoomInfo.types';
 
 const styles = {
   container:
-    'w-2/5 flex flex-wrap justify-center lg:justify-between items-center gap-5 text-white text-2xl font-bold bg-white/25 px-6 py-4 rounded',
-  textContainer: 'flex flex-col w-[50%]',
+    'w-[40%] max-w-[512px] min-w-[350px] flex flex-wrap justify-center min-[1070px]:justify-between items-center gap-5 text-white text-2xl font-bold bg-white/25 px-6 py-4 rounded',
+  textContainer: 'flex flex-col self-center min-[1070px]:w-[50%]',
   title: 'truncate',
   span: 'text-brand',
   button:
-    'w-36 h-9 shrink-0 bg-cyan-600 rounded-md text-base hover:cursor-pointer hover:bg-green-600 hover:transition-colors hover:duration-300',
+    'w-34 h-9 shrink-0 bg-cyan-600 rounded-md text-base hover:cursor-pointer hover:bg-green-600 hover:transition-colors hover:duration-300',
 };
 
 export default class RoomInfo extends ContainerComponent {

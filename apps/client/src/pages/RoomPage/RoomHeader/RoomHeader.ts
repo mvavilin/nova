@@ -4,7 +4,7 @@ import { Logo, ExitButton } from '@components';
 import RoomUser from '../RoomUser/RoomUser';
 
 const styles = {
-  header: 'w-full grid grid-cols-3 items-center p-4 bg-white/25 text-white rounded',
+  header: 'w-full max-w-7xl grid grid-cols-3 items-center p-4 bg-white/25 text-white rounded',
   userMenu: 'flex items-center justify-end gap-4 justify-self-end',
   title: 'text-2xl text-center font-bold uppercase',
 };

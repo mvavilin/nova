@@ -4,7 +4,7 @@ import type { RoomChoosingUsersProps } from './RoomChoosingUsers.types';
 
 const styles = {
   container:
-    'w-2/5 flex flex-col items-center justify-center gap-5 p-4 bg-white/25 text-white text-lg rounded',
+    'w-[40%] min-w-[250px] flex flex-col items-center justify-center gap-5 p-4 bg-white/25 text-white text-lg rounded',
   title: 'text-2xl text-center font-bold',
   list: 'w-full grid grid-cols-[repeat(auto-fill,150px)] justify-center items-center gap-5',
 };

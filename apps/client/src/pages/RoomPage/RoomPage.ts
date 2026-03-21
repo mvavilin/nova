@@ -7,9 +7,10 @@ import { red, blue, choosingUsers } from './roomMockData';
 
 const styles = {
   pageContainer:
-    'w-full h-full px-20 py-5 flex flex-col justify-between items-center gap-10 bg-[url(/src/assets/backgrounds/lobby-page-background.jpg)] bg-center bg-cover bg-no-repeat',
-  main: 'w-full flex flex-col justify-between items-center gap-10',
-  commandContainer: 'w-full flex justify-between items-center',
+    'w-full min-h-screen px-20 py-10 flex flex-col gap-10 items-center bg-[url(/src/assets/backgrounds/lobby-page-background.jpg)] bg-center bg-cover bg-no-repeat',
+  main: 'w-full max-w-7xl flex-1 flex flex-col justify-start items-center gap-10',
+  commandContainer:
+    'w-full h-full flex flex-col min-[950px]:flex-row justify-center min-[950px]:justify-between items-center min-[950px]:items-start gap-10',
 };
 export default class RoomPage extends ContainerComponent {
   constructor() {

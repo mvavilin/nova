@@ -9,9 +9,9 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint \"**/*.{ts,tsx,js}\" --fix",
-    "format": "prettier --write \"**/*.{ts,tsx,md,js,json,css}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,md,js,json,css}\"  --log-level silent",
     "format:check": "prettier --check \"**/*.{ts,tsx,md,js,json,css}\"",
-    "test": "vitest run",
+    "test": "vitest run --reporter=dot",
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {

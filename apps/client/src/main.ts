@@ -24,4 +24,11 @@ window.addEventListener('load', () => app.show(true, 500));
 //   });
 // }
 
+// import { KnowledgeCheckModal } from '@pages/GamePage/components';
+
+// new KnowledgeCheckModal({
+//   topic: `Promise`,
+//   question: `Какие три состояния есть у объектов Promise? И в какой последовательности они обычно сменяют друг друга?`,
+// }).show();
+
 export { app, router };

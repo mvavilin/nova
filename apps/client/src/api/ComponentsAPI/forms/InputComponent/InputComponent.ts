@@ -38,7 +38,7 @@ export default class InputComponent extends BaseComponent {
     return this.value.length;
   }
 
-  public setValue(value: string): this {
+  public setValue(value: string = ''): this {
     this.input.value = value;
     return this;
   }

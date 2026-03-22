@@ -8,7 +8,7 @@ interface ButtonProperties extends ButtonComponentProperties {
   onClick?: () => void;
 }
 
-const BUTTON_CLASSES = `flex items-center justify-center gap-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition cursor-pointer p-1`;
+const BUTTON_CLASSES = `flex items-center justify-center gap-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition cursor-pointer p-1 disabled:bg-gray-400 disabled:cursor-not-allowed`;
 
 export default class Button extends ButtonComponent {
   constructor({ label, iconUrl, iconSize = 24, onClick, classes = '', ...rest }: ButtonProperties) {

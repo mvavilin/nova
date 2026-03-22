@@ -1,6 +1,7 @@
 import { BaseComponent, TextComponent } from '@ComponentsAPI';
-import { Button, Icon } from '@components/ui';
-import ICON from '@assets/icons';
+import { Button } from '@components/ui';
+// import { Icon } from '@components/ui';
+// import ICON from '@assets/icons';
 import { app } from '@app';
 import { ANIMATION_DURATION } from '@constants/styles';
 import MessageType from '@constants/messageType';
@@ -11,8 +12,14 @@ interface ToastProperties {
   onUndo?: () => void;
 }
 
+const ICON = {
+  CIRCLE_CHECK: '✅',
+  INFO: 'ℹ️',
+  CIRCLE_ALERT: '❌',
+  TRIANGLE_ALERT: '⚠️',
+};
 const TOAST_CLASSES = {
-  BASE: 'fixed z-100 bottom-3 right-3 p-3 rounded shadow-md flex items-center justify-between space-x-3 opacity-0 translate-y-4 transition-all duration-300 border max-w-sm min-w-3xs',
+  BASE: 'fixed z-100 bottom-3 right-3 p-3 rounded shadow-md flex items-center justify-between gap-3 opacity-0 translate-y-4 transition-all duration-300 border max-w-sm min-w-3xs',
   [MessageType.SUCCESS]: 'bg-green-50 border-green-600 text-green-600',
   [MessageType.INFO]: 'bg-blue-50 border-blue-600 text-blue-600',
   [MessageType.ERROR]: 'bg-red-50 border-red-600 text-red-600',
@@ -25,7 +32,7 @@ const UNDO_BUTTON_CLASSES = {
   [MessageType.ERROR]: 'bg-red-600 hover:bg-red-700',
   [MessageType.WARNING]: '!bg-amber-600 !hover:bg-amber-700',
 } as const;
-const MESSAGE__CLASSES = `flex-1 truncate text-sm`;
+const MESSAGE_CLASSES = `flex-1 text-wrap leading-none text-sm`;
 const TOAST_ICON_URL: Record<MessageType, string> = {
   [MessageType.SUCCESS]: ICON.CIRCLE_CHECK,
   [MessageType.INFO]: ICON.INFO,
@@ -40,8 +47,9 @@ export default class Toast extends BaseComponent {
   constructor({ type, message, onUndo }: ToastProperties) {
     super({ classes: `${TOAST_CLASSES.BASE} ${TOAST_CLASSES[type]}` });
 
-    this.appendChildren(new Icon({ url: TOAST_ICON_URL[type] }));
-    this.appendChildren(new TextComponent({ content: message, classes: MESSAGE__CLASSES }));
+    // this.appendChildren(new Icon({ url: TOAST_ICON_URL[type] }));
+    this.appendChildren(new TextComponent({ content: TOAST_ICON_URL[type] }));
+    this.appendChildren(new TextComponent({ content: message, classes: MESSAGE_CLASSES }));
     this.appendChildren(
       new Button({
         label: 'Закрыть',

@@ -1,7 +1,7 @@
 import { ImageComponent } from '@ComponentsAPI';
 import type { ImageComponentProperties } from '@ComponentsAPI';
 
-const AVATAR_CLASSES = `rounded-full w-10 h-10 object-cover border-2 border-white`;
+const AVATAR_CLASSES = `rounded-full object-cover border-2`;
 
 type AvatarProperties = ImageComponentProperties;
 
@@ -13,9 +13,9 @@ const DEFAULT_AVATAR_PROPERTIES: AvatarProperties = {
 };
 
 export default class Avatar extends ImageComponent {
-  constructor(properties: AvatarProperties = {}) {
+  constructor({ classes, ...properties }: AvatarProperties = {}) {
     super({
-      classes: AVATAR_CLASSES,
+      classes: `${AVATAR_CLASSES} ${classes}`,
       ...DEFAULT_AVATAR_PROPERTIES,
       ...properties,
     });

@@ -12,6 +12,8 @@ export const SECTION_CLASSES = {
   CREATE_ROOM_SECTION: `${BASE_SECTION} col-start-1 row-start-2 h-full`,
 
   PUBLIC_ROOMS_SECTION: `${BASE_SECTION} col-start-2 row-start-2 h-full`,
+
+  LOG_CHAT_SECTION: `${BASE_SECTION} h-full`,
 } as const;
 
 export const FORM_CLASSES = {

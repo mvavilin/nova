@@ -3,7 +3,8 @@ import { FormActions } from '../actions/form.actions';
 import type { AppActions } from '../types/action';
 import type { AuthResponse } from '@/types/user.types';
 import type { Overlay } from '@/components/ui';
-// import {ServerUrl, Endpoints} from "@repo/shared",
+import { showErrorToast } from '@utils';
+// import { ServerUrl, Endpoints } from "@repo/shared",
 
 const Endpoints = {
   BASE: '/',
@@ -65,6 +66,8 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
           console.error('The received data is incorrect');
         }
       } catch (error) {
+        showErrorToast(error, `Вход невозможен`);
+
         console.error('Fetch failed:', error);
         return context.next(context.action);
       } finally {

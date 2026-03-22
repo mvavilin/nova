@@ -6,7 +6,9 @@ import { NotFoundPage } from '@pages';
 export default class Router {
   private app: App;
   private routes = ROUTES;
+  // chore: remove in production
   // private lastAllowedPath = URLS.LOBBY();
+  // private lastAllowedPath = URLS.GAME('27626bdf-f197-4c9d-8dd5-0cd1426f1f71');
   private lastAllowedPath = URLS.WELCOME();
 
   constructor(app: App) {

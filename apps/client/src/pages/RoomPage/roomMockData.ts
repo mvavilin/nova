@@ -29,13 +29,13 @@ export const red = [
     userId: '111',
     username: 'Aliceeeee',
     command: 'red',
-    role: 'Spymaster',
+    role: 'spymaster',
   },
   {
     userId: '222',
     username: 'Sam',
     command: 'red',
-    role: 'Agent',
+    role: 'agent',
   },
 ];
 export const blue = [
@@ -43,12 +43,12 @@ export const blue = [
     userId: '333',
     username: 'Nick',
     command: 'blue',
-    role: 'Agent',
+    role: 'agent',
   },
   {
     userId: '444',
     username: 'Mila',
     command: 'blue',
-    role: 'Agent',
+    role: 'agent',
   },
 ];

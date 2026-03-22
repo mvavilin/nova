@@ -1,50 +1,81 @@
 import { ButtonComponent, ContainerComponent, TextComponent } from '@/api/ComponentsAPI';
 import type { RoomInfoProps } from './RoomInfo.types';
+import { TranslationKeys } from '@/i18n/translationKeys';
+import { t } from '@/i18n';
+import type { State } from '@/store/types/state';
+import type { Action } from '@/api/StateAPI';
+import store from '@/store/store';
+import { AppActionTypes } from '@/store/actions';
 
 const styles = {
   container:
-    'w-[40%] max-w-[512px] min-w-[350px] flex flex-wrap justify-center min-[1070px]:justify-between items-center gap-5 text-white text-2xl font-bold bg-white/25 px-6 py-4 rounded',
-  textContainer: 'flex flex-col self-center min-[1070px]:w-[50%]',
-  title: 'truncate',
-  span: 'text-brand',
+    'w-[70%] max-w-[512px] min-w-[350px] flex flex-wrap justify-center min-[1070px]:justify-between items-center gap-5 text-white text-2xl font-bold bg-white/25 px-6 py-4 rounded',
+  textContainerRow: 'w-full flex gap-2 items-center',
+  textContainerCol: 'flex flex-col self-center min-[1070px]:w-[50%]',
+  span: 'text-brand truncate',
   button:
-    'w-34 h-9 shrink-0 bg-cyan-600 rounded-md text-base hover:cursor-pointer hover:bg-green-600 hover:transition-colors hover:duration-300',
+    'w-34 h-14 shrink-0 bg-cyan-600 rounded-md text-base hover:cursor-pointer hover:bg-green-600 hover:transition-colors hover:duration-300',
 };
 
 export default class RoomInfo extends ContainerComponent {
+  private roomTitle: TextComponent;
+  private playersTitle: TextComponent;
+  private leaveButton: ButtonComponent;
+
   constructor({ roomName, currentCount, totalCount }: RoomInfoProps) {
     super({ classes: styles.container });
 
-    const textContainer = new ContainerComponent({
-      classes: styles.textContainer,
+    const textContainerColumn = new ContainerComponent({
+      classes: styles.textContainerCol,
+    });
+    const textContainerRoomRow = new ContainerComponent({
+      classes: styles.textContainerRow,
+    });
+    const textContainerCountRow1 = new ContainerComponent({
+      classes: 'flex',
+    });
+    const textContainerCountRow2 = new ContainerComponent({
+      classes: styles.textContainerRow,
     });
 
-    const name = new TextComponent({ classes: styles.title, content: 'Room: ' });
-    const spanName = new TextComponent({ tag: 'span', content: roomName, classes: styles.span });
-    name.appendChildren([spanName]);
+    this.roomTitle = new TextComponent({
+      content: t(TranslationKeys.ROOM_INFO_TITLE),
+    });
+    const name = new TextComponent({ content: roomName, classes: styles.span });
+    textContainerRoomRow.appendChildren([this.roomTitle, name]);
 
-    const count = new TextComponent({
-      content: 'Players: ',
+    this.playersTitle = new TextComponent({
+      content: t(TranslationKeys.ROOM_INFO_PLAYERS),
     });
     const nowCount = new TextComponent({
-      tag: 'span',
-      content: currentCount,
+      content: `${currentCount}`,
       classes: styles.span,
     });
     const allCount = new TextComponent({
-      tag: 'span',
       content: `/${totalCount}`,
       classes: styles.span,
     });
-    count.appendChildren([nowCount, allCount]);
 
-    textContainer.appendChildren([name, count]);
+    textContainerCountRow1.appendChildren([nowCount, allCount]);
+    textContainerCountRow2.appendChildren([this.playersTitle, textContainerCountRow1]);
 
-    const leaveButton = new ButtonComponent({
+    textContainerColumn.appendChildren([textContainerRoomRow, textContainerCountRow2]);
+
+    this.leaveButton = new ButtonComponent({
       classes: styles.button,
-      content: 'Leave room',
+      content: t(TranslationKeys.ROOM_LEAVE_ROOM_BTN),
     });
 
-    this.appendChildren([textContainer, leaveButton]);
+    this.appendChildren([textContainerColumn, this.leaveButton]);
+
+    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
+  }
+
+  private switchLanguage(_state: State, action: Action): void {
+    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
+      this.roomTitle.setContent(t(TranslationKeys.ROOM_INFO_TITLE));
+      this.playersTitle.setContent(t(TranslationKeys.ROOM_INFO_PLAYERS));
+      this.leaveButton.setContent(t(TranslationKeys.ROOM_LEAVE_ROOM_BTN));
+    }
   }
 }

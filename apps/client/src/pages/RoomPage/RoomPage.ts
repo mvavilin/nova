@@ -2,7 +2,8 @@ import { ContainerComponent } from '@/api/ComponentsAPI';
 import RoomHeader from './RoomHeader/RoomHeader';
 import RoomInfo from './RoomInfo/RoomInfo';
 import RoomCommandSection from './RoomCommandSection/RoomCommandSection';
-import RoomChoosingUsers from './RoomChoosingUsers/RoomChoosingUsers';
+
+import RoomChoosingPlayers from './RoomChoosingPlayers/RoomChoosingPlayers';
 import { red, blue, choosingUsers } from './roomMockData';
 
 const styles = {
@@ -18,7 +19,6 @@ export default class RoomPage extends ContainerComponent {
       tag: 'div',
       classes: styles.pageContainer,
     });
-
     this.render();
   }
 
@@ -36,7 +36,7 @@ export default class RoomPage extends ContainerComponent {
     main.appendChildren([
       new RoomInfo({ roomName: 'js-users-11', currentCount: 8, totalCount: 8 }),
       commandContainer,
-      new RoomChoosingUsers({ players: choosingUsers }),
+      new RoomChoosingPlayers({ players: choosingUsers }),
     ]);
 
     this.appendChildren([new RoomHeader(), main]);

@@ -5,7 +5,6 @@ export const TranslationKeys = {
   WELCOME_LOGIN: 'welcome-login',
   WELCOME_LOBBY: 'welcome-lobby',
   WELCOME_HEADING: 'welcome-heading',
-  WELCOME_LANGUAGE: 'welcome-language',
   WELCOME_REGISTRATION: 'welcome-registration',
   WELCOME_DESCRIPTION: 'welcome-description',
 
@@ -59,11 +58,24 @@ export const TranslationKeys = {
 
   REGISTRATION_TITLE: 'registrationTitle',
   REGISTRATION_SUBMIT_BTN: 'registrationSubmitBtn',
-  REGISTRATION_LANG_BTN: 'registrationLangBtn',
 
   LOGIN_TITLE: 'loginTitle',
   LOGIN_SUBMIT_BTN: 'loginSubmitBtn',
-  LOGIN_LANG_BTN: 'loginLangBtn',
+
+  ROOM_TITLE: 'RoomTitle',
+  ROOM_INFO_TITLE: 'RoomInfoTitle',
+  ROOM_INFO_PLAYERS: 'RoomPlayersInfo',
+  ROOM_LEAVE_ROOM_BTN: 'RoomLeaveRoomBtn',
+  ROOM_RED_TITLE: 'RoomRedTitle',
+  ROOM_BLUE_TITLE: 'RoomBlueTitle',
+  ROOM_PLAYER: 'RoomPlayer',
+  ROOM_ROLE: 'RoomRole',
+  ROOM_SPYMASTER: 'RoomSpymaster',
+  ROOM_AGENT: 'RoomAgent',
+  ROOM_SPYMASTER_BTN: 'RoomSpymasterBtn',
+  ROOM_AGENT_BTN: 'RoomAgentBtn',
+  ROOM_LEAVE_COMM_BTN: 'RoomLeaveCommBtn',
+  ROOM_PLAYERS_CHOOSING: 'RoomPlayersChoosing',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];

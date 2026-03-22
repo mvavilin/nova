@@ -14,6 +14,8 @@ import {
   socketMiddleware,
 } from '@middlewares';
 import { loggerAfterware, welcomePageAfterware, socketAfterware, appAfterware } from '@afterwares';
+// chore: remove in production
+// import { initialState } from '@__mocks__/store/initialState';
 
 function loadState(): State {
   const saved = getLocalStorageData<Partial<State>>(localStorageProps.store);

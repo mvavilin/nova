@@ -17,3 +17,5 @@ export { default as CardComponent } from '@pages/GamePage/components/Card/Card';
 // export { default as GameResultsModal } from '@pages/GamePage/components/modals/GameResultsModal/GameResultsModal';
 
 export { default as Timer } from '@pages/GamePage/components/Timer/Timer';
+
+export { default as TeamTurnIndicator } from '@pages/GamePage/components/TeamTurnIndicator/TeamTurnIndicator';

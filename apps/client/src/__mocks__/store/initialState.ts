@@ -1,11 +1,11 @@
-import type { State } from '@State';
 import { Language } from '@types';
+import type { State } from '@State';
 
 export const initialState: State = {
-  id: null,
-  username: null,
-  email: null,
-  authStatus: false,
+  id: '27626bdf-f197-4c9d-8dd5-0cd1426f1f71',
+  username: 'test',
+  email: 'a@a.ab',
+  authStatus: true,
   language: Language.RU,
   registration: {
     fields: {

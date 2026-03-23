@@ -1,4 +1,5 @@
 export const TranslationKeys = {
+  WELCOME_RULES: 'welcome-rules',
   WELCOME_ABOUT: 'welcome-about',
   WELCOME_LOGIN: 'welcome-login',
   WELCOME_LOBBY: 'welcome-lobby',
@@ -6,6 +7,22 @@ export const TranslationKeys = {
   WELCOME_LANGUAGE: 'welcome-language',
   WELCOME_REGISTRATION: 'welcome-registration',
   WELCOME_DESCRIPTION: 'welcome-description',
+
+  ABOUT_US_TITLE: 'aboutUsTitle',
+
+  ABOUT_US_INTRO_P1: 'aboutUsIntro1',
+  ABOUT_US_INTRO_P2: 'aboutUsIntro2',
+
+  ABOUT_US_HIGHLIGHTS_TITLE: 'aboutUsHighLightsTitle',
+  ABOUT_US_HIGHLIGHTS_LIST: 'aboutUsHighLightsList',
+  ABOUT_US_MIKHAIL_TITLE: 'aboutUsMikhailTitle',
+  ABOUT_US_MIKHAIL_LIST: 'aboutUsMikhailList',
+  ABOUT_US_SERGEY_TITLE: 'aboutUsSergeyTitle',
+  ABOUT_US_SERGEY_LIST: 'aboutUsSergeyList',
+  ABOUT_US_ELENA_TITLE: 'aboutUsElenaTitle',
+  ABOUT_US_ELENA_LIST: 'aboutUsElenaList',
+  ABOUT_US_ANDREY_TITLE: 'aboutUsAndreyTitle',
+  ABOUT_US_ANDREY_LIST: 'aboutUsAndreyList',
 
   GAME_RULES_TITLE: 'gameRulesTitle',
 

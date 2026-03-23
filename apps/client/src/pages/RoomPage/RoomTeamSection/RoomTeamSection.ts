@@ -99,7 +99,7 @@ export default class RoomTeamSection extends ContainerComponent {
       const me = allPlayers.find((player) => player.userId === myId);
 
       const myTeam = me ? me.team : null;
-      this.buttons?.update(myTeam, this.teamName);
+      this.buttons?.update(myTeam, this.teamName, currentPlayers);
     }
   }
 

@@ -21,12 +21,13 @@ export default class RoomTeamButtons extends ContainerComponent {
   private spyButton: ButtonComponent | null = null;
   private agentButton: ButtonComponent | null = null;
   private leaveButton: ButtonComponent | null = null;
+  private teamName: Teams;
   private userId = store.getState().id;
   private userName = store.getState().username;
 
   constructor({ teamName }: TeamButtonProps) {
     super({ classes: styles.container });
-
+    this.teamName = teamName;
     this.render(teamName);
     this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
   }
@@ -62,16 +63,22 @@ export default class RoomTeamButtons extends ContainerComponent {
 
     this.appendChildren([containerRoleButtons, this.leaveButton]);
 
+    this.updateState();
+  }
+
+  private updateState(): void {
     const room = store.getState().currentRoom;
     const myId = store.getState().id;
 
     if (!room || !myId) return;
 
+    const currentPlayers = this.teamName === 'red' ? room.redPlayers : room.bluePlayers;
+
     const allPlayers = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
     const me = allPlayers.find((player) => player.userId === myId);
 
     const myTeam = me ? me.team : null;
-    this.update(myTeam, teamName);
+    this.update(myTeam, this.teamName, currentPlayers);
   }
 
   private switchLanguage(_state: State, action: Action): void {
@@ -132,15 +139,22 @@ export default class RoomTeamButtons extends ContainerComponent {
     });
   }
 
-  public update(myTeam: Teams | null, sectionTeam: string): void {
+  public update(myTeam: Teams | null, sectionTeam: string, teamPlayers: Player[]): void {
     if (!this.spyButton || !this.agentButton || !this.leaveButton) return;
 
-    const hasTeam = myTeam !== null && myTeam !== 'choosing';
-    const isMyTeam = hasTeam && myTeam === sectionTeam;
+    const room = store.getState().currentRoom;
+    if (!room) return;
 
-    // Блокируем, если я УЖЕ в какой-то команде
-    this.toggleButton(this.spyButton, hasTeam);
-    this.toggleButton(this.agentButton, hasTeam);
+    const hasAnyTeam = myTeam !== null && myTeam !== 'choosing';
+    const isMyTeam = hasAnyTeam && myTeam === sectionTeam;
+    const maxAgents = Math.floor(room.maxPlayers / 2) - 1;
+    const isSpyOccupied = teamPlayers.some((player) => player.role === 'spymaster');
+    const currentAgentsCount = teamPlayers.filter((player) => player.role === 'agent').length;
+    const isAgentLimitReached = currentAgentsCount >= maxAgents;
+
+    // Блокируем, если я УЖЕ в какой-то команде или роли заняты
+    this.toggleButton(this.spyButton, hasAnyTeam || isSpyOccupied);
+    this.toggleButton(this.agentButton, hasAnyTeam || isAgentLimitReached);
 
     // leave оказываем и активируем только если я в ЭТОЙ команде
     if (isMyTeam) {

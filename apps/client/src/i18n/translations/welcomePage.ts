@@ -3,7 +3,8 @@ import { TranslationKeys } from '../translationKeys';
 
 const welcomePage = {
   [Language.EN]: {
-    [TranslationKeys.WELCOME_ABOUT]: 'Game rules',
+    [TranslationKeys.WELCOME_RULES]: 'Game rules',
+    [TranslationKeys.WELCOME_ABOUT]: 'About us',
     [TranslationKeys.WELCOME_LOGIN]: 'log in',
     [TranslationKeys.WELCOME_LOBBY]: 'to lobby',
     [TranslationKeys.WELCOME_HEADING]: 'nova codenames game',
@@ -13,7 +14,8 @@ const welcomePage = {
     A multiplayer game designed to help you prepare for technical interviews. Guess JS/TS concepts, prove your knowledge, and get stronger. No coder wins alone — team up with fellow code jedis or train with an AI captain.`,
   },
   [Language.RU]: {
-    [TranslationKeys.WELCOME_ABOUT]: 'Правила игры',
+    [TranslationKeys.WELCOME_RULES]: 'Правила игры',
+    [TranslationKeys.WELCOME_ABOUT]: 'О нас',
     [TranslationKeys.WELCOME_LOGIN]: 'войти',
     [TranslationKeys.WELCOME_LOBBY]: 'перейти в лобби',
     [TranslationKeys.WELCOME_HEADING]: 'nova codenames game',

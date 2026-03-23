@@ -28,6 +28,10 @@ Prototype: [Classic game Codenames](<https://en.wikipedia.org/wiki/Codenames_(bo
 
 https://nova-codenames-client.vercel.app/
 
+## 404 page, loading state, and error handling tests
+
+https://drive.google.com/file/d/1TJOmjeb6R6mmiboVv1dhbeA2l9oF8tVx/view
+
 ## Setup
 
 - Clone this repository: `git clone https://github.com/mvavilin/nova`.

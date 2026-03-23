@@ -8,13 +8,15 @@ import RegistrationButton from './RegistrationButton/RegistrationButton';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
 import type { State } from '@store/types/state';
 import LangButton from './LangButton/LangButton';
-import AboutButton from './AboutButton/AboutButton';
+import RulesButton from './RulesButton/RulesButton';
 import GameDescription from './GameDescription/GameDescription';
 import LobbyButton from './LobbyButton/LobbyButton';
 import { Button, Modal } from '@/components/ui';
 import GameRules from './GameRules/GameRules';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
+import AboutButton from './AboutButton/AboutButton';
+import AboutUs from './AboutUs/AboutUs';
 
 export default class WelcomePage extends ContainerComponent {
   constructor({ ...rest }: WelcomePageProperties = {}) {
@@ -25,7 +27,10 @@ export default class WelcomePage extends ContainerComponent {
       ...rest,
     });
 
-    this.addSubscriptions([store.subscribe((state, action) => this.showGameRules(state, action))]);
+    this.addSubscriptions([
+      store.subscribe((state, action) => this.showGameRules(state, action)),
+      store.subscribe((state, action) => this.showAboutUs(state, action)),
+    ]);
 
     this.render();
   }
@@ -37,7 +42,7 @@ export default class WelcomePage extends ContainerComponent {
     });
     const nav = new ContainerComponent({ tag: 'nav', classes: 'flex' });
     header.appendChildren(nav);
-    header.appendChildren([new AboutButton(), new LangButton()]);
+    header.appendChildren([new RulesButton(), new AboutButton(), new LangButton()]);
 
     const content = new ContainerComponent({
       classes: 'grid grid-rows-[auto_1fr_auto] w-full h-full max-w-[1024px] gap-10',
@@ -59,6 +64,36 @@ export default class WelcomePage extends ContainerComponent {
     if (action.type === WelcomeActions.SHOW_GAME_RULES) {
       const modal = new Modal({
         children: [new GameRules()],
+        isClosable: true,
+      });
+
+      modal.setClasses(
+        '!px-0 !py-0 rounded-lg !bg-[var(--color-dark)] border border-[var(--color-brand)]'
+      );
+
+      const close = modal.children[1];
+      if (close) {
+        close.destroyChildren();
+        close.setContent('📌');
+      }
+
+      modal.appendChildren(
+        new Button({
+          label: t(TranslationKeys.GAME_RULES_CLOSE_BTN),
+          classes:
+            'mb-6 mx-auto !bg-[var(--color-brand)] hover:!bg-[var(--color-accent)] !font-brand !text-[var(--color-dark)] transition-colors duration-200',
+          onClick: (): Modal => modal.hide(),
+        })
+      );
+
+      modal.show();
+    }
+  }
+
+  private showAboutUs(_state: State, action: Action): void {
+    if (action.type === WelcomeActions.SHOW_ABOUT_US) {
+      const modal = new Modal({
+        children: [new AboutUs()],
         isClosable: true,
       });
 

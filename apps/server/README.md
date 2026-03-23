@@ -419,86 +419,82 @@ The main disadvantage is that socket.io requires an authentication token during 
 - ### Messages sent to the client from the server during connection and disconnection
 
   **Important!** The server tracks the user's actions and status via socket.io from the moment of logging to unlogging
-
   - **Connection errors**
     <details>
+    - Authentication errors (incorrect token). Error message: `AUTH_REQUIRED`
 
-      - Authentication errors (incorrect token). Error message: `AUTH_REQUIRED`
+    ```
+      socket.on('connect_error', (error) => { /.../ }
+    ```
 
-      ```
-        socket.on('connect_error', (error) => { /.../ }
-      ```
-      
-      - Parallel connection attempt. Error code: `ALREADY_ONLINE`
-   
-      ```
-        socket.on('error', ({ code }) => { /.../ }
-      ```
-        
+    - Parallel connection attempt. Error code: `ALREADY_ONLINE`
+
+    ```
+      socket.on('error', ({ code }) => { /.../ }
+    ```
+
     </details>
 
   - **Connecting / reconnecting**
     <details>
       
       - A message to a user who has connected or reconnected. Transmits the user's status
-   
-      ```
-        { type: 'session:connect'; payload: { userStatus: UserStatus } }
-      ```
- 
-      - Message to users in the room (game) about the user's connection/reconnection. Passes the Player object
-   
-      ```
-        { type: 'session:player-connected'; payload: { player: Player } }
-      ```
- 
+
+    ```
+      { type: 'session:connect'; payload: { userStatus: UserStatus } }
+    ```
+
+    - Message to users in the room (game) about the user's connection/reconnection. Passes the Player object
+
+    ```
+      { type: 'session:player-connected'; payload: { player: Player } }
+    ```
+
     </details>
 
   - **Disconnecting / exit**
     <details>
- 
-      - A message to users in the room (game) that the user has disconnected. The server starts a timer (1 minute) to wait for the user to reconnect. If the user manages to reconnect, the timer is reset
-   
-      ```
-        { type: 'session:player-disconnected'; payload: { player: Player } }
-      ```
- 
-      - A message indicating that the timer has expired and the user has not reconnected. The server assumes that the user will not return and deletes their data. If the user logs in later, they will be taken to the Lobby
-   
-      ```
-        { type: 'session:player-exit'; payload: { player: Player } }
-      ```
-      
+    - A message to users in the room (game) that the user has disconnected. The server starts a timer (1 minute) to wait for the user to reconnect. If the user manages to reconnect, the timer is reset
+
+    ```
+      { type: 'session:player-disconnected'; payload: { player: Player } }
+    ```
+
+    - A message indicating that the timer has expired and the user has not reconnected. The server assumes that the user will not return and deletes their data. If the user logs in later, they will be taken to the Lobby
+
+    ```
+      { type: 'session:player-exit'; payload: { player: Player } }
+    ```
+
     </details>
 
   - **Get the status on request from the client**
     <details>
- 
-      - Request to server
-   
-      ```
-        { type: 'session:ask-status' }
-      ```
- 
-      - Response to the user who sent the request
+    - Request to server
 
-      ```
-        { type: 'session:send-status'; payload: { userStatus: UserStatus } }
-      ```
-      
+    ```
+      { type: 'session:ask-status' }
+    ```
+
+    - Response to the user who sent the request
+
+    ```
+      { type: 'session:send-status'; payload: { userStatus: UserStatus } }
+    ```
+
     </details>
 
   - **The outdated content will be removed in the future**
     <details>
       
       - Getting a session token
-   
-      ```
-        { type: 'session:token'; payload: { sessionToken: string } }
-      ```
-      
+
+    ```
+      { type: 'session:token'; payload: { sessionToken: string } }
+    ```
+
     </details>
-    
+
 - ### List of events sent to the server (stored in the @repo/shared/src/socketEvents.ts)
 
   **Important!** Data is not converted to JSON for transmission to and from the server
@@ -513,9 +509,9 @@ The main disadvantage is that socket.io requires an authentication token during 
       
       - Response to all users in loggy and user who sent the request
 
-      ```
-        { type: 'room:created'; payload: { roomPreview: RoomPreview } }
-      ```
+    ```
+      { type: 'room:created'; payload: { roomPreview: RoomPreview } }
+    ```
 
     </details>
 
@@ -525,15 +521,15 @@ The main disadvantage is that socket.io requires an authentication token during 
       
       - Request to server
 
-      ```
-        { type: 'room:ask-list' }
-      ```
+    ```
+      { type: 'room:ask-list' }
+    ```
 
-      - Response to the user who sent the request
+    - Response to the user who sent the request
 
-      ```
-        { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } }
-      ```
+    ```
+      { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } }
+    ```
 
     </details>
 
@@ -543,16 +539,16 @@ The main disadvantage is that socket.io requires an authentication token during 
       
       - Request to server
 
-      ```
-        { type: 'room:search'; payload: { name: string | undefined } }
-      ```
+    ```
+      { type: 'room:search'; payload: { name: string | undefined } }
+    ```
 
-      If no room name is specified, a list of all rooms is returned
-      - Response to the user who sent the request
+    If no room name is specified, a list of all rooms is returned
+    - Response to the user who sent the request
 
-      ```
-        { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } }
-      ```
+    ```
+      { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } }
+    ```
 
     </details>
 
@@ -562,33 +558,33 @@ The main disadvantage is that socket.io requires an authentication token during 
       
       - Request to server
 
-      ```
-        { type: 'room:join'; payload: { roomId: string } }
-      ```
+    ```
+      { type: 'room:join'; payload: { roomId: string } }
+    ```
 
-      - Response to the user who sent the request
+    - Response to the user who sent the request
 
-      ```
-        { type: 'room:state'; payload: { roomInfo: RoomInfo } }
-      ```
+    ```
+      { type: 'room:state'; payload: { roomInfo: RoomInfo } }
+    ```
 
-      - Response to all users in lobby
+    - Response to all users in lobby
 
-      ```
-        { type: 'room:update-review'; payload: { roomPreview: RoomPreview } }
-      ```
+    ```
+      { type: 'room:update-review'; payload: { roomPreview: RoomPreview } }
+    ```
 
-      - Response to all users in room
+    - Response to all users in room
 
-      ```
-        { type: 'room:player-joined'; payload: { player: Player } }
-      ```
+    ```
+      { type: 'room:player-joined'; payload: { player: Player } }
+    ```
 
-      - Response in case of an error
+    - Response in case of an error
 
-      ```
-        { type: 'error'; payload: { code: ErrorCode } }
-      ```
+    ```
+      { type: 'error'; payload: { code: ErrorCode } }
+    ```
 
     This request may receive a response with codes `ROOM_NOT_FOUND` and `ROOM_FULL`. The full list of error codes is listed below
 
@@ -621,11 +617,11 @@ The main disadvantage is that socket.io requires an authentication token during 
   - **Possible error codes**
 
     <details>
- 
+
     ```
       type ErrorCode = 'ROOM_NOT_FOUND' | 'ROOM_FULL' | 'INVALID_ACTION' | 'ALREADY_ONLINE';
     ```
-  
+
     </details>
 
 - ### List of types and interfaces for transferring data to and from the server (stored in the @repo/shared/src/types folder)
@@ -636,55 +632,55 @@ The main disadvantage is that socket.io requires an authentication token during 
     
     - User statuses
 
-    ```
-      type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME';
-    ```
-    
-    - Room settings that are transmitted to the server when a room is created
+  ```
+    type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME';
+  ```
 
-    ```
-      export interface RoomSettings {
-        name: string;
-        maxPlayers: number;
-      }
-    ```
+  - Room settings that are transmitted to the server when a room is created
 
-    - Room statuses
+  ```
+    export interface RoomSettings {
+      name: string;
+      maxPlayers: number;
+    }
+  ```
 
-    ```
-      export type RoomStatus = 'waiting' | 'playing' | 'finishing';
-    ```
+  - Room statuses
 
-    - Reduced information about the room for display on the Lobby page
+  ```
+    export type RoomStatus = 'waiting' | 'playing' | 'finishing';
+  ```
 
-    ```
-      export interface RoomPreview {
-        id: string;
-        name: string;
-        maxPlayers: number;
-        playerCount: number;
-        status: RoomStatus;
-      }
-    ```
+  - Reduced information about the room for display on the Lobby page
 
-    - Player information for display on the Room page
+  ```
+    export interface RoomPreview {
+      id: string;
+      name: string;
+      maxPlayers: number;
+      playerCount: number;
+      status: RoomStatus;
+    }
+  ```
 
-    ```
-      export type Player = {
-        userId: string;
-        username: string;
-      };
-    ```
+  - Player information for display on the Room page
 
-    - Room Information
+  ```
+    export type Player = {
+      userId: string;
+      username: string;
+    };
+  ```
 
-    ```
-      export interface RoomInfo {
-        id: string;
-        name: string;
-        maxPlayers: number;
-        players: Player[];
-      }
-    ```
+  - Room Information
+
+  ```
+    export interface RoomInfo {
+      id: string;
+      name: string;
+      maxPlayers: number;
+      players: Player[];
+    }
+  ```
 
   </details>

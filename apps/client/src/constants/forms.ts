@@ -22,4 +22,9 @@ export const CREATE_ROOM_FORM_CONFIG = {
     PLAYERS: 'Количество игроков:',
     ROOM: 'Название комнаты:',
   },
+  LOG_CHAT: {
+    INPUT_ID: 'tooltip',
+    INPUT_NAME: 'tooltip',
+    PLACEHOLDER: 'Введите подсказку',
+  },
 } as const;

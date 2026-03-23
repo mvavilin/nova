@@ -1,0 +1,988 @@
+{
+  "closure": [
+    {
+      "id": "closure-01",
+      "word": "closure",
+      "question": "Что такое замыкание в JavaScript и как оно работает?",
+      "question_en": "What is a closure in JavaScript and how does it work?",
+      "referenceAnswer": "Замыкание – это функция, которая сохраняет доступ к переменным из внешней области видимости даже после завершения выполнения этой области. В JavaScript любая функция создает замыкание, запоминая лексическое окружение, в котором была объявлена.",
+      "referenceAnswer_en": "A closure is a function that retains access to variables from its outer scope even after that scope has finished executing. In JavaScript, every function creates a closure, remembering the lexical environment in which it was declared.",
+      "difficulty": 1,
+      "tags": ["scope", "functions"]
+    },
+    {
+      "id": "closure-02",
+      "word": "closure",
+      "question": "Как замыкания используются для инкапсуляции данных?",
+      "question_en": "How are closures used for data encapsulation?",
+      "referenceAnswer": "Замыкания позволяют создавать приватные переменные, которые недоступны извне. Возвращаемая функция или объект с методами сохраняет доступ к этим переменным, но внешний код не может изменить их напрямую. Это основа паттерна модуль в JavaScript. Пример: function createCounter() { let count = 0; return { increment: () => ++count, decrement: () => --count, getCount: () => count }; } const counter = createCounter(); counter.increment(); // 1",
+      "referenceAnswer_en": "Closures allow creating private variables that are inaccessible from outside. The returned function or object with methods retains access to these variables, but external code cannot modify them directly. This is the basis of the module pattern in JavaScript. Example: function createCounter() { let count = 0; return { increment: () => ++count, decrement: () => --count, getCount: () => count }; } const counter = createCounter(); counter.increment(); // 1",
+      "difficulty": 2,
+      "tags": ["encapsulation", "patterns"]
+    },
+    {
+      "id": "closure-03",
+      "word": "closure",
+      "question": "Как замыкания могут приводить к утечкам памяти?",
+      "question_en": "How can closures cause memory leaks?",
+      "referenceAnswer": "Замыкания могут вызывать утечки памяти, когда они удерживают ссылки на большие объекты или DOM-элементы, которые не могут быть собраны сборщиком мусора до тех пор, пока само замыкание существует. Особенно это актуально при работе с большими структурами данных или при создании множества вложенных функций. Пример: function createLeak() { const largeData = new Array(1000000).fill('data'); return function() { console.log(largeData.length); }; } const leak = createLeak(); // largeData не освобождается",
+      "referenceAnswer_en": "Closures can cause memory leaks when they retain references to large objects or DOM elements that cannot be garbage collected until the closure itself exists. This is especially relevant when working with large data structures or creating many nested functions. Example: function createLeak() { const largeData = new Array(1000000).fill('data'); return function() { console.log(largeData.length); }; } const leak = createLeak(); // largeData is not freed",
+      "difficulty": 3,
+      "tags": ["memory", "performance"]
+    },
+    {
+      "id": "closure-04",
+      "word": "closure",
+      "question": "В чем разница между замыканием и функцией высшего порядка?",
+      "question_en": "What is the difference between a closure and a higher-order function?",
+      "referenceAnswer": "Замыкание – это функция, которая запоминает переменные из внешней области видимости. Функция высшего порядка – это функция, которая принимает другую функцию как аргумент или возвращает функцию. Эти понятия часто пересекаются, но не являются синонимами: не всякое замыкание – функция высшего порядка, и не всякая функция высшего порядка – замыкание. Пример функции высшего порядка: function map(arr, fn) { return arr.map(fn); }",
+      "referenceAnswer_en": "A closure is a function that remembers variables from its outer scope. A higher-order function is a function that takes another function as an argument or returns a function. These concepts often overlap but are not synonymous: not every closure is a higher-order function, and not every higher-order function is a closure. Example of a higher-order function: function map(arr, fn) { return arr.map(fn); }",
+      "difficulty": 2,
+      "tags": ["concepts", "comparison"]
+    }
+  ],
+  "promise": [
+    {
+      "id": "promise-01",
+      "word": "promise",
+      "question": "Что такое Promise в JavaScript и какие у него состояния?",
+      "question_en": "What is a Promise in JavaScript and what states does it have?",
+      "referenceAnswer": "Promise – это объект, представляющий результат асинхронной операции. Он может находиться в трех состояниях: pending (ожидание) – начальное состояние, fulfilled (выполнено успешно) – операция завершилась успешно, rejected (отклонено) – операция завершилась с ошибкой. После перехода в fulfilled или rejected состояние изменению не подлежит.",
+      "referenceAnswer_en": "A Promise is an object representing the result of an asynchronous operation. It can be in three states: pending (initial state), fulfilled (operation completed successfully), rejected (operation failed). Once it becomes fulfilled or rejected, the state cannot change.",
+      "difficulty": 1,
+      "tags": ["async", "states"]
+    },
+    {
+      "id": "promise-02",
+      "word": "promise",
+      "question": "В чем разница между Promise.all и Promise.allSettled?",
+      "question_en": "What is the difference between Promise.all and Promise.allSettled?",
+      "referenceAnswer": "Promise.all завершается ошибкой при первом же отклоненном промисе и возвращает только первую ошибку. Promise.allSettled же ожидает завершения всех промисов и возвращает массив с результатами каждого, независимо от того, были ли они выполнены успешно или отклонены, что позволяет обработать все результаты без прерывания. Пример: Promise.allSettled([Promise.resolve(1), Promise.reject('error')]).then(results => results.forEach(r => console.log(r.status)));",
+      "referenceAnswer_en": "Promise.all rejects immediately when any promise rejects and returns only the first error. Promise.allSettled waits for all promises to settle and returns an array with the results of each, regardless of whether they were fulfilled or rejected, allowing handling of all results without interruption. Example: Promise.allSettled([Promise.resolve(1), Promise.reject('error')]).then(results => results.forEach(r => console.log(r.status)));",
+      "difficulty": 2,
+      "tags": ["async", "comparison"]
+    },
+    {
+      "id": "promise-03",
+      "word": "promise",
+      "question": "Что происходит с ошибкой, выброшенной внутри then?",
+      "question_en": "What happens to an error thrown inside a then callback?",
+      "referenceAnswer": "Ошибка, выброшенная внутри колбэка then, автоматически преобразуется в отклоненный Promise и будет перехвачена ближайшим обработчиком catch в цепочке. Это позволяет обрабатывать синхронные и асинхронные ошибки единообразно. Пример: Promise.resolve().then(() => { throw new Error('Oops'); }).catch(err => console.log(err.message)); // 'Oops'",
+      "referenceAnswer_en": "An error thrown inside a then callback is automatically converted into a rejected Promise and will be caught by the nearest catch handler in the chain. This allows handling synchronous and asynchronous errors uniformly. Example: Promise.resolve().then(() => { throw new Error('Oops'); }).catch(err => console.log(err.message)); // 'Oops'",
+      "difficulty": 2,
+      "tags": ["error", "handling"]
+    },
+    {
+      "id": "promise-04",
+      "word": "promise",
+      "question": "Как отменить Promise и существует ли встроенный механизм?",
+      "question_en": "How to cancel a Promise and is there a built-in mechanism?",
+      "referenceAnswer": "Встроенного механизма отмены Promise не существует. Для отмены асинхронных операций обычно используют AbortController с fetch API или реализуют собственный паттерн с флагом отмены, проверяемым на каждом этапе выполнения. Пример с AbortController: const controller = new AbortController(); fetch(url, { signal: controller.signal }); controller.abort();",
+      "referenceAnswer_en": "There is no built-in cancellation mechanism for Promises. To cancel asynchronous operations, developers typically use AbortController with the fetch API or implement their own pattern with a cancellation flag checked at each execution step. Example with AbortController: const controller = new AbortController(); fetch(url, { signal: controller.signal }); controller.abort();",
+      "difficulty": 3,
+      "tags": ["cancellation", "advanced"]
+    },
+    {
+      "id": "promise-05",
+      "word": "promise",
+      "question": "Что такое Promise.resolve и когда его используют?",
+      "question_en": "What is Promise.resolve and when is it used?",
+      "referenceAnswer": "Promise.resolve возвращает Promise, который выполнен успешно с переданным значением. Используется для создания уже выполненного Promise, для преобразования значения в Promise, а также для начала цепочки Promise, когда требуется гарантировать асинхронное выполнение. Пример: Promise.resolve(42).then(value => console.log(value)); // 42",
+      "referenceAnswer_en": "Promise.resolve returns a Promise that is fulfilled with the given value. It is used to create an already fulfilled Promise, to convert a value into a Promise, and to start a Promise chain when asynchronous execution is required. Example: Promise.resolve(42).then(value => console.log(value)); // 42",
+      "difficulty": 2,
+      "tags": ["utility", "creation"]
+    }
+  ],
+  "eventLoop": [
+    {
+      "id": "eventloop-01",
+      "word": "eventLoop",
+      "question": "Что такое Event Loop и как он связан с асинхронностью в JavaScript?",
+      "question_en": "What is the Event Loop and how is it related to asynchronicity in JavaScript?",
+      "referenceAnswer": "Event Loop – это механизм, который позволяет JavaScript, будучи однопоточным, выполнять неблокирующие асинхронные операции. Он непрерывно проверяет стек вызовов и очереди задач, перемещая задачи из очередей в стек, когда он освобождается. Благодаря этому колбэки и обещания выполняются после завершения синхронного кода.",
+      "referenceAnswer_en": "The Event Loop is a mechanism that allows JavaScript, being single-threaded, to perform non-blocking asynchronous operations. It continuously checks the call stack and task queues, moving tasks from the queues to the stack when it becomes empty. This allows callbacks and promises to execute after synchronous code completes.",
+      "difficulty": 1,
+      "tags": ["async", "mechanism"]
+    },
+    {
+      "id": "eventloop-02",
+      "word": "eventLoop",
+      "question": "В каком порядке выполняются microtasks и macrotasks?",
+      "question_en": "In what order are microtasks and macrotasks executed?",
+      "referenceAnswer": "Сначала выполняется весь синхронный код в стеке вызовов. Затем, перед выполнением следующей макрозадачи, выполняются все микрозадачи из очереди микрозадач. После этого выполняется одна макрозадача. Цикл повторяется: микрозадачи → одна макрозадача → микрозадачи. Пример: console.log(1); setTimeout(() => console.log(2), 0); Promise.resolve().then(() => console.log(3)); console.log(4); // Вывод: 1,4,3,2",
+      "referenceAnswer_en": "First, all synchronous code in the call stack is executed. Then, before the next macrotask, all microtasks in the microtask queue are executed. After that, one macrotask is executed. The cycle repeats: microtasks → one macrotask → microtasks. Example: console.log(1); setTimeout(() => console.log(2), 0); Promise.resolve().then(() => console.log(3)); console.log(4); // Output: 1,4,3,2",
+      "difficulty": 2,
+      "tags": ["queue", "order"]
+    },
+    {
+      "id": "eventloop-03",
+      "word": "eventLoop",
+      "question": "Что происходит, если микрозадача добавляет новую микрозадачу?",
+      "question_en": "What happens if a microtask adds a new microtask?",
+      "referenceAnswer": "Если микрозадача добавляет новую микрозадачу, она будет выполнена в той же итерации цикла событий, до того как будет обработана следующая макрозадача. Это может привести к бесконечному циклу, если микрозадачи постоянно добавляют новые микрозадачи, что блокирует выполнение макрозадач и может привести к зависанию страницы. Пример: function recursiveMicrotask() { Promise.resolve().then(() => recursiveMicrotask()); } recursiveMicrotask(); // Бесконечный цикл микрозадач",
+      "referenceAnswer_en": "If a microtask adds a new microtask, it will be executed in the same event loop iteration before the next macrotask is processed. This can lead to an infinite loop if microtasks continuously add new microtasks, blocking macrotask execution and potentially causing the page to freeze. Example: function recursiveMicrotask() { Promise.resolve().then(() => recursiveMicrotask()); } recursiveMicrotask(); // Infinite microtask loop",
+      "difficulty": 3,
+      "tags": ["microtasks", "blocking"]
+    },
+    {
+      "id": "eventloop-04",
+      "word": "eventLoop",
+      "question": "В чем разница между setTimeout с нулевой задержкой и Promise.resolve?",
+      "question_en": "What is the difference between setTimeout with zero delay and Promise.resolve?",
+      "referenceAnswer": "setTimeout с нулевой задержкой помещает задачу в очередь макрозадач, в то время как Promise.resolve.then помещает задачу в очередь микрозадач. Микрозадачи выполняются перед макрозадачами в каждой итерации цикла событий, поэтому код в Promise.resolve.then выполнится раньше, чем код в setTimeout, даже если задержка равна нулю. Пример: setTimeout(() => console.log('timeout'), 0); Promise.resolve().then(() => console.log('promise')); // Вывод: promise, timeout",
+      "referenceAnswer_en": "setTimeout with zero delay queues a macrotask, while Promise.resolve.then queues a microtask. Microtasks are executed before macrotasks in each event loop iteration, so code in Promise.resolve.then will execute before code in setTimeout, even with zero delay. Example: setTimeout(() => console.log('timeout'), 0); Promise.resolve().then(() => console.log('promise')); // Output: promise, timeout",
+      "difficulty": 3,
+      "tags": ["comparison", "priority"]
+    },
+    {
+      "id": "eventloop-05",
+      "word": "eventLoop",
+      "question": "Как работает Web Workers в контексте Event Loop?",
+      "question_en": "How do Web Workers work in the context of the Event Loop?",
+      "referenceAnswer": "Web Workers выполняются в отдельных потоках, полностью изолированных от основного потока. У каждого Worker есть свой собственный Event Loop, стек вызовов и очереди задач. Workers не имеют доступа к DOM, но могут обмениваться данными с основным потоком через postMessage, который помещает сообщения в очередь задач получателя. Пример: worker.postMessage('hello'); worker.onmessage = (e) => console.log(e.data);",
+      "referenceAnswer_en": "Web Workers run in separate threads, completely isolated from the main thread. Each Worker has its own Event Loop, call stack, and task queues. Workers do not have access to the DOM but can exchange data with the main thread through postMessage, which places messages in the recipient's task queue. Example: worker.postMessage('hello'); worker.onmessage = (e) => console.log(e.data);",
+      "difficulty": 3,
+      "tags": ["workers", "multithreading"]
+    }
+  ],
+  "this": [
+    {
+      "id": "this-01",
+      "word": "this",
+      "question": "Что такое this в JavaScript и как определяется его значение?",
+      "question_en": "What is 'this' in JavaScript and how is its value determined?",
+      "referenceAnswer": "this – это контекст выполнения функции, который определяется в момент вызова функции, а не в момент ее объявления. Значение this определяется по четырем основным правилам: неявное связывание (вызов метода объекта), явное связывание (call, apply, bind), связывание через new (конструктор) и связывание по умолчанию (глобальный объект или undefined в строгом режиме).",
+      "referenceAnswer_en": "this is the execution context of a function, determined at the time of function call, not at declaration. The value of this is determined by four main rules: implicit binding (method call), explicit binding (call, apply, bind), new binding (constructor), and default binding (global object or undefined in strict mode).",
+      "difficulty": 1,
+      "tags": ["context", "rules"]
+    },
+    {
+      "id": "this-02",
+      "word": "this",
+      "question": "Как определяется this в стрелочной функции?",
+      "question_en": "How is 'this' determined in an arrow function?",
+      "referenceAnswer": "Стрелочные функции не имеют собственного this. Вместо этого они захватывают значение this из окружающего лексического контекста, в котором были объявлены. Значение this внутри стрелочной функции остается неизменным независимо от того, как функция была вызвана, и не может быть изменено с помощью call, apply или bind. Пример: const obj = { name: 'test', arrow: () => console.log(this.name), regular() { console.log(this.name); } };",
+      "referenceAnswer_en": "Arrow functions do not have their own this. Instead, they capture the this value from the surrounding lexical context in which they were declared. The this value inside an arrow function remains unchanged regardless of how the function is called and cannot be changed with call, apply, or bind. Example: const obj = { name: 'test', arrow: () => console.log(this.name), regular() { console.log(this.name); } };",
+      "difficulty": 2,
+      "tags": ["arrow", "lexical"]
+    },
+    {
+      "id": "this-03",
+      "word": "this",
+      "question": "В чем разница между call, apply и bind?",
+      "question_en": "What is the difference between call, apply, and bind?",
+      "referenceAnswer": "call и apply немедленно вызывают функцию с указанным значением this, отличаясь только способом передачи аргументов: call принимает аргументы по отдельности, apply – массивом аргументов. bind же не вызывает функцию сразу, а возвращает новую функцию с привязанным значением this, которая может быть вызвана позже. Пример: fn.call(obj, 1, 2); fn.apply(obj, [1, 2]); const bound = fn.bind(obj); bound(1, 2);",
+      "referenceAnswer_en": "call and apply immediately invoke a function with the specified this value, differing only in how arguments are passed: call takes arguments individually, apply takes an array of arguments. bind does not invoke the function immediately but returns a new function with the this value bound, which can be called later. Example: fn.call(obj, 1, 2); fn.apply(obj, [1, 2]); const bound = fn.bind(obj); bound(1, 2);",
+      "difficulty": 2,
+      "tags": ["bind", "methods"]
+    },
+    {
+      "id": "this-04",
+      "word": "this",
+      "question": "Как работает this в обработчиках событий DOM?",
+      "question_en": "How does 'this' work in DOM event handlers?",
+      "referenceAnswer": "В обработчиках событий, определенных через addEventListener, this ссылается на DOM-элемент, к которому привязан обработчик. В обработчиках, определенных через HTML-атрибуты (onclick), this ссылается на глобальный объект, если не используется bind. Пример: button.addEventListener('click', function() { console.log(this); }); // this === button",
+      "referenceAnswer_en": "In event handlers defined with addEventListener, this refers to the DOM element to which the handler is attached. In handlers defined via HTML attributes (onclick), this refers to the global object unless bind is used. Example: button.addEventListener('click', function() { console.log(this); }); // this === button",
+      "difficulty": 3,
+      "tags": ["dom", "events"]
+    }
+  ],
+  "prototype": [
+    {
+      "id": "prototype-01",
+      "word": "prototype",
+      "question": "Что такое прототипное наследование в JavaScript?",
+      "question_en": "What is prototypal inheritance in JavaScript?",
+      "referenceAnswer": "Прототипное наследование – это механизм, при котором объекты могут наследовать свойства и методы от других объектов. Каждый объект имеет внутреннюю ссылку на свой прототип (__proto__ или Object.getPrototypeOf). При обращении к свойству, если его нет в самом объекте, JavaScript ищет его в цепочке прототипов до тех пор, пока не найдет или не достигнет конца цепочки.",
+      "referenceAnswer_en": "Prototypal inheritance is a mechanism where objects can inherit properties and methods from other objects. Every object has an internal reference to its prototype (__proto__ or Object.getPrototypeOf). When accessing a property, if it is not found in the object itself, JavaScript looks for it in the prototype chain until found or the end of the chain is reached.",
+      "difficulty": 1,
+      "tags": ["inheritance", "oop"]
+    },
+    {
+      "id": "prototype-02",
+      "word": "prototype",
+      "question": "В чем разница между __proto__ и prototype?",
+      "question_en": "What is the difference between __proto__ and prototype?",
+      "referenceAnswer": "__proto__ – это свойство, которое существует у всех объектов и указывает на их прототип. prototype – это свойство, которое существует только у функций-конструкторов (кроме стрелочных) и используется для установки прототипа для объектов, создаваемых через new. Пример: function Person() {} Person.prototype.sayHi = () => {}; const p = new Person(); console.log(p.__proto__ === Person.prototype); // true",
+      "referenceAnswer_en": "__proto__ is a property that exists on all objects and points to their prototype. prototype is a property that exists only on constructor functions (except arrow functions) and is used to set the prototype for objects created with new. Example: function Person() {} Person.prototype.sayHi = () => {}; const p = new Person(); console.log(p.__proto__ === Person.prototype); // true",
+      "difficulty": 3,
+      "tags": ["comparison", "internals"]
+    },
+    {
+      "id": "prototype-03",
+      "word": "prototype",
+      "question": "Как создать объект без прототипа?",
+      "question_en": "How to create an object without a prototype?",
+      "referenceAnswer": "Объект без прототипа можно создать с помощью Object.create(null). Такой объект не наследует никаких свойств от Object.prototype, включая toString, hasOwnProperty и другие. Это может быть полезно для создания чистых словарей, где не требуется случайное переопределение методов прототипа. Пример: const dict = Object.create(null); dict.key = 'value'; console.log(dict.toString); // undefined",
+      "referenceAnswer_en": "An object without a prototype can be created with Object.create(null). Such an object does not inherit any properties from Object.prototype, including toString, hasOwnProperty, and others. This can be useful for creating pure dictionaries where accidental prototype method overriding is not desired. Example: const dict = Object.create(null); dict.key = 'value'; console.log(dict.toString); // undefined",
+      "difficulty": 2,
+      "tags": ["creation", "advanced"]
+    },
+    {
+      "id": "prototype-04",
+      "word": "prototype",
+      "question": "Что такое цепочка прототипов и как она работает?",
+      "question_en": "What is the prototype chain and how does it work?",
+      "referenceAnswer": "Цепочка прототипов – это последовательная связь между объектами через их прототипы. Когда свойство запрашивается у объекта, JavaScript сначала ищет его в самом объекте. Если свойство не найдено, поиск продолжается в прототипе объекта, затем в прототипе прототипа и так далее, пока не достигнет null. Пример: const parent = { a: 1 }; const child = Object.create(parent); console.log(child.a); // 1 (найдено в parent)",
+      "referenceAnswer_en": "The prototype chain is a sequential link between objects through their prototypes. When a property is requested from an object, JavaScript first looks for it in the object itself. If not found, the search continues in the object's prototype, then in the prototype's prototype, and so on until null is reached. Example: const parent = { a: 1 }; const child = Object.create(parent); console.log(child.a); // 1 (found in parent)",
+      "difficulty": 2,
+      "tags": ["inheritance", "lookup"]
+    }
+  ],
+  "asyncAwait": [
+    {
+      "id": "asyncawait-01",
+      "word": "asyncAwait",
+      "question": "Что такое async/await и как они работают?",
+      "question_en": "What are async/await and how do they work?",
+      "referenceAnswer": "async/await – это синтаксический сахар над Promise, позволяющий писать асинхронный код в синхронном стиле. Функция, объявленная с async, всегда возвращает Promise. Ключевое слово await приостанавливает выполнение функции до тех пор, пока Promise не будет разрешен, и возвращает результат. Ошибки обрабатываются через try/catch.",
+      "referenceAnswer_en": "async/await is syntactic sugar over Promises that allows writing asynchronous code in a synchronous style. A function declared with async always returns a Promise. The await keyword pauses function execution until the Promise is resolved and returns the result. Errors are handled with try/catch.",
+      "difficulty": 1,
+      "tags": ["async", "syntax"]
+    },
+    {
+      "id": "asyncawait-02",
+      "word": "asyncAwait",
+      "question": "Как обработать ошибку в async функции?",
+      "question_en": "How to handle errors in an async function?",
+      "referenceAnswer": "Ошибки в async функции обрабатываются с помощью конструкции try/catch, так как await выбрасывает исключение при отклонении Promise. Также можно использовать catch на Promise, возвращаемом async функцией, но try/catch внутри функции дает более чистый и локализованный подход к обработке ошибок. Пример: async function fetchData() { try { const res = await fetch(url); } catch (err) { console.error(err); } }",
+      "referenceAnswer_en": "Errors in an async function are handled using try/catch, since await throws an exception when the Promise rejects. You can also use catch on the Promise returned by the async function, but try/catch inside the function provides a cleaner and more localized approach to error handling. Example: async function fetchData() { try { const res = await fetch(url); } catch (err) { console.error(err); } }",
+      "difficulty": 2,
+      "tags": ["error", "handling"]
+    },
+    {
+      "id": "asyncawait-03",
+      "word": "asyncAwait",
+      "question": "В чем преимущества async/await перед цепочками then?",
+      "question_en": "What are the advantages of async/await over then chains?",
+      "referenceAnswer": "async/await предоставляет более читаемый и поддерживаемый код, особенно при работе с последовательными асинхронными операциями. Он позволяет избежать глубокой вложенности (callback hell) и делает обработку ошибок единообразной через try/catch. Также упрощается работа с условными операторами и циклами внутри асинхронного кода.",
+      "referenceAnswer_en": "async/await provides more readable and maintainable code, especially when working with sequential asynchronous operations. It avoids deep nesting (callback hell) and makes error handling uniform through try/catch. It also simplifies working with conditionals and loops within asynchronous code.",
+      "difficulty": 1,
+      "tags": ["comparison", "readability"]
+    },
+    {
+      "id": "asyncawait-04",
+      "word": "asyncAwait",
+      "question": "Можно ли использовать await без async?",
+      "question_en": "Can await be used without async?",
+      "referenceAnswer": "await можно использовать только внутри функции, объявленной с async, за исключением модулей высшего уровня (top-level await), который поддерживается в современных средах (ES2022). Top-level await позволяет использовать await непосредственно в модулях без обертки в async функцию, что удобно для инициализации модулей. Пример в модуле: const data = await fetch('/api'); export default data;",
+      "referenceAnswer_en": "await can only be used inside a function declared with async, except for top-level await, which is supported in modern environments (ES2022). Top-level await allows using await directly in modules without wrapping in an async function, which is convenient for module initialization. Example in module: const data = await fetch('/api'); export default data;",
+      "difficulty": 3,
+      "tags": ["limitations", "advanced"]
+    }
+  ],
+  "hoisting": [
+    {
+      "id": "hoisting-01",
+      "word": "hoisting",
+      "question": "Что такое hoisting (поднятие) в JavaScript?",
+      "question_en": "What is hoisting in JavaScript?",
+      "referenceAnswer": "Hoisting – это механизм, при котором объявления переменных и функций перемещаются вверх своей области видимости во время фазы компиляции. Это позволяет использовать функции до их объявления в коде. Для переменных, объявленных с var, происходит поднятие объявления, но не инициализации, поэтому они имеют значение undefined до присвоения.",
+      "referenceAnswer_en": "Hoisting is a mechanism where variable and function declarations are moved to the top of their scope during the compilation phase. This allows using functions before they are declared in the code. For variables declared with var, the declaration is hoisted but not the initialization, so they have the value undefined until assignment.",
+      "difficulty": 1,
+      "tags": ["scope", "variables"]
+    },
+    {
+      "id": "hoisting-02",
+      "word": "hoisting",
+      "question": "Как работает hoisting для var, let и const?",
+      "question_en": "How does hoisting work for var, let, and const?",
+      "referenceAnswer": "Все объявления переменных (var, let, const) поднимаются, но по-разному. var поднимается с инициализацией undefined, поэтому доступна до объявления. let и const также поднимаются, но находятся в Temporal Dead Zone от начала блока до момента объявления, поэтому попытка доступа до объявления вызывает ReferenceError. Пример: console.log(a); // undefined (var); console.log(b); // ReferenceError (let)",
+      "referenceAnswer_en": "All variable declarations (var, let, const) are hoisted, but differently. var is hoisted with undefined initialization, so it is accessible before declaration. let and const are also hoisted but are in the Temporal Dead Zone from block start until declaration, so accessing before declaration causes a ReferenceError. Example: console.log(a); // undefined (var); console.log(b); // ReferenceError (let)",
+      "difficulty": 2,
+      "tags": ["comparison", "variables"]
+    },
+    {
+      "id": "hoisting-03",
+      "word": "hoisting",
+      "question": "Что такое Temporal Dead Zone (TDZ)?",
+      "question_en": "What is the Temporal Dead Zone (TDZ)?",
+      "referenceAnswer": "Temporal Dead Zone – это период времени между входом в область видимости и фактическим объявлением переменной, объявленной с let или const. В течение этого периода переменная существует, но недоступна для использования. Попытка доступа к переменной в TDZ приводит к ReferenceError. Пример: { console.log(x); // ReferenceError (TDZ) let x = 5; }",
+      "referenceAnswer_en": "The Temporal Dead Zone is the period between entering a scope and the actual declaration of a variable declared with let or const. During this period, the variable exists but is not accessible. Accessing a variable in the TDZ results in a ReferenceError. Example: { console.log(x); // ReferenceError (TDZ) let x = 5; }",
+      "difficulty": 3,
+      "tags": ["scope", "advanced"]
+    },
+    {
+      "id": "hoisting-04",
+      "word": "hoisting",
+      "question": "Поднимаются ли функциональные выражения?",
+      "question_en": "Are function expressions hoisted?",
+      "referenceAnswer": "Функциональные выражения не поднимаются так же, как функциональные объявления. Только объявление переменной поднимается, но не присвоение функции. Поэтому функциональное выражение нельзя использовать до строки кода, где оно определено. Пример: console.log(foo); // undefined; foo(); // TypeError; var foo = function() {};",
+      "referenceAnswer_en": "Function expressions are not hoisted like function declarations. Only the variable declaration is hoisted, not the function assignment. Therefore, a function expression cannot be used before the line of code where it is defined. Example: console.log(foo); // undefined; foo(); // TypeError; var foo = function() {};",
+      "difficulty": 2,
+      "tags": ["functions", "expressions"]
+    }
+  ],
+  "map": [
+    {
+      "id": "map-01",
+      "word": "map",
+      "question": "В чем отличие Map от обычного объекта в JavaScript?",
+      "question_en": "What is the difference between Map and a regular object in JavaScript?",
+      "referenceAnswer": "Map позволяет использовать ключи любого типа, включая объекты и функции, в то время как объекты преобразуют ключи в строки. Map сохраняет порядок вставки элементов, имеет встроенный метод size для получения количества элементов, предоставляет удобные методы для итерации (keys, values, entries) и оптимизирован для частых добавлений и удалений пар ключ-значение.",
+      "referenceAnswer_en": "Map allows keys of any type, including objects and functions, while objects convert keys to strings. Map maintains insertion order, has a built-in size method to get the number of elements, provides convenient iteration methods (keys, values, entries), and is optimized for frequent additions and removals of key-value pairs.",
+      "difficulty": 1,
+      "tags": ["comparison", "data-structures"]
+    },
+    {
+      "id": "map-02",
+      "word": "map",
+      "question": "Как выполнить итерацию по Map?",
+      "question_en": "How to iterate over a Map?",
+      "referenceAnswer": "Map поддерживает несколько способов итерации: метод forEach, который принимает колбэк со значением, ключом и самой коллекцией; цикл for...of, который может использоваться напрямую с Map, возвращая массивы [key, value]; а также методы keys(), values() и entries(), возвращающие итераторы для соответствующих элементов. Пример: for (const [key, value] of map) { console.log(key, value); }",
+      "referenceAnswer_en": "Map supports several iteration methods: the forEach method, which takes a callback with value, key, and the collection itself; for...of loop, which can be used directly with Map, returning [key, value] arrays; and keys(), values(), and entries() methods, which return iterators for the corresponding elements. Example: for (const [key, value] of map) { console.log(key, value); }",
+      "difficulty": 2,
+      "tags": ["iteration", "methods"]
+    },
+    {
+      "id": "map-03",
+      "word": "map",
+      "question": "В каких случаях Map предпочтительнее объекта?",
+      "question_en": "In which cases is Map preferable to an object?",
+      "referenceAnswer": "Map предпочтительнее, когда ключи неизвестны до выполнения, когда ключи являются объектами или примитивами, отличными от строк, когда требуется частые добавления и удаления элементов, когда важен порядок итерации, или когда нужно эффективное получение размера коллекции. Пример использования Map с объектами в качестве ключей: const map = new Map(); const obj = {}; map.set(obj, 'value');",
+      "referenceAnswer_en": "Map is preferable when keys are unknown until runtime, when keys are objects or non-string primitives, when frequent additions and deletions are needed, when iteration order matters, or when efficient size retrieval is required. Example using Map with objects as keys: const map = new Map(); const obj = {}; map.set(obj, 'value');",
+      "difficulty": 3,
+      "tags": ["use-cases", "performance"]
+    }
+  ],
+  "set": [
+    {
+      "id": "set-01",
+      "word": "set",
+      "question": "Что такое Set в JavaScript и для чего он используется?",
+      "question_en": "What is Set in JavaScript and what is it used for?",
+      "referenceAnswer": "Set – это коллекция уникальных значений, где каждое значение может встречаться только один раз. Set используется для хранения уникальных элементов, удаления дубликатов из массивов, проверки наличия элемента за O(1) и выполнения операций над множествами, таких как объединение, пересечение и разность. Set может хранить значения любых типов.",
+      "referenceAnswer_en": "Set is a collection of unique values where each value can appear only once. Set is used for storing unique elements, removing duplicates from arrays, checking element existence in O(1), and performing set operations like union, intersection, and difference. Set can store values of any type.",
+      "difficulty": 1,
+      "tags": ["data-structures", "uniqueness"]
+    },
+    {
+      "id": "set-02",
+      "word": "set",
+      "question": "Как удалить дубликаты из массива с помощью Set?",
+      "question_en": "How to remove duplicates from an array using Set?",
+      "referenceAnswer": "Для удаления дубликатов из массива можно передать массив в конструктор Set, который автоматически оставит только уникальные значения, а затем преобразовать Set обратно в массив с помощью оператора spread или Array.from. Пример: const arr = [1, 2, 2, 3, 3, 4]; const unique = [...new Set(arr)]; // [1, 2, 3, 4]",
+      "referenceAnswer_en": "To remove duplicates from an array, you can pass the array to the Set constructor, which will automatically keep only unique values, then convert the Set back to an array using the spread operator or Array.from. Example: const arr = [1, 2, 2, 3, 3, 4]; const unique = [...new Set(arr)]; // [1, 2, 3, 4]",
+      "difficulty": 2,
+      "tags": ["arrays", "transformation"]
+    },
+    {
+      "id": "set-03",
+      "word": "set",
+      "question": "Как проверить наличие элемента в Set и какова сложность операции?",
+      "question_en": "How to check for an element in Set and what is the complexity?",
+      "referenceAnswer": "Наличие элемента в Set проверяется методом has(element), который возвращает true или false. Сложность операции has составляет O(1) в среднем, благодаря реализации на основе хеш-таблицы, что делает Set эффективным для проверки существования элементов по сравнению с массивами, где поиск занимает O(n). Пример: const set = new Set([1, 2, 3]); console.log(set.has(2)); // true; console.log(set.has(5)); // false",
+      "referenceAnswer_en": "Element presence in a Set is checked with the has(element) method, which returns true or false. The complexity of the has operation is O(1) on average, thanks to hash table implementation, making Set efficient for existence checking compared to arrays, where search takes O(n). Example: const set = new Set([1, 2, 3]); console.log(set.has(2)); // true; console.log(set.has(5)); // false",
+      "difficulty": 2,
+      "tags": ["performance", "methods"]
+    }
+  ],
+  "weakmap": [
+    {
+      "id": "weakmap-01",
+      "word": "weakMap",
+      "question": "Что такое WeakMap и чем она отличается от Map?",
+      "question_en": "What is WeakMap and how does it differ from Map?",
+      "referenceAnswer": "WeakMap – это коллекция пар ключ-значение, где ключи могут быть только объектами, и ссылки на ключи являются слабыми. Если на объект-ключ нет других ссылок, он может быть удален сборщиком мусора, а соответствующая запись автоматически удаляется из WeakMap. Пример: let obj = {}; const wm = new WeakMap(); wm.set(obj, 'data'); obj = null; // запись будет удалена при сборке мусора",
+      "referenceAnswer_en": "WeakMap is a collection of key-value pairs where keys can only be objects and key references are weak. If there are no other references to the key object, it can be garbage collected, and the corresponding entry is automatically removed from the WeakMap. Example: let obj = {}; const wm = new WeakMap(); wm.set(obj, 'data'); obj = null; // entry will be removed on garbage collection",
+      "difficulty": 3,
+      "tags": ["memory", "garbage-collection"]
+    },
+    {
+      "id": "weakmap-02",
+      "word": "weakMap",
+      "question": "Когда следует использовать WeakMap вместо Map?",
+      "question_en": "When should WeakMap be used instead of Map?",
+      "referenceAnswer": "WeakMap следует использовать, когда нужно хранить дополнительные данные, связанные с объектами, но не препятствовать сборке мусора этих объектов. Типичный пример: хранение приватных данных для DOM-элементов. const wm = new WeakMap(); element.addEventListener('click', () => { const data = wm.get(element); });",
+      "referenceAnswer_en": "WeakMap should be used when additional data needs to be stored associated with objects without preventing garbage collection of those objects. Typical example: storing private data for DOM elements. const wm = new WeakMap(); element.addEventListener('click', () => { const data = wm.get(element); });",
+      "difficulty": 3,
+      "tags": ["use-cases", "memory-management"]
+    },
+    {
+      "id": "weakmap-03",
+      "word": "weakMap",
+      "question": "Как WeakMap связан со сборкой мусора?",
+      "question_en": "How is WeakMap related to garbage collection?",
+      "referenceAnswer": "WeakMap содержит слабые ссылки на объекты-ключи, что означает, что эти ссылки не учитываются сборщиком мусора при определении, можно ли удалить объект. Если объект, используемый как ключ в WeakMap, больше не доступен из корневых ссылок, он может быть собран сборщиком мусора, а соответствующая запись в WeakMap автоматически удаляется. Это позволяет избежать утечек памяти, которые возможны при использовании Map. Пример: let key = {}; const map = new Map(); map.set(key, 'value'); key = null; // запись остается в Map",
+      "referenceAnswer_en": "WeakMap holds weak references to key objects, meaning these references are not considered by the garbage collector when determining whether an object can be collected. If an object used as a key in WeakMap is no longer reachable from root references, it can be garbage collected, and the corresponding entry in WeakMap is automatically removed. This helps avoid memory leaks that are possible when using Map. Example: let key = {}; const map = new Map(); map.set(key, 'value'); key = null; // entry remains in Map",
+      "difficulty": 3,
+      "tags": ["garbage-collection", "memory"]
+    }
+  ],
+  "symbol": [
+    {
+      "id": "symbol-01",
+      "word": "symbol",
+      "question": "Что такое Symbol в JavaScript и для чего он нужен?",
+      "question_en": "What is Symbol in JavaScript and what is it used for?",
+      "referenceAnswer": "Symbol – это уникальный и неизменяемый примитивный тип данных, который может использоваться как идентификатор для свойств объектов. Каждый символ гарантированно уникален, даже если создан с одинаковым описанием. Символы используются для создания приватных или скрытых свойств объекта, предотвращения конфликтов имен свойств и определения встроенных протоколов через хорошо известные символы (Symbol.iterator, Symbol.hasInstance и другие).",
+      "referenceAnswer_en": "Symbol is a unique and immutable primitive data type that can be used as an identifier for object properties. Each symbol is guaranteed to be unique, even if created with the same description. Symbols are used to create private or hidden object properties, prevent property name conflicts, and define built-in protocols through well-known symbols (Symbol.iterator, Symbol.hasInstance, etc.).",
+      "difficulty": 1,
+      "tags": ["primitives", "uniqueness"]
+    },
+    {
+      "id": "symbol-02",
+      "word": "symbol",
+      "question": "Как создать символ и как использовать его в качестве ключа объекта?",
+      "question_en": "How to create a symbol and use it as an object key?",
+      "referenceAnswer": "Символ создается вызовом функции Symbol(), опционально с описанием для отладки: Symbol('description'). Для использования символа в качестве ключа объекта, его можно добавить через квадратные скобки в литерале объекта или через оператор присваивания. Пример: const sym = Symbol('id'); const obj = { [sym]: 'secret' }; console.log(obj[sym]); // 'secret'",
+      "referenceAnswer_en": "A symbol is created by calling the Symbol() function, optionally with a description for debugging: Symbol('description'). To use a symbol as an object key, it can be added via square brackets in an object literal or through assignment. Example: const sym = Symbol('id'); const obj = { [sym]: 'secret' }; console.log(obj[sym]); // 'secret'",
+      "difficulty": 2,
+      "tags": ["creation", "properties"]
+    },
+    {
+      "id": "symbol-03",
+      "word": "symbol",
+      "question": "Что такое глобальный реестр символов и когда его использовать?",
+      "question_en": "What is the global symbol registry and when to use it?",
+      "referenceAnswer": "Глобальный реестр символов позволяет создавать и получать символы по строковому ключу с помощью методов Symbol.for(key) и Symbol.keyFor(symbol). Символы из глобального реестра не уникальны – для одного ключа всегда возвращается один и тот же символ. Пример: const s1 = Symbol.for('app.id'); const s2 = Symbol.for('app.id'); console.log(s1 === s2); // true",
+      "referenceAnswer_en": "The global symbol registry allows creating and retrieving symbols by string key using Symbol.for(key) and Symbol.keyFor(symbol) methods. Symbols from the global registry are not unique – the same key always returns the same symbol. Example: const s1 = Symbol.for('app.id'); const s2 = Symbol.for('app.id'); console.log(s1 === s2); // true",
+      "difficulty": 3,
+      "tags": ["registry", "global"]
+    }
+  ],
+  "spread": [
+    {
+      "id": "spread-01",
+      "word": "spread",
+      "question": "Что такое оператор spread (…) и как он работает?",
+      "question_en": "What is the spread operator (…) and how does it work?",
+      "referenceAnswer": "Оператор spread (…) используется для разворачивания итерируемых объектов (массивов, строк, Map, Set) в местах, где ожидается ноль или более аргументов (при вызове функций) или элементов (при создании массивов). Также используется для копирования объектов и массивов, объединения коллекций и преобразования итерируемых объектов в массивы.",
+      "referenceAnswer_en": "The spread operator (…) is used to expand iterable objects (arrays, strings, Map, Set) in places where zero or more arguments (in function calls) or elements (in array literals) are expected. It is also used for copying objects and arrays, merging collections, and converting iterable objects to arrays.",
+      "difficulty": 1,
+      "tags": ["operators", "syntax"]
+    },
+    {
+      "id": "spread-02",
+      "word": "spread",
+      "question": "Делает ли оператор spread глубокое копирование?",
+      "question_en": "Does the spread operator perform deep copying?",
+      "referenceAnswer": "Оператор spread выполняет поверхностное (shallow) копирование. Для массивов и объектов он создает новый объект или массив, но вложенные объекты и массивы копируются по ссылке. Изменение вложенных структур в копии отразится в оригинале. Пример: const original = { a: { b: 1 } }; const copy = { ...original }; copy.a.b = 2; console.log(original.a.b); // 2",
+      "referenceAnswer_en": "The spread operator performs shallow copying. For arrays and objects, it creates a new object or array, but nested objects and arrays are copied by reference. Modifying nested structures in the copy will affect the original. Example: const original = { a: { b: 1 } }; const copy = { ...original }; copy.a.b = 2; console.log(original.a.b); // 2",
+      "difficulty": 2,
+      "tags": ["copying", "shallow-deep"]
+    },
+    {
+      "id": "spread-03",
+      "word": "spread",
+      "question": "В чем разница между spread и rest операторами?",
+      "question_en": "What is the difference between spread and rest operators?",
+      "referenceAnswer": "Spread и rest используют одинаковый синтаксис (…), но выполняют противоположные операции. Spread разворачивает итерируемый объект на отдельные элементы. Rest собирает оставшиеся аргументы в массив. Пример: const [first, ...rest] = [1, 2, 3, 4]; // rest = [2,3,4]; const arr = [1, 2]; const newArr = [...arr, 3]; // spread",
+      "referenceAnswer_en": "Spread and rest use the same syntax (…) but perform opposite operations. Spread expands an iterable object into individual elements. Rest collects remaining arguments into an array. Example: const [first, ...rest] = [1, 2, 3, 4]; // rest = [2,3,4]; const arr = [1, 2]; const newArr = [...arr, 3]; // spread",
+      "difficulty": 2,
+      "tags": ["comparison", "rest"]
+    }
+  ],
+  "destructuring": [
+    {
+      "id": "destructuring-01",
+      "word": "destructuring",
+      "question": "Что такое деструктуризация в JavaScript?",
+      "question_en": "What is destructuring in JavaScript?",
+      "referenceAnswer": "Деструктуризация – это синтаксическая конструкция, которая позволяет извлекать значения из массивов или свойств из объектов в отдельные переменные. Она позволяет писать более чистый и лаконичный код при работе со сложными структурами данных, обмене значениями, работе с параметрами функций и импорте модулей.",
+      "referenceAnswer_en": "Destructuring is a syntactic construct that allows extracting values from arrays or properties from objects into distinct variables. It enables writing cleaner and more concise code when working with complex data structures, swapping values, handling function parameters, and importing modules.",
+      "difficulty": 1,
+      "tags": ["syntax", "patterns"]
+    },
+    {
+      "id": "destructuring-02",
+      "word": "destructuring",
+      "question": "Как использовать деструктуризацию для параметров функции?",
+      "question_en": "How to use destructuring for function parameters?",
+      "referenceAnswer": "Деструктуризация параметров функции позволяет извлекать свойства объекта или элементы массива непосредственно в параметрах функции. Это особенно полезно для функций, которые принимают объекты с опциями. Пример: function greet({ name, age = 18 }) { console.log(`${name}, ${age}`); } greet({ name: 'John' }); // John, 18",
+      "referenceAnswer_en": "Function parameter destructuring allows extracting object properties or array elements directly into function parameters. This is especially useful for functions that accept options objects. Example: function greet({ name, age = 18 }) { console.log(`${name}, ${age}`); } greet({ name: 'John' }); // John, 18",
+      "difficulty": 2,
+      "tags": ["functions", "parameters"]
+    },
+    {
+      "id": "destructuring-03",
+      "word": "destructuring",
+      "question": "Как задать значения по умолчанию при деструктуризации?",
+      "question_en": "How to set default values during destructuring?",
+      "referenceAnswer": "Значения по умолчанию при деструктуризации задаются через знак равно после имени переменной. Если извлекаемое значение отсутствует или равно undefined, будет использовано значение по умолчанию. Пример: const { a = 10, b = 20 } = { a: 5 }; console.log(a, b); // 5, 20",
+      "referenceAnswer_en": "Default values during destructuring are set using an equals sign after the variable name. If the extracted value is missing or equals undefined, the default value is used. Example: const { a = 10, b = 20 } = { a: 5 }; console.log(a, b); // 5, 20",
+      "difficulty": 2,
+      "tags": ["defaults", "handling"]
+    }
+  ],
+  "generics": [
+    {
+      "id": "generics-01",
+      "word": "generics",
+      "question": "Что такое дженерики в TypeScript и зачем они нужны?",
+      "question_en": "What are generics in TypeScript and why are they needed?",
+      "referenceAnswer": "Дженерики – это инструмент TypeScript для создания переиспользуемых компонентов, которые могут работать с различными типами данных, сохраняя при этом строгую типизацию. Они позволяют определять типы как параметры, которые задаются при использовании компонента. Дженерики обеспечивают типобезопасность без потери гибкости, устраняя необходимость в типе any.",
+      "referenceAnswer_en": "Generics are a TypeScript tool for creating reusable components that can work with various data types while maintaining strict typing. They allow defining types as parameters that are specified when using the component. Generics provide type safety without sacrificing flexibility, eliminating the need for the any type.",
+      "difficulty": 1,
+      "tags": ["typescript", "types"]
+    },
+    {
+      "id": "generics-02",
+      "word": "generics",
+      "question": "Как ограничить дженерик определенным набором типов?",
+      "question_en": "How to constrain a generic to a specific set of types?",
+      "referenceAnswer": "Ограничения дженериков (constraints) задаются с помощью ключевого слова extends, после которого указывается тип или интерфейс, которому должен соответствовать тип-параметр. Это позволяет использовать методы и свойства ограничивающего типа внутри дженерика. Пример: function getLength<T extends { length: number }>(arg: T): number { return arg.length; }",
+      "referenceAnswer_en": "Generic constraints are specified using the extends keyword, followed by a type or interface that the type parameter must conform to. This allows using methods and properties of the constraint type inside the generic. Example: function getLength<T extends { length: number }>(arg: T): number { return arg.length; }",
+      "difficulty": 3,
+      "tags": ["constraints", "typescript"]
+    },
+    {
+      "id": "generics-03",
+      "word": "generics",
+      "question": "В чем разница между дженериками и union типами?",
+      "question_en": "What is the difference between generics and union types?",
+      "referenceAnswer": "Дженерики сохраняют связь между входными и выходными типами, в то время как union типы определяют набор возможных типов, но не фиксируют связь между ними. Дженерики позволяют зафиксировать, что тип возвращаемого значения совпадает с типом аргумента. Пример: function identity<T>(arg: T): T { return arg; } // сохраняет тип; function identityUnion(arg: string | number): string | number { return arg; } // связь потеряна",
+      "referenceAnswer_en": "Generics preserve the relationship between input and output types, while union types define a set of possible types but do not capture the relationship between them. Generics allow fixing that the return type matches the argument type. Example: function identity<T>(arg: T): T { return arg; } // preserves type; function identityUnion(arg: string | number): string | number { return arg; } // relationship lost",
+      "difficulty": 3,
+      "tags": ["comparison", "typescript"]
+    }
+  ],
+  "localStorage": [
+    {
+      "id": "storage-01",
+      "word": "localStorage",
+      "question": "В чем отличие localStorage от sessionStorage?",
+      "question_en": "What is the difference between localStorage and sessionStorage?",
+      "referenceAnswer": "localStorage хранит данные без срока истечения, они сохраняются между сессиями браузера и после закрытия вкладки. sessionStorage хранит данные только в рамках текущей сессии вкладки, данные удаляются при закрытии вкладки или браузера. Оба имеют одинаковый API, лимит около 5-10 МБ и синхронный характер операций.",
+      "referenceAnswer_en": "localStorage stores data with no expiration time, persisting across browser sessions and after closing tabs. sessionStorage stores data only for the current tab session, with data being deleted when the tab or browser closes. Both have the same API, about 5-10 MB limit, and synchronous operations.",
+      "difficulty": 1,
+      "tags": ["storage", "web-api"]
+    },
+    {
+      "id": "storage-02",
+      "word": "localStorage",
+      "question": "Какой лимит объема данных в localStorage и что происходит при его превышении?",
+      "question_en": "What is the data size limit in localStorage and what happens when exceeded?",
+      "referenceAnswer": "Лимит localStorage обычно составляет 5-10 МБ в зависимости от браузера. При попытке записать данные, превышающие лимит, выбрасывается исключение QuotaExceededError. Пример: try { localStorage.setItem('key', largeData); } catch (e) { if (e.name === 'QuotaExceededError') { console.log('Storage limit exceeded'); } }",
+      "referenceAnswer_en": "The localStorage limit is typically 5-10 MB depending on the browser. When attempting to write data exceeding the limit, a QuotaExceededError exception is thrown. Example: try { localStorage.setItem('key', largeData); } catch (e) { if (e.name === 'QuotaExceededError') { console.log('Storage limit exceeded'); } }",
+      "difficulty": 2,
+      "tags": ["limits", "error-handling"]
+    },
+    {
+      "id": "storage-03",
+      "word": "localStorage",
+      "question": "Можно ли хранить объекты в localStorage? Как правильно это делать?",
+      "question_en": "Can objects be stored in localStorage? How to do it correctly?",
+      "referenceAnswer": "localStorage может хранить только строки. Для хранения объектов их необходимо сериализовать в JSON с помощью JSON.stringify() перед сохранением и десериализовать с помощью JSON.parse() при чтении. Пример: const obj = { name: 'John' }; localStorage.setItem('user', JSON.stringify(obj)); const restored = JSON.parse(localStorage.getItem('user'));",
+      "referenceAnswer_en": "localStorage can only store strings. To store objects, they must be serialized to JSON using JSON.stringify() before saving and deserialized using JSON.parse() when reading. Example: const obj = { name: 'John' }; localStorage.setItem('user', JSON.stringify(obj)); const restored = JSON.parse(localStorage.getItem('user'));",
+      "difficulty": 2,
+      "tags": ["serialization", "objects"]
+    }
+  ],
+  "proxy": [
+    {
+      "id": "proxy-01",
+      "word": "proxy",
+      "question": "Что такое Proxy в JavaScript и для чего он используется?",
+      "question_en": "What is Proxy in JavaScript and what is it used for?",
+      "referenceAnswer": "Proxy – это объект, который позволяет перехватывать и переопределять фундаментальные операции для другого объекта (целевого объекта). Proxy используется для реализации валидации, логирования, вычисляемых свойств, отложенной инициализации, создания реактивных систем, контроля доступа и многих других мета-программирования возможностей.",
+      "referenceAnswer_en": "Proxy is an object that allows intercepting and redefining fundamental operations for another object (target object). Proxy is used for validation, logging, computed properties, lazy initialization, creating reactive systems, access control, and many other metaprogramming capabilities.",
+      "difficulty": 1,
+      "tags": ["meta-programming", "interception"]
+    },
+    {
+      "id": "proxy-02",
+      "word": "proxy",
+      "question": "Какие ловушки (traps) существуют у Proxy?",
+      "question_en": "What traps exist in Proxy?",
+      "referenceAnswer": "Proxy предоставляет множество ловушек: get (чтение свойства), set (запись свойства), deleteProperty (удаление свойства), has (проверка существования), apply (вызов функции), construct (вызов с new). Пример: const handler = { get(target, prop) { return prop in target ? target[prop] : 'default'; } };",
+      "referenceAnswer_en": "Proxy provides many traps: get (property reading), set (property writing), deleteProperty (property deletion), has (existence check), apply (function call), construct (call with new). Example: const handler = { get(target, prop) { return prop in target ? target[prop] : 'default'; } };",
+      "difficulty": 3,
+      "tags": ["traps", "operations"]
+    },
+    {
+      "id": "proxy-03",
+      "word": "proxy",
+      "question": "В чем отличие Proxy от Object.defineProperty?",
+      "question_en": "What is the difference between Proxy and Object.defineProperty?",
+      "referenceAnswer": "Proxy позволяет перехватывать любые операции с объектом, включая добавление новых свойств, удаление, итерацию и вызовы функций, в то время как Object.defineProperty позволяет переопределять поведение только существующих свойств. Пример с Proxy: const p = new Proxy({}, { set(target, prop, val) { console.log(`Setting ${prop}`); target[prop] = val; return true; } });",
+      "referenceAnswer_en": "Proxy can intercept any operation on an object, including adding new properties, deletion, iteration, and function calls, while Object.defineProperty can only redefine behavior for existing properties. Example with Proxy: const p = new Proxy({}, { set(target, prop, val) { console.log(`Setting ${prop}`); target[prop] = val; return true; } });",
+      "difficulty": 3,
+      "tags": ["comparison", "reactive"]
+    }
+  ],
+  "debounce": [
+    {
+      "id": "debounce-01",
+      "word": "debounce",
+      "question": "Что такое debounce и в каких случаях применяется?",
+      "question_en": "What is debounce and in what cases is it applied?",
+      "referenceAnswer": "Debounce – это техника, которая ограничивает частоту выполнения функции, гарантируя, что она будет вызвана только один раз после того, как перестанут поступать вызовы в течение определенного интервала времени. Применяется для оптимизации обработчиков ввода (поиск по мере ввода), событий resize, scroll, и других частых событий, где требуется выполнить действие только после завершения серии вызовов.",
+      "referenceAnswer_en": "Debounce is a technique that limits the execution frequency of a function, ensuring it is called only once after calls stop arriving for a certain time interval. It is used to optimize input handlers (search as you type), resize, scroll events, and other frequent events where the action should only execute after the series of calls ends.",
+      "difficulty": 1,
+      "tags": ["optimization", "events"]
+    },
+    {
+      "id": "debounce-02",
+      "word": "debounce",
+      "question": "В чем разница между debounce и throttle?",
+      "question_en": "What is the difference between debounce and throttle?",
+      "referenceAnswer": "Debounce гарантирует, что функция будет вызвана только после того, как вызовы перестанут поступать в течение заданного интервала (выполняется один раз в конце). Throttle гарантирует, что функция будет вызываться не чаще одного раза за заданный интервал времени. Пример debounce: поиск при вводе; throttle: обработка скролла.",
+      "referenceAnswer_en": "Debounce ensures that a function is called only after calls stop arriving for a specified interval (executes once at the end). Throttle ensures that a function is called at most once per specified time interval. Example debounce: search as you type; throttle: scroll handling.",
+      "difficulty": 2,
+      "tags": ["comparison", "optimization"]
+    },
+    {
+      "id": "debounce-03",
+      "word": "debounce",
+      "question": "Как реализовать debounce с возможностью немедленного вызова?",
+      "question_en": "How to implement debounce with immediate execution option?",
+      "referenceAnswer": "Debounce с немедленным вызовом (leading edge) вызывает функцию сразу при первом вызове, а затем блокирует вызовы на заданный интервал. Реализация: function debounce(fn, delay, immediate = false) { let timer; return function(...args) { const callNow = immediate && !timer; clearTimeout(timer); timer = setTimeout(() => { timer = null; if (!immediate) fn.apply(this, args); }, delay); if (callNow) fn.apply(this, args); }; }",
+      "referenceAnswer_en": "Debounce with immediate execution (leading edge) calls the function immediately on the first call and then blocks calls for the specified interval. Implementation: function debounce(fn, delay, immediate = false) { let timer; return function(...args) { const callNow = immediate && !timer; clearTimeout(timer); timer = setTimeout(() => { timer = null; if (!immediate) fn.apply(this, args); }, delay); if (callNow) fn.apply(this, args); }; }",
+      "difficulty": 3,
+      "tags": ["implementation", "leading-trailing"]
+    }
+  ],
+  "throttle": [
+    {
+      "id": "throttle-01",
+      "word": "throttle",
+      "question": "Что такое throttle и в каких случаях применяется?",
+      "question_en": "What is throttle and in what cases is it applied?",
+      "referenceAnswer": "Throttle – это техника, которая ограничивает частоту выполнения функции, гарантируя, что она будет вызываться не чаще одного раза за указанный интервал времени. Применяется для обработки событий, генерирующих большое количество вызовов: скроллинг, изменение размера окна, движение мыши, где требуется регулярное обновление UI, но с контролируемой частотой.",
+      "referenceAnswer_en": "Throttle is a technique that limits the execution frequency of a function, ensuring it is called at most once per specified time interval. It is used for handling events that generate many calls: scrolling, window resizing, mouse movement, where UI updates are needed regularly but at a controlled frequency.",
+      "difficulty": 1,
+      "tags": ["optimization", "events"]
+    },
+    {
+      "id": "throttle-02",
+      "word": "throttle",
+      "question": "Какие существуют варианты реализации throttle?",
+      "question_en": "What implementation variants of throttle exist?",
+      "referenceAnswer": "Существует два основных варианта throttle: с немедленным вызовом (leading edge) – функция выполняется сразу при первом вызове, затем блокируется на интервал; с вызовом по окончании (trailing edge) – функция выполняется после того, как прошел интервал с последнего вызова. Реализация leading: function throttle(fn, delay) { let lastCall = 0; return function(...args) { const now = Date.now(); if (now - lastCall >= delay) { lastCall = now; fn.apply(this, args); } }; }",
+      "referenceAnswer_en": "There are two main throttle variants: immediate execution (leading edge) – the function executes immediately on first call, then is blocked for the interval; trailing edge – the function executes after the interval has passed since the last call. Leading implementation: function throttle(fn, delay) { let lastCall = 0; return function(...args) { const now = Date.now(); if (now - lastCall >= delay) { lastCall = now; fn.apply(this, args); } }; }",
+      "difficulty": 3,
+      "tags": ["implementation", "variants"]
+    },
+    {
+      "id": "throttle-03",
+      "word": "throttle",
+      "question": "Как throttle влияет на производительность и когда его следует использовать?",
+      "question_en": "How does throttle affect performance and when should it be used?",
+      "referenceAnswer": "Throttle улучшает производительность, сокращая количество вызовов ресурсоемких функций, особенно в обработчиках событий с высокой частотой срабатывания (скролл, resize, mousemove). Пример: window.addEventListener('scroll', throttle(() => { updatePosition(); }, 100));",
+      "referenceAnswer_en": "Throttle improves performance by reducing the number of calls to resource-intensive functions, especially in high-frequency event handlers (scroll, resize, mousemove). Example: window.addEventListener('scroll', throttle(() => { updatePosition(); }, 100));",
+      "difficulty": 2,
+      "tags": ["performance", "use-cases"]
+    }
+  ],
+  "memoization": [
+    {
+      "id": "memoization-01",
+      "word": "memoization",
+      "question": "Что такое мемоизация и как она применяется в JavaScript?",
+      "question_en": "What is memoization and how is it applied in JavaScript?",
+      "referenceAnswer": "Мемоизация – это техника оптимизации, при которой результаты дорогостоящих вызовов функций кэшируются и возвращаются при повторных вызовах с теми же аргументами. Это позволяет избежать повторных вычислений, улучшая производительность. Мемоизация особенно полезна для чистых функций, рекурсивных алгоритмов (например, вычисление чисел Фибоначчи) и функций с тяжелыми вычислениями.",
+      "referenceAnswer_en": "Memoization is an optimization technique where results of expensive function calls are cached and returned when the same arguments are passed again. This avoids repeated computations, improving performance. Memoization is especially useful for pure functions, recursive algorithms (like Fibonacci calculation), and functions with heavy computations.",
+      "difficulty": 1,
+      "tags": ["optimization", "caching"]
+    },
+    {
+      "id": "memoization-02",
+      "word": "memoization",
+      "question": "Какие ограничения и недостатки имеет мемоизация?",
+      "question_en": "What are the limitations and drawbacks of memoization?",
+      "referenceAnswer": "Мемоизация требует дополнительной памяти для хранения кэша, что может привести к утечкам памяти при неправильном управлении. Она работает только с чистыми функциями, результат которых зависит только от аргументов. Пример проблемы: function memoize(fn) { const cache = new Map(); return function(...args) { const key = JSON.stringify(args); if (cache.has(key)) return cache.get(key); const result = fn(...args); cache.set(key, result); return result; }; }",
+      "referenceAnswer_en": "Memoization requires additional memory for cache storage, which can lead to memory leaks if not managed properly. It only works with pure functions whose results depend solely on arguments. Example problem: function memoize(fn) { const cache = new Map(); return function(...args) { const key = JSON.stringify(args); if (cache.has(key)) return cache.get(key); const result = fn(...args); cache.set(key, result); return result; }; }",
+      "difficulty": 3,
+      "tags": ["limitations", "memory"]
+    },
+    {
+      "id": "memoization-03",
+      "word": "memoization",
+      "question": "Как реализовать мемоизацию для функции с несколькими аргументами?",
+      "question_en": "How to implement memoization for a function with multiple arguments?",
+      "referenceAnswer": "Для мемоизации функции с несколькими аргументами можно создать ключ кэша, объединяя аргументы в строку через JSON.stringify или используя Map с вложенными структурами. Пример: function memoize(fn) { const cache = new Map(); return function(...args) { const key = args.map(a => JSON.stringify(a)).join('|'); if (cache.has(key)) return cache.get(key); const result = fn(...args); cache.set(key, result); return result; }; }",
+      "referenceAnswer_en": "To memoize a function with multiple arguments, you can create a cache key by serializing arguments with JSON.stringify or using nested Map structures. Example: function memoize(fn) { const cache = new Map(); return function(...args) { const key = args.map(a => JSON.stringify(a)).join('|'); if (cache.has(key)) return cache.get(key); const result = fn(...args); cache.set(key, result); return result; }; }",
+      "difficulty": 3,
+      "tags": ["implementation", "multiple-arguments"]
+    }
+  ],
+  "currying": [
+    {
+      "id": "currying-01",
+      "word": "currying",
+      "question": "Что такое каррирование (currying) в JavaScript?",
+      "question_en": "What is currying in JavaScript?",
+      "referenceAnswer": "Каррирование – это техника преобразования функции, принимающей несколько аргументов, в последовательность функций, каждая из которых принимает один аргумент. Это позволяет создавать частично примененные функции, упрощает переиспользование кода и композицию функций. Каррирование особенно полезно в функциональном программировании.",
+      "referenceAnswer_en": "Currying is a technique of transforming a function that takes multiple arguments into a sequence of functions, each taking a single argument. This allows creating partially applied functions, simplifies code reuse and function composition. Currying is especially useful in functional programming.",
+      "difficulty": 1,
+      "tags": ["functional", "transformation"]
+    },
+    {
+      "id": "currying-02",
+      "word": "currying",
+      "question": "В чем разница между каррированием и частичным применением?",
+      "question_en": "What is the difference between currying and partial application?",
+      "referenceAnswer": "Каррирование преобразует функцию, возвращая цепочку функций, каждая из которых принимает один аргумент, до тех пор, пока не будут получены все аргументы. Частичное применение – это фиксация некоторых аргументов функции, возвращающая новую функцию с меньшим количеством аргументов. Пример: const add = (a, b, c) => a + b + c; const curried = a => b => c => a + b + c; // каррирование; const add5 = add.bind(null, 5); // частичное применение",
+      "referenceAnswer_en": "Currying transforms a function, returning a chain of functions each taking one argument until all arguments are received. Partial application fixes some arguments of a function, returning a new function with fewer arguments. Example: const add = (a, b, c) => a + b + c; const curried = a => b => c => a + b + c; // currying; const add5 = add.bind(null, 5); // partial application",
+      "difficulty": 3,
+      "tags": ["comparison", "functional"]
+    },
+    {
+      "id": "currying-03",
+      "word": "currying",
+      "question": "Как реализовать универсальную функцию каррирования?",
+      "question_en": "How to implement a universal currying function?",
+      "referenceAnswer": "Универсальная функция каррирования принимает функцию и возвращает новую функцию, которая собирает аргументы. Когда количество накопленных аргументов достигает ожидаемого, исходная функция вызывается. Пример: function curry(fn) { return function curried(...args) { if (args.length >= fn.length) return fn(...args); return (...next) => curried(...args, ...next); }; }",
+      "referenceAnswer_en": "A universal currying function takes a function and returns a new function that collects arguments. When the accumulated number of arguments reaches the expected count, the original function is called. Example: function curry(fn) { return function curried(...args) { if (args.length >= fn.length) return fn(...args); return (...next) => curried(...args, ...next); }; }",
+      "difficulty": 3,
+      "tags": ["implementation", "functional"]
+    }
+  ],
+  "composition": [
+    {
+      "id": "composition-01",
+      "word": "composition",
+      "question": "Что такое композиция функций и чем она полезна?",
+      "question_en": "What is function composition and why is it useful?",
+      "referenceAnswer": "Композиция функций – это техника объединения нескольких функций в одну, где результат каждой функции передается в следующую. Это позволяет создавать сложные преобразования данных из простых, переиспользуемых функций. Композиция является фундаментальным понятием функционального программирования, способствуя созданию более читаемого, тестируемого и поддерживаемого кода.",
+      "referenceAnswer_en": "Function composition is a technique of combining multiple functions into one, where the result of each function is passed to the next. This allows creating complex data transformations from simple, reusable functions. Composition is a fundamental concept in functional programming, contributing to more readable, testable, and maintainable code.",
+      "difficulty": 1,
+      "tags": ["functional", "composition"]
+    },
+    {
+      "id": "composition-02",
+      "word": "composition",
+      "question": "В чем разница между композицией и наследованием в ООП?",
+      "question_en": "What is the difference between composition and inheritance in OOP?",
+      "referenceAnswer": "Композиция предполагает включение одного объекта в другой для использования его функциональности, создавая отношение 'имеет' (has-a). Наследование создает отношение 'является' (is-a), где дочерний класс расширяет родительский. Пример композиции: class Engine {} class Car { constructor() { this.engine = new Engine(); } }",
+      "referenceAnswer_en": "Composition involves including one object within another to use its functionality, creating a 'has-a' relationship. Inheritance creates an 'is-a' relationship where child classes extend parent classes. Example composition: class Engine {} class Car { constructor() { this.engine = new Engine(); } }",
+      "difficulty": 2,
+      "tags": ["oop", "comparison"]
+    },
+    {
+      "id": "composition-03",
+      "word": "composition",
+      "question": "Как реализовать композицию функций в JavaScript?",
+      "question_en": "How to implement function composition in JavaScript?",
+      "referenceAnswer": "Композицию функций можно реализовать с помощью функции compose, которая принимает массив функций и возвращает новую функцию. Реализация использует reduceRight для последовательного применения функций справа налево. Пример: const compose = (...fns) => (x) => fns.reduceRight((acc, fn) => fn(acc), x); const addOne = x => x + 1; const double = x => x * 2; const addOneThenDouble = compose(double, addOne); console.log(addOneThenDouble(5)); // 12",
+      "referenceAnswer_en": "Function composition can be implemented with a compose function that takes an array of functions and returns a new function. The implementation uses reduceRight to apply functions from right to left. Example: const compose = (...fns) => (x) => fns.reduceRight((acc, fn) => fn(acc), x); const addOne = x => x + 1; const double = x => x * 2; const addOneThenDouble = compose(double, addOne); console.log(addOneThenDouble(5)); // 12",
+      "difficulty": 3,
+      "tags": ["implementation", "functional"]
+    }
+  ],
+  "immutability": [
+    {
+      "id": "immutability-01",
+      "word": "immutability",
+      "question": "Что такое иммутабельность (неизменяемость) и почему она важна?",
+      "question_en": "What is immutability and why is it important?",
+      "referenceAnswer": "Иммутабельность – это концепция, при которой данные не изменяются после создания, а любые изменения приводят к созданию новой копии данных. Это важно для предсказуемости кода, упрощает отладку, позволяет использовать ссылочное сравнение для обнаружения изменений, улучшает производительность при работе с реактивными системами и способствует написанию более надежного кода без побочных эффектов.",
+      "referenceAnswer_en": "Immutability is a concept where data cannot be changed after creation, and any modifications result in creating a new copy of the data. This is important for code predictability, simplifies debugging, enables reference comparison for detecting changes, improves performance with reactive systems, and promotes writing more reliable code without side effects.",
+      "difficulty": 1,
+      "tags": ["functional", "data-structures"]
+    },
+    {
+      "id": "immutability-02",
+      "word": "immutability",
+      "question": "Как обеспечить иммутабельность в JavaScript?",
+      "question_en": "How to ensure immutability in JavaScript?",
+      "referenceAnswer": "Иммутабельность в JavaScript можно обеспечить несколькими способами: использование Object.freeze() для заморозки объектов, использование оператора spread для создания копий, применение методов, возвращающих новые массивы. Пример: const original = { a: 1, b: 2 }; const updated = { ...original, b: 3 }; Object.freeze(updated);",
+      "referenceAnswer_en": "Immutability in JavaScript can be achieved in several ways: using Object.freeze() to freeze objects, using the spread operator to create copies, applying methods that return new arrays. Example: const original = { a: 1, b: 2 }; const updated = { ...original, b: 3 }; Object.freeze(updated);",
+      "difficulty": 2,
+      "tags": ["implementation", "patterns"]
+    },
+    {
+      "id": "immutability-03",
+      "word": "immutability",
+      "question": "Каковы компромиссы при использовании иммутабельности?",
+      "question_en": "What are the trade-offs when using immutability?",
+      "referenceAnswer": "Иммутабельность требует дополнительной памяти, так как при каждом изменении создаются новые объекты, что может привести к увеличению использования памяти и частой сборке мусора. Однако преимущества в предсказуемости, отладке и возможности оптимизации (структурное совместное использование) часто перевешивают эти затраты. Пример структурного совместного использования: const obj1 = { a: 1, b: { c: 2 } }; const obj2 = { ...obj1, b: { ...obj1.b, c: 3 } }; // b скопирован, но a разделяется",
+      "referenceAnswer_en": "Immutability requires additional memory since new objects are created with each change, potentially increasing memory usage and garbage collection frequency. However, the benefits in predictability, debugging, and optimization potential (structural sharing) often outweigh these costs. Example of structural sharing: const obj1 = { a: 1, b: { c: 2 } }; const obj2 = { ...obj1, b: { ...obj1.b, c: 3 } }; // b copied, but a is shared",
+      "difficulty": 3,
+      "tags": ["performance", "trade-offs"]
+    }
+  ],
+  "intersectionObserver": [
+    {
+      "id": "intersectionObserver-01",
+      "word": "intersectionObserver",
+      "question": "Что такое Intersection Observer API и для чего он используется?",
+      "question_en": "What is the Intersection Observer API and what is it used for?",
+      "referenceAnswer": "Intersection Observer – это API браузера, позволяющий асинхронно отслеживать пересечение элемента с его родительским контейнером или областью просмотра (viewport). Используется для реализации ленивой загрузки изображений, бесконечной прокрутки, отслеживания видимости элементов для аналитики, анимации при появлении в области видимости и других сценариев, требующих реагирования на видимость элементов.",
+      "referenceAnswer_en": "Intersection Observer is a browser API that allows asynchronously monitoring the intersection of an element with its parent container or viewport. It is used for lazy loading images, infinite scrolling, tracking element visibility for analytics, animations on appearance, and other scenarios requiring reacting to element visibility.",
+      "difficulty": 1,
+      "tags": ["web-api", "performance"]
+    },
+    {
+      "id": "intersectionObserver-02",
+      "word": "intersectionObserver",
+      "question": "Каковы преимущества Intersection Observer перед обработчиками scroll?",
+      "question_en": "What are the advantages of Intersection Observer over scroll handlers?",
+      "referenceAnswer": "Intersection Observer работает асинхронно и вне основного потока, что обеспечивает лучшую производительность по сравнению с обработчиками scroll, которые выполняются синхронно на каждый пиксель прокрутки. Observer не вызывает перекомпоновку (reflow) при проверке видимости, позволяет наблюдать за несколькими элементами одновременно и предоставляет точные данные о степени пересечения. Пример: const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) console.log('visible'); }); }); observer.observe(element);",
+      "referenceAnswer_en": "Intersection Observer works asynchronously and off the main thread, providing better performance compared to scroll handlers that execute synchronously on every scroll pixel. The Observer doesn't trigger reflow when checking visibility, allows observing multiple elements simultaneously, and provides precise intersection ratio data. Example: const observer = new IntersectionObserver(entries => { entries.forEach(entry => { if (entry.isIntersecting) console.log('visible'); }); }); observer.observe(element);",
+      "difficulty": 2,
+      "tags": ["performance", "comparison"]
+    },
+    {
+      "id": "intersectionObserver-03",
+      "word": "intersectionObserver",
+      "question": "Как настроить Intersection Observer для отслеживания частичного пересечения элемента?",
+      "question_en": "How to configure Intersection Observer to track partial element intersection?",
+      "referenceAnswer": "Для отслеживания частичного пересечения используется опция threshold в настройках observer. Threshold может быть числом от 0 до 1, указывающим долю видимости элемента для срабатывания, или массивом чисел для срабатывания на нескольких порогах. Пример: const observer = new IntersectionObserver(callback, { threshold: [0, 0.25, 0.5, 0.75, 1] });",
+      "referenceAnswer_en": "To track partial intersection, the threshold option is used in observer settings. Threshold can be a number from 0 to 1 indicating the visibility ratio for triggering, or an array of numbers to trigger at multiple thresholds. Example: const observer = new IntersectionObserver(callback, { threshold: [0, 0.25, 0.5, 0.75, 1] });",
+      "difficulty": 3,
+      "tags": ["configuration", "threshold"]
+    }
+  ],
+  "typePredicates": [
+    {
+      "id": "typePredicates-01",
+      "word": "typePredicates",
+      "question": "Что такое type predicates (предикаты типа) в TypeScript?",
+      "question_en": "What are type predicates in TypeScript?",
+      "referenceAnswer": "Type predicates – это специальный синтаксис TypeScript, который позволяет сужать тип в условных блоках. Они определяются с помощью конструкции parameterName is Type в возвращаемом типе функции. Type predicates используются в пользовательских функциях-валидаторах для точного определения типа переменной, что улучшает типобезопасность и позволяет TypeScript понимать, какой тип имеет переменная после проверки.",
+      "referenceAnswer_en": "Type predicates are a special TypeScript syntax that allows narrowing types in conditional blocks. They are defined using the parameterName is Type construct in the return type of a function. Type predicates are used in custom validator functions to precisely determine a variable's type, improving type safety and allowing TypeScript to understand the type after validation.",
+      "difficulty": 1,
+      "tags": ["typescript", "type-guards"]
+    },
+    {
+      "id": "typePredicates-02",
+      "word": "typePredicates",
+      "question": "В чем отличие type predicates от обычных type guards?",
+      "question_en": "What is the difference between type predicates and regular type guards?",
+      "referenceAnswer": "Type predicates являются одним из способов реализации type guards в TypeScript. Type guard – это любое выражение, которое проверяет тип во время выполнения и сужает тип в условной ветке. Type predicates – это конкретный синтаксис для функций, возвращающих boolean. Пример type predicate: function isString(value: unknown): value is string { return typeof value === 'string'; }",
+      "referenceAnswer_en": "Type predicates are one way to implement type guards in TypeScript. A type guard is any expression that checks types at runtime and narrows the type in a conditional branch. Type predicates are a specific syntax for functions returning boolean. Example type predicate: function isString(value: unknown): value is string { return typeof value === 'string'; }",
+      "difficulty": 3,
+      "tags": ["typescript", "comparison"]
+    },
+    {
+      "id": "typePredicates-03",
+      "word": "typePredicates",
+      "question": "Приведите пример использования type predicates для discriminated unions.",
+      "question_en": "Provide an example of using type predicates for discriminated unions.",
+      "referenceAnswer": "Type predicates особенно полезны при работе с discriminated unions (размеченными объединениями). Можно создать функцию-валидатор, которая проверяет наличие дискриминантного свойства и использует type predicate для сужения типа. Пример: type Circle = { kind: 'circle'; radius: number }; type Square = { kind: 'square'; side: number }; function isCircle(shape: Circle | Square): shape is Circle { return shape.kind === 'circle'; }",
+      "referenceAnswer_en": "Type predicates are especially useful when working with discriminated unions. You can create a validator function that checks for the presence of a discriminant property and uses a type predicate to narrow the type. Example: type Circle = { kind: 'circle'; radius: number }; type Square = { kind: 'square'; side: number }; function isCircle(shape: Circle | Square): shape is Circle { return shape.kind === 'circle'; }",
+      "difficulty": 3,
+      "tags": ["typescript", "discriminated-unions"]
+    }
+  ],
+  "utilityTypes": [
+    {
+      "id": "utilityTypes-01",
+      "word": "utilityTypes",
+      "question": "Какие встроенные utility types существуют в TypeScript?",
+      "question_en": "What built-in utility types exist in TypeScript?",
+      "referenceAnswer": "TypeScript предоставляет множество встроенных utility types: Partial делает все свойства опциональными, Required делает все свойства обязательными, Readonly делает все свойства только для чтения, Pick создает тип с выбранными свойствами, Omit исключает указанные свойства, Record создает тип с набором ключей одного типа, Exclude и Extract работают с union типами, ReturnType получает возвращаемый тип функции, Parameters получает типы параметров функции.",
+      "referenceAnswer_en": "TypeScript provides many built-in utility types: Partial makes all properties optional, Required makes all properties required, Readonly makes all properties read-only, Pick creates a type with selected properties, Omit excludes specified properties, Record creates a type with keys of one type, Exclude and Extract work with union types, ReturnType gets a function's return type, Parameters gets function parameter types.",
+      "difficulty": 1,
+      "tags": ["typescript", "utilities"]
+    },
+    {
+      "id": "utilityTypes-02",
+      "word": "utilityTypes",
+      "question": "Как создать собственный utility type?",
+      "question_en": "How to create a custom utility type?",
+      "referenceAnswer": "Собственные utility типы создаются с использованием условных типов (conditional types), оператора keyof, mapped types и других возможностей TypeScript. Пример создания DeepReadonly: type DeepReadonly<T> = { readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P]; };",
+      "referenceAnswer_en": "Custom utility types are created using conditional types, keyof operator, mapped types, and other TypeScript features. Example creating DeepReadonly: type DeepReadonly<T> = { readonly [P in keyof T]: T[P] extends object ? DeepReadonly<T[P]> : T[P]; };",
+      "difficulty": 3,
+      "tags": ["typescript", "advanced-types"]
+    },
+    {
+      "id": "utilityTypes-03",
+      "word": "utilityTypes",
+      "question": "В чем разница между Pick и Omit?",
+      "question_en": "What is the difference between Pick and Omit?",
+      "referenceAnswer": "Pick и Omit являются противоположными по смыслу utility типами. Pick создает новый тип, выбирая указанные свойства из исходного типа. Omit создает новый тип, исключая указанные свойства из исходного типа. Пример: interface User { id: number; name: string; age: number; } type UserPreview = Pick<User, 'id' | 'name'>; type UserWithoutAge = Omit<User, 'age'>;",
+      "referenceAnswer_en": "Pick and Omit are opposite utility types. Pick creates a new type by selecting specified properties from the original type. Omit creates a new type by excluding specified properties from the original type. Example: interface User { id: number; name: string; age: number; } type UserPreview = Pick<User, 'id' | 'name'>; type UserWithoutAge = Omit<User, 'age'>;",
+      "difficulty": 2,
+      "tags": ["typescript", "comparison"]
+    }
+  ],
+  "decorators": [
+    {
+      "id": "decorators-01",
+      "word": "decorators",
+      "question": "Что такое декораторы в TypeScript и для чего они используются?",
+      "question_en": "What are decorators in TypeScript and what are they used for?",
+      "referenceAnswer": "Декораторы – это экспериментальная возможность TypeScript, позволяющая добавлять метаданные и изменять поведение классов, методов, свойств и параметров. Они выглядят как функции, вызываемые с особым синтаксисом @expression. Декораторы широко используются в фреймворках (Angular, NestJS) для внедрения зависимостей, логирования, валидации, сериализации и других аспектно-ориентированных задач.",
+      "referenceAnswer_en": "Decorators are an experimental TypeScript feature that allows adding metadata and modifying behavior of classes, methods, properties, and parameters. They look like functions called with the @expression syntax. Decorators are widely used in frameworks (Angular, NestJS) for dependency injection, logging, validation, serialization, and other aspect-oriented tasks.",
+      "difficulty": 1,
+      "tags": ["typescript", "metadata"]
+    },
+    {
+      "id": "decorators-02",
+      "word": "decorators",
+      "question": "Какие типы декораторов существуют в TypeScript?",
+      "question_en": "What types of decorators exist in TypeScript?",
+      "referenceAnswer": "В TypeScript существуют пять типов декораторов: декораторы классов (применяются к конструктору класса), декораторы методов (применяются к методам), декораторы свойств (применяются к свойствам класса), декораторы параметров (применяются к параметрам методов) и декораторы аксессоров (применяются к геттерам и сеттерам). Пример декоратора метода: function log(target, key, descriptor) { const original = descriptor.value; descriptor.value = function(...args) { console.log(`Calling ${key}`); return original.apply(this, args); }; }",
+      "referenceAnswer_en": "In TypeScript, there are five types of decorators: class decorators (applied to class constructors), method decorators (applied to methods), property decorators (applied to class properties), parameter decorators (applied to method parameters), and accessor decorators (applied to getters and setters). Example method decorator: function log(target, key, descriptor) { const original = descriptor.value; descriptor.value = function(...args) { console.log(`Calling ${key}`); return original.apply(this, args); }; }",
+      "difficulty": 3,
+      "tags": ["typescript", "types"]
+    },
+    {
+      "id": "decorators-03",
+      "word": "decorators",
+      "question": "Каковы ограничения и особенности использования декораторов?",
+      "question_en": "What are the limitations and features of using decorators?",
+      "referenceAnswer": "Декораторы являются экспериментальной функцией и требуют включения в tsconfig.json (experimentalDecorators). Они выполняются во время определения класса, а не во время выполнения экземпляра. Декораторы не могут изменять сигнатуру типа, а только поведение. Пример настройки: { \"compilerOptions\": { \"experimentalDecorators\": true, \"emitDecoratorMetadata\": true } }",
+      "referenceAnswer_en": "Decorators are an experimental feature requiring enabling in tsconfig.json (experimentalDecorators). They execute at class definition time, not at instance runtime. Decorators cannot change type signatures, only behavior. Example configuration: { \"compilerOptions\": { \"experimentalDecorators\": true, \"emitDecoratorMetadata\": true } }",
+      "difficulty": 3,
+      "tags": ["typescript", "limitations"]
+    }
+  ],
+  "moduleSystems": [
+    {
+      "id": "moduleSystems-01",
+      "word": "moduleSystems",
+      "question": "Какие системы модулей существуют в JavaScript и чем они отличаются?",
+      "question_en": "What module systems exist in JavaScript and how do they differ?",
+      "referenceAnswer": "Основные системы модулей: CommonJS (используется в Node.js, синхронная загрузка, module.exports/require), ES Modules (стандарт ECMAScript, асинхронная загрузка, export/import, поддерживается в браузерах и современных версиях Node.js), AMD (асинхронная загрузка, используется RequireJS) и UMD (универсальный формат, совместимый с разными системами). ES Modules является современным стандартом, рекомендованным для новых проектов.",
+      "referenceAnswer_en": "Main module systems: CommonJS (used in Node.js, synchronous loading, module.exports/require), ES Modules (ECMAScript standard, asynchronous loading, export/import, supported in browsers and modern Node.js), AMD (asynchronous loading, used with RequireJS), and UMD (universal format, compatible with different systems). ES Modules is the modern standard, recommended for new projects.",
+      "difficulty": 1,
+      "tags": ["modules", "comparison"]
+    },
+    {
+      "id": "moduleSystems-02",
+      "word": "moduleSystems",
+      "question": "В чем разница между export default и именованным export?",
+      "question_en": "What is the difference between export default and named export?",
+      "referenceAnswer": "export default экспортирует одно значение как дефолтное, которое можно импортировать с любым именем без фигурных скобок. Именованные экспорты (export const name = value) экспортируют несколько значений, которые должны импортироваться с теми же именами в фигурных скобках. Пример: // module.js export default const A = 1; export const B = 2; // main.js import A, { B } from './module.js';",
+      "referenceAnswer_en": "export default exports a single value as the default, which can be imported with any name without curly braces. Named exports (export const name = value) export multiple values that must be imported with the same names in curly braces. Example: // module.js export default const A = 1; export const B = 2; // main.js import A, { B } from './module.js';",
+      "difficulty": 2,
+      "tags": ["modules", "syntax"]
+    },
+    {
+      "id": "moduleSystems-03",
+      "word": "moduleSystems",
+      "question": "Как работает динамический импорт и когда его использовать?",
+      "question_en": "How does dynamic import work and when to use it?",
+      "referenceAnswer": "Динамический импорт (import()) позволяет загружать модули асинхронно во время выполнения, возвращая Promise. Он используется для code splitting, lazy loading компонентов, условной загрузки модулей и уменьшения начального размера бандла. Пример: button.addEventListener('click', async () => { const module = await import('./heavy-module.js'); module.run(); });",
+      "referenceAnswer_en": "Dynamic import (import()) allows loading modules asynchronously at runtime, returning a Promise. It is used for code splitting, lazy loading components, conditional module loading, and reducing initial bundle size. Example: button.addEventListener('click', async () => { const module = await import('./heavy-module.js'); module.run(); });",
+      "difficulty": 2,
+      "tags": ["modules", "async"]
+    }
+  ],
+  "serviceWorkers": [
+    {
+      "id": "serviceWorkers-01",
+      "word": "serviceWorkers",
+      "question": "Что такое Service Worker и какие задачи он решает?",
+      "question_en": "What is a Service Worker and what problems does it solve?",
+      "referenceAnswer": "Service Worker – это специальный скрипт, работающий в фоновом режиме, независимо от веб-страницы. Он решает задачи: кэширование ресурсов для работы офлайн, push-уведомления, фоновая синхронизация данных, перехват и обработка сетевых запросов. Service Worker работает как прокси-сервер между приложением и сетью, что позволяет создавать Progressive Web Apps (PWA).",
+      "referenceAnswer_en": "A Service Worker is a special script that runs in the background, independent of the web page. It solves problems: caching resources for offline work, push notifications, background data synchronization, intercepting and handling network requests. Service Worker acts as a proxy between the application and the network, enabling Progressive Web Apps (PWA).",
+      "difficulty": 1,
+      "tags": ["web-api", "pwa"]
+    },
+    {
+      "id": "serviceWorkers-02",
+      "word": "serviceWorkers",
+      "question": "Каков жизненный цикл Service Worker?",
+      "question_en": "What is the lifecycle of a Service Worker?",
+      "referenceAnswer": "Жизненный цикл Service Worker включает этапы: регистрация (регистрируется в браузере), установка (установка после загрузки, событие install), ожидание (активация после закрытия всех вкладок со старой версией), активация (событие activate, очистка старого кэша), работа (перехват запросов) и обновление (при обнаружении нового файла). Пример регистрации: navigator.serviceWorker.register('/sw.js').then(reg => console.log('Registered'));",
+      "referenceAnswer_en": "The Service Worker lifecycle includes stages: registration (registered in browser), installation (after loading, install event), waiting (activation after all tabs with old version close), activation (activate event, clearing old cache), working (intercepting requests), and update (when new file is detected). Example registration: navigator.serviceWorker.register('/sw.js').then(reg => console.log('Registered'));",
+      "difficulty": 3,
+      "tags": ["lifecycle", "pwa"]
+    },
+    {
+      "id": "serviceWorkers-03",
+      "word": "serviceWorkers",
+      "question": "Каковы ограничения Service Worker?",
+      "question_en": "What are the limitations of Service Workers?",
+      "referenceAnswer": "Service Worker работает только через HTTPS или localhost для безопасности, не имеет доступа к DOM, требует управления версиями кэша, работает только с областью видимости (scope), ограничен одним на origin, не может хранить данные в localStorage (использует Cache API или IndexedDB). Пример использования Cache API: caches.open('v1').then(cache => cache.addAll(['/styles.css', '/script.js']));",
+      "referenceAnswer_en": "Service Workers only work over HTTPS or localhost for security, have no DOM access, require cache versioning, are limited to their scope, only one per origin, cannot store data in localStorage (use Cache API or IndexedDB). Example using Cache API: caches.open('v1').then(cache => cache.addAll(['/styles.css', '/script.js']));",
+      "difficulty": 3,
+      "tags": ["limitations", "security"]
+    }
+  ]
+}

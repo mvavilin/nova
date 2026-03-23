@@ -25,7 +25,7 @@ export default class AboutButton extends ButtonComponent {
     this.setContent(t(TranslationKeys.WELCOME_ABOUT));
     this.setListeners({
       click: (): void => {
-        store.dispatch({ type: WelcomeActions.SHOW_GAME_RULES });
+        store.dispatch({ type: WelcomeActions.SHOW_ABOUT_US });
       },
     });
   }

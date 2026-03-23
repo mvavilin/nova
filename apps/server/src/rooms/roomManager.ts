@@ -121,7 +121,9 @@ export class RoomManager {
       }
     }
 
-    const player = this.getPlayer(userId) || this.addPlayerToLobby({ userId, username });
+    const player =
+      this.getPlayer(userId) ||
+      this.addPlayerToLobby({ userId, username, team: 'choosing', role: 'choosing' });
     return { userStatus: 'IN_LOBBY', player, recipients: [] };
   }
 

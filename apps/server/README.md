@@ -577,7 +577,7 @@ The main disadvantage is that socket.io requires an authentication token during 
     - Response to all users in room
 
     ```
-      { type: 'room:player-joined'; payload: { player: Player } }
+      { type: 'room:player-joined'; payload: { roomInfo: RoomInfo } }
     ```
 
     - Response in case of an error
@@ -600,6 +600,12 @@ The main disadvantage is that socket.io requires an authentication token during 
       { type: 'room:leave' }
     ```
 
+    - Response to the user who sent the request
+
+    ```
+      { type: 'room:state'; payload: { roomPreviews: RoomPreview[] } }
+    ```
+
     - Response to all users in lobby
 
     ```
@@ -609,7 +615,37 @@ The main disadvantage is that socket.io requires an authentication token during 
     - Response to all users in room
 
     ```
-      { type: 'room:player-left'; payload: { player: Player } }
+      { type: 'room:player-left'; payload: { roomInfo: RoomInfo } }
+    ```
+
+    </details>
+
+  - **Change the player's team and role**
+
+    <details>
+
+    - Request to server
+  
+    ```
+      { type: 'team:change'; payload: { player: Player }
+    ```
+
+    - Response to all users in room
+   
+    ```
+      { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
+    ```
+ 
+    - If commands and roles are assigned, a timer starts. A message is sent to all users in the room every second
+   
+    ```
+      { type: 'game:start-timer'; payload: { time: number } }
+    ```
+ 
+    - When the timer expires (15 seconds), a message will be sent to all users in the room
+   
+    ```
+      { type: 'game:start' }
     ```
 
     </details>
@@ -663,12 +699,26 @@ The main disadvantage is that socket.io requires an authentication token during 
     }
   ```
 
+  - Team types
+
+  ```
+    export type Teams = 'red' | 'blue' | 'choosing';
+  ```
+
+  - Role types
+ 
+  ```
+    export type Roles = 'spymaster' | 'agent' | 'choosing';
+  ```
+
   - Player information for display on the Room page
 
   ```
     export type Player = {
       userId: string;
       username: string;
+      team: Team;
+      rome: Role;
     };
   ```
 
@@ -679,7 +729,10 @@ The main disadvantage is that socket.io requires an authentication token during 
       id: string;
       name: string;
       maxPlayers: number;
-      players: Player[];
+      playerCount: number;
+      redPlayers: Player[];
+      bluePlayers: Player[];
+      choosingPlayers: Player[];
     }
   ```
 

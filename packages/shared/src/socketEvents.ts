@@ -5,10 +5,8 @@ export enum ClientEventType {
   ROOM_ASK_LIST = 'room:ask-list',
   ROOM_SEARCH = 'room:search',
   ROOM_JOIN = 'room:join',
-  ROOM_STATE = 'room:state',
-  ROOM_CHOOSE_TEAM = 'room:choose-team',
-  ROOM_LEAVE_TEAM = 'room:leave-team',
-  ROOM_LEAVE_ROOM = 'room:leave-room',
+  LEAVE_ROOM = 'room:leave',
+  TEAM_CHANGE = 'team:change',
 }
 
 export enum ServerEventType {
@@ -22,9 +20,9 @@ export enum ServerEventType {
   ERROR = 'error',
   CONNECT_ERROR = 'connect_error',
   CONNECT = 'connect',
-  ROOM_CHOOSE_TEAM = 'room:choose-team',
-  ROOM_LEAVE_TEAM = 'room:leave-team',
-  ROOM_CHANGE = 'room:change',
+  TEAM_CHANGED = 'team:changed',
+  START_TIMER_GAME = 'start:timer-game',
+  START_GAME = 'start:game',
 }
 
 export enum SocketErrorCode {
@@ -43,9 +41,7 @@ type ClientEvent =
   | { type: 'room:leave' }
   | { type: 'room:ask-room-info' }
   | { type: 'session:ask-status' }
-  | { type: 'room:state'; payload: { roomInfo: RoomInfo } }
-  | { type: 'room:choose-team'; payload: { player: Player } }
-  | { type: 'room:leave-team'; payload: { player: Player } };
+  | { type: 'team:change'; payload: { player: Player } };
 
 type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
@@ -58,12 +54,12 @@ type ServerEvent =
   | { type: 'room:created'; payload: { roomPreview: RoomPreview } }
   | { type: 'room:state'; payload: { roomInfo: RoomInfo } }
   | { type: 'room:update-review'; payload: { roomPreview: RoomPreview } }
-  | { type: 'room:player-joined'; payload: { player: Player } }
-  | { type: 'room:player-left'; payload: { player: Player } }
-  | { type: 'error'; payload: { code: ErrorCode } }
-  | { type: 'room:choose-team'; payload: { player: Player } }
-  | { type: 'room:leave-team'; payload: { player: Player } }
-  | { type: 'room:change'; payload: { roomInfo: RoomInfo } };
+  | { type: 'room:player-joined'; payload: { roomInfo: RoomInfo } }
+  | { type: 'room:player-left'; payload: { roomInfo: RoomInfo } }
+  | { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
+  | { type: 'game:start-timer'; payload: { count: number } }
+  | { type: 'game:start' }
+  | { type: 'error'; payload: { code: ErrorCode } };
 
 export type ErrorCode =
   | 'ROOM_NOT_FOUND'

@@ -3,8 +3,8 @@ import type { State } from '@State';
 import { Language } from '@types';
 
 export const initialState: State = {
-  id: '111',
-  username: 'Alice',
+  id: '666',
+  username: 'Rino',
   email: null,
   authStatus: false,
   language: Language.RU,

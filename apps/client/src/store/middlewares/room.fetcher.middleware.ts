@@ -8,7 +8,21 @@ import { showErrorToast } from '@utils';
 import store from '../store';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
-  socketClient.onRoomChange(({ roomInfo }) => {
+  socketClient.onPlayerJoined(({ roomInfo }) => {
+    store.dispatch({
+      type: RoomPageActionTypes.SET_ROOM_DATA,
+      payload: { roomInfo },
+    });
+  });
+
+  socketClient.onPlayerLeft(({ roomInfo }) => {
+    store.dispatch({
+      type: RoomPageActionTypes.SET_ROOM_DATA,
+      payload: { roomInfo },
+    });
+  });
+
+  socketClient.onTeamChanged(({ roomInfo }) => {
     store.dispatch({
       type: RoomPageActionTypes.SET_ROOM_DATA,
       payload: { roomInfo },
@@ -16,7 +30,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
   });
 
   return function middleware(context) {
-    if (context.action.type === RoomPageActionTypes.CHOOSE_TEAM) {
+    if (context.action.type === RoomPageActionTypes.TEAM_CHANGE) {
       try {
         const player = context.action.payload;
 
@@ -26,23 +40,21 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.off(ServerEventType.ERROR);
         });
 
-        socketClient.emit(ClientEventType.ROOM_CHOOSE_TEAM, { player });
+        socketClient.emit(ClientEventType.TEAM_CHANGE, { player });
       } catch (error) {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
       }
     }
 
-    if (context.action.type === RoomPageActionTypes.LEAVE_TEAM) {
+    if (context.action.type === RoomPageActionTypes.LEAVE_ROOM) {
       try {
-        const player = context.action.payload;
-
         socketClient.onError(({ code }) => {
           showErrorToast(code, SOCKET_ERROR_MESSAGES.ON_ERROR);
 
           socketClient.off(ServerEventType.ERROR);
         });
 
-        socketClient.emit(ClientEventType.ROOM_LEAVE_TEAM, { player });
+        socketClient.emit(ClientEventType.LEAVE_ROOM);
       } catch (error) {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
       }

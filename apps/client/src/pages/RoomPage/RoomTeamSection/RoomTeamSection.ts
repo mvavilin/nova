@@ -8,7 +8,7 @@ import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 import store from '@/store/store';
 import { AppActionTypes, RoomPageActionTypes } from '@/store/actions';
-import type { Player } from '@shared/types/room';
+import type { Player, Teams } from '@shared/types/room';
 
 const styles = {
   container:
@@ -21,9 +21,9 @@ const styles = {
 };
 
 export default class RoomTeamSection extends ContainerComponent {
-  private title: HeadingComponent | null = null;
+  private teamName: Teams;
   private isRedTeam: boolean = false;
-  private teamName: string;
+  private title: HeadingComponent | null = null;
   private listContainer: ListComponent | null = null;
   private buttons: RoomTeamButtons | null = null;
 
@@ -58,7 +58,7 @@ export default class RoomTeamSection extends ContainerComponent {
 
     this.listContainer = new ListComponent({ type: 'ol', classes: styles.list });
 
-    this.buttons = new RoomTeamButtons({ teamName: teamName });
+    this.buttons = new RoomTeamButtons({ teamName });
     this.appendChildren([this.title, this.listContainer, this.buttons]);
 
     this.updatePlayersList(players);
@@ -74,10 +74,22 @@ export default class RoomTeamSection extends ContainerComponent {
     }
   }
 
+  // private getCurrentRole(): Roles | undefined {
+  //   const room = store.getState().currentRoom;
+  //   const myId = store.getState().id;
+
+  //   if (!room || !myId) return;
+  //   if (!room) return;
+  //   const allPlayers = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
+  //   const me = allPlayers.find((player) => player.userId === myId);
+  //   return me ? me.role : undefined;
+  // }
+
   private handleStateChange(_state: State, action: Action): void {
     if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
       const room = store.getState().currentRoom;
       const myId = store.getState().id;
+
       if (!room || !myId) return;
 
       const currentPlayers = this.teamName === 'red' ? room.redPlayers : room.bluePlayers;
@@ -85,6 +97,7 @@ export default class RoomTeamSection extends ContainerComponent {
 
       const allPlayers = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
       const me = allPlayers.find((player) => player.userId === myId);
+
       const myTeam = me ? me.team : null;
       this.buttons?.update(myTeam, this.teamName);
     }

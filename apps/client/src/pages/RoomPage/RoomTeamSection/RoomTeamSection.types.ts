@@ -1,7 +1,7 @@
 import type { ContainerComponentProperties } from '@/api/ComponentsAPI';
-import type { Player } from '@shared/types/room';
+import type { Player, Teams } from '@shared/types/room';
 
 export interface TeamSectionProps extends ContainerComponentProperties {
-  teamName: string;
+  teamName: Teams;
   players: Player[];
 }

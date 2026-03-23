@@ -13,11 +13,15 @@ export interface RoomPreview {
   status: RoomStatus;
 }
 
+export type Teams = 'red' | 'blue' | 'choosing';
+
+export type Roles = 'spymaster' | 'agent' | 'choosing';
+
 export type Player = {
   userId: string;
   username: string;
-  team: string;
-  role: string;
+  team: Teams;
+  role: Roles;
 };
 
 export interface RoomInfo {

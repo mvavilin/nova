@@ -1,33 +1,33 @@
-import type { RoomInfo } from '@shared/types/room';
+import type { Player, RoomInfo } from '@shared/types/room';
 
-const choosingPlayers = [
+const choosingPlayers: Player[] = [
   {
     userId: '555',
     username: 'Ameli',
-    team: '',
-    role: '',
+    team: 'choosing',
+    role: 'choosing',
   },
   {
     userId: '666',
     username: 'Rino',
-    team: '',
-    role: '',
+    team: 'choosing',
+    role: 'choosing',
   },
   {
     userId: '777',
     username: 'Sydni',
-    team: '',
-    role: '',
+    team: 'choosing',
+    role: 'choosing',
   },
   {
     userId: '888',
     username: 'Alex',
-    team: '',
-    role: '',
+    team: 'choosing',
+    role: 'choosing',
   },
 ];
 
-const red = [
+const red: Player[] = [
   {
     userId: '111',
     username: 'Aliceeeee',
@@ -42,7 +42,7 @@ const red = [
   },
 ];
 
-const blue = [
+const blue: Player[] = [
   {
     userId: '333',
     username: 'Nick',

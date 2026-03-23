@@ -6,7 +6,7 @@ import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 import store from '@/store/store';
 import { AppActionTypes, RoomPageActionTypes } from '@/store/actions';
-import type { Player } from '@shared/types/room';
+import type { Player, Teams } from '@shared/types/room';
 
 const styles = {
   container: 'flex flex-col items-center gap-5',
@@ -31,7 +31,7 @@ export default class RoomTeamButtons extends ContainerComponent {
     this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
   }
 
-  private render(teamName: string): void {
+  private render(teamName: Teams): void {
     const buttonColor = teamName === 'red' ? styles.buttonRed : styles.buttonBlue;
     const buttonStyle = `${styles.button} ${buttonColor}`;
     const containerRoleButtons = new ContainerComponent({ classes: styles.containerRoleBtn });
@@ -61,14 +61,17 @@ export default class RoomTeamButtons extends ContainerComponent {
     });
 
     this.appendChildren([containerRoleButtons, this.leaveButton]);
-    this.update(null, teamName);
-  }
-  private getCurrentRole(): string | undefined {
+
     const room = store.getState().currentRoom;
-    if (!room) return;
-    const players = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
-    const user = players.find((player) => player.userId === this.userId);
-    return user ? user.role : undefined;
+    const myId = store.getState().id;
+
+    if (!room || !myId) return;
+
+    const allPlayers = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
+    const me = allPlayers.find((player) => player.userId === myId);
+
+    const myTeam = me ? me.team : null;
+    this.update(myTeam, teamName);
   }
 
   private switchLanguage(_state: State, action: Action): void {
@@ -81,7 +84,7 @@ export default class RoomTeamButtons extends ContainerComponent {
     }
   }
 
-  private playAsSpymaster(teamName: string): void {
+  private playAsSpymaster(teamName: Teams): void {
     if (!this.userId || !this.userName) return;
 
     const player: Player = {
@@ -92,12 +95,12 @@ export default class RoomTeamButtons extends ContainerComponent {
     };
 
     store.dispatch({
-      type: RoomPageActionTypes.CHOOSE_TEAM,
+      type: RoomPageActionTypes.TEAM_CHANGE,
       payload: player,
     });
   }
 
-  private playAsAgent(teamName: string): void {
+  private playAsAgent(teamName: Teams): void {
     if (!this.userId || !this.userName) return;
 
     const player: Player = {
@@ -108,29 +111,28 @@ export default class RoomTeamButtons extends ContainerComponent {
     };
 
     store.dispatch({
-      type: RoomPageActionTypes.CHOOSE_TEAM,
+      type: RoomPageActionTypes.TEAM_CHANGE,
       payload: player,
     });
   }
 
-  private leaveTeam(teamName: string): void {
-    const role = this.getCurrentRole();
-    if (!this.userId || !this.userName || !role) return;
+  private leaveTeam(teamName: Teams): void {
+    if (!this.userId || !this.userName) return;
 
     const player: Player = {
       userId: this.userId,
       username: this.userName,
       team: teamName,
-      role: role,
+      role: 'choosing',
     };
 
     store.dispatch({
-      type: RoomPageActionTypes.LEAVE_TEAM,
+      type: RoomPageActionTypes.TEAM_CHANGE,
       payload: player,
     });
   }
 
-  public update(myTeam: string | null, sectionTeam: string): void {
+  public update(myTeam: Teams | null, sectionTeam: string): void {
     if (!this.spyButton || !this.agentButton || !this.leaveButton) return;
 
     const hasTeam = myTeam !== null && myTeam !== 'choosing';
@@ -138,7 +140,7 @@ export default class RoomTeamButtons extends ContainerComponent {
 
     // Блокируем, если я УЖЕ в какой-то команде
     this.toggleButton(this.spyButton, hasTeam);
-    this.toggleButton(this.spyButton, hasTeam);
+    this.toggleButton(this.agentButton, hasTeam);
 
     // leave оказываем и активируем только если я в ЭТОЙ команде
     if (isMyTeam) {

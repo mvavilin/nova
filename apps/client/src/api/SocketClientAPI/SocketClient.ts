@@ -1,5 +1,5 @@
 import type { Player, RoomInfo, RoomPreview } from '@repo/shared/src/types/room';
-import { ServerEventType, type ErrorCode } from '@repo/shared/src/socketEvents';
+import { ServerEventType, type ErrorCode, type UserStatus } from '@repo/shared/src/socketEvents';
 import { ServerUrl } from '@repo/shared/src/api.constants';
 
 import { BaseSocketClient } from '@SocketClientAPI';
@@ -45,6 +45,10 @@ class SocketClient extends BaseSocketClient {
     } catch (error) {
       showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
     }
+  }
+
+  public onSessionConnect(handler: (payload: { userStatus: UserStatus }) => void): void {
+    this.socket.on(ServerEventType.SESSION_CONNECT, handler);
   }
 }
 

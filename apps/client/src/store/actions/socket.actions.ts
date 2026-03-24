@@ -6,6 +6,7 @@ export enum SocketActionTypes {
   SOCKET_CREATE_ROOM = 'SOCKET/CREATE_ROOM',
   SOCKET_REQUEST_ROOM_LIST = 'SOCKET/REQUEST_ROOM_LIST',
   SOCKET_JOIN_ROOM = 'SOCKET/JOIN_ROOM',
+  ROOM_ASK_ROOM_INFO = 'SOCKET/ROOM_ASK_ROOM_INFO',
 }
 
 type SocketRequestSessionToken = {
@@ -31,9 +32,14 @@ type SocketJoinRoom = {
   payload: { roomId: string };
 };
 
+type SocketRoomAskRoomInfo = {
+  type: SocketActionTypes.ROOM_ASK_ROOM_INFO;
+};
+
 export type SocketActions =
   | SocketRequestSessionToken
   | SocketAuthFailed
   | SocketCreateRoom
   | SocketRequestRoomList
-  | SocketJoinRoom;
+  | SocketJoinRoom
+  | SocketRoomAskRoomInfo;

@@ -6,10 +6,12 @@ export enum ClientEventType {
   ROOM_SEARCH = 'room:search',
   ROOM_JOIN = 'room:join',
   ROOM_LEAVE = 'room:leave',
+  ROOM_ASK_ROOM_INFO = 'room:ask-room-info',
 }
 
 export enum ServerEventType {
   SESSION_TOKEN = 'session:token',
+  SESSION_CONNECT = 'session:connect',
   ROOM_SEND_LIST = 'room:send-list',
   ROOM_CREATED = 'room:created',
   ROOM_STATE = 'room:state',
@@ -25,6 +27,12 @@ export enum SocketErrorCode {
   ROOM_NOT_FOUND = 'ROOM_NOT_FOUND',
   ROOM_FULL = 'ROOM_FULL',
   INVALID_ACTION = 'INVALID_ACTION',
+}
+
+export enum UserStatusType {
+  IN_LOBBY = 'IN_LOBBY',
+  IN_ROOM = 'IN_ROOM',
+  IN_GAME = 'IN_GAME',
 }
 
 export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME';

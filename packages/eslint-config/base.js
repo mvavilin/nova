@@ -93,6 +93,13 @@ export default [
   },
 
   {
+    files: ['**/socket.fetcher.middleware.ts'],
+    rules: {
+      'max-lines-per-function': 'off',
+    },
+  },
+
+  {
     ignores: ['dist/**', 'node_modules/**', 'apps/server/generated/**'],
   },
 ];

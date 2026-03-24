@@ -1,6 +1,6 @@
 import type { Middleware } from '@StateAPI';
 import type { AppActions } from '@AppActions';
-import { ClientEventType, ServerEventType } from '@repo/shared/src/socketEvents';
+import { ClientEventType, ServerEventType, UserStatusType } from '@repo/shared/src/socketEvents';
 
 import { socketClient } from '@SocketClientAPI';
 import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
@@ -10,6 +10,7 @@ import { router } from '@router';
 
 import TOKENS from '@constants/tokens';
 import { saveSessionStorageData, showErrorToast } from '@utils';
+import store from '@store';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
@@ -21,9 +22,16 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
 
         socketClient.onSessionToken(({ sessionToken }) => {
           saveSessionStorageData(TOKENS.SESSION, sessionToken);
-          router.navigate(URLS.LOBBY());
-          // chore: remove in production
-          // router.navigate(URLS.GAME('27626bdf-f197-4c9d-8dd5-0cd1426f1f71'));
+
+          socketClient.off(ServerEventType.SESSION_TOKEN);
+        });
+
+        socketClient.onSessionConnect(({ userStatus }) => {
+          if (userStatus === UserStatusType.IN_LOBBY) router.navigate(URLS.LOBBY());
+          if (userStatus === UserStatusType.IN_ROOM)
+            store.dispatch({
+              type: SocketActionTypes.ROOM_ASK_ROOM_INFO,
+            });
 
           socketClient.off(ServerEventType.SESSION_TOKEN);
         });
@@ -76,6 +84,14 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         });
 
         socketClient.emit(ClientEventType.ROOM_JOIN, { roomId });
+      } catch (error) {
+        showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
+      }
+    }
+
+    if (context.action.type === SocketActionTypes.SOCKET_REQUEST_ROOM_LIST) {
+      try {
+        socketClient.emit(ClientEventType.ROOM_ASK_ROOM_INFO);
       } catch (error) {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
       }

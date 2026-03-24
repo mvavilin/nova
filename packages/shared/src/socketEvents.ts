@@ -12,6 +12,9 @@ export enum ClientEventType {
 export enum ServerEventType {
   SESSION_TOKEN = 'session:token',
   SESSION_CONNECT = 'session:connect',
+  SESSION_PLAYER_CONNECTED = 'session:player-connected',
+  SESSION_PLAYER_DISCONNECTED = 'session:player-disconnected',
+  SESSION_PLAYER_EXIT = 'session:player-exit',
   ROOM_SEND_LIST = 'room:send-list',
   ROOM_CREATED = 'room:created',
   ROOM_STATE = 'room:state',

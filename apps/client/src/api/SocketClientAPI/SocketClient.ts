@@ -1,4 +1,4 @@
-import type { RoomInfo, RoomPreview } from '@repo/shared/src/types/room';
+import type { Player, RoomInfo, RoomPreview } from '@repo/shared/src/types/room';
 import { ServerEventType, type ErrorCode, type UserStatus } from '@repo/shared/src/socketEvents';
 import { ServerUrl } from '@repo/shared/src/api.constants';
 
@@ -49,6 +49,18 @@ class SocketClient extends BaseSocketClient {
 
   public onSessionConnect(handler: (payload: { userStatus: UserStatus }) => void): void {
     this.socket.on(ServerEventType.SESSION_CONNECT, handler);
+  }
+
+  public onSessionPlayerConnected(handler: (payload: { player: Player }) => void): void {
+    this.socket.on(ServerEventType.SESSION_PLAYER_CONNECTED, handler);
+  }
+
+  public onSessionPlayerDisconnected(handler: (payload: { player: Player }) => void): void {
+    this.socket.on(ServerEventType.SESSION_PLAYER_DISCONNECTED, handler);
+  }
+
+  public onSessionPlayerExit(handler: (payload: { player: Player }) => void): void {
+    this.socket.on(ServerEventType.SESSION_PLAYER_EXIT, handler);
   }
 }
 

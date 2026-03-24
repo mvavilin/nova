@@ -1,4 +1,4 @@
-import type { RoomSettings } from '@repo/shared/src/types/room';
+import type { Player, RoomInfo, RoomSettings } from '@repo/shared/src/types/room';
 
 export enum SocketActionTypes {
   SOCKET_REQUEST_SESSION_TOKEN = 'SOCKET/REQUEST_SESSION_TOKEN',
@@ -7,6 +7,10 @@ export enum SocketActionTypes {
   SOCKET_REQUEST_ROOM_LIST = 'SOCKET/REQUEST_ROOM_LIST',
   SOCKET_JOIN_ROOM = 'SOCKET/JOIN_ROOM',
   ROOM_ASK_ROOM_INFO = 'SOCKET/ROOM_ASK_ROOM_INFO',
+  ROOM_STATE = 'SOCKET/ROOM_STATE',
+  SESSION_PLAYER_CONNECTED = 'SOCKET/SESSION_PLAYER_CONNECTED',
+  SESSION_PLAYER_DISCONNECTED = 'SOCKET/SESSION_PLAYER_DISCONNECTED',
+  SESSION_PLAYER_EXIT = 'SOCKET/SESSION_PLAYER_EXIT',
 }
 
 type SocketRequestSessionToken = {
@@ -36,10 +40,34 @@ type SocketRoomAskRoomInfo = {
   type: SocketActionTypes.ROOM_ASK_ROOM_INFO;
 };
 
+type SocketRoomState = {
+  type: SocketActionTypes.ROOM_STATE;
+  payload: { roomInfo: RoomInfo };
+};
+
+type SocketSessionPlayerConnected = {
+  type: SocketActionTypes.SESSION_PLAYER_CONNECTED;
+  payload: { player: Player };
+};
+
+type SocketSessionPlayerDisconnected = {
+  type: SocketActionTypes.SESSION_PLAYER_DISCONNECTED;
+  payload: { player: Player };
+};
+
+type SocketSessionPlayerExit = {
+  type: SocketActionTypes.SESSION_PLAYER_EXIT;
+  payload: { player: Player };
+};
+
 export type SocketActions =
   | SocketRequestSessionToken
   | SocketAuthFailed
   | SocketCreateRoom
   | SocketRequestRoomList
   | SocketJoinRoom
-  | SocketRoomAskRoomInfo;
+  | SocketRoomState
+  | SocketSessionPlayerConnected
+  | SocketSessionPlayerDisconnected
+  | SocketRoomAskRoomInfo
+  | SocketSessionPlayerExit;

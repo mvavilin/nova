@@ -11,6 +11,8 @@ import { router } from '@router';
 import TOKENS from '@constants/tokens';
 import { saveSessionStorageData, showErrorToast } from '@utils';
 import store from '@store';
+import { Toast } from '@components';
+import MessageType from '@constants/messageType';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
@@ -27,6 +29,8 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         });
 
         socketClient.onSessionConnect(({ userStatus }) => {
+          console.log(userStatus);
+
           if (userStatus === UserStatusType.IN_LOBBY) router.navigate(URLS.LOBBY());
           if (userStatus === UserStatusType.IN_ROOM)
             store.dispatch({
@@ -67,6 +71,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
       }
     }
 
+    // точка входа в комнату
     if (context.action.type === SocketActionTypes.SOCKET_JOIN_ROOM) {
       try {
         const { roomId } = context.action.payload;
@@ -83,14 +88,63 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.off(ServerEventType.ROOM_STATE);
         });
 
+        socketClient.onSessionPlayerConnected(({ player }) => {
+          new Toast({
+            type: MessageType.INFO,
+            message: `Пользователь ${player.username} присоединился к комнате`,
+          });
+        });
+
+        socketClient.onSessionPlayerDisconnected(({ player }) => {
+          new Toast({
+            type: MessageType.WARNING,
+            message: `Пользователь ${player.username} покинул комнату`,
+          });
+        });
+
+        socketClient.onSessionPlayerExit(({ player }) => {
+          new Toast({
+            type: MessageType.ERROR,
+            message: `Пользователь ${player.username} вышел из системы`,
+          });
+        });
+
         socketClient.emit(ClientEventType.ROOM_JOIN, { roomId });
       } catch (error) {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
       }
     }
 
-    if (context.action.type === SocketActionTypes.SOCKET_REQUEST_ROOM_LIST) {
+    // точка реконнекта пользователя, включающая запрос информации о комнате и навигацию в нее
+    if (context.action.type === SocketActionTypes.ROOM_ASK_ROOM_INFO) {
       try {
+        socketClient.onRoomState(({ roomInfo }) => {
+          router.navigate(URLS.ROOM(roomInfo.id));
+
+          socketClient.off(ServerEventType.ROOM_STATE);
+        });
+
+        socketClient.onSessionPlayerConnected(({ player }) => {
+          new Toast({
+            type: MessageType.INFO,
+            message: `Пользователь ${player.username} переподключился к комнате`,
+          });
+        });
+
+        socketClient.onSessionPlayerDisconnected(({ player }) => {
+          new Toast({
+            type: MessageType.WARNING,
+            message: `Пользователь ${player.username} покинул комнату`,
+          });
+        });
+
+        socketClient.onSessionPlayerExit(({ player }) => {
+          new Toast({
+            type: MessageType.ERROR,
+            message: `Пользователь ${player.username} вышел из системы`,
+          });
+        });
+
         socketClient.emit(ClientEventType.ROOM_ASK_ROOM_INFO);
       } catch (error) {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);

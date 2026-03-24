@@ -29,13 +29,17 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         });
 
         socketClient.onSessionConnect(({ userStatus }) => {
-          console.log(userStatus);
-
           if (userStatus === UserStatusType.IN_LOBBY) router.navigate(URLS.LOBBY());
           if (userStatus === UserStatusType.IN_ROOM)
             store.dispatch({
               type: SocketActionTypes.ROOM_ASK_ROOM_INFO,
             });
+
+          socketClient.off(ServerEventType.SESSION_TOKEN);
+        });
+
+        socketClient.onError(({ code }) => {
+          showErrorToast(code, SOCKET_ERROR_MESSAGES.GENERAL_ERROR);
 
           socketClient.off(ServerEventType.SESSION_TOKEN);
         });

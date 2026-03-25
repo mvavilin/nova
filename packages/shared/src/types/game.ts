@@ -1,4 +1,4 @@
-import type { Player, Teams } from './room';
+import type { Player, Teams } from './room.ts';
 
 export interface GameInfo {
   redTeam: Player[];

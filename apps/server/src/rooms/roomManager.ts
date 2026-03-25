@@ -135,6 +135,16 @@ export class RoomManager {
     player: Player;
     recipients: string[];
   } {
+    for (const game of this.games) {
+      if (game.getPlayerIds().includes(userId)) {
+        const player = game.getPlayer(userId);
+        const recipients = game.getPlayerIds().filter((item) => item !== userId);
+        if (player) {
+          return { userStatus: 'IN_GAME', player, recipients };
+        }
+      }
+    }
+
     for (const room of this.rooms) {
       if (room.getPlayerIds().includes(userId)) {
         const player = room.getPlayer(userId);

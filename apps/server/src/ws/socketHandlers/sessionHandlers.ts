@@ -124,9 +124,21 @@ function exitPlayer(userId: string, player: Player, recipients: string[]): void 
     }
   }
 
-  const response = roomManager.leaveRoom(userId);
-  if ('roomPreviews' in response) {
-    const { roomPreview, lobbyRecipients } = response;
+  const gameResponse = roomManager.leaveGame(userId);
+  if (!('error' in gameResponse)) {
+    const { roomInfo, roomRecipients } = gameResponse;
+    for (const recipient of roomRecipients) {
+      const socketId = socketIdMap.get(recipient);
+      if (socketId) {
+        io.to(socketId).emit('room:state', { roomInfo });
+        logger.emit(recipient, 'room:state', { roomInfo });
+      }
+    }
+  }
+
+  const roomResponse = roomManager.leaveRoom(userId);
+  if (!('error' in roomResponse)) {
+    const { roomPreview, lobbyRecipients } = roomResponse;
     for (const recipient of lobbyRecipients) {
       const socketId = socketIdMap.get(recipient);
       if (socketId) {

@@ -1,4 +1,4 @@
-import { BaseComponent, ContainerComponent, HeadingComponent } from '@/api/ComponentsAPI';
+import { ListComponent, ContainerComponent, HeadingComponent } from '@/api/ComponentsAPI';
 import RoomUser from '../RoomUser/RoomUser';
 import type { RoomChoosingUsersProps } from './RoomChoosingPlayers.types';
 import type { Player } from '@shared/types/room';
@@ -7,7 +7,7 @@ import { t } from '@/i18n';
 import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 import store from '@/store/store';
-import { AppActionTypes } from '@/store/actions';
+import { AppActionTypes, RoomPageActionTypes } from '@/store/actions';
 
 const styles = {
   container:
@@ -15,16 +15,20 @@ const styles = {
   title: 'text-2xl text-center font-bold',
   list: 'w-full grid grid-cols-[repeat(auto-fill,150px)] justify-center items-center gap-5',
 };
+
 export default class RoomChoosingPlayers extends ContainerComponent {
-  private usersList: RoomUser[] = [];
+  private listContainer: ListComponent | null = null;
   private title: HeadingComponent | null = null;
 
   constructor({ players }: RoomChoosingUsersProps) {
     super({ classes: styles.container });
 
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
-
     this.render(players);
+
+    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
+    this.addSubscriptions([
+      store.subscribe((state, action) => this.handleStateChange(state, action)),
+    ]);
   }
 
   private render(players: Player[]): void {
@@ -34,18 +38,36 @@ export default class RoomChoosingPlayers extends ContainerComponent {
       content: t(TranslationKeys.ROOM_PLAYERS_CHOOSING),
     });
 
-    const list = new BaseComponent({ tag: 'ul', classes: styles.list });
+    this.listContainer = new ListComponent({ type: 'ul', classes: styles.list });
+    this.updatePlayersList(players);
+
+    this.appendChildren([this.title, this.listContainer]);
+  }
+
+  private updatePlayersList(players: Player[]): void {
+    if (!this.listContainer) return;
+    this.listContainer.destroyChildren();
+    const playersList = [];
 
     for (const player of players) {
       const item = new RoomUser({
         username: player.username,
-        userId: player.id,
+        id: player.id,
       });
-      this.usersList.push(item);
+      playersList.push(item);
     }
-    list.appendChildren(this.usersList);
+    this.listContainer.appendChildren(playersList);
+  }
 
-    this.appendChildren([this.title, list]);
+  private handleStateChange(_state: State, action: Action): void {
+    if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
+      const room = store.getState().currentRoom;
+      if (!room) return;
+      const currentPlayers = room?.choosingPlayers;
+      if (!currentPlayers) return;
+
+      this.updatePlayersList(currentPlayers);
+    }
   }
 
   private switchLanguage(_state: State, action: Action): void {

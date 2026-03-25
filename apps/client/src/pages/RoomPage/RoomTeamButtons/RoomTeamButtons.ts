@@ -57,7 +57,7 @@ export default class RoomTeamButtons extends ContainerComponent {
       content: t(TranslationKeys.ROOM_LEAVE_TEAM_BTN),
       classes: buttonStyle,
       listeners: {
-        click: (): void => this.leaveTeam(teamName),
+        click: (): void => this.leaveTeam(),
       },
     });
 
@@ -123,13 +123,13 @@ export default class RoomTeamButtons extends ContainerComponent {
     });
   }
 
-  private leaveTeam(teamName: Teams): void {
+  private leaveTeam(): void {
     if (!this.userId || !this.userName) return;
 
     const player: Player = {
       id: this.userId,
       username: this.userName,
-      team: teamName,
+      team: 'choosing',
       role: 'choosing',
     };
 

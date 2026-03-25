@@ -43,7 +43,7 @@ export default class RoomItem extends BaseComponent {
     });
 
     this.user = player.userId
-      ? new RoomUser({ username: player.username, userId: player.userId })
+      ? new RoomUser({ username: player.username, id: player.userId })
       : new RoomUser({ username: player.username });
 
     this.role = new TextComponent({ tag: 'span', classes: styles.role, content: roleText });

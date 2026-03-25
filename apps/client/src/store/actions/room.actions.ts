@@ -23,7 +23,6 @@ export type RoomTeamChange = {
 
 export type RoomLeaveRoom = {
   type: RoomPageActionTypes.LEAVE_ROOM;
-  payload: Player;
 };
 
 export type RoomPageActions = RoomSetData | RoomClearData | RoomTeamChange | RoomLeaveRoom;

@@ -38,7 +38,7 @@ export default class RoomHeader extends ContainerComponent {
     const username = store.getState().username;
     const userId = store.getState().id;
     if (username && userId) {
-      this.userMenu.appendChildren([new RoomUser({ username: username, userId: userId })]);
+      this.userMenu.appendChildren([new RoomUser({ username: username, id: userId })]);
     }
     this.userMenu.appendChildren([new ExitButton()]);
 

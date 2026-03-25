@@ -64,26 +64,23 @@ export default class RoomTeamSection extends ContainerComponent {
     this.updatePlayersList(players);
   }
 
-  private switchLanguage(_state: State, action: Action): void {
-    const text = this.isRedTeam
-      ? t(TranslationKeys.ROOM_RED_TITLE)
-      : t(TranslationKeys.ROOM_BLUE_TITLE);
+  private updatePlayersList(players: Player[]): void {
+    if (!this.listContainer) return;
+    this.listContainer.destroyChildren();
+    const playersList = [];
+    const header = {
+      number: '№',
+      player: { username: t(TranslationKeys.ROOM_PLAYER), role: t(TranslationKeys.ROOM_ROLE) },
+    };
 
-    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
-      this.title?.setContent(text);
+    for (const [index, player] of players.entries()) {
+      const options = { number: `${index + 1}.`, player };
+      const item = new RoomItem(options);
+      playersList.push(item);
     }
+
+    this.listContainer.appendChildren([new RoomItem(header), ...playersList]);
   }
-
-  // private getCurrentRole(): Roles | undefined {
-  //   const room = store.getState().currentRoom;
-  //   const myId = store.getState().id;
-
-  //   if (!room || !myId) return;
-  //   if (!room) return;
-  //   const allPlayers = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
-  //   const me = allPlayers.find((player) => player.userId === myId);
-  //   return me ? me.role : undefined;
-  // }
 
   private handleStateChange(_state: State, action: Action): void {
     if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
@@ -103,21 +100,13 @@ export default class RoomTeamSection extends ContainerComponent {
     }
   }
 
-  private updatePlayersList(players: Player[]): void {
-    if (!this.listContainer) return;
-    this.listContainer.destroyChildren();
-    const playersList = [];
-    const header = {
-      number: '№',
-      player: { username: t(TranslationKeys.ROOM_PLAYER), role: t(TranslationKeys.ROOM_ROLE) },
-    };
+  private switchLanguage(_state: State, action: Action): void {
+    const text = this.isRedTeam
+      ? t(TranslationKeys.ROOM_RED_TITLE)
+      : t(TranslationKeys.ROOM_BLUE_TITLE);
 
-    for (const [index, player] of players.entries()) {
-      const options = { number: `${index + 1}.`, player };
-      const item = new RoomItem(options);
-      playersList.push(item);
+    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
+      this.title?.setContent(text);
     }
-
-    this.listContainer.appendChildren([new RoomItem(header), ...playersList]);
   }
 }

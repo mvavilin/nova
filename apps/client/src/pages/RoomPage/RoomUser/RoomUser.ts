@@ -8,11 +8,11 @@ const styles = {
 };
 
 export default class RoomUser extends ContainerComponent {
-  constructor({ username, userId }: RoomUserProps) {
+  constructor({ username, id }: RoomUserProps) {
     super({ classes: styles.container });
 
-    if (userId) {
-      const avatar = new Avatar({ seed: userId });
+    if (id) {
+      const avatar = new Avatar({ seed: id });
       this.appendChildren([avatar]);
     }
 

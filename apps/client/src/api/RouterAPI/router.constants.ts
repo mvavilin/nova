@@ -17,7 +17,6 @@ export const URLS = {
 export const ROUTES: Route[] = [
   { path: /^\/$/, page: WelcomePage, access: Access.PUBLIC },
   { path: /^\/registration$/, page: RegistrationPage, access: Access.UNAUTHORIZED },
-  // { path: /^\/registration$/, page: RoomPage, access: Access.UNAUTHORIZED },
   { path: /^\/login$/, page: LoginPage, access: Access.UNAUTHORIZED },
   // { path: /^\/lobby$/, page: LobbyPage, access: Access.PUBLIC },
   { path: /^\/lobby$/, page: LobbyPage, access: Access.AUTHORIZED },

@@ -5,7 +5,8 @@ import { t } from '@/i18n';
 import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 import store from '@/store/store';
-import { AppActionTypes } from '@/store/actions';
+import { AppActionTypes, RoomPageActionTypes } from '@/store/actions';
+import { socketClient } from '@SocketClientAPI';
 
 const styles = {
   container:
@@ -18,13 +19,23 @@ const styles = {
 };
 
 export default class RoomInfoBlock extends ContainerComponent {
-  private roomTitle: TextComponent;
-  private playersTitle: TextComponent;
-  private leaveButton: ButtonComponent;
+  private roomTitle: TextComponent | null = null;
+  private playersTitle: TextComponent | null = null;
+  private playersCount: TextComponent | null = null;
+  private leaveButton: ButtonComponent | null = null;
 
   constructor({ roomName, currentCount, totalCount }: RoomInfoBlockProps) {
     super({ classes: styles.container });
 
+    this.render({ roomName, currentCount, totalCount });
+    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
+    // this.addSubscriptions([
+    //   store.subscribe((state, action) => this.handleStateChange(state, action)),
+    // ]);
+    this.subscribeToSocket();
+  }
+
+  private render({ roomName, currentCount, totalCount }: RoomInfoBlockProps): void {
     const textContainerColumn = new ContainerComponent({
       classes: styles.textContainerCol,
     });
@@ -47,7 +58,8 @@ export default class RoomInfoBlock extends ContainerComponent {
     this.playersTitle = new TextComponent({
       content: t(TranslationKeys.ROOM_INFO_PLAYERS),
     });
-    const nowCount = new TextComponent({
+
+    this.playersCount = new TextComponent({
       content: `${currentCount}`,
       classes: styles.span,
     });
@@ -56,7 +68,7 @@ export default class RoomInfoBlock extends ContainerComponent {
       classes: styles.span,
     });
 
-    textContainerCountRow1.appendChildren([nowCount, allCount]);
+    textContainerCountRow1.appendChildren([this.playersCount, allCount]);
     textContainerCountRow2.appendChildren([this.playersTitle, textContainerCountRow1]);
 
     textContainerColumn.appendChildren([textContainerRoomRow, textContainerCountRow2]);
@@ -64,14 +76,46 @@ export default class RoomInfoBlock extends ContainerComponent {
     this.leaveButton = new ButtonComponent({
       classes: styles.button,
       content: t(TranslationKeys.ROOM_LEAVE_ROOM_BTN),
+      listeners: {
+        click: (): void => this.leaveRoom(),
+      },
     });
 
     this.appendChildren([textContainerColumn, this.leaveButton]);
+  }
 
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
+  // private handleStateChange(_state: State, action: Action) {
+  //   if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
+  //     const room = store.getState().currentRoom;
+  //     if (!room || !this.playersCount) return;
+
+  //     this.playersCount.setContent(room.playerCount);
+  //   }
+  // }
+
+  private leaveRoom(): void {
+    store.dispatch({
+      type: RoomPageActionTypes.LEAVE_ROOM,
+    });
+  }
+
+  private subscribeToSocket(): void {
+    socketClient.onPlayerJoined(({ roomInfo }) => {
+      if (!this.playersCount) return;
+
+      this.playersCount.setContent(roomInfo.playerCount);
+    });
+
+    socketClient.onPlayerLeft(({ roomInfo }) => {
+      if (!this.playersCount) return;
+
+      this.playersCount.setContent(roomInfo.playerCount);
+    });
   }
 
   private switchLanguage(_state: State, action: Action): void {
+    if (!this.roomTitle || !this.playersTitle || !this.leaveButton) return;
+
     if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.roomTitle.setContent(t(TranslationKeys.ROOM_INFO_TITLE));
       this.playersTitle.setContent(t(TranslationKeys.ROOM_INFO_PLAYERS));

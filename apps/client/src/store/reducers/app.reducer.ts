@@ -9,6 +9,7 @@ export default function appReducer(state: State, action: Action): State {
     case AppActionTypes.EXIT_APP: {
       return {
         ...initialState,
+        authStatus: false,
       };
     }
 

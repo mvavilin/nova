@@ -7,7 +7,7 @@ export default function roomReducer(state: State, action: AppActions): State {
     case RoomPageActionTypes.SET_ROOM_DATA: {
       return {
         ...state,
-        currentRoom: action.payload.roomInfo || state.currentRoom,
+        currentRoom: action.payload.roomInfo,
       };
     }
 

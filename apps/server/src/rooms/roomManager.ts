@@ -193,6 +193,7 @@ export class RoomManager {
       const player = room.getPlayer(userId);
       if (player) {
         game.addPlayer(player);
+        room.removePlayer(player.id);
         if (game.isFull()) {
           const gameInfo = game.getGameInfo();
           const cutGameInfo = game.getGameInfo();

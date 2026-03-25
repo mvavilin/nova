@@ -635,18 +635,32 @@ The main disadvantage is that socket.io requires an authentication token during 
       { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
     ```
 
-    - If commands and roles are assigned, a timer starts. A message is sent to all users in the room every second
+    </details>
 
+  - **Start game**
+ 
+    <details>
+ 
+    - After each change in the composition of the teams in the room, the server checks the number of players in the teams. If the teams are fully staffed, the server sends a message to all users in the room
+ 
     ```
-      { type: 'game:start-timer'; payload: { time: number } }
+      { type: 'game:start-timer' }
     ```
-
-    - When the timer expires (15 seconds), a message will be sent to all users in the room
-
+ 
+    - After receiving `game:start-timer` message, each user starts a countdown timer until the game begins. After 15 seconds have passed, each user sends a message
+   
     ```
-      { type: 'game:start' }
+      { type: 'game:add-player' }
     ```
-
+ 
+    - When receiving a `game:add-player` message, the server adds the user to the upcoming game. After each addition, the server checks the number of players in the game. If the game is full, the server sends a message with the game details to all participants in the game
+   
+    ```
+      { type: 'game:start'; payload: { gameInfo: GameInfo } }
+    ```
+ 
+    - If the game is not full after adding a user to the game, the user will receive a `GAME_IS_NOT_FULL` error message. However, this error can be ignored and the `game:start` message can be expected
+  
     </details>
 
   - **Possible error codes**
@@ -654,7 +668,7 @@ The main disadvantage is that socket.io requires an authentication token during 
     <details>
 
     ```
-      type ErrorCode = 'ROOM_NOT_FOUND' | 'ROOM_FULL' | 'INVALID_ACTION' | 'ALREADY_ONLINE';
+      type ErrorCode = 'ROOM_NOT_FOUND' | 'ROOM_FULL' | 'INVALID_ACTION' | 'ALREADY_ONLINE' | 'GAME_IS_NOT_FULL';
     ```
 
     </details>
@@ -732,6 +746,16 @@ The main disadvantage is that socket.io requires an authentication token during 
       redPlayers: Player[];
       bluePlayers: Player[];
       choosingPlayers: Player[];
+    }
+  ```
+
+  - Game information
+ 
+  ```
+    export interface GameInfo {
+      redTeam: Player[];
+      blueTeam: Player[];
+      currentTeam: Teams;
     }
   ```
 

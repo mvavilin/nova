@@ -9,6 +9,7 @@ import { setupRoomHandlers } from './roomHandlers.ts';
 import { io } from '../../app.ts';
 import { logger } from '../logger/logger.ts';
 import type { Player } from '../../../../../packages/shared/src/types/room.ts';
+import { setupGameHandlers } from './gameHandlers.ts';
 
 const reconnectTimerMap = new Map<string, NodeJS.Timeout>();
 export const roomManager = new RoomManager();
@@ -55,6 +56,7 @@ export function setupConnection(): void {
       setupDisconnect(socket);
       setupAskStatusHandler(socket);
       setupRoomHandlers(socket);
+      setupGameHandlers(socket);
       setupLogoutHandler(socket);
     }
   );

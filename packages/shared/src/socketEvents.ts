@@ -74,6 +74,7 @@ export type ServerEvent =
 
 export type ErrorCode =
   | 'ROOM_NOT_FOUND'
+  | 'GAME_NOT_FOUND'
   | 'ROOM_FULL'
   | 'INVALID_ACTION'
   | 'AUTH_REQUIRED'

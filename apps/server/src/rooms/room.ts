@@ -65,7 +65,19 @@ export class Room {
   }
 
   public addPlayer(player: Player): void {
-    this.choosingPlayers.push(player);
+    switch (player.team) {
+      case 'red': {
+        this.redPlayers.push(player);
+        break;
+      }
+      case 'blue': {
+        this.bluePlayers.push(player);
+        break;
+      }
+      default: {
+        this.choosingPlayers.push(player);
+      }
+    }
   }
 
   public getPlayer(userId: string): Player | undefined {

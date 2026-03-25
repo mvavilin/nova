@@ -57,8 +57,16 @@ export class RoomManager {
     return roomPreviews;
   }
 
+  private getRoomById(roomId: string): Room | undefined {
+    return this.rooms.find((room) => room.getId() === roomId);
+  }
+
   private getRoomByUserId(userId: string): Room | undefined {
     return this.rooms.find((room) => room.getPlayerIds().includes(userId));
+  }
+
+  private getGameByUserId(userId: string): Game | undefined {
+    return this.games.find((game) => game.getPlayerIds().includes(userId));
   }
 
   public joinToRoom(
@@ -125,6 +133,37 @@ export class RoomManager {
     }
 
     return { error: 'ROOM_NOT_FOUND' };
+  }
+
+  public leaveGame(userId: string):
+    | {
+        roomInfo: RoomInfo;
+        player: Player;
+        roomRecipients: string[];
+        gameRecipients: string[];
+      }
+    | { error: ErrorCode } {
+    const game = this.getGameByUserId(userId);
+
+    if (game) {
+      const player = game.getPlayer(userId);
+      const room = this.getRoomById(game.getRoomId());
+      if (player && room) {
+        room.addPlayer(player);
+        game.removePlayer(userId);
+        const gameRecipients = game.getPlayerIds();
+        const roomRecipients = room.getPlayerIds();
+
+        return {
+          roomInfo: room.getRoomInfo(),
+          player,
+          roomRecipients,
+          gameRecipients,
+        };
+      }
+    }
+
+    return { error: 'GAME_NOT_FOUND' };
   }
 
   public getStatus(

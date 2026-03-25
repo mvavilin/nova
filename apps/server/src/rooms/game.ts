@@ -56,4 +56,9 @@ export class Game {
   public getPlayer(userId: string): Player | undefined {
     return this.getAllPlayers().find((player) => player.id === userId);
   }
+
+  public removePlayer(userId: string): void {
+    this.redTeam = this.redTeam.filter((player) => player.id !== userId);
+    this.blueTeam = this.blueTeam.filter((player) => player.id !== userId);
+  }
 }

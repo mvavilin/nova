@@ -62,13 +62,6 @@ export default class RoomTeamButtons extends ContainerComponent {
     this.appendChildren([containerRoleButtons, this.leaveButton]);
   }
 
-  public switchLanguage(): void {
-    if (!this.spyButton || !this.agentButton || !this.leaveButton) return;
-    this.spyButton.setContent(t(TranslationKeys.ROOM_SPYMASTER_BTN));
-    this.agentButton.setContent(t(TranslationKeys.ROOM_AGENT_BTN));
-    this.leaveButton.setContent(t(TranslationKeys.ROOM_LEAVE_TEAM_BTN));
-  }
-
   private playAsSpymaster(): void {
     const { id, username } = store.getState();
     if (!id || !username) return;
@@ -87,7 +80,6 @@ export default class RoomTeamButtons extends ContainerComponent {
   }
 
   private playAsAgent(): void {
-    // if (!this.userId || !this.userName) return;
     const { id, username } = store.getState();
     if (!id || !username) return;
 
@@ -175,6 +167,12 @@ export default class RoomTeamButtons extends ContainerComponent {
       button.removeAttributes('disabled');
       button.removeClasses('disabled-state');
     }
+  }
+  public switchLanguage(): void {
+    if (!this.spyButton || !this.agentButton || !this.leaveButton) return;
+    this.spyButton.setContent(t(TranslationKeys.ROOM_SPYMASTER_BTN));
+    this.agentButton.setContent(t(TranslationKeys.ROOM_AGENT_BTN));
+    this.leaveButton.setContent(t(TranslationKeys.ROOM_LEAVE_TEAM_BTN));
   }
 
   public destroyComponent(): void {

@@ -17,6 +17,7 @@ const styles = {
   teamContainer:
     'w-full h-full flex flex-col min-[950px]:flex-row justify-center min-[950px]:justify-between items-center min-[950px]:items-start gap-10',
 };
+
 export default class RoomPage extends ContainerComponent {
   private static currentUnsubscribe: (() => void) | null = null;
 
@@ -45,19 +46,19 @@ export default class RoomPage extends ContainerComponent {
   }
 
   private refreshFromStore(_state: State, action: Action): void {
-    console.log('REFRESH', action.type);
-    // if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
-    const roomInfo = store.getState().currentRoom;
-    if (!roomInfo) return;
+    if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
+      const roomInfo = store.getState().currentRoom;
+      if (!roomInfo) return;
 
-    // Обновляем игроков и кнопки
-    this.redTeamSection?.handleStateChange(roomInfo);
-    this.blueTeamSection?.handleStateChange(roomInfo);
+      this.redTeamSection?.handleStateChange(roomInfo);
+      this.blueTeamSection?.handleStateChange(roomInfo);
+      this.choosingSection?.updatePlayersList(roomInfo.choosingPlayers);
+    }
 
-    // Перевод
     if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.redTeamSection?.switchLanguage();
       this.blueTeamSection?.switchLanguage();
+      this.choosingSection?.switchLanguage();
     }
   }
 
@@ -133,10 +134,7 @@ export default class RoomPage extends ContainerComponent {
       RoomPage.currentUnsubscribe();
       RoomPage.currentUnsubscribe = null;
     }
+
     this.unsubscribeFromSocket();
-    // Очистка store
-    // store.dispatch({
-    //   type: RoomPageActionTypes.CLEAR_ROOM_DATA,
-    // });
   }
 }

@@ -3,10 +3,6 @@ import type { RoomItemProps } from './RoomItem.types';
 import RoomUser from '../RoomUser/RoomUser';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
-import type { State } from '@/store/types/state';
-import type { Action } from '@/api/StateAPI';
-import store from '@/store/store';
-import { AppActionTypes } from '@/store/actions';
 
 const styles = {
   item: 'grid grid-cols-[1fr_3fr_2fr] items-center justify-center gap p-2 outline outline-white',
@@ -49,22 +45,22 @@ export default class RoomItem extends BaseComponent {
     this.role = new TextComponent({ tag: 'span', classes: styles.role, content: roleText });
 
     this.appendChildren([indexNumber, this.user, this.role]);
-
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
   }
 
-  private switchLanguage(_state: State, action: Action): void {
-    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
-      if (this.isHeader) {
-        this.role.setContent(t(TranslationKeys.ROOM_ROLE));
-        this.user.setContent(t(TranslationKeys.ROOM_PLAYER));
+  public switchLanguage(): void {
+    if (this.isHeader) {
+      this.role.setContent(t(TranslationKeys.ROOM_ROLE));
+      this.user.setContent(t(TranslationKeys.ROOM_PLAYER));
+    } else {
+      if (this.isAgent) {
+        this.role.setContent(t(TranslationKeys.ROOM_AGENT));
       } else {
-        if (this.isAgent) {
-          this.role.setContent(t(TranslationKeys.ROOM_AGENT));
-        } else {
-          this.role.setContent(t(TranslationKeys.ROOM_SPYMASTER));
-        }
+        this.role.setContent(t(TranslationKeys.ROOM_SPYMASTER));
       }
     }
+  }
+  public destroyComponent(): void {
+    this.destroyChildren();
+    super.destroy();
   }
 }

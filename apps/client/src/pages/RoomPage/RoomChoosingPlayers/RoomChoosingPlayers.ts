@@ -4,10 +4,6 @@ import type { RoomChoosingUsersProps } from './RoomChoosingPlayers.types';
 import type { Player } from '@shared/types/room';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
-import type { State } from '@/store/types/state';
-import type { Action } from '@/api/StateAPI';
-import store from '@/store/store';
-import { AppActionTypes, RoomPageActionTypes } from '@/store/actions';
 
 const styles = {
   container:
@@ -24,11 +20,6 @@ export default class RoomChoosingPlayers extends ContainerComponent {
     super({ classes: styles.container });
 
     this.render(players);
-
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
-    this.addSubscriptions([
-      store.subscribe((state, action) => this.handleStateChange(state, action)),
-    ]);
   }
 
   private render(players: Player[]): void {
@@ -44,7 +35,7 @@ export default class RoomChoosingPlayers extends ContainerComponent {
     this.appendChildren([this.title, this.listContainer]);
   }
 
-  private updatePlayersList(players: Player[]): void {
+  public updatePlayersList(players: Player[]): void {
     if (!this.listContainer) return;
     this.listContainer.destroyChildren();
     const playersList = [];
@@ -59,32 +50,14 @@ export default class RoomChoosingPlayers extends ContainerComponent {
     this.listContainer.appendChildren(playersList);
   }
 
-  private handleStateChange(_state: State, action: Action): void {
-    if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
-      const room = store.getState().currentRoom;
-      if (!room) return;
-      const currentPlayers = room?.choosingPlayers;
-      if (!currentPlayers) return;
-
-      this.updatePlayersList(currentPlayers);
-    }
+  public switchLanguage(): void {
+    if (!this.title) return;
+    this.title.setContent(t(TranslationKeys.ROOM_PLAYERS_CHOOSING));
   }
 
-  private switchLanguage(_state: State, action: Action): void {
-    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
-      this.title?.setContent(t(TranslationKeys.ROOM_PLAYERS_CHOOSING));
-    }
-  }
   public destroyComponent(): void {
     this.listContainer = null;
-
-    // отписка от store
-    // this.unsubs.forEach((unsub) => unsub());
-    // this.unsubs = [];
-
-    // уничтожаем дочерние
     this.destroyChildren();
-
     super.destroy();
   }
 }

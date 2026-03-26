@@ -9,34 +9,6 @@ import { URLS } from '@RouterAPI/router.constants';
 import { router } from '@router';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
-  // socketClient.onPlayerJoined(({ roomInfo }) => {
-  //   store.dispatch({
-  //     type: RoomPageActionTypes.SET_ROOM_DATA,
-  //     payload: { roomInfo },
-  //   });
-  // });
-
-  // socketClient.onPlayerLeft(({ roomInfo }) => {
-  //   store.dispatch({
-  //     type: RoomPageActionTypes.SET_ROOM_DATA,
-  //     payload: { roomInfo },
-  //   });
-  // });
-
-  // socketClient.onTeamChanged(({ roomInfo }) => {
-  //   store.dispatch({
-  //     type: RoomPageActionTypes.SET_ROOM_DATA,
-  //     payload: { roomInfo },
-  //   });
-  // });
-
-  // socketClient.onRoomState(({ roomInfo }) => {
-  //   store.dispatch({
-  //     type: RoomPageActionTypes.SET_ROOM_DATA,
-  //     payload: { roomInfo },
-  //   });
-  // });
-
   return function middleware(context) {
     if (context.action.type === RoomPageActionTypes.TEAM_CHANGE) {
       try {
@@ -61,9 +33,9 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.off(ServerEventType.ERROR);
         });
 
-        // context.next({
-        //   type: RoomPageActionTypes.CLEAR_ROOM_DATA,
-        // });
+        context.next({
+          type: RoomPageActionTypes.CLEAR_ROOM_DATA,
+        });
 
         router.navigate(URLS.LOBBY());
         socketClient.emit(ClientEventType.ROOM_LEAVE);

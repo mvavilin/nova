@@ -22,29 +22,17 @@ export default class RoomTeamSection extends ContainerComponent {
   private title: HeadingComponent | null = null;
   private listContainer: ListComponent | null = null;
   private buttons: RoomTeamButtons | null = null;
-  // private unsubs: (() => void)[] = [];
+  private items: RoomItem[] = [];
 
   constructor({ teamName, players }: TeamSectionProps) {
     super({ tag: 'section' });
 
     this.isRedTeam = teamName === 'red';
     this.teamName = teamName;
-    // this.unsubs.push(
-    //   store.subscribe((state, action) => this.switchLanguage(state, action)),
-    //   store.subscribe((state, action) => this.handleStateChange(state, action))
-    // );
     this.render(players);
-
-    // this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
-
-    // this.addSubscriptions([
-    //   store.subscribe((state, action) => this.handleStateChange(state, action)),
-    // ]);
   }
 
   private render(players: Player[]): void {
-    // this.isRedTeam = teamName === 'red';
-
     const containerStyle = this.isRedTeam ? styles.containerRed : styles.containerBlue;
     this.setClasses(`${styles.container} ${containerStyle}`);
 
@@ -68,68 +56,60 @@ export default class RoomTeamSection extends ContainerComponent {
 
   private updatePlayersList(players: Player[]): void {
     if (!this.listContainer) return;
+    for (const item of this.items) {
+      item.destroyComponent();
+    }
+    this.items = [];
+
     this.listContainer.destroyChildren();
-    const playersList = [];
+
     const header = {
       number: '№',
       player: { username: t(TranslationKeys.ROOM_PLAYER), role: t(TranslationKeys.ROOM_ROLE) },
     };
 
+    this.items.push(new RoomItem(header));
+
     for (const [index, player] of players.entries()) {
       const options = { number: `${index + 1}.`, player };
       const item = new RoomItem(options);
-      playersList.push(item);
+      this.items.push(item);
     }
 
-    this.listContainer.appendChildren([new RoomItem(header), ...playersList]);
+    this.listContainer.appendChildren([...this.items]);
   }
 
   public handleStateChange(room: RoomInfo): void {
-    // if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
-    //   const room = store.getState().currentRoom;
-    // const myId = store.getState().id;
-
-    //   if (!room || !myId) return;
-
     const currentPlayers = this.teamName === 'red' ? room.redPlayers : room.bluePlayers;
 
     this.updatePlayersList(currentPlayers);
     this.buttons?.update();
-
-    // const allPlayers = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
-    // const me = allPlayers.find((player) => player.id === myId);
-
-    // const myTeam = me ? me.team : null;
-    // if (!myTeam) return;
-    // console.log(myTeam, this.teamName, currentPlayers);
   }
 
   public switchLanguage(): void {
-    // const text = this.isRedTeam
-    //   ? t(TranslationKeys.ROOM_RED_TITLE)
-    //   : t(TranslationKeys.ROOM_BLUE_TITLE);
-
-    // if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
-    //   this.title?.setContent(text);
-    // }
     if (!this.title || !this.buttons) return;
 
     const text = this.isRedTeam
       ? t(TranslationKeys.ROOM_RED_TITLE)
       : t(TranslationKeys.ROOM_BLUE_TITLE);
     this.title.setContent(text);
+
     this.buttons.switchLanguage();
+
+    for (const item of this.items) {
+      item.switchLanguage();
+    }
   }
 
   public destroyComponent(): void {
+    for (const item of this.items) {
+      item.destroy();
+    }
+    this.items = [];
+
     this.buttons?.destroyComponent();
     this.buttons = null;
 
-    // отписка от store
-    // this.unsubs.forEach((unsub) => unsub());
-    // this.unsubs = [];
-
-    // уничтожаем дочерние
     this.destroyChildren();
 
     super.destroy();

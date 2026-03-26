@@ -22,6 +22,5 @@ export const ROUTES: Route[] = [
   { path: /^\/lobby$/, page: LobbyPage, access: Access.AUTHORIZED },
   { path: /^\/room\/(?<roomId>[^/]+)$/, page: RoomPage, access: Access.AUTHORIZED },
   { path: /^\/game\/(?<gameId>[^/]+)$/, page: GamePage, access: Access.AUTHORIZED },
-  // Profile page is under development (Access.AUTHORIZED)
-  { path: /^\/profile$/, page: ProfilePage, access: Access.UNAUTHORIZED },
+  { path: /^\/profile$/, page: ProfilePage, access: Access.AUTHORIZED },
 ];

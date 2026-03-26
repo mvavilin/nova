@@ -1,3 +1,5 @@
+import { LogMessageKeys } from '@repo/shared/src/types/logMessage';
+
 export const TranslationKeys = {
   WELCOME_RULES: 'welcome-rules',
   WELCOME_ABOUT: 'welcome-about',
@@ -79,6 +81,96 @@ export const TranslationKeys = {
   LOGIN_TITLE: 'loginTitle',
   LOGIN_SUBMIT_BTN: 'loginSubmitBtn',
   LOGIN_LANG_BTN: 'loginLangBtn',
+
+  LOBBY_TITLE: 'lobbyTitle',
+
+  JOIN_ROOM_SECTION_TITLE: 'joinRoomSectionTitle',
+  CREATE_ROOM_SECTION_TITLE: 'createRoomSectionTitle',
+  PUBLIC_ROOMS_SECTION_TITLE: 'publicRoomsSectionTitle',
+
+  PLAYER_COUNT_FIELD_TITLE: 'playerCountFieldTitle',
+
+  ROOM_NAME_FIELD_TITLE: 'roomNameFieldTitle',
+  ROOM_NAME_FIELD_PLACEHOLDER: 'roomNameFieldPlaceholder',
+  ROOM_NAME_FIELD_CREATE_BUTTON_LABEL: 'roomNameFieldCreateButtonLabel',
+
+  JOIN_ROOM_FIELD_TITLE: 'joinRoomFieldTitle',
+  JOIN_ROOM_FIELD_PLACEHOLDER: 'joinRoomFieldPlaceholder',
+  JOIN_ROOM_FIELD_JOIN_BUTTON_LABEL: 'joinRoomFieldJoinButtonLabel',
+
+  SEARCH_ROOM_FIELD_TITLE: 'searchRoomFieldTitle',
+  SEARCH_ROOM_FIELD_PLACEHOLDER: 'searchRoomFieldPlaceholder',
+  SEARCH_ROOM_FIELD_FIND_BUTTON_LABEL: 'searchRoomFieldFindButtonLabel',
+
+  ROOMS_TABLE_HEADER_TITLES_ROOM: 'roomsTableHeaderRoom',
+  ROOMS_TABLE_HEADER_TITLES_PLAYERS: 'roomsTableHeaderPlayers',
+  ROOMS_TABLE_HEADER_TITLES_STATUS: 'roomsTableHeaderStatus',
+
+  ROOM_ROW_STATUS_WAITING: 'roomRowStatusWaiting',
+  ROOM_ROW_STATUS_PLAYING: 'roomRowStatusPlaying',
+  ROOM_ROW_STATUS_FINISHING: 'roomRowStatusFinishing',
+  ROOM_ROW_JOIN_BUTTON: 'roomRowJoinButton',
+
+  GAME_TITLE: 'gameTitle',
+
+  RED_TURN: 'redTurn',
+  BLUE_TURN: 'blueTurn',
+
+  RED_TEAM: 'redTeam',
+  BLUE_TEAM: 'blueTeam',
+
+  CHAT_LOG_TITLE: 'chatLogTitle',
+  CHAT_INPUT_PLACEHOLDER: 'chatInputPlaceholder',
+
+  [LogMessageKeys.LOG_START_GAME]: 'logStartGame',
+  [LogMessageKeys.LOG_HINT_RED]: 'logHintRed',
+  [LogMessageKeys.LOG_HINT_BLUE]: 'logHintBlue',
+  [LogMessageKeys.LOG_VOTE_STARTED]: 'logVoteStarted',
+  [LogMessageKeys.LOG_VOTE_ENDED]: 'logVoteEnded',
+  [LogMessageKeys.LOG_OWN_CARD_CHOSEN_RED]: 'logOwnCardChosenRed',
+  [LogMessageKeys.LOG_OWN_CARD_CHOSEN_BLUE]: 'logOwnCardChosenBlue',
+  [LogMessageKeys.LOG_OTHER_CARD_CHOSEN_RED]: 'logOtherCardChosenRed',
+  [LogMessageKeys.LOG_OTHER_CARD_CHOSEN_BLUE]: 'logOtherCardChosenBlue',
+  [LogMessageKeys.LOG_CHECKING_ANSWER_RED]: 'logCheckingAnswerRed',
+  [LogMessageKeys.LOG_CHECKING_ANSWER_BLUE]: 'logCheckingAnswerBlue',
+  [LogMessageKeys.LOG_ANSWER_COUNTED_RED]: 'logAnswerCountedRed',
+  [LogMessageKeys.LOG_ANSWER_COUNTED_BLUE]: 'logAnswerCountedBlue',
+  [LogMessageKeys.LOG_SCORE_POINT]: 'logScorePoint',
+
+  UNDO_LABEL: 'undoLabel',
+
+  KNOWLEDGE_CHECK_TITLE: 'knowledgeCheckTitle',
+  QUESTION_TOPIC: 'questionTopic',
+  ENTER_ANSWER: 'enterAnswer',
+  ANSWER_EMPTY_WARNING: 'answerEmptyWarning',
+  SEND_BUTTON: 'sendButton',
+
+  ANSWER_RATING_TITLE: 'answerRatingTitle',
+  OPPONENT_ANSWER: 'opponentAnswer',
+  POSSIBLE_ANSWER: 'possibleAnswer',
+  PASS_BUTTON: 'passButton',
+  FAIL_BUTTON: 'failButton',
+
+  GAME_RESULTS_TITLE: 'gameResultsTitle',
+  WINNING_TEAM_PREFIX: 'winningTeamPrefix',
+  WINNING_TEAM_SUFFIX: 'winningTeamSuffix',
+  TEAM_RED: 'teamRed',
+  TEAM_BLUE: 'teamBlue',
+  GAME_STATS_TITLE: 'gameStatsTitle',
+  SCORE_LABEL: 'scoreLabel',
+  TIME_LABEL: 'timeLabel',
+  PLAYER_COLUMN: 'playerColumn',
+  ROLE_COLUMN: 'roleColumn',
+  QUESTIONS_COLUMN: 'questionsColumn',
+  CORRECT_ANSWERS_COLUMN: 'correctAnswersColumn',
+  RED_TEAM_TITLE: 'redTeamTitle',
+  BLUE_TEAM_TITLE: 'blueTeamTitle',
+  LOBBY_BUTTON: 'lobbyButton',
+  ROOM_BUTTON: 'roomButton',
+  ROLE_SPYMASTER: 'roleSpymaster',
+  ROLE_OPERATIVE: 'roleOperative',
+
+  FORM_EMPTY_FIELD_WARNING: 'formEmptyFieldWarning',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];

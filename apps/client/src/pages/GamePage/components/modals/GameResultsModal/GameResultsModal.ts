@@ -1,13 +1,15 @@
 import { Button, Modal } from '@components/ui';
 import { GAME_RESULTS_MODAL_BACKGROUND } from '@assets/backgrounds';
 import { BaseComponent, ContainerComponent, HeadingComponent, TextComponent } from '@ComponentsAPI';
-import { Team, type GameResultData } from '@__mocks__';
+import { Role, Team, type GameResultData } from '@__mocks__';
 import { Avatar } from '@components';
 import { TEAM_HEADER_CLASSES } from '@pages/GamePage/components/TeamHeader/TeamHeader';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 const THIS_CLASSES = {
   BACKGROUND: `bg-no-repeat bg-center bg-cover`,
-  CONTAINER: `relative flex flex-col p-4 gap-4 font-text text-slate-900 bg-white/75 rounded select-none`,
+  CONTAINER: `relative flex flex-col p-4 gap-4 font-text text-slate-900 bg-white/75 rounded`,
   TITLE: `font-bold text-2xl text-center`,
   RED_TEAM_SPAN: `text-red-500`,
   BLUE_TEAM_SPAN: `text-blue-500`,
@@ -69,12 +71,12 @@ export default class GameResultsModal extends Modal {
     return this.winningTeam === Team.RED
       ? new BaseComponent({
           tag: `span`,
-          content: `красных`,
+          content: t(TranslationKeys.TEAM_RED),
           classes: THIS_CLASSES.RED_TEAM_SPAN,
         })
       : new BaseComponent({
           tag: `span`,
-          content: `синих`,
+          content: t(TranslationKeys.TEAM_BLUE),
           classes: THIS_CLASSES.BLUE_TEAM_SPAN,
         });
   }
@@ -89,13 +91,13 @@ export default class GameResultsModal extends Modal {
     });
 
     modalTitle.setChildren([
-      new TextComponent({ content: `Игра завершена!` }),
+      new TextComponent({ content: t(TranslationKeys.GAME_RESULTS_TITLE) }),
       new BaseComponent({
         tag: `p`,
         children: [
-          new BaseComponent({ tag: `span`, content: `Команда ` }),
+          new BaseComponent({ tag: `span`, content: t(TranslationKeys.WINNING_TEAM_PREFIX) }),
           teamSpan,
-          new BaseComponent({ tag: `span`, content: ` выйграла!` }),
+          new BaseComponent({ tag: `span`, content: t(TranslationKeys.WINNING_TEAM_SUFFIX) }),
         ],
       }),
     ]);
@@ -106,7 +108,7 @@ export default class GameResultsModal extends Modal {
   private createModalSubTitle(): HeadingComponent {
     return new HeadingComponent({
       level: 3,
-      content: `Статистика игры ${this.gameId}`,
+      content: `${t(TranslationKeys.GAME_STATS_TITLE)} ${this.gameId}`,
       classes: THIS_CLASSES.BLOCK_TITLE,
     });
   }
@@ -115,7 +117,7 @@ export default class GameResultsModal extends Modal {
     const scoreBlock = new ContainerComponent({
       classes: THIS_CLASSES.SCORE_TIME_BLOCK_ITEM,
       children: [
-        new TextComponent({ content: `Счет` }),
+        new TextComponent({ content: t(TranslationKeys.SCORE_LABEL) }),
         new TextComponent({ content: this.score, classes: THIS_CLASSES.SCORE_TIME_BLOCK_INFO }),
       ],
     });
@@ -123,7 +125,7 @@ export default class GameResultsModal extends Modal {
     const timeBlock = new ContainerComponent({
       classes: THIS_CLASSES.SCORE_TIME_BLOCK_ITEM,
       children: [
-        new TextComponent({ content: `Время` }),
+        new TextComponent({ content: t(TranslationKeys.TIME_LABEL) }),
         new TextComponent({ content: this.time, classes: THIS_CLASSES.SCORE_TIME_BLOCK_INFO }),
       ],
     });
@@ -138,17 +140,25 @@ export default class GameResultsModal extends Modal {
     return new TextComponent({
       classes: THIS_CLASSES.PLAY_TITLE_LIST,
       children: [
-        new BaseComponent({ tag: `p`, classes: THIS_CLASSES.PLAY_TITLE_ITEM, content: `Игрок` }),
-        new BaseComponent({ tag: `p`, classes: THIS_CLASSES.PLAY_TITLE_ITEM, content: `Роль` }),
         new BaseComponent({
           tag: `p`,
           classes: THIS_CLASSES.PLAY_TITLE_ITEM,
-          content: `Вопросов`,
+          content: t(TranslationKeys.PLAYER_COLUMN),
         }),
         new BaseComponent({
           tag: `p`,
           classes: THIS_CLASSES.PLAY_TITLE_ITEM,
-          content: `Зачтено ответов`,
+          content: t(TranslationKeys.ROLE_COLUMN),
+        }),
+        new BaseComponent({
+          tag: `p`,
+          classes: THIS_CLASSES.PLAY_TITLE_ITEM,
+          content: t(TranslationKeys.QUESTIONS_COLUMN),
+        }),
+        new BaseComponent({
+          tag: `p`,
+          classes: THIS_CLASSES.PLAY_TITLE_ITEM,
+          content: t(TranslationKeys.CORRECT_ANSWERS_COLUMN),
         }),
       ],
     });
@@ -180,7 +190,10 @@ export default class GameResultsModal extends Modal {
             ],
           }),
           new TextComponent({
-            content: `${playerData.player.role}`,
+            content:
+              playerData.player.role === Role.SPYMASTER
+                ? t(TranslationKeys.ROLE_SPYMASTER)
+                : t(TranslationKeys.ROLE_OPERATIVE),
             classes: THIS_CLASSES.PLAYER_ITEM,
           }),
           new TextComponent({
@@ -209,7 +222,7 @@ export default class GameResultsModal extends Modal {
 
   private createNavButtons(): ContainerComponent {
     const LobbyButton = new Button({
-      label: `В лобби`,
+      label: t(TranslationKeys.LOBBY_BUTTON),
       classes: THIS_CLASSES.LOBBY_BUTTON,
       listeners: {
         click: (): void => {
@@ -221,7 +234,7 @@ export default class GameResultsModal extends Modal {
     });
 
     const RoomButton = new Button({
-      label: `В комнату`,
+      label: t(TranslationKeys.ROOM_BUTTON),
       classes: THIS_CLASSES.ROOM_BUTTON,
       listeners: {
         click: (): void => {
@@ -246,12 +259,12 @@ export default class GameResultsModal extends Modal {
 
     const redTeamPlayersList = this.createTeamPlayersList(
       this.redTeamPlayers,
-      `Команда красных`,
+      t(TranslationKeys.RED_TEAM_TITLE),
       THIS_CLASSES.RED_TEAM_SPAN
     );
     const blueTeamPlayersList = this.createTeamPlayersList(
       this.blueTeamPlayers,
-      `Команда синих`,
+      t(TranslationKeys.BLUE_TEAM_TITLE),
       THIS_CLASSES.BLUE_TEAM_SPAN
     );
 

@@ -7,11 +7,11 @@ export const SECTION_CLASSES = {
 
   SOLO_SECTION: `${BASE_SECTION} col-start-1 row-start-1`,
 
-  JOIN_ROOM_SECTION: `${BASE_SECTION} col-start-2 row-start-1`,
+  JOIN_ROOM_SECTION: `${BASE_SECTION} col-start-1 row-start-2`,
 
-  CREATE_ROOM_SECTION: `${BASE_SECTION} col-start-1 row-start-2 h-full`,
+  CREATE_ROOM_SECTION: `${BASE_SECTION} col-start-1 row-start-1 h-full`,
 
-  PUBLIC_ROOMS_SECTION: `${BASE_SECTION} col-start-2 row-start-2 h-full`,
+  PUBLIC_ROOMS_SECTION: `${BASE_SECTION} col-start-2 row-start-1 row-span-2 h-full`,
 
   LOG_CHAT_SECTION: `${BASE_SECTION} h-full`,
 } as const;
@@ -26,7 +26,6 @@ export const FORM_CLASSES = {
   LABEL: `w-full block font-bold`,
 } as const;
 
-export const HEADER_TITLES = ['Комната', 'Игроков', 'Статус', ''];
 export const CELL_BASE = 'truncate overflow-hidden whitespace-nowrap';
 export const GRID_ROW = 'w-full grid grid-cols-[3fr_2fr_3fr_2fr] px-3';
 export const TABLE_CLASSES = {

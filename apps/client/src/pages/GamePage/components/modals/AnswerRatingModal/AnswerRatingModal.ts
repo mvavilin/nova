@@ -2,6 +2,8 @@ import { Modal, Button } from '@components/ui';
 import { ANSWER_RATING_MODAL_BACKGROUND } from '@assets/backgrounds';
 import { ContainerComponent, HeadingComponent, TextComponent } from '@ComponentsAPI';
 import { Timer } from '@pages/GamePage/components';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 const QUESTION_DURATION_S = 60;
 
@@ -46,7 +48,7 @@ export default class AnswerRatingModal extends Modal {
   private createModalTitle(): HeadingComponent {
     return new HeadingComponent({
       level: 2,
-      content: `Оценка ответа соперника`,
+      content: t(TranslationKeys.ANSWER_RATING_TITLE),
       classes: THIS_CLASSES.TITLE,
     });
   }
@@ -57,7 +59,7 @@ export default class AnswerRatingModal extends Modal {
       children: [
         new HeadingComponent({
           level: 3,
-          content: `Вопрос на тему: ${this.topic}`,
+          content: `${t(TranslationKeys.QUESTION_TOPIC)} ${this.topic}`,
           classes: THIS_CLASSES.BLOCK_TITLE,
         }),
         new TextComponent({ classes: THIS_CLASSES.TEXT, content: this.question }),
@@ -71,7 +73,7 @@ export default class AnswerRatingModal extends Modal {
       children: [
         new HeadingComponent({
           level: 3,
-          content: `Ответ соперника`,
+          content: t(TranslationKeys.OPPONENT_ANSWER),
           classes: THIS_CLASSES.BLOCK_TITLE,
         }),
         new TextComponent({ content: this.answer, classes: THIS_CLASSES.ANSWER }),
@@ -85,7 +87,7 @@ export default class AnswerRatingModal extends Modal {
       children: [
         new HeadingComponent({
           level: 3,
-          content: `Возможный ответ`,
+          content: t(TranslationKeys.POSSIBLE_ANSWER),
           classes: THIS_CLASSES.BLOCK_TITLE,
         }),
         new TextComponent({ content: this.possibleAnswer, classes: THIS_CLASSES.TEXT }),
@@ -95,7 +97,7 @@ export default class AnswerRatingModal extends Modal {
 
   private createResultButtons(): ContainerComponent {
     const passButton = new Button({
-      label: `Зачтено`,
+      label: t(TranslationKeys.PASS_BUTTON),
       classes: THIS_CLASSES.PASS_BUTTON,
       listeners: {
         click: (): void => {
@@ -106,7 +108,7 @@ export default class AnswerRatingModal extends Modal {
     });
 
     const failButton = new Button({
-      label: `Не зачтено`,
+      label: t(TranslationKeys.FAIL_BUTTON),
       classes: THIS_CLASSES.FAIL_BUTTON,
       listeners: {
         click: (): void => {

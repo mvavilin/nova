@@ -13,3 +13,5 @@ export {
   getLocalStorageData,
   removeLocalStorageData,
 } from '@utils/localStorage';
+
+export { isRedTeam } from '@utils/isRedTeam';

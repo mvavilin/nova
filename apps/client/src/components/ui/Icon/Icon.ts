@@ -14,7 +14,7 @@ export default class Icon extends BaseComponent {
     this.setStyle({
       width: `${size}px`,
       height: `${size}px`,
-      backgroundImage: `url('.${url}')`,
+      backgroundImage: `url('${url}')`,
     });
   }
 }

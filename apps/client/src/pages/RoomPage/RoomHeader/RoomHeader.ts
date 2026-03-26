@@ -10,7 +10,9 @@ import type { Action } from '@/api/StateAPI';
 import { AppActionTypes } from '@/store/actions';
 
 const styles = {
-  header: 'w-full max-w-7xl grid grid-cols-3 items-center p-4 bg-white/25 text-white rounded',
+  header:
+    'w-full max-w-7xl grid grid grid-cols-3 gap-2 p-4 items-center p-4 bg-white/25 text-white rounded place-items-center',
+
   title: 'text-2xl text-center font-bold',
   container: 'flex justify-between items-center',
   userMenu: 'flex items-center justify-end gap-4 justify-self-end',
@@ -35,15 +37,14 @@ export default class RoomHeader extends ContainerComponent {
   }
 
   private render(): void {
+    const container = new ContainerComponent({ classes: styles.container });
     const username = store.getState().username;
     const userId = store.getState().id;
     if (username && userId) {
       this.userMenu.appendChildren([new RoomUser({ username: username, id: userId })]);
     }
-    this.userMenu.appendChildren([new ExitButton()]);
 
-    const container = new ContainerComponent({ classes: styles.container });
-    container.appendChildren([new LanguageButton(), this.userMenu]);
+    container.appendChildren([new LanguageButton(), this.userMenu, new ExitButton()]);
 
     this.appendChildren([new Logo(), this.title, container]);
   }

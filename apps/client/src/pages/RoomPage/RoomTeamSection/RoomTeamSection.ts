@@ -4,11 +4,7 @@ import RoomItem from '../RoomItem/RoomItem';
 import RoomTeamButtons from '../RoomTeamButtons/RoomTeamButtons';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
-import type { State } from '@/store/types/state';
-import type { Action } from '@/api/StateAPI';
-import store from '@/store/store';
-import { AppActionTypes, RoomPageActionTypes } from '@/store/actions';
-import type { Player, Teams } from '@shared/types/room';
+import type { Player, RoomInfo, Teams } from '@shared/types/room';
 
 const styles = {
   container:
@@ -26,22 +22,28 @@ export default class RoomTeamSection extends ContainerComponent {
   private title: HeadingComponent | null = null;
   private listContainer: ListComponent | null = null;
   private buttons: RoomTeamButtons | null = null;
+  // private unsubs: (() => void)[] = [];
 
   constructor({ teamName, players }: TeamSectionProps) {
     super({ tag: 'section' });
 
+    this.isRedTeam = teamName === 'red';
     this.teamName = teamName;
-    this.render({ teamName, players });
+    // this.unsubs.push(
+    //   store.subscribe((state, action) => this.switchLanguage(state, action)),
+    //   store.subscribe((state, action) => this.handleStateChange(state, action))
+    // );
+    this.render(players);
 
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
+    // this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
 
-    this.addSubscriptions([
-      store.subscribe((state, action) => this.handleStateChange(state, action)),
-    ]);
+    // this.addSubscriptions([
+    //   store.subscribe((state, action) => this.handleStateChange(state, action)),
+    // ]);
   }
 
-  private render({ teamName, players }: TeamSectionProps): void {
-    this.isRedTeam = teamName === 'red';
+  private render(players: Player[]): void {
+    // this.isRedTeam = teamName === 'red';
 
     const containerStyle = this.isRedTeam ? styles.containerRed : styles.containerBlue;
     this.setClasses(`${styles.container} ${containerStyle}`);
@@ -58,7 +60,7 @@ export default class RoomTeamSection extends ContainerComponent {
 
     this.listContainer = new ListComponent({ type: 'ol', classes: styles.list });
 
-    this.buttons = new RoomTeamButtons({ teamName });
+    this.buttons = new RoomTeamButtons({ teamName: this.teamName });
     this.appendChildren([this.title, this.listContainer, this.buttons]);
 
     this.updatePlayersList(players);
@@ -82,31 +84,54 @@ export default class RoomTeamSection extends ContainerComponent {
     this.listContainer.appendChildren([new RoomItem(header), ...playersList]);
   }
 
-  private handleStateChange(_state: State, action: Action): void {
-    if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
-      const room = store.getState().currentRoom;
-      const myId = store.getState().id;
+  public handleStateChange(room: RoomInfo): void {
+    // if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
+    //   const room = store.getState().currentRoom;
+    // const myId = store.getState().id;
 
-      if (!room || !myId) return;
+    //   if (!room || !myId) return;
 
-      const currentPlayers = this.teamName === 'red' ? room.redPlayers : room.bluePlayers;
-      this.updatePlayersList(currentPlayers);
+    const currentPlayers = this.teamName === 'red' ? room.redPlayers : room.bluePlayers;
 
-      const allPlayers = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
-      const me = allPlayers.find((player) => player.id === myId);
+    this.updatePlayersList(currentPlayers);
+    this.buttons?.update();
 
-      const myTeam = me ? me.team : null;
-      this.buttons?.update(myTeam, this.teamName, currentPlayers);
-    }
+    // const allPlayers = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
+    // const me = allPlayers.find((player) => player.id === myId);
+
+    // const myTeam = me ? me.team : null;
+    // if (!myTeam) return;
+    // console.log(myTeam, this.teamName, currentPlayers);
   }
 
-  private switchLanguage(_state: State, action: Action): void {
+  public switchLanguage(): void {
+    // const text = this.isRedTeam
+    //   ? t(TranslationKeys.ROOM_RED_TITLE)
+    //   : t(TranslationKeys.ROOM_BLUE_TITLE);
+
+    // if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
+    //   this.title?.setContent(text);
+    // }
+    if (!this.title || !this.buttons) return;
+
     const text = this.isRedTeam
       ? t(TranslationKeys.ROOM_RED_TITLE)
       : t(TranslationKeys.ROOM_BLUE_TITLE);
+    this.title.setContent(text);
+    this.buttons.switchLanguage();
+  }
 
-    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
-      this.title?.setContent(text);
-    }
+  public destroyComponent(): void {
+    this.buttons?.destroyComponent();
+    this.buttons = null;
+
+    // отписка от store
+    // this.unsubs.forEach((unsub) => unsub());
+    // this.unsubs = [];
+
+    // уничтожаем дочерние
+    this.destroyChildren();
+
+    super.destroy();
   }
 }

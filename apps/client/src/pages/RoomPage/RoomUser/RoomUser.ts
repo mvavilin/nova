@@ -4,7 +4,7 @@ import { Avatar } from '@/components';
 
 const styles = {
   container: 'w-[150px] flex items-center justify-center justify-self-center gap-4',
-  userName: 'truncate flex-1',
+  userName: 'truncate',
 };
 
 export default class RoomUser extends ContainerComponent {

@@ -2,10 +2,8 @@ import { ButtonComponent, ContainerComponent } from '@/api/ComponentsAPI';
 import type { TeamButtonProps } from './RoomTeamButtons.types';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
-import type { State } from '@/store/types/state';
-import type { Action } from '@/api/StateAPI';
 import store from '@/store/store';
-import { AppActionTypes, RoomPageActionTypes } from '@/store/actions';
+import { RoomPageActionTypes } from '@/store/actions';
 import type { Player, Teams } from '@shared/types/room';
 
 const styles = {
@@ -22,14 +20,13 @@ export default class RoomTeamButtons extends ContainerComponent {
   private agentButton: ButtonComponent | null = null;
   private leaveButton: ButtonComponent | null = null;
   private teamName: Teams;
-  private userId = store.getState().id;
-  private userName = store.getState().username;
 
   constructor({ teamName }: TeamButtonProps) {
     super({ classes: styles.container });
     this.teamName = teamName;
+
     this.render(teamName);
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
+    this.update();
   }
 
   private render(teamName: Teams): void {
@@ -41,14 +38,15 @@ export default class RoomTeamButtons extends ContainerComponent {
       content: t(TranslationKeys.ROOM_SPYMASTER_BTN),
       classes: buttonStyle,
       listeners: {
-        click: (): void => this.playAsSpymaster(teamName),
+        click: (): void => this.playAsSpymaster(),
       },
     });
+
     this.agentButton = new ButtonComponent({
       content: t(TranslationKeys.ROOM_AGENT_BTN),
       classes: buttonStyle,
       listeners: {
-        click: (): void => this.playAsAgent(teamName),
+        click: (): void => this.playAsAgent(),
       },
     });
     containerRoleButtons.appendChildren([this.spyButton, this.agentButton]);
@@ -62,42 +60,23 @@ export default class RoomTeamButtons extends ContainerComponent {
     });
 
     this.appendChildren([containerRoleButtons, this.leaveButton]);
-
-    this.updateState();
   }
 
-  private updateState(): void {
-    const room = store.getState().currentRoom;
-    const myId = store.getState().id;
-
-    if (!room || !myId) return;
-
-    const currentPlayers = this.teamName === 'red' ? room.redPlayers : room.bluePlayers;
-
-    const allPlayers = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
-    const me = allPlayers.find((player) => player.id === myId);
-
-    const myTeam = me ? me.team : null;
-    this.update(myTeam, this.teamName, currentPlayers);
-  }
-
-  private switchLanguage(_state: State, action: Action): void {
+  public switchLanguage(): void {
     if (!this.spyButton || !this.agentButton || !this.leaveButton) return;
-
-    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
-      this.spyButton.setContent(t(TranslationKeys.ROOM_SPYMASTER_BTN));
-      this.agentButton.setContent(t(TranslationKeys.ROOM_AGENT_BTN));
-      this.leaveButton.setContent(t(TranslationKeys.ROOM_LEAVE_TEAM_BTN));
-    }
+    this.spyButton.setContent(t(TranslationKeys.ROOM_SPYMASTER_BTN));
+    this.agentButton.setContent(t(TranslationKeys.ROOM_AGENT_BTN));
+    this.leaveButton.setContent(t(TranslationKeys.ROOM_LEAVE_TEAM_BTN));
   }
 
-  private playAsSpymaster(teamName: Teams): void {
-    if (!this.userId || !this.userName) return;
+  private playAsSpymaster(): void {
+    const { id, username } = store.getState();
+    if (!id || !username) return;
 
     const player: Player = {
-      id: this.userId,
-      username: this.userName,
-      team: teamName,
+      id: id,
+      username: username,
+      team: this.teamName,
       role: 'spymaster',
     };
 
@@ -107,13 +86,15 @@ export default class RoomTeamButtons extends ContainerComponent {
     });
   }
 
-  private playAsAgent(teamName: Teams): void {
-    if (!this.userId || !this.userName) return;
+  private playAsAgent(): void {
+    // if (!this.userId || !this.userName) return;
+    const { id, username } = store.getState();
+    if (!id || !username) return;
 
     const player: Player = {
-      id: this.userId,
-      username: this.userName,
-      team: teamName,
+      id: id,
+      username: username,
+      team: this.teamName,
       role: 'agent',
     };
 
@@ -124,54 +105,105 @@ export default class RoomTeamButtons extends ContainerComponent {
   }
 
   private leaveTeam(): void {
-    if (!this.userId || !this.userName) return;
+    const { id, username } = store.getState();
+    if (!id || !username) return;
 
     const player: Player = {
-      id: this.userId,
-      username: this.userName,
+      id: id,
+      username: username,
       team: 'choosing',
       role: 'choosing',
     };
-
     store.dispatch({
       type: RoomPageActionTypes.TEAM_CHANGE,
       payload: player,
     });
   }
 
-  public update(myTeam: Teams | null, sectionTeam: string, teamPlayers: Player[]): void {
+  public update(): void {
     if (!this.spyButton || !this.agentButton || !this.leaveButton) return;
 
+    this.resetButtons();
+
     const room = store.getState().currentRoom;
-    if (!room) return;
+    const myId = store.getState().id;
+    if (!room || !myId) return;
 
-    const hasAnyTeam = myTeam !== null && myTeam !== 'choosing';
-    const isMyTeam = hasAnyTeam && myTeam === sectionTeam;
+    const allPlayers = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
+    const me = allPlayers.find((p) => p.id === myId);
+    if (!me) return;
+    const myTeam = me.team;
+    const myRole = me.role;
+    const redPlayers = room.redPlayers;
+    const bluePlayers = room.bluePlayers;
+
+    const isMyTeam = myTeam === this.teamName;
+
     const maxAgents = Math.floor(room.maxPlayers / 2) - 1;
-    const isSpyOccupied = teamPlayers.some((player) => player.role === 'spymaster');
-    const currentAgentsCount = teamPlayers.filter((player) => player.role === 'agent').length;
-    const isAgentLimitReached = currentAgentsCount >= maxAgents;
 
-    // Блокируем, если я УЖЕ в какой-то команде или роли заняты
-    this.toggleButton(this.spyButton, hasAnyTeam || isSpyOccupied);
-    this.toggleButton(this.agentButton, hasAnyTeam || isAgentLimitReached);
+    const isRedSpyOccupied = redPlayers.some((p) => p.role === 'spymaster');
+    const isBlueSpyOccupied = bluePlayers.some((p) => p.role === 'spymaster');
 
-    // leave оказываем и активируем только если я в ЭТОЙ команде
-    if (isMyTeam) {
-      this.toggleButton(this.leaveButton, false);
-    } else {
-      // Скрываем, если я в другой команде или еще не выбрал
-      this.toggleButton(this.leaveButton, true);
+    const redAgents = redPlayers.filter((p) => p.role === 'agent').length;
+    const blueAgents = bluePlayers.filter((p) => p.role === 'agent').length;
+
+    const isRedAgentLimit = redAgents >= maxAgents;
+    const isBlueAgentLimit = blueAgents >= maxAgents;
+
+    if (myTeam === 'choosing') {
+      this.disable(this.leaveButton);
+
+      if (this.teamName === 'red') {
+        if (isRedSpyOccupied) this.disable(this.spyButton);
+        if (isRedAgentLimit) this.disable(this.agentButton);
+      }
+      if (this.teamName === 'blue') {
+        if (isBlueSpyOccupied) this.disable(this.spyButton);
+        if (isBlueAgentLimit) this.disable(this.agentButton);
+      }
+      return;
+    }
+
+    if (!isMyTeam) {
+      this.disable(this.spyButton);
+      this.disable(this.agentButton);
+      this.disable(this.leaveButton);
+      return;
+    }
+
+    if (myRole === 'spymaster' || myRole === 'agent') {
+      this.disable(this.spyButton);
+      this.disable(this.agentButton);
+      this.enable(this.leaveButton);
     }
   }
 
-  private toggleButton(button: ButtonComponent, isDisabled: boolean): void {
-    if (isDisabled) {
-      button.setAttributes({ disabled: 'disabled' });
-      button.setClasses('disabled-state');
-    } else {
+  private disable(button: ButtonComponent): void {
+    button.setAttributes({ disabled: 'disabled' });
+    button.setClasses('disabled-state');
+  }
+
+  private enable(button: ButtonComponent): void {
+    button.removeAttributes('disabled');
+    button.removeClasses('disabled-state');
+  }
+
+  private resetButtons(): void {
+    const allButtons = [this.spyButton, this.agentButton, this.leaveButton];
+    for (const button of allButtons) {
+      if (!button) return;
       button.removeAttributes('disabled');
       button.removeClasses('disabled-state');
     }
+  }
+
+  public destroyComponent(): void {
+    this.destroyChildren();
+
+    this.spyButton = null;
+    this.agentButton = null;
+    this.leaveButton = null;
+
+    super.destroy();
   }
 }

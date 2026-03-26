@@ -8,6 +8,6 @@ export interface RoomItemProps extends BaseComponentProperties {
 interface RoomPlayer {
   username: string;
   role: string;
-  userId?: string;
+  id?: string;
   team?: string;
 }

@@ -4,6 +4,11 @@ import RoomInfoBlock from './RoomInfoBlock/RoomInfoBlock';
 import RoomTeamSection from './RoomTeamSection/RoomTeamSection';
 import RoomChoosingPlayers from './RoomChoosingPlayers/RoomChoosingPlayers';
 import store from '@/store/store';
+import type { RoomInfo } from '@shared/types/room';
+import { socketClient } from '@/api/SocketClientAPI';
+import { AppActionTypes, RoomPageActionTypes } from '@/store/actions';
+import type { State } from '@/store/types/state';
+import type { Action } from '@/api/StateAPI';
 
 const styles = {
   pageContainer:
@@ -13,18 +18,74 @@ const styles = {
     'w-full h-full flex flex-col min-[950px]:flex-row justify-center min-[950px]:justify-between items-center min-[950px]:items-start gap-10',
 };
 export default class RoomPage extends ContainerComponent {
+  private static currentUnsubscribe: (() => void) | null = null;
+
+  private redTeamSection: RoomTeamSection | null = null;
+  private blueTeamSection: RoomTeamSection | null = null;
+  private choosingSection: RoomChoosingPlayers | null = null;
+
   constructor() {
+    if (RoomPage.currentUnsubscribe) {
+      RoomPage.currentUnsubscribe();
+      RoomPage.currentUnsubscribe = null;
+    }
+
     super({
       tag: 'div',
       classes: styles.pageContainer,
     });
+
+    RoomPage.currentUnsubscribe = store.subscribe((state, action) =>
+      this.refreshFromStore(state, action)
+    );
+
+    this.subscribeToSocket();
+
     this.render();
   }
 
-  private render(): void {
-    const roomDate = store.getState().currentRoom;
+  private refreshFromStore(_state: State, action: Action): void {
+    console.log('REFRESH', action.type);
+    // if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
+    const roomInfo = store.getState().currentRoom;
+    if (!roomInfo) return;
 
-    if (!roomDate) {
+    // Обновляем игроков и кнопки
+    this.redTeamSection?.handleStateChange(roomInfo);
+    this.blueTeamSection?.handleStateChange(roomInfo);
+
+    // Перевод
+    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
+      this.redTeamSection?.switchLanguage();
+      this.blueTeamSection?.switchLanguage();
+    }
+  }
+
+  private handleRoomUpdate = (payload: { roomInfo: RoomInfo }): void => {
+    store.dispatch({
+      type: RoomPageActionTypes.SET_ROOM_DATA,
+      payload: { roomInfo: payload.roomInfo },
+    });
+  };
+
+  private subscribeToSocket(): void {
+    socketClient.onRoomState(this.handleRoomUpdate);
+    socketClient.onPlayerJoined(this.handleRoomUpdate);
+    socketClient.onPlayerLeft(this.handleRoomUpdate);
+    socketClient.onTeamChanged(this.handleRoomUpdate);
+  }
+
+  private unsubscribeFromSocket(): void {
+    socketClient.offRoomState(this.handleRoomUpdate);
+    socketClient.offPlayerJoined(this.handleRoomUpdate);
+    socketClient.offPlayerLeft(this.handleRoomUpdate);
+    socketClient.offTeamChanged(this.handleRoomUpdate);
+  }
+
+  private render(): void {
+    const roomInfo = store.getState().currentRoom;
+
+    if (!roomInfo) {
       //Loader
       console.log(1111);
       return;
@@ -35,21 +96,47 @@ export default class RoomPage extends ContainerComponent {
     const teamContainer = new ContainerComponent({
       classes: styles.teamContainer,
     });
-    teamContainer.appendChildren([
-      new RoomTeamSection({ teamName: 'red', players: roomDate.redPlayers }),
-      new RoomTeamSection({ teamName: 'blue', players: roomDate.bluePlayers }),
-    ]);
+
+    this.redTeamSection = new RoomTeamSection({ teamName: 'red', players: roomInfo.redPlayers });
+
+    this.blueTeamSection = new RoomTeamSection({
+      teamName: 'blue',
+      players: roomInfo.bluePlayers,
+    });
+
+    teamContainer.appendChildren([this.redTeamSection, this.blueTeamSection]);
+
+    this.choosingSection = new RoomChoosingPlayers({ players: roomInfo.choosingPlayers });
 
     main.appendChildren([
       new RoomInfoBlock({
-        roomName: roomDate.name,
-        currentCount: roomDate.playerCount,
-        totalCount: roomDate.maxPlayers,
+        roomName: roomInfo.name,
+        currentCount: roomInfo.playerCount,
+        totalCount: roomInfo.maxPlayers,
       }),
       teamContainer,
-      new RoomChoosingPlayers({ players: roomDate.choosingPlayers }),
+      this.choosingSection,
     ]);
 
     this.appendChildren([new RoomHeader(), main]);
+  }
+  public destroyPage(): void {
+    this.redTeamSection?.destroyComponent();
+    this.blueTeamSection?.destroyComponent();
+
+    this.blueTeamSection = null;
+    this.redTeamSection = null;
+    this.choosingSection = null;
+    super.destroy();
+
+    if (RoomPage.currentUnsubscribe) {
+      RoomPage.currentUnsubscribe();
+      RoomPage.currentUnsubscribe = null;
+    }
+    this.unsubscribeFromSocket();
+    // Очистка store
+    // store.dispatch({
+    //   type: RoomPageActionTypes.CLEAR_ROOM_DATA,
+    // });
   }
 }

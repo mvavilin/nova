@@ -22,13 +22,22 @@ class SocketClient extends BaseSocketClient {
   public onRoomState(handler: (payload: { roomInfo: RoomInfo }) => void): void {
     this.socket.on(ServerEventType.ROOM_STATE, handler);
   }
+  public offRoomState(listener: (payload: { roomInfo: RoomInfo }) => void): void {
+    this._socket.off(ServerEventType.ROOM_PLAYER_LEFT, listener);
+  }
 
   public onPlayerJoined(handler: (payload: { roomInfo: RoomInfo }) => void): void {
     this.socket.on(ServerEventType.ROOM_PLAYER_JOINED, handler);
   }
+  public offPlayerJoined(listener: (payload: { roomInfo: RoomInfo }) => void): void {
+    this._socket.off(ServerEventType.ROOM_PLAYER_LEFT, listener);
+  }
 
   public onPlayerLeft(handler: (payload: { roomInfo: RoomInfo }) => void): void {
     this.socket.on(ServerEventType.ROOM_PLAYER_LEFT, handler);
+  }
+  public offPlayerLeft(listener: (payload: { roomInfo: RoomInfo }) => void): void {
+    this._socket.off(ServerEventType.ROOM_PLAYER_LEFT, listener);
   }
 
   public onRoomList(handler: (payload: { roomPreviews: RoomPreview[] }) => void): void {
@@ -65,6 +74,9 @@ class SocketClient extends BaseSocketClient {
 
   public onTeamChanged(handler: (payload: { roomInfo: RoomInfo }) => void): void {
     this.socket.on(ServerEventType.TEAM_CHANGED, handler);
+  }
+  public offTeamChanged(listener: (payload: { roomInfo: RoomInfo }) => void): void {
+    this._socket.off(ServerEventType.TEAM_CHANGED, listener);
   }
 }
 

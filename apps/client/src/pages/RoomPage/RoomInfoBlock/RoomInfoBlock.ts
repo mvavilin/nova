@@ -29,9 +29,9 @@ export default class RoomInfoBlock extends ContainerComponent {
 
     this.render({ roomName, currentCount, totalCount });
     this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
-    // this.addSubscriptions([
-    //   store.subscribe((state, action) => this.handleStateChange(state, action)),
-    // ]);
+    this.addSubscriptions([
+      store.subscribe((state, action) => this.handleStateChange(state, action)),
+    ]);
     this.subscribeToSocket();
   }
 
@@ -84,14 +84,14 @@ export default class RoomInfoBlock extends ContainerComponent {
     this.appendChildren([textContainerColumn, this.leaveButton]);
   }
 
-  // private handleStateChange(_state: State, action: Action) {
-  //   if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
-  //     const room = store.getState().currentRoom;
-  //     if (!room || !this.playersCount) return;
+  private handleStateChange(_state: State, action: Action): void {
+    if (action.type === RoomPageActionTypes.SET_ROOM_DATA) {
+      const room = store.getState().currentRoom;
+      if (!room || !this.playersCount) return;
 
-  //     this.playersCount.setContent(room.playerCount);
-  //   }
-  // }
+      this.playersCount.setContent(room.playerCount);
+    }
+  }
 
   private leaveRoom(): void {
     store.dispatch({

@@ -75,4 +75,16 @@ export default class RoomChoosingPlayers extends ContainerComponent {
       this.title?.setContent(t(TranslationKeys.ROOM_PLAYERS_CHOOSING));
     }
   }
+  public destroyComponent(): void {
+    this.listContainer = null;
+
+    // отписка от store
+    // this.unsubs.forEach((unsub) => unsub());
+    // this.unsubs = [];
+
+    // уничтожаем дочерние
+    this.destroyChildren();
+
+    super.destroy();
+  }
 }

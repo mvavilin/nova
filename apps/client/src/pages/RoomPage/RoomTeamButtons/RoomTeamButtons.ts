@@ -125,55 +125,35 @@ export default class RoomTeamButtons extends ContainerComponent {
 
     this.resetButtons();
 
-    const room = store.getState().currentRoom;
-    const myId = store.getState().id;
+    const { currentRoom: room, id: myId } = store.getState();
     if (!room || !myId) return;
 
+    // 1. Получаем данные игрока и текущей команды (this.teamName)
     const allPlayers = [...room.redPlayers, ...room.bluePlayers, ...room.choosingPlayers];
     const me = allPlayers.find((p) => p.id === myId);
     if (!me) return;
-    const myTeam = me.team;
-    const myRole = me.role;
-    const redPlayers = room.redPlayers;
-    const bluePlayers = room.bluePlayers;
 
-    const isMyTeam = myTeam === this.teamName;
+    const currentTeamPlayers = this.teamName === 'red' ? room.redPlayers : room.bluePlayers;
+    const isMyTeam = me.team === this.teamName;
 
-    const maxAgents = Math.floor(room.maxPlayers / 2) - 1;
+    // 2. Рассчитываем состояния занятости/лимитов
+    const isSpyOccupied = currentTeamPlayers.some((p) => p.role === 'spymaster');
+    const agentCount = currentTeamPlayers.filter((p) => p.role === 'agent').length;
+    const isAgentLimit = agentCount >= Math.floor(room.maxPlayers / 2) - 1;
 
-    const isRedSpyOccupied = redPlayers.some((p) => p.role === 'spymaster');
-    const isBlueSpyOccupied = bluePlayers.some((p) => p.role === 'spymaster');
-
-    const redAgents = redPlayers.filter((p) => p.role === 'agent').length;
-    const blueAgents = bluePlayers.filter((p) => p.role === 'agent').length;
-
-    const isRedAgentLimit = redAgents >= maxAgents;
-    const isBlueAgentLimit = blueAgents >= maxAgents;
-
-    if (myTeam === 'choosing') {
-      this.disable(this.leaveButton);
-
-      if (this.teamName === 'red') {
-        if (isRedSpyOccupied) this.disable(this.spyButton);
-        if (isRedAgentLimit) this.disable(this.agentButton);
-      }
-      if (this.teamName === 'blue') {
-        if (isBlueSpyOccupied) this.disable(this.spyButton);
-        if (isBlueAgentLimit) this.disable(this.agentButton);
-      }
-      return;
+    // 3. Блокировка кнопок выбора роли (если занято, достигнут лимит или я уже на этой роли)
+    if (isSpyOccupied || (isMyTeam && me.role === 'spymaster')) {
+      this.disable(this.spyButton);
     }
 
-    if (!isMyTeam) {
-      this.disable(this.spyButton);
+    if (isAgentLimit || (isMyTeam && me.role === 'agent')) {
       this.disable(this.agentButton);
-      this.disable(this.leaveButton);
-      return;
     }
 
-    if (myRole === 'spymaster' || myRole === 'agent') {
-      this.disable(this.spyButton);
-      this.disable(this.agentButton);
+    // 4. Управление кнопкой Leave (активна только если я в этой команде и не в 'choosing')
+    if (!isMyTeam || me.team === 'choosing') {
+      this.disable(this.leaveButton);
+    } else {
       this.enable(this.leaveButton);
     }
   }

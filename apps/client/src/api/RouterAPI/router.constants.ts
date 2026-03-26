@@ -1,4 +1,4 @@
-import { WelcomePage, RegistrationPage, LobbyPage, RoomPage, GamePage } from '@pages';
+import { WelcomePage, RegistrationPage, LobbyPage, RoomPage, GamePage, ProfilePage } from '@pages';
 import { Access, type Route } from '@api/RouterAPI/router.types';
 import LoginPage from '@/pages/LoginPage/LoginPage';
 
@@ -22,4 +22,6 @@ export const ROUTES: Route[] = [
   { path: /^\/lobby$/, page: LobbyPage, access: Access.AUTHORIZED },
   { path: /^\/room\/(?<roomId>[^/]+)$/, page: RoomPage, access: Access.AUTHORIZED },
   { path: /^\/game\/(?<gameId>[^/]+)$/, page: GamePage, access: Access.AUTHORIZED },
+  // Profile page is under development (Access.AUTHORIZED)
+  { path: /^\/profile$/, page: ProfilePage, access: Access.UNAUTHORIZED },
 ];

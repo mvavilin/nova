@@ -2,6 +2,7 @@ import LangButton from '@/pages/WelcomePage/LangButton/LangButton';
 import type { ProfileHeroProperties } from './ProfileHero.types';
 
 import { ContainerComponent, HeadingComponent, TextComponent } from '@ComponentsAPI';
+import store from '@/store/store';
 
 export default class ProfileHero extends ContainerComponent {
   constructor({ ...rest }: ProfileHeroProperties = {}) {
@@ -27,7 +28,7 @@ export default class ProfileHero extends ContainerComponent {
           children: [
             new HeadingComponent({
               level: 2,
-              content: `${'StarLeader26'}`,
+              content: `${store.getState().username}`,
               classes: 'text-2xl font-bold',
             }),
             new ContainerComponent({

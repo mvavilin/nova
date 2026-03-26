@@ -2,11 +2,13 @@ import { ContainerComponent, TextComponent } from '@api/ComponentsAPI';
 import { RadioItem, RadioGroup } from '@components/ui';
 import { FORM_CLASSES } from '@constants/styles';
 import { CREATE_ROOM_FORM_CONFIG as CONFIG } from '@constants/forms';
+import { TranslationKeys } from '@i18n/translationKeys';
+import { t } from '@i18n';
 
 export default class PlayerCountField extends ContainerComponent {
   constructor(onChange: (value: string) => void) {
     const label = new TextComponent({
-      content: CONFIG.PLAYERS.LABEL_TEXT,
+      content: t(TranslationKeys.PLAYER_COUNT_FIELD_TITLE),
       classes: FORM_CLASSES.LABEL,
     });
 

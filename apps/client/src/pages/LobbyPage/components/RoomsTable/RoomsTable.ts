@@ -8,13 +8,6 @@ import { SocketActionTypes } from '@actions';
 import { t } from '@i18n';
 import { TranslationKeys } from '@i18n/translationKeys';
 
-const HEADER_TITLES = [
-  t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_ROOM),
-  t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_PLAYERS),
-  t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_STATUS),
-  '',
-];
-
 export default class RoomsTable extends BaseComponent {
   private rooms: RoomPreview[] = [];
   private tbody: BaseComponent;
@@ -40,15 +33,29 @@ export default class RoomsTable extends BaseComponent {
     const thead = new BaseComponent({ tag: 'thead' });
     const tr = new BaseComponent({ tag: 'tr', classes: TABLE_CLASSES.THEAD.TR });
 
-    for (const [index, text] of HEADER_TITLES.entries()) {
-      const th = new BaseComponent({
-        tag: 'th',
-        content: text,
-        classes: (index === 0 ? TABLE_CLASSES.THEAD.TH.FIRST : TABLE_CLASSES.THEAD.TH.BASE).trim(),
-      });
-
-      tr.appendChildren(th);
-    }
+    const thRoom = new BaseComponent({
+      tag: 'th',
+      content: t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_ROOM),
+      classes: TABLE_CLASSES.THEAD.TH.FIRST,
+    });
+    tr.appendChildren(thRoom);
+    const thPlayers = new BaseComponent({
+      tag: 'th',
+      content: t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_PLAYERS),
+      classes: TABLE_CLASSES.THEAD.TH.BASE,
+    });
+    tr.appendChildren(thPlayers);
+    const thStatus = new BaseComponent({
+      tag: 'th',
+      content: t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_STATUS),
+      classes: TABLE_CLASSES.THEAD.TH.BASE,
+    });
+    tr.appendChildren(thStatus);
+    const thEmpty = new BaseComponent({
+      tag: 'th',
+      classes: TABLE_CLASSES.THEAD.TH.BASE,
+    });
+    tr.appendChildren(thEmpty);
 
     thead.appendChildren(tr);
 

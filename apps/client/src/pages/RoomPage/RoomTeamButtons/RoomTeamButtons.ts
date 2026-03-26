@@ -3,7 +3,7 @@ import type { TeamButtonProps } from './RoomTeamButtons.types';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
 import store from '@/store/store';
-import { RoomPageActionTypes } from '@/store/actions';
+import { SocketActionTypes } from '@/store/actions';
 import type { Player, Teams } from '@shared/types/room';
 
 const styles = {
@@ -74,7 +74,7 @@ export default class RoomTeamButtons extends ContainerComponent {
     };
 
     store.dispatch({
-      type: RoomPageActionTypes.TEAM_CHANGE,
+      type: SocketActionTypes.TEAM_CHANGE,
       payload: player,
     });
   }
@@ -91,7 +91,7 @@ export default class RoomTeamButtons extends ContainerComponent {
     };
 
     store.dispatch({
-      type: RoomPageActionTypes.TEAM_CHANGE,
+      type: SocketActionTypes.TEAM_CHANGE,
       payload: player,
     });
   }
@@ -107,7 +107,7 @@ export default class RoomTeamButtons extends ContainerComponent {
       role: 'choosing',
     };
     store.dispatch({
-      type: RoomPageActionTypes.TEAM_CHANGE,
+      type: SocketActionTypes.TEAM_CHANGE,
       payload: player,
     });
   }

@@ -3,7 +3,7 @@ import type { RoomInfoBlockProps } from './RoomInfoBlock.types';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
 import store from '@/store/store';
-import { RoomPageActionTypes } from '@/store/actions';
+import { SocketActionTypes } from '@/store/actions';
 import type { RoomInfo } from '@shared/types/room';
 
 const styles = {
@@ -79,7 +79,7 @@ export default class RoomInfoBlock extends ContainerComponent {
 
   private leaveRoom(): void {
     store.dispatch({
-      type: RoomPageActionTypes.LEAVE_ROOM,
+      type: SocketActionTypes.LEAVE_ROOM,
     });
   }
 

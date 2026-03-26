@@ -10,6 +10,7 @@ export enum ClientEventType {
   ROOM_ASK_ROOM_INFO = 'room:ask-room-info',
   SESSION_PLAYER_EXIT = 'session:player-exit',
   TEAM_CHANGE = 'team:change',
+  GAME_ADD_PLAYER = 'game:add-player',
 }
 
 export enum ServerEventType {

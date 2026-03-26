@@ -28,24 +28,14 @@ function setupGameAddPlayer(
         logger.emit(userId, 'error', { code: response.error });
       }
     } else {
-      const game = roomManager.getGameByUserId(userId);
-      if (game) {
-        game.initial();
+      const { game } = response;
 
-        const { gameInfo, cutGameInfo, spymasterIds, agentIds } = response;
+      const playerIds = game.getPlayerIds();
 
-        for (const spymasterId of spymasterIds) {
-          const socketId = socketIdMap.get(spymasterId);
-          if (socketId) {
-            io.to(socketId).emit('game:start', { gameInfo });
-          }
-        }
-
-        for (const agentId of agentIds) {
-          const socketId = socketIdMap.get(agentId);
-          if (socketId) {
-            io.to(socketId).emit('game:start', { gameInfo: cutGameInfo });
-          }
+      for (const playerId of playerIds) {
+        const socketId = socketIdMap.get(playerId);
+        if (socketId) {
+          io.to(socketId).emit('game:start', { gameInfo: game.getGameInfo(playerId) });
         }
       }
     }

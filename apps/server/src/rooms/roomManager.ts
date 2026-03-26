@@ -1,5 +1,4 @@
 import type { ErrorCode, UserStatus } from '../../../../packages/shared/src/socketEvents.ts';
-import type { GameInfo } from '../../../../packages/shared/src/types/game.ts';
 import type {
   Player,
   RoomInfo,
@@ -243,11 +242,7 @@ export class RoomManager {
     return game;
   }
 
-  public addPlayerToGame(
-    userId: string
-  ):
-    | { gameInfo: GameInfo; cutGameInfo: GameInfo; spymasterIds: string[]; agentIds: string[] }
-    | { error: ErrorCode } {
+  public addPlayerToGame(userId: string): { game: Game } | { error: ErrorCode } {
     const room = this.getRoomByUserId(userId);
 
     if (room) {
@@ -259,11 +254,8 @@ export class RoomManager {
         game.addPlayer(player);
         room.removePlayer(player.id);
         if (game.isFull()) {
-          const gameInfo = game.getGameInfo();
-          const cutGameInfo = game.getGameInfo();
-          const spymasterIds = game.getSpymasterIds();
-          const agentIds = game.getAgentIds();
-          return { gameInfo, cutGameInfo, spymasterIds, agentIds };
+          game.initial();
+          return { game };
         } else {
           return { error: 'GAME_IS_NOT_FULL' };
         }

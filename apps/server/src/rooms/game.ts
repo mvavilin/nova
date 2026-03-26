@@ -4,7 +4,7 @@ import {
   type CardColor,
   type GameInfo,
 } from '../../../../packages/shared/src/types/game.ts';
-import type { Player } from '../../../../packages/shared/src/types/room.ts';
+import type { Player, Teams } from '../../../../packages/shared/src/types/room.ts';
 import jsonData from '../../../../packages/shared/src/question-bank.json' with { type: 'json' };
 import { v4 as uuid } from 'uuid';
 
@@ -14,6 +14,7 @@ export class Game {
   private blueTeam: Player[] = [];
   private maxPlayers: number;
   private cards: Card[] = [];
+  private currentTeam: Teams = 'red';
 
   constructor(roomId: string, maxPlayers: number) {
     this.roomId = roomId;
@@ -33,12 +34,22 @@ export class Game {
     return this.redTeam.length + this.blueTeam.length >= this.maxPlayers;
   }
 
-  public getGameInfo(): GameInfo {
+  public getGameInfo(playerId: string): GameInfo {
+    const player = this.getPlayer(playerId);
+
+    const cards: Card[] = this.cards.map((card) => ({
+      ...card,
+      color:
+        card.status === 'revealed' || (player && player.role === 'spymaster')
+          ? card.color
+          : 'unknown',
+    }));
+
     return {
       redTeam: this.redTeam,
       blueTeam: this.blueTeam,
-      currentTeam: 'red',
-      cards: this.cards,
+      currentTeam: this.currentTeam,
+      cards,
     };
   }
 
@@ -94,9 +105,5 @@ export class Game {
         this.cards.push({ id: uuid(), word, color, status: 'hidden' });
       }
     }
-  }
-
-  public getCards(): Card[] {
-    return this.cards;
   }
 }

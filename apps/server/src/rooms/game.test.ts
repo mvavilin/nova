@@ -6,7 +6,7 @@ test('probe', () => {
   const game = new Game('', 4);
   game.initial();
 
-  const cards = game.getCards();
+  const cards = game.getGameInfo('').cards;
 
   expect(cards.length).toBe(CardCounts.ALL);
 });

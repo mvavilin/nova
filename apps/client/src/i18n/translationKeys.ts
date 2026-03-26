@@ -79,6 +79,35 @@ export const TranslationKeys = {
   LOGIN_TITLE: 'loginTitle',
   LOGIN_SUBMIT_BTN: 'loginSubmitBtn',
   LOGIN_LANG_BTN: 'loginLangBtn',
+
+  LOBBY_TITLE: 'lobbyTitle',
+
+  JOIN_ROOM_SECTION_TITLE: 'joinRoomSectionTitle',
+  CREATE_ROOM_SECTION_TITLE: 'createRoomSectionTitle',
+  PUBLIC_ROOMS_SECTION_TITLE: 'publicRoomsSectionTitle',
+
+  PLAYER_COUNT_FIELD_TITLE: 'playerCountFieldTitle',
+
+  ROOM_NAME_FIELD_TITLE: 'roomNameFieldTitle',
+  ROOM_NAME_FIELD_PLACEHOLDER: 'roomNameFieldPlaceholder',
+  ROOM_NAME_FIELD_CREATE_BUTTON_LABEL: 'roomNameFieldCreateButtonLabel',
+
+  JOIN_ROOM_FIELD_TITLE: 'joinRoomFieldTitle',
+  JOIN_ROOM_FIELD_PLACEHOLDER: 'joinRoomFieldPlaceholder',
+  JOIN_ROOM_FIELD_JOIN_BUTTON_LABEL: 'joinRoomFieldJoinButtonLabel',
+
+  SEARCH_ROOM_FIELD_TITLE: 'searchRoomFieldTitle',
+  SEARCH_ROOM_FIELD_PLACEHOLDER: 'searchRoomFieldPlaceholder',
+  SEARCH_ROOM_FIELD_FIND_BUTTON_LABEL: 'searchRoomFieldFindButtonLabel',
+
+  ROOMS_TABLE_HEADER_TITLES_ROOM: 'roomsTableHeaderRoom',
+  ROOMS_TABLE_HEADER_TITLES_PLAYERS: 'roomsTableHeaderPlayers',
+  ROOMS_TABLE_HEADER_TITLES_STATUS: 'roomsTableHeaderStatus',
+
+  ROOM_ROW_STATUS_WAITING: 'roomRowStatusWaiting',
+  ROOM_ROW_STATUS_PLAYING: 'roomRowStatusPlaying',
+  ROOM_ROW_STATUS_FINISHING: 'roomRowStatusFinishing',
+  ROOM_ROW_JOIN_BUTTON: 'roomRowJoinButton',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];

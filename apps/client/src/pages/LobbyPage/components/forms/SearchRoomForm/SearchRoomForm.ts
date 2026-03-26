@@ -2,6 +2,8 @@ import { FORM_CLASSES } from '@constants/styles';
 import { ContainerComponent, FormComponent } from '@api/ComponentsAPI';
 import { InputText, Button, FieldLabel } from '@components/ui';
 import { RoomsTable } from '@pages/LobbyPage/components';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 export default class SearchRoomForm extends FormComponent {
   private roomLabel: FieldLabel;
@@ -16,7 +18,7 @@ export default class SearchRoomForm extends FormComponent {
     this.roomsTable = roomsTable;
 
     this.roomLabel = new FieldLabel({
-      text: 'Введите название комнаты',
+      text: t(TranslationKeys.SEARCH_ROOM_FIELD_TITLE),
       htmlFor: 'searchRoom',
       classes: 'w-full',
     });
@@ -24,7 +26,7 @@ export default class SearchRoomForm extends FormComponent {
     this.roomInput = new InputText({
       id: 'searchRoom',
       name: 'searchRoom',
-      placeholder: 'Поиск комнаты',
+      placeholder: t(TranslationKeys.SEARCH_ROOM_FIELD_PLACEHOLDER),
       classes: FORM_CLASSES.INPUT,
       listeners: {
         input: (): void => this.onInputChange(),
@@ -32,7 +34,7 @@ export default class SearchRoomForm extends FormComponent {
     });
 
     this.searchRoomButton = new Button({
-      label: 'Найти',
+      label: t(TranslationKeys.SEARCH_ROOM_FIELD_FIND_BUTTON_LABEL),
       classes: FORM_CLASSES.BUTTON,
       onClick: (): void => this.onSearch(),
     });

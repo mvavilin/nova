@@ -1,10 +1,19 @@
 import { type RoomPreview, ROOM_PREVIEW_FIELDS } from '@types';
 import { BaseComponent } from '@ComponentsAPI';
 import { RoomRow } from '@pages/LobbyPage/components';
-import { TABLE_CLASSES, HEADER_TITLES } from '@constants/styles';
+import { TABLE_CLASSES } from '@constants/styles';
 import store from '@store';
 import { socketClient } from '@SocketClientAPI';
 import { SocketActionTypes } from '@actions';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
+
+const HEADER_TITLES = [
+  t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_ROOM),
+  t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_PLAYERS),
+  t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_STATUS),
+  '',
+];
 
 export default class RoomsTable extends BaseComponent {
   private rooms: RoomPreview[] = [];

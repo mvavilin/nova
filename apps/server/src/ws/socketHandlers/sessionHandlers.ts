@@ -128,9 +128,15 @@ function exitPlayer(userId: string, player: Player, recipients: string[]): void 
     }
   }
 
-  const gameResponse = roomManager.leaveGame(userId);
-  if (!('error' in gameResponse)) {
-    const { roomInfo, roomRecipients } = gameResponse;
+  // const gameResponse = roomManager.leaveGame(userId);
+  // if (!('error' in gameResponse)) {
+  //   const { roomInfo, roomRecipients } = gameResponse;
+  // }
+
+  const roomResponse = roomManager.leaveRoom(userId);
+  if (!('error' in roomResponse)) {
+    const { roomInfo, roomPreview, roomRecipients, lobbyRecipients } = roomResponse;
+
     for (const recipient of roomRecipients) {
       const socketId = socketIdMap.get(recipient);
       if (socketId) {
@@ -138,11 +144,7 @@ function exitPlayer(userId: string, player: Player, recipients: string[]): void 
         logger.emit(recipient, 'room:state', { roomInfo });
       }
     }
-  }
 
-  const roomResponse = roomManager.leaveRoom(userId);
-  if (!('error' in roomResponse)) {
-    const { roomPreview, lobbyRecipients } = roomResponse;
     for (const recipient of lobbyRecipients) {
       const socketId = socketIdMap.get(recipient);
       if (socketId) {

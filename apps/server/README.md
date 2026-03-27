@@ -484,6 +484,39 @@ The main disadvantage is that socket.io requires an authentication token during 
 
     </details>
 
+  - **Logout**
+    <details>
+ 
+    - Request to server
+   
+    ```
+      { type: 'session:logout' }
+    ```
+ 
+    - Response to users in room or game
+   
+    ```
+      { type: 'session:player-exit'; payload: { player: Player } }
+    ```
+ 
+    - Response to users in lobby
+   
+    ```
+      { type: 'room:update-review'; payload: { roomPreview: RoomPreview } }
+    ```
+ 
+    - Response to users in room
+   
+    ```
+      { type: 'room:state'; payload: { roomInfo: RoomInfo } }
+    ```
+ 
+    - Response to users in game
+ 
+      Not added yet
+
+    </details>
+
   - **The outdated content will be removed in the future**
     <details>
       
@@ -495,10 +528,10 @@ The main disadvantage is that socket.io requires an authentication token during 
 
     </details>
 
-- ### List of events sent to the server (stored in the @repo/shared/src/socketEvents.ts)
+- ### List of events sent to the server when working with rooms (stored in the @repo/shared/src/socketEvents.ts)
 
   **Important!** Data is not converted to JSON for transmission to and from the server
-  - **Create room**
+  - **Create room and join the room**
     <details>
       
       - Request to server
@@ -506,8 +539,14 @@ The main disadvantage is that socket.io requires an authentication token during 
       ```
         { type: 'room:create'; payload: { settings: RoomSettings } }
       ```
+
+      - Response to  user who sent the request
+   
+      ```
+        { type: 'room:state'; payload: { roomInfo: RoomInfo } }
+      ```
       
-      - Response to all users in loggy and user who sent the request
+      - Response to all users in loggy and
 
     ```
       { type: 'room:created'; payload: { roomPreview: RoomPreview } }
@@ -590,7 +629,25 @@ The main disadvantage is that socket.io requires an authentication token during 
 
     </details>
 
-  - **Exit the room**
+  - **Get room state**
+ 
+    <details>
+ 
+    - Request to server
+   
+    ```
+      { type: 'room:ask-room-info' }
+    ```
+
+    - Response to the user who sent the request
+
+    ```
+      { type: 'room:state'; payload: { roomInfo: RoomInfo } }
+    ```
+
+    </details>
+
+  - **Leave the room**
 
     <details>
       
@@ -603,7 +660,7 @@ The main disadvantage is that socket.io requires an authentication token during 
     - Response to the user who sent the request
 
     ```
-      { type: 'room:state'; payload: { roomPreviews: RoomPreview[] } }
+      { type: 'room:send-list'; payload: { roomPreviews: RoomPreview[] } }
     ```
 
     - Response to all users in lobby
@@ -623,6 +680,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   - **Change the player's team and role**
 
     <details>
+      
     - Request to server
 
     ```
@@ -635,11 +693,6 @@ The main disadvantage is that socket.io requires an authentication token during 
       { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
     ```
 
-    </details>
-
-  - **Start game**
-
-    <details>
     - After each change in the composition of the teams in the room, the server checks the number of players in the teams. If the teams are fully staffed, the server sends a message to all users in the room
 
     ```
@@ -651,7 +704,16 @@ The main disadvantage is that socket.io requires an authentication token during 
     ```
       { type: 'game:add-player' }
     ```
+ 
+    </details>
 
+- ### List of events sent to the server when working with game (stored in the @repo/shared/src/socketEvents.ts)
+
+  **Important!** Data is not converted to JSON for transmission to and from the server
+  - **Start game**
+ 
+    <details>
+ 
     - When receiving a `game:add-player` message, the server adds the user to the upcoming game. After each addition, the server checks the number of players in the game. If the game is full, the server sends a message with the game details to all participants in the game
 
     ```
@@ -662,12 +724,78 @@ The main disadvantage is that socket.io requires an authentication token during 
 
     </details>
 
-  - **Possible error codes**
+
+- ### List of events sent to the server when working with profile (stored in the @repo/shared/src/socketEvents.ts)
+
+  **Important!** Data is not converted to JSON for transmission to and from the server
+  - **Moving to a profile**
+ 
+    <details>
+ 
+    - Request to server
+   
+    ```
+      { type: 'profile:enter' }
+    ```
+ 
+    - Response to the user who sent the request
+
+    ```
+      { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
+    ```
+  
+  - **Leave a profile**
+ 
+    <details>
+ 
+    - Request to server
+   
+    ```
+      { type: 'profile:leave' }
+    ```
+ 
+    - Response to the user who sent the request
+
+    ```
+      { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
+    ```
+  
+    </details>
+
+  - **Ask profile info**
+ 
+    <details>
+ 
+    - Request to server
+   
+    ```
+      { type: 'profile:ask-info' }
+    ```
+ 
+    - Response to the user who sent the request
+
+    ```
+      { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
+    ```
+  
+    </details>
+
+- ### Possible error codes
 
     <details>
 
     ```
-      type ErrorCode = 'ROOM_NOT_FOUND' | 'ROOM_FULL' | 'INVALID_ACTION' | 'ALREADY_ONLINE' | 'GAME_IS_NOT_FULL';
+      export type ErrorCode =
+        | 'PLAYER_NOT_FOUND'
+        | 'ROOM_NOT_FOUND'
+        | 'GAME_NOT_FOUND'
+        | 'ROOM_FULL'
+        | 'THERE_IS_ALREADY_SPYMASTER'
+        | 'THERE_ARE_ALREADY_AGENTS'
+        | 'INVALID_ACTION'
+        | 'AUTH_REQUIRED'
+        | 'ALREADY_ONLINE'
+        | 'GAME_IS_NOT_FULL';
     ```
 
     </details>
@@ -681,7 +809,7 @@ The main disadvantage is that socket.io requires an authentication token during 
     - User statuses
 
   ```
-    type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME';
+    type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME' | 'IN_PROFILE';
   ```
 
   - Room settings that are transmitted to the server when a room is created
@@ -723,6 +851,18 @@ The main disadvantage is that socket.io requires an authentication token during 
     export type Roles = 'spymaster' | 'agent' | 'choosing';
   ```
 
+  - Card colors
+ 
+  ```
+    export type CardColor = 'red' | 'blue' | 'neutral' | 'bomb' | 'unknown';
+  ```
+
+  - Card statuses
+ 
+  ```
+    export type CardStatus = 'hidden' | 'revealed';
+  ```
+
   - Player information for display on the Room page
 
   ```
@@ -748,6 +888,17 @@ The main disadvantage is that socket.io requires an authentication token during 
     }
   ```
 
+  - Card
+ 
+  ```
+    export interface Card {
+      id: string;
+      word: string;
+      color: CardColor;
+      status: CardStatus;
+    }
+  ```
+
   - Game information
 
   ```
@@ -755,6 +906,7 @@ The main disadvantage is that socket.io requires an authentication token during 
       redTeam: Player[];
       blueTeam: Player[];
       currentTeam: Teams;
+      cards: Card[];
     }
   ```
 

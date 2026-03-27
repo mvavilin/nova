@@ -171,6 +171,8 @@ export const TranslationKeys = {
   ROLE_OPERATIVE: 'roleOperative',
 
   FORM_EMPTY_FIELD_WARNING: 'formEmptyFieldWarning',
+
+  PROFILE_TITLE: 'profileTitle',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];

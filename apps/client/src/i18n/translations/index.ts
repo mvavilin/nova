@@ -12,6 +12,7 @@ import knowledgeCheckModal from '@i18n/translations/knowledgeCheckModal';
 import toast from '@i18n/translations/toast';
 import answerRatingModal from '@i18n/translations/answerRatingModal';
 import gameResultsModal from '@i18n/translations/gameResultsModal';
+import profilePage from './profilePage';
 
 export const translations: Record<Language, Record<TranslationKey, string>> = {
   [Language.EN]: {
@@ -27,6 +28,7 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     ...toast[Language.EN],
     ...answerRatingModal[Language.EN],
     ...gameResultsModal[Language.EN],
+    ...profilePage[Language.EN],
   },
   [Language.RU]: {
     ...welcomePage[Language.RU],
@@ -41,5 +43,6 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     ...toast[Language.RU],
     ...answerRatingModal[Language.RU],
     ...gameResultsModal[Language.RU],
+    ...profilePage[Language.RU],
   },
 };

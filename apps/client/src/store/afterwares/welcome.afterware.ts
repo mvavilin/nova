@@ -19,6 +19,10 @@ export default function welcomePageAfterware<State extends StateWithLanguage>():
       router.navigate(URLS.LOGIN());
     }
 
+    if (context.action.type === WelcomeActions.GO_TO_LOBBY_PAGE) {
+      router.navigate(URLS.LOBBY());
+    }
+
     if (context.action.type === WelcomeActions.SWITCH_LANGUAGE) {
       const store = getLocalStorageData(localStorageProps.store) ?? {};
 

@@ -1,6 +1,8 @@
 import { FORM_CLASSES } from '@/constants/styles';
 import { InputComponent, type InputComponentProperties } from '@ComponentsAPI';
 import { WarningMessage } from '@components/ui';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 interface InputTextProperties extends InputComponentProperties {
   onInputText?: (value: string) => void;
@@ -10,7 +12,7 @@ interface InputTextProperties extends InputComponentProperties {
 const INPUT_CLASSES = `w-full rounded bg-white px-3 py-1 text-black placeholder:text-gray-400 transition-colors focus:outline-none focus:ring-1 focus:ring-black disabled:cursor-not-allowed disabled:opacity-50`;
 
 export default class InputText extends InputComponent {
-  private warningMessage = new WarningMessage('Поле не может быть пустым');
+  private warningMessage = new WarningMessage(t(TranslationKeys.FORM_EMPTY_FIELD_WARNING));
 
   constructor({ onInputText, onChange, classes = '', ...properties }: InputTextProperties = {}) {
     super({

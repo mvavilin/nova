@@ -5,6 +5,8 @@ import { Button } from '@components/ui';
 import { app } from '@app';
 import { ANIMATION_DURATION } from '@constants/styles';
 import MessageType from '@constants/messageType';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 interface ToastProperties {
   type: MessageType;
@@ -52,7 +54,7 @@ export default class Toast extends BaseComponent {
     this.appendChildren(new TextComponent({ content: message, classes: MESSAGE_CLASSES }));
     this.appendChildren(
       new Button({
-        label: 'Закрыть',
+        label: t(TranslationKeys.UNDO_LABEL),
         classes: `${UNDO_BUTTON_CLASSES.BASE} ${UNDO_BUTTON_CLASSES[type]}`,
         listeners: {
           click: (): void => {

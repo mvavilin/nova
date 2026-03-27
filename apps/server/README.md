@@ -694,13 +694,13 @@ The main disadvantage is that socket.io requires an authentication token during 
     ```
 
     - After each change in the composition of the teams in the room, the server checks the number of players in the teams. If the teams are fully staffed, the server sends a message to all users in the room
- 
+
     ```
       { type: 'game:start-timer' }
     ```
- 
+
     - After receiving `game:start-timer` message, each user starts a countdown timer until the game begins. After 15 seconds have passed, each user sends a message
-   
+
     ```
       { type: 'game:add-player' }
     ```
@@ -715,13 +715,13 @@ The main disadvantage is that socket.io requires an authentication token during 
     <details>
  
     - When receiving a `game:add-player` message, the server adds the user to the upcoming game. After each addition, the server checks the number of players in the game. If the game is full, the server sends a message with the game details to all participants in the game
-   
+
     ```
       { type: 'game:start'; payload: { gameInfo: GameInfo } }
     ```
- 
+
     - If the game is not full after adding a user to the game, the user will receive a `GAME_IS_NOT_FULL` error message. However, this error can be ignored and the `game:start` message can be expected
-  
+
     </details>
 
 
@@ -900,7 +900,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   ```
 
   - Game information
- 
+
   ```
     export interface GameInfo {
       redTeam: Player[];

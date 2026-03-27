@@ -2,7 +2,7 @@ import { ButtonComponent, FormComponent, HeadingComponent } from '@/api/Componen
 import type { BaseFormProps, FormType } from './BaseForm.types';
 import store from '@/store/store';
 import type InputForm from '../InputForm/InputForm';
-import { FormActions } from '@/store/actions/form.actions';
+import { FormActionTypes } from '@/store/actions/form.actions';
 import { Overlay } from '../ui';
 import Loader from '../ui/Loader/Loader';
 
@@ -89,7 +89,7 @@ export default class BaseForm extends FormComponent {
     const data = this.getFormInputValues();
 
     store.dispatch({
-      type: FormActions.FETCH_DATA,
+      type: FormActionTypes.FETCH_DATA,
       payload: {
         formId: this.formId,
         formData: data,

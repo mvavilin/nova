@@ -10,6 +10,8 @@ export enum ClientEventType {
   ROOM_LEAVE = 'room:leave',
   ROOM_ASK_ROOM_INFO = 'room:ask-room-info',
   SESSION_PLAYER_EXIT = 'session:player-exit',
+  TEAM_CHANGE = 'team:change',
+  GAME_ADD_PLAYER = 'game:add-player',
 }
 
 export enum ServerEventType {
@@ -24,6 +26,9 @@ export enum ServerEventType {
   ROOM_UPDATE_PREVIEW = 'room:update-review',
   ROOM_PLAYER_JOINED = 'room:player-joined',
   ROOM_PLAYER_LEFT = 'room:player-left',
+  TEAM_CHANGED = 'team:changed',
+  GAME_START_TIMER = 'game:start-timer',
+  GAME_START = 'game:start',
   ERROR = 'error',
   CONNECT_ERROR = 'connect_error',
   CONNECT = 'connect',

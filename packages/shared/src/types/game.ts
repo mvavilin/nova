@@ -19,6 +19,7 @@ export interface Card {
 }
 
 export interface GameInfo {
+  id: string;
   redTeam: Player[];
   blueTeam: Player[];
   currentTeam: Teams;

@@ -27,12 +27,12 @@ export const TEAM_HEADER_CLASSES = {
   DIVIDER: 'min-h-full w-px bg-slate-900',
   AVATAR_BORDER: {
     [Team.RED]: {
-      [Role.SPYMASTER]: 'border-red-600',
-      [Role.OPERATIVE]: 'border-red-400',
+      [Role.SPYMASTER]: 'rounded-full w-10 h-10 object-cover shrink-0 border-2 border-red-600',
+      [Role.OPERATIVE]: 'rounded-full w-10 h-10 object-cover shrink-0 border-2 border-red-400',
     },
     [Team.BLUE]: {
-      [Role.SPYMASTER]: 'border-blue-600',
-      [Role.OPERATIVE]: 'border-blue-400',
+      [Role.SPYMASTER]: 'rounded-full w-10 h-10 object-cover shrink-0 border-2 border-blue-600',
+      [Role.OPERATIVE]: 'rounded-full w-10 h-10 object-cover shrink-0 border-2 border-blue-400',
     },
   },
 };
@@ -67,6 +67,7 @@ export default class TeamHeader extends ContainerComponent {
       const avatar = new Avatar({
         ...AVATAR_SIZE,
         classes: TEAM_HEADER_CLASSES.AVATAR_BORDER[player.team][player.role],
+        seed: player.id,
       });
 
       if (this.team === Team.BLUE && player.role === Role.SPYMASTER) {

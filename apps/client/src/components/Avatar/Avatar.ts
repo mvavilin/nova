@@ -1,22 +1,28 @@
 import { ImageComponent } from '@ComponentsAPI';
 import type { ImageComponentProperties } from '@ComponentsAPI';
+import { createAvatar } from '@dicebear/core';
+import { bottts } from '@dicebear/collection';
 
-const AVATAR_CLASSES = `rounded-full object-cover border-2`;
-
-type AvatarProperties = ImageComponentProperties;
-
-const DEFAULT_AVATAR_PROPERTIES: AvatarProperties = {
-  source: 'https://i.pinimg.com/736x/78/7b/87/787b8797600f85304373da5d5b6aab68.jpg',
-  alt: 'Аватар',
-  width: 40,
-  height: 40,
-};
+interface AvatarProperties extends ImageComponentProperties {
+  seed: string | null;
+}
+const AVATAR_CLASSES = `rounded-full w-10 h-10 object-cover border-2 border-white shrink-0`;
 
 export default class Avatar extends ImageComponent {
-  constructor({ classes, ...properties }: AvatarProperties = {}) {
+  constructor(properties: AvatarProperties) {
+    const seedValue = properties.seed ?? 'John Doe';
+
+    const avatarInstance = createAvatar(bottts, {
+      seed: seedValue,
+      size: 128,
+    });
+
     super({
-      classes: `${AVATAR_CLASSES} ${classes}`,
-      ...DEFAULT_AVATAR_PROPERTIES,
+      classes: AVATAR_CLASSES,
+      source: avatarInstance.toDataUri(),
+      alt: 'Avatar',
+      width: 40,
+      height: 40,
       ...properties,
     });
   }

@@ -1,4 +1,5 @@
 import type { Player, RoomInfo, RoomPreview } from '@repo/shared/src/types/room';
+import type { GameInfo } from '@shared/types/game';
 import { ServerEventType, type ErrorCode, type UserStatus } from '@repo/shared/src/socketEvents';
 import { ServerUrl } from '@repo/shared/src/api.constants';
 
@@ -22,13 +23,22 @@ class SocketClient extends BaseSocketClient {
   public onRoomState(handler: (payload: { roomInfo: RoomInfo }) => void): void {
     this.socket.on(ServerEventType.ROOM_STATE, handler);
   }
+  public offRoomState(listener: (payload: { roomInfo: RoomInfo }) => void): void {
+    this._socket.off(ServerEventType.ROOM_PLAYER_LEFT, listener);
+  }
 
   public onPlayerJoined(handler: (payload: { roomInfo: RoomInfo }) => void): void {
     this.socket.on(ServerEventType.ROOM_PLAYER_JOINED, handler);
   }
+  public offPlayerJoined(listener: (payload: { roomInfo: RoomInfo }) => void): void {
+    this._socket.off(ServerEventType.ROOM_PLAYER_LEFT, listener);
+  }
 
   public onPlayerLeft(handler: (payload: { roomInfo: RoomInfo }) => void): void {
     this.socket.on(ServerEventType.ROOM_PLAYER_LEFT, handler);
+  }
+  public offPlayerLeft(listener: (payload: { roomInfo: RoomInfo }) => void): void {
+    this._socket.off(ServerEventType.ROOM_PLAYER_LEFT, listener);
   }
 
   public onRoomList(handler: (payload: { roomPreviews: RoomPreview[] }) => void): void {
@@ -61,6 +71,27 @@ class SocketClient extends BaseSocketClient {
 
   public onSessionPlayerExit(handler: (payload: { player: Player }) => void): void {
     this.socket.on(ServerEventType.SESSION_PLAYER_EXIT, handler);
+  }
+
+  public onTeamChanged(handler: (payload: { roomInfo: RoomInfo }) => void): void {
+    this.socket.on(ServerEventType.TEAM_CHANGED, handler);
+  }
+  public offTeamChanged(listener: (payload: { roomInfo: RoomInfo }) => void): void {
+    this._socket.off(ServerEventType.TEAM_CHANGED, listener);
+  }
+
+  public onGameStartTimer(handler: () => void): void {
+    this.socket.on(ServerEventType.GAME_START_TIMER, handler);
+  }
+  public offGameStartTimer(listener: () => void): void {
+    this._socket.off(ServerEventType.GAME_START_TIMER, listener);
+  }
+
+  public onGameStart(handler: (payload: { gameInfo: GameInfo }) => void): void {
+    this.socket.on(ServerEventType.GAME_START, handler);
+  }
+  public offGameStart(listener: (payload: { gameInfo: GameInfo }) => void): void {
+    this._socket.off(ServerEventType.GAME_START, listener);
   }
 }
 

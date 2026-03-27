@@ -5,3 +5,5 @@ export { default as testFetcherMiddleware } from '@middlewares/socket.fetcher.mi
 export { default as formFetcherMiddleware } from '@middlewares/test.fetcher.middleware';
 
 export { default as socketMiddleware } from '@middlewares/test.sender.middleware';
+
+export { default as roomMiddleware } from '@middlewares/room.fetcher.middleware';

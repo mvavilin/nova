@@ -4,6 +4,7 @@ import type {
   RoomPreview,
   RoomSettings,
   RoomStatus,
+  Teams,
 } from '../../../../packages/shared/src/types/room.ts';
 import { v4 as uuid } from 'uuid';
 
@@ -60,12 +61,38 @@ export class Room {
     return this.getPlayerCount() >= this.maxPlayers;
   }
 
+  public hasSpymaster(selectedTeam: Teams): boolean {
+    const team = selectedTeam === 'red' ? this.redPlayers : this.bluePlayers;
+
+    return team.some((player) => player.role === 'spymaster');
+  }
+
+  public hasAllAgents(selectedTeam: Teams): boolean {
+    const team = selectedTeam === 'red' ? this.redPlayers : this.bluePlayers;
+
+    const agentCount = team.filter((player) => player.role === 'agent').length;
+
+    return agentCount >= this.maxPlayers / 2 - 1;
+  }
+
   public getPlayerIds(): string[] {
     return this.getAllPlayers().map((player) => player.id);
   }
 
   public addPlayer(player: Player): void {
-    this.choosingPlayers.push(player);
+    switch (player.team) {
+      case 'red': {
+        this.redPlayers.push(player);
+        break;
+      }
+      case 'blue': {
+        this.bluePlayers.push(player);
+        break;
+      }
+      default: {
+        this.choosingPlayers.push(player);
+      }
+    }
   }
 
   public getPlayer(userId: string): Player | undefined {

@@ -1,5 +1,7 @@
 import { BaseComponent, TextComponent } from '@ComponentsAPI';
 import { type LogMessage, LogMessageType } from '@repo/shared/src/types/logMessage';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 type LogMessageProperties = Partial<LogMessage>;
 
@@ -7,17 +9,13 @@ export default class LogMessageComponent extends TextComponent {
   private messageComponent?: BaseComponent;
   private infoComponent?: BaseComponent;
 
-  constructor({
-    type = LogMessageType.SYSTEM,
-    message = 'No message',
-    info = null,
-  }: LogMessageProperties) {
+  constructor({ type = LogMessageType.SYSTEM, key, info = null }: LogMessageProperties) {
     super({ classes: LOG_MESSAGE_CLASSES[type] });
 
-    if (message) {
+    if (key) {
       this.messageComponent = new BaseComponent({
         tag: 'span',
-        content: message,
+        content: t(TranslationKeys[key]),
       });
       this.appendChildren([this.messageComponent]);
     }

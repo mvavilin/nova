@@ -1,11 +1,12 @@
-import { LogMessageType } from '@repo/shared/src/types/logMessage';
+import { LogMessageType, LogMessageKeys } from '@repo/shared/src/types/logMessage';
 import { ContainerComponent, FormComponent } from '@ComponentsAPI';
 import { Button, InputText } from '@components/ui';
 import { logOutput } from '@pages/GamePage/components';
 import ICONS from '@assets/icons';
 import { FORM_CLASSES } from '@constants/styles';
-import { LOG_MESSAGES } from '@constants/logMessage';
 import { CREATE_ROOM_FORM_CONFIG as CONFIG } from '@constants/forms';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 export default class LogChatForm extends FormComponent {
   private input?: InputText;
@@ -30,7 +31,7 @@ export default class LogChatForm extends FormComponent {
   }
 
   private initOutput(): void {
-    logOutput.addMessage({ message: LOG_MESSAGES.START_GAME() });
+    logOutput.addMessage({ key: LogMessageKeys.LOG_START_GAME });
 
     this.appendChildren([logOutput]);
   }
@@ -39,7 +40,7 @@ export default class LogChatForm extends FormComponent {
     this.input = new InputText({
       id: CONFIG.LOG_CHAT.INPUT_ID,
       name: CONFIG.LOG_CHAT.INPUT_NAME,
-      placeholder: CONFIG.LOG_CHAT.PLACEHOLDER,
+      placeholder: t(TranslationKeys.CHAT_INPUT_PLACEHOLDER),
       listeners: {
         input: (): void => {
           this.input?.isEmpty();
@@ -67,13 +68,11 @@ export default class LogChatForm extends FormComponent {
 
     logOutput.addMessage({
       type: LogMessageType.RED,
-      message: LOG_MESSAGES.HINT(LogMessageType.RED),
+      key: LogMessageKeys.LOG_HINT_RED,
       info: this.input?.value || null,
     });
 
-    logOutput.addMessage({
-      message: LOG_MESSAGES.VOTE_STARTED(),
-    });
+    logOutput.addMessage({ key: LogMessageKeys.LOG_VOTE_STARTED });
 
     this.input?.setValue();
     this.input?.setDisabled(true);

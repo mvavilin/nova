@@ -1,4 +1,5 @@
 import type { GameInfo } from './types/game.ts';
+import type { ProfileInfo } from './types/profile.ts';
 import type { Player, RoomInfo, RoomPreview, RoomSettings } from './types/room.ts';
 
 export enum ClientEventType {
@@ -45,7 +46,7 @@ export enum UserStatusType {
   IN_GAME = 'IN_GAME',
 }
 
-export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME';
+export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME' | 'IN_PROFILE';
 
 export type ClientEvent =
   | { type: 'room:create'; payload: { settings: RoomSettings } }
@@ -56,7 +57,11 @@ export type ClientEvent =
   | { type: 'room:ask-room-info' }
   | { type: 'session:ask-status' }
   | { type: 'team:change'; payload: { player: Player } }
-  | { type: 'game:add-player' };
+  | { type: 'game:add-player' }
+  | { type: 'session:logout' }
+  | { type: 'profile:enter' }
+  | { type: 'profile:leave' }
+  | { type: 'profile:ask-info' };
 
 export type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
@@ -74,11 +79,17 @@ export type ServerEvent =
   | { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
   | { type: 'game:start-timer' }
   | { type: 'game:start'; payload: { gameInfo: GameInfo } }
+  | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
+  | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };
 
 export type ErrorCode =
+  | 'PLAYER_NOT_FOUND'
   | 'ROOM_NOT_FOUND'
+  | 'GAME_NOT_FOUND'
   | 'ROOM_FULL'
+  | 'THERE_IS_ALREADY_SPYMASTER'
+  | 'THERE_ARE_ALREADY_AGENTS'
   | 'INVALID_ACTION'
   | 'AUTH_REQUIRED'
   | 'ALREADY_ONLINE'

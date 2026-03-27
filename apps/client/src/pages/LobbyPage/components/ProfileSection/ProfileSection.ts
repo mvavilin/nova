@@ -1,5 +1,6 @@
 import store from '@store';
 import { BaseComponent, TextComponent } from '@ComponentsAPI';
+import { LobbyActions } from '@/store/actions/lobby.actions';
 
 const PROFILE_SECTION_CLASSES = `flex items-center gap-5 justify-end cursor-pointer`;
 const USER_NAME_CLASSES = `text-xl font-bold`;
@@ -25,6 +26,10 @@ export default class ProfileSection extends BaseComponent {
     this.appendChildren([this.nameComponent]);
 
     this.unsubscribe = store.subscribe(this.handleStoreUpdate);
+
+    this.setListeners({
+      click: () => store.dispatch({ type: LobbyActions.GO_TO_PROFILE_PAGE }),
+    });
   }
 
   private handleStoreUpdate = (): void => {

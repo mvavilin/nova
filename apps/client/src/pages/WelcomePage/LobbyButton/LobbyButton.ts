@@ -26,7 +26,7 @@ export default class LobbyButton extends ButtonComponent {
     this.setContent(t(TranslationKeys.WELCOME_LOBBY));
     this.setListeners({
       click: (): void => {
-        store.dispatch({ type: WelcomeActions.GO_TO_REGISTRATION_PAGE });
+        store.dispatch({ type: WelcomeActions.GO_TO_LOBBY_PAGE });
       },
     });
   }

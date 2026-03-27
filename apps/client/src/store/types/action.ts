@@ -1,4 +1,5 @@
 import type { WelcomePageActions } from '@actions/welcome.actions';
+import type { LobbyPageActions } from '../actions/lobby.actions';
 
 import type {
   TestPageActions,
@@ -14,4 +15,5 @@ export type AppActions =
   | FormActions
   | SocketActions
   | LocalAppActions
-  | RoomPageActions;
+  | RoomPageActions
+  | LobbyPageActions;

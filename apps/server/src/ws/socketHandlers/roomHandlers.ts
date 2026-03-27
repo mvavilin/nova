@@ -18,7 +18,6 @@ export function setupRoomHandlers(
   setupRoomLeaveEvent(socket);
   setupSendRoomInfoEvent(socket);
   setupChooseTeam(socket);
-  setupGameAddPlayer(socket);
 }
 
 function setupCreateRoomHandlers(
@@ -26,13 +25,24 @@ function setupCreateRoomHandlers(
 ): void {
   const { userId } = socket.data;
   socket.on('room:create', ({ settings }) => {
-    logger.on(userId, 'room:create', { settings });
-    const { payload, recipients } = roomManager.createRoom(settings);
-    for (const recipient of recipients) {
-      const socketId = socketIdMap.get(recipient);
+    const response = roomManager.createRoom(userId, settings);
+
+    if (!('error' in response)) {
+      logger.on(userId, 'room:create', { settings });
+      const { roomPreview, roomInfo, lobbyRecipients } = response;
+
+      const socketId = socketIdMap.get(userId);
       if (socketId) {
-        io.to([socketId]).emit('room:created', { roomPreview: payload });
-        logger.emit(recipient, 'room:created', { roomPreview: payload });
+        io.to(socketId).emit('room:state', { roomInfo });
+        logger.emit(userId, 'room:state', { roomInfo });
+      }
+
+      for (const recipient of lobbyRecipients) {
+        const socketId = socketIdMap.get(recipient);
+        if (socketId) {
+          io.to([socketId]).emit('room:created', { roomPreview });
+          logger.emit(recipient, 'room:created', { roomPreview });
+        }
       }
     }
   });
@@ -213,37 +223,4 @@ function sendGameStartTimer(recipients: string[]): void {
       logger.emit(recipient, 'game:start-timer');
     }
   }
-}
-
-function setupGameAddPlayer(
-  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
-): void {
-  const { userId } = socket.data;
-
-  socket.on('game:add-player', () => {
-    const response = roomManager.addPlayerToGame(userId);
-    if ('error' in response) {
-      const socketId = socketIdMap.get(userId);
-      if (socketId) {
-        io.to(socketId).emit('error', { code: response.error });
-        logger.emit(userId, 'error', { code: response.error });
-      }
-    } else {
-      const { gameInfo, cutGameInfo, spymasterIds, agentIds } = response;
-
-      for (const spymasterId of spymasterIds) {
-        const socketId = socketIdMap.get(spymasterId);
-        if (socketId) {
-          io.to(socketId).emit('game:start', { gameInfo });
-        }
-      }
-
-      for (const agentId of agentIds) {
-        const socketId = socketIdMap.get(agentId);
-        if (socketId) {
-          io.to(socketId).emit('game:start', { gameInfo: cutGameInfo });
-        }
-      }
-    }
-  });
 }

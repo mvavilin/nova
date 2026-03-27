@@ -3,7 +3,9 @@ import { FormActionTypes } from '../actions/form.actions';
 import type { AppActions } from '../types/action';
 import type { AuthResponse } from '@/types/user.types';
 import type { Overlay } from '@/components/ui';
-import { showErrorToast } from '@utils';
+import { getLocalStorageData, saveLocalStorageData, showErrorToast } from '@utils';
+import { isObject } from '@/utils/isObject';
+import { LOCAL_STORAGE_KEYS } from '@/constants/localStorageKeys';
 // import { ServerUrl, Endpoints } from "@repo/shared",
 
 const Endpoints = {
@@ -56,6 +58,13 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
         console.log(response);
         const token = response.headers.get(AuthToken);
         const user: unknown = await response.json();
+
+        const store = getLocalStorageData(LOCAL_STORAGE_KEYS.STORE);
+        if (isObject(user)) {
+          if (isObject(store))
+            saveLocalStorageData(LOCAL_STORAGE_KEYS.STORE, { ...store, ...user });
+          else saveLocalStorageData(LOCAL_STORAGE_KEYS.STORE, { ...user });
+        }
 
         if (isValidAuthResponse(user)) {
           return context.next({

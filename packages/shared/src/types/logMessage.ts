@@ -4,8 +4,27 @@ export enum LogMessageType {
   SYSTEM = 'system',
 }
 
+export const LogMessageKeys = {
+  LOG_START_GAME: 'LOG_START_GAME',
+  LOG_HINT_RED: 'LOG_HINT_RED',
+  LOG_HINT_BLUE: 'LOG_HINT_BLUE',
+  LOG_VOTE_STARTED: 'LOG_VOTE_STARTED',
+  LOG_VOTE_ENDED: 'LOG_VOTE_ENDED',
+  LOG_OWN_CARD_CHOSEN_RED: 'LOG_OWN_CARD_CHOSEN_RED',
+  LOG_OWN_CARD_CHOSEN_BLUE: 'LOG_OWN_CARD_CHOSEN_BLUE',
+  LOG_OTHER_CARD_CHOSEN_RED: 'LOG_OTHER_CARD_CHOSEN_RED',
+  LOG_OTHER_CARD_CHOSEN_BLUE: 'LOG_OTHER_CARD_CHOSEN_BLUE',
+  LOG_CHECKING_ANSWER_RED: 'LOG_CHECKING_ANSWER_RED',
+  LOG_CHECKING_ANSWER_BLUE: 'LOG_CHECKING_ANSWER_BLUE',
+  LOG_ANSWER_COUNTED_RED: 'LOG_ANSWER_COUNTED_RED',
+  LOG_ANSWER_COUNTED_BLUE: 'LOG_ANSWER_COUNTED_BLUE',
+  LOG_SCORE_POINT: 'LOG_SCORE_POINT',
+} as const;
+
+export type LogMessageKey = (typeof LogMessageKeys)[keyof typeof LogMessageKeys];
+
 export type LogMessage = {
   type: LogMessageType;
-  message: string;
+  key: LogMessageKey;
   info: string | null;
 };

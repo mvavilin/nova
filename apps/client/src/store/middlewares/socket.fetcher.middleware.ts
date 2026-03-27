@@ -29,7 +29,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         });
 
         socketClient.onSessionConnect(({ userStatus }) => {
-          if (userStatus === UserStatusType.IN_LOBBY) router.navigate(URLS.LOBBY());
+          if (userStatus === UserStatusType.IN_LOBBY) router.init(URLS.LOBBY());
           if (userStatus === UserStatusType.IN_ROOM)
             store.dispatch({
               type: SocketActionTypes.ROOM_ASK_ROOM_INFO,

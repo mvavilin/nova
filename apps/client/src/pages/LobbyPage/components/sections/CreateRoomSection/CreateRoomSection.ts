@@ -1,3 +1,5 @@
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 import { BaseComponent, HeadingComponent } from '@ComponentsAPI';
 import { SectionHeading } from '@components';
 import { SECTION_CLASSES } from '@constants/styles';
@@ -9,7 +11,7 @@ export default class CreateRoomSection extends BaseComponent {
   constructor() {
     super({ classes: SECTION_CLASSES.CREATE_ROOM_SECTION });
 
-    this.heading = new SectionHeading({ title: 'Создать комнату' });
+    this.heading = new SectionHeading({ title: t(TranslationKeys.CREATE_ROOM_SECTION_TITLE) });
 
     this.render();
   }

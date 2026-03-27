@@ -22,6 +22,7 @@ import {
   roomMiddleware,
 } from '@middlewares';
 import { loggerAfterware, welcomePageAfterware, socketAfterware, appAfterware } from '@afterwares';
+import lobbyPageAfterware from './afterwares/lobby.afterware';
 // chore: remove in production
 // import { initialState } from '@__mocks__/store/initialState';
 
@@ -40,6 +41,12 @@ store.addMiddleware(
   socketMiddleware(),
   roomMiddleware()
 );
-store.addAfterware(loggerAfterware(), welcomePageAfterware(), socketAfterware(), appAfterware());
+store.addAfterware(
+  loggerAfterware(),
+  welcomePageAfterware(),
+  socketAfterware(),
+  appAfterware(),
+  lobbyPageAfterware()
+);
 
 export default store;

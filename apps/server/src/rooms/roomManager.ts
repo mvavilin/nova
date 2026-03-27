@@ -29,7 +29,7 @@ export class RoomManager {
     this.lobby = this.lobby.filter((player) => player.id !== userId);
   }
 
-  private getLobbyIds(): string[] {
+  public getLobbyIds(): string[] {
     return this.lobby.map((player) => player.id);
   }
 
@@ -43,6 +43,10 @@ export class RoomManager {
 
   private removePlayerFromProfile(userId: string): void {
     this.profiles = this.profiles.filter((player) => player.id !== userId);
+  }
+
+  public getProfileIds(): string[] {
+    return this.profiles.map((player) => player.id);
   }
 
   public createRoom(

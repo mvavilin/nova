@@ -1,7 +1,7 @@
 export enum WelcomeActions {
   GO_TO_LOGIN_PAGE = 'WELCOME/GO_TO_LOGIN_PAGE',
   GO_TO_REGISTRATION_PAGE = 'WELCOME/GO_TO_REGISTRATION_PAGE',
-  GO_TO_TEST_PAGE = 'WELCOME/GO_TO_TEST_PAGE',
+  GO_TO_LOBBY_PAGE = 'WELCOME/GO_TO_LOBBY_PAGE',
   SWITCH_LANGUAGE = 'WELCOME/SWITCH_LANGUAGE',
   SHOW_GAME_RULES = 'WELCOME/SHOW_GAME_RULES',
   SHOW_ABOUT_US = 'WELCOME/SHOW_ABOUT_US',
@@ -13,6 +13,10 @@ export type GoToLoginPage = {
 
 export type GoToRegistrationPage = {
   type: WelcomeActions.GO_TO_REGISTRATION_PAGE;
+};
+
+export type GoToLobbyPage = {
+  type: WelcomeActions.GO_TO_LOBBY_PAGE;
 };
 
 export type SwitchLanguage = {
@@ -29,6 +33,7 @@ export type ShowAboutUs = {
 
 export type WelcomePageActions =
   | GoToLoginPage
+  | GoToLobbyPage
   | GoToRegistrationPage
   | SwitchLanguage
   | ShowGameRules

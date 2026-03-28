@@ -187,6 +187,16 @@ export const TranslationKeys = {
   FORM_EMPTY_FIELD_WARNING: 'formEmptyFieldWarning',
 
   PROFILE_TITLE: 'profileTitle',
+  PROFILE_USER_LANGUAGE: 'profileUserLanguage',
+  PROFILE_USER_ONLINE: 'profileUserOnline',
+  PROFILE_USER_LEVEL: 'profileUserLevel',
+  PROFILE_USER_WINRATE: 'profileUserWinrate',
+  PROFILE_USER_CORRECT: 'profileUserCorrect',
+  PROFILE_STATS_TITLE: 'profileStatsTitle',
+  PROFILE_STATS_GAMES: 'profileStatsGames',
+  PROFILE_STATS_WINS: 'profileStatsWins',
+  PROFILE_STATS_LOSSES: 'profileStatsLosses',
+  PROFILE_STATS_WINRATE: 'profileStatsWinrate',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];

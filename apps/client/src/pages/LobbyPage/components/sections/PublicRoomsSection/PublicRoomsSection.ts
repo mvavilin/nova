@@ -12,9 +12,9 @@ import { AppActionTypes } from '@/store/actions';
 
 export default class PublicRoomsSection extends BaseComponent {
   private heading: HeadingComponent;
-  private unsubscribe: () => void;
   private searchRoomForm: SearchRoomForm | null = null;
   private roomsTable: RoomsTable | null = null;
+  private unsubscribe: () => void;
 
   constructor() {
     super({ classes: SECTION_CLASSES.PUBLIC_ROOMS_SECTION });

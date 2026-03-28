@@ -28,8 +28,8 @@ type LobbyChild = CreateRoomSection | JoinRoomSection | PublicRoomsSection;
 export default class LobbyPage extends ContainerComponent {
   private main: ContainerComponent;
   private pageTitle: HeadingComponent;
-  private unsubscribe: () => void;
   private childComponents: LobbyChild[] = [];
+  private unsubscribe: () => void;
 
   constructor() {
     super({ id: 'lobby-page', classes: LOBBY_PAGE_CLASSES });
@@ -77,6 +77,7 @@ export default class LobbyPage extends ContainerComponent {
     }
     this.childComponents = [];
     super.destroy();
+
     return this;
   }
 }

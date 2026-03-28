@@ -13,7 +13,7 @@ export const SECTION_CLASSES = {
 
   // PUBLIC_ROOMS_SECTION: `${BASE_SECTION} col-start-2 row-start-1 row-span-2 h-full`,
 
-  JOIN_ROOM_SECTION: `${BASE_SECTION} col-start-1 lg:row-start-2`,
+  JOIN_ROOM_SECTION: `${BASE_SECTION} col-start-1 lg:row-start-2 h-full`,
 
   CREATE_ROOM_SECTION: `${BASE_SECTION} lg:col-start-1 lg:row-start-1 h-full`,
 

@@ -13,7 +13,7 @@ import { TITLE_CLASSES } from '@constants/styles';
 import { t } from '@i18n';
 import { TranslationKeys } from '@i18n/translationKeys';
 
-const LOBBY_PAGE_CLASSES = `w-full h-full flex flex-col items-center justify-start gap-5 px-20 py-5 bg-cover bg-center font-text`;
+const LOBBY_PAGE_CLASSES = `w-full min-h-screen flex flex-col items-center justify-start gap-5 px-20 py-5 bg-cover bg-center font-text`;
 const MAIN_CLASSES = `w-full h-full grid grid-cols-2 grid-rows-2 gap-5 text-white rounded`;
 
 export default class LobbyPage extends ContainerComponent {

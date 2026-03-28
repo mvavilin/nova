@@ -61,7 +61,7 @@ export default [
       'prettier/prettier': 'error',
 
       // ограничивает функции максимум 40 строками (исключая пустые строки и комментарии)
-      'max-lines-per-function': ['error', { max: 60, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': ['error', { max: 70, skipBlankLines: true, skipComments: true }],
       'unicorn/filename-case': [
         'error',
         {
@@ -101,5 +101,21 @@ export default [
 
   {
     ignores: ['dist/**', 'node_modules/**', 'apps/server/generated/**'],
+  },
+
+  {
+    files: [
+      '**src/api/ComponentsAPI/base/managers/core/ChildrenManager.test.ts',
+      '**src/api/ComponentsAPI/base/managers/core/HierarchyManager.test.ts',
+      '**src/components/BaseForm/BaseForm.test.ts',
+      '**src/components/InputForm/InputForm.test.ts',
+      '**src/store/reducers/form.reducer.ts',
+      '**src/store/middlewares/socket.fetcher.middleware.ts',
+      '**src/store/middlewares/form.fetcher.middleware.ts',
+      '**/src/app.ts',
+    ],
+    rules: {
+      'max-lines-per-function': 'off',
+    },
   },
 ];

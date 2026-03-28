@@ -2,7 +2,7 @@ import { InputComponent } from '@/api/ComponentsAPI';
 import { ContainerComponent } from '@/api/ComponentsAPI';
 import { LabelComponent } from '@/api/ComponentsAPI';
 import { TextComponent } from '@/api/ComponentsAPI';
-import { FormActions } from '@/store/actions/form.actions';
+import { FormActionTypes } from '@/store/actions/form.actions';
 import type { FormType } from '../BaseForm/BaseForm.types';
 import type { FieldName, InputBlockProps } from './InputForm.types';
 import type { Action } from '@/api/StateAPI';
@@ -10,6 +10,7 @@ import type { State } from '@/store/types/state';
 import store from '@/store/store';
 import { t } from '@/i18n';
 import type { TranslationKey } from '@/i18n/translationKeys';
+import { AppActionTypes } from '@/store/actions';
 
 export default class InputForm extends ContainerComponent {
   private formId: FormType;
@@ -79,7 +80,7 @@ export default class InputForm extends ContainerComponent {
     const isValid = this.pattern.test(value) && value.length >= Number(event.target.minLength);
 
     store.dispatch({
-      type: FormActions.FORM_UPDATE_FIELD,
+      type: FormActionTypes.FORM_UPDATE_FIELD,
       payload: {
         formId: this.formId,
         fieldName: this.fieldName,
@@ -96,8 +97,8 @@ export default class InputForm extends ContainerComponent {
   }
 
   private updateInputForm(_state: State, action: Action): void {
-    const isFieldUpdate = action.type === FormActions.FORM_UPDATE_FIELD;
-    const isLanguageSwitch = action.type === FormActions.SWITCH_LANGUAGE;
+    const isFieldUpdate = action.type === FormActionTypes.FORM_UPDATE_FIELD;
+    const isLanguageSwitch = action.type === AppActionTypes.SWITCH_LANGUAGE;
     if (isFieldUpdate || isLanguageSwitch) {
       const formState = store.getState()[this.formId];
       const fieldState = formState.fields[this.fieldName];

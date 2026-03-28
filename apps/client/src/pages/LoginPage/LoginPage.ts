@@ -1,6 +1,6 @@
 import { ContainerComponent } from '@/api/ComponentsAPI';
 import LoginForm from './LoginForm/LoginForm';
-import LoginLangButton from './LoginLangButton/LoginLangButton';
+import LanguageButton from '@/components/LanguageButton/LanguageButton';
 
 export default class LoginPage extends ContainerComponent {
   constructor() {
@@ -14,7 +14,7 @@ export default class LoginPage extends ContainerComponent {
   }
 
   private render(): void {
-    const languageButton = new LoginLangButton();
+    const languageButton = new LanguageButton();
     const form = new LoginForm();
     this.appendChildren([languageButton, form]);
   }

@@ -7,3 +7,4 @@ export { default as RadioGroup } from '@components/ui/RadioGroup/RadioGroup';
 export { default as Overlay } from '@components/ui/Overlay/Overlay';
 export { default as Modal } from '@components/ui/Modal/Modal';
 export { default as WarningMessage } from '@components/ui/WarningMessage/WarningMessage';
+export { default as Loader } from '@components/ui/Loader/Loader';

@@ -1,7 +1,7 @@
 import { ContainerComponent } from '@/api/ComponentsAPI';
 import RegistrationForm from './RegistrationForm.ts/RegistrationForm';
 
-import RegistrationLangButton from './RegistrationLangButton/RegistrationLangButton';
+import LanguageButton from '@/components/LanguageButton/LanguageButton';
 
 export default class RegistrationPage extends ContainerComponent {
   constructor() {
@@ -15,7 +15,7 @@ export default class RegistrationPage extends ContainerComponent {
   }
 
   private render(): void {
-    const languageButton = new RegistrationLangButton();
+    const languageButton = new LanguageButton();
     const form = new RegistrationForm();
     this.appendChildren([languageButton, form]);
   }

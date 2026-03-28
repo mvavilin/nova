@@ -14,7 +14,8 @@
     "start": "node ./dist/Nova-Codenames/apps/server/src/index.js",
     "dev": "tsx watch ./src/index.js",
     "prisma:migrate": "npx prisma migrate dev --name init",
-    "prisma:generate": "npx prisma generate"
+    "prisma:generate": "npx prisma generate",
+    "coverage": "vitest run --coverage"
   },
   "keywords": [],
   "author": "",
@@ -28,6 +29,7 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^25.3.0",
     "@types/pg": "^8.16.0",
+    "@vitest/coverage-v8": "^4.1.1",
     "install": "^0.13.0",
     "npm": "^11.10.1",
     "prisma": "^7.4.1",

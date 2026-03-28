@@ -12,7 +12,7 @@ import { t } from '@/i18n';
 import store from '@/store/store';
 import type { State } from '@/store/types';
 import type { Action } from '@/api/StateAPI';
-import { WelcomeActions } from '@/store/actions/welcome.actions';
+import { AppActionTypes } from '@/store/actions/app.actions';
 
 export default class ProfilePage extends ContainerComponent {
   constructor({ ...rest }: ProfilePageProperties = {}) {
@@ -48,7 +48,7 @@ export default class ProfilePage extends ContainerComponent {
     heading.addSubscriptions([store.subscribe((state, action) => switchLanguage(state, action))]);
 
     function switchLanguage(_state: State, action: Action): void {
-      if (action.type === WelcomeActions.SWITCH_LANGUAGE) {
+      if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
         heading.setContent(t(TranslationKeys.PROFILE_TITLE));
       }
     }

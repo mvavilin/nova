@@ -4,15 +4,10 @@ import { FORM_CLASSES } from '@constants/styles';
 import { CREATE_ROOM_FORM_CONFIG as CONFIG } from '@constants/forms';
 import { t } from '@i18n';
 import { TranslationKeys } from '@i18n/translationKeys';
-import type { State } from '@/store/types/state';
-import type { Action } from '@/api/StateAPI';
-import store from '@/store/store';
-import { AppActionTypes } from '@/store/actions';
 
 export default class RoomNameField extends ContainerComponent {
   private onInput: (value: string) => void;
   private onSubmit: () => void;
-  private unsubscribe: () => void;
   private label: FieldLabel | null = null;
   private input: InputText | null = null;
   private button: Button | null = null;
@@ -24,8 +19,6 @@ export default class RoomNameField extends ContainerComponent {
     this.onSubmit = onSubmit;
 
     this.render();
-
-    this.unsubscribe = store.subscribe((state, action) => this.switchLanguage(state, action));
   }
 
   private render(): void {
@@ -70,17 +63,10 @@ export default class RoomNameField extends ContainerComponent {
     this.appendChildren([this.label, inputRow]);
   }
 
-  private switchLanguage(_state: State, action: Action): void {
-    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
-      if (!this.label || !this.input || !this.button) return;
-      this.label.setContent(t(TranslationKeys.ROOM_NAME_FIELD_TITLE));
-      this.input.setPlaceholder(t(TranslationKeys.ROOM_NAME_FIELD_PLACEHOLDER));
-      this.button.setLabel(t(TranslationKeys.ROOM_NAME_FIELD_CREATE_BUTTON_LABEL));
-    }
-  }
-
-  public override destroy(): this {
-    this.unsubscribe();
-    return this;
+  public switchLanguage(): void {
+    if (!this.label || !this.input || !this.button) return;
+    this.label.setContent(t(TranslationKeys.ROOM_NAME_FIELD_TITLE));
+    this.input.setPlaceholder(t(TranslationKeys.ROOM_NAME_FIELD_PLACEHOLDER));
+    this.button.setLabel(t(TranslationKeys.ROOM_NAME_FIELD_CREATE_BUTTON_LABEL));
   }
 }

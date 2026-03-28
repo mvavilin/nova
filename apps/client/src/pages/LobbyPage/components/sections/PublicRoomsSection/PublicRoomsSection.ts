@@ -13,6 +13,8 @@ import { AppActionTypes } from '@/store/actions';
 export default class PublicRoomsSection extends BaseComponent {
   private heading: HeadingComponent;
   private unsubscribe: () => void;
+  private searchRoomForm: SearchRoomForm | null = null;
+  private roomsTable: RoomsTable | null = null;
 
   constructor() {
     super({ classes: SECTION_CLASSES.PUBLIC_ROOMS_SECTION });
@@ -25,19 +27,24 @@ export default class PublicRoomsSection extends BaseComponent {
   }
 
   private render(): void {
-    const roomsTable = new RoomsTable();
+    this.roomsTable = new RoomsTable();
+    this.searchRoomForm = new SearchRoomForm(this.roomsTable);
 
-    this.appendChildren([this.heading, new SearchRoomForm(roomsTable), roomsTable]);
+    this.appendChildren([this.heading, this.searchRoomForm, this.roomsTable]);
   }
 
   private switchLanguage(_state: State, action: Action): void {
     if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
+      if (!this.searchRoomForm || !this.roomsTable) return;
       this.heading.setContent(t(TranslationKeys.PUBLIC_ROOMS_SECTION_TITLE));
+      this.searchRoomForm.switchLanguage();
+      this.roomsTable.switchLanguage();
     }
   }
 
   public override destroy(): this {
     this.unsubscribe();
+    super.destroy();
     return this;
   }
 }

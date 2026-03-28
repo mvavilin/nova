@@ -23,10 +23,13 @@ import { AppActionTypes } from '@/store/actions';
 const LOBBY_PAGE_CLASSES = `w-full min-h-screen flex flex-col items-center justify-start gap-5 px-5 sm:px-15 py-5 bg-cover bg-center font-text`;
 const MAIN_CLASSES = `w-full max-w-7xl h-full grid grid-cols-1 lg:grid-cols-2 gap-5 text-white rounded`;
 
+type LobbyChild = CreateRoomSection | JoinRoomSection | PublicRoomsSection;
+
 export default class LobbyPage extends ContainerComponent {
   private main: ContainerComponent;
   private pageTitle: HeadingComponent;
   private unsubscribe: () => void;
+  private childComponents: LobbyChild[] = [];
 
   constructor() {
     super({ id: 'lobby-page', classes: LOBBY_PAGE_CLASSES });
@@ -46,12 +49,12 @@ export default class LobbyPage extends ContainerComponent {
   }
 
   private render(): void {
-    this.main.appendChildren([
-      // new SoloSection(),
-      new CreateRoomSection(),
-      new JoinRoomSection(),
-      new PublicRoomsSection(),
-    ]);
+    // new SoloSection(),
+    const createRoom = new CreateRoomSection();
+    const joinRoom = new JoinRoomSection();
+    const publicRooms = new PublicRoomsSection();
+    this.childComponents.push(createRoom, joinRoom, publicRooms);
+    this.main.appendChildren([createRoom, joinRoom, publicRooms]);
 
     this.appendChildren([
       new Header({
@@ -69,6 +72,11 @@ export default class LobbyPage extends ContainerComponent {
 
   public override destroy(): this {
     this.unsubscribe();
+    for (const child of this.childComponents) {
+      child.destroy();
+    }
+    this.childComponents = [];
+    super.destroy();
     return this;
   }
 }

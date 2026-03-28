@@ -4,10 +4,6 @@ import { JoinButton } from '@pages/LobbyPage/components';
 import { TABLE_CLASSES } from '@constants/styles';
 import { t } from '@i18n';
 import { TranslationKeys } from '@i18n/translationKeys';
-import type { State } from '@/store/types/state';
-import type { Action } from '@/api/StateAPI';
-import store from '@/store/store';
-import { AppActionTypes } from '@/store/actions';
 
 export default class RoomRow extends BaseComponent {
   private _room: RoomPreview;
@@ -16,7 +12,6 @@ export default class RoomRow extends BaseComponent {
   private statusTd: BaseComponent;
   private actionTd: BaseComponent;
   private joinButton: JoinButton | null = null;
-  private unsubscribe: () => void;
 
   constructor(room: RoomPreview) {
     super({ tag: 'tr', id: room.id, classes: TABLE_CLASSES.TBODY.TR });
@@ -50,8 +45,6 @@ export default class RoomRow extends BaseComponent {
     });
 
     this.render();
-
-    this.unsubscribe = store.subscribe((state, action) => this.switchLanguage(state, action));
   }
 
   public get room(): RoomPreview {
@@ -117,19 +110,13 @@ export default class RoomRow extends BaseComponent {
     }
   }
 
-  private switchLanguage(_state: State, action: Action): void {
-    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
-      const statusText =
-        this.room.status === ROOM_STATUS.WAITING
-          ? t(TranslationKeys.ROOM_ROW_STATUS_WAITING)
-          : t(TranslationKeys.ROOM_ROW_STATUS_PLAYING);
+  public switchLanguage(): void {
+    const statusText =
+      this.room.status === ROOM_STATUS.WAITING
+        ? t(TranslationKeys.ROOM_ROW_STATUS_WAITING)
+        : t(TranslationKeys.ROOM_ROW_STATUS_PLAYING);
 
-      this.statusTd.setContent(statusText);
-    }
-  }
-
-  public override destroy(): this {
-    this.unsubscribe();
-    return this;
+    this.statusTd.setContent(statusText);
+    this.joinButton?.switchLanguage();
   }
 }

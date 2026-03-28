@@ -11,12 +11,14 @@ import { AppActionTypes } from '@/store/actions';
 
 export default class CreateRoomSection extends BaseComponent {
   private heading: HeadingComponent;
+  private roomForm: CreateRoomForm;
   private unsubscribe: () => void;
 
   constructor() {
     super({ classes: SECTION_CLASSES.CREATE_ROOM_SECTION });
 
     this.heading = new SectionHeading({ title: t(TranslationKeys.CREATE_ROOM_SECTION_TITLE) });
+    this.roomForm = new CreateRoomForm();
 
     this.render();
 
@@ -24,17 +26,19 @@ export default class CreateRoomSection extends BaseComponent {
   }
 
   private render(): void {
-    this.appendChildren([this.heading, new CreateRoomForm()]);
+    this.appendChildren([this.heading, this.roomForm]);
   }
 
   private switchLanguage(_state: State, action: Action): void {
     if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.heading.setContent(t(TranslationKeys.CREATE_ROOM_SECTION_TITLE));
+      this.roomForm.switchLanguage();
     }
   }
 
   public override destroy(): this {
     this.unsubscribe();
+    super.destroy();
     return this;
   }
 }

@@ -7,9 +7,6 @@ import { socketClient } from '@SocketClientAPI';
 import { SocketActionTypes } from '@actions';
 import { t } from '@i18n';
 import { TranslationKeys } from '@i18n/translationKeys';
-import type { State } from '@/store/types/state';
-import type { Action } from '@/api/StateAPI';
-import { AppActionTypes } from '@/store/actions';
 
 export default class RoomsTable extends BaseComponent {
   private rooms: RoomPreview[] = [];
@@ -17,7 +14,7 @@ export default class RoomsTable extends BaseComponent {
   private thRoom: BaseComponent | null = null;
   private thPlayers: BaseComponent | null = null;
   private thStatus: BaseComponent | null = null;
-  private unsubscribe: () => void;
+  private roomComponents: RoomRow[] = [];
 
   constructor() {
     super({ tag: 'table', classes: TABLE_CLASSES.TABLE });
@@ -28,7 +25,6 @@ export default class RoomsTable extends BaseComponent {
 
     this.subscribeToState();
     this.subscribeToSocket();
-    this.unsubscribe = store.subscribe((state, action) => this.switchLanguage(state, action));
 
     store.dispatch({ type: SocketActionTypes.SOCKET_REQUEST_ROOM_LIST });
   }
@@ -108,7 +104,9 @@ export default class RoomsTable extends BaseComponent {
 
   public addRoom(room: RoomPreview): void {
     this.rooms.push(room);
-    this.tbody.appendChildren(new RoomRow(room));
+    const newRoom = new RoomRow(room);
+    this.roomComponents.push(newRoom);
+    this.tbody.appendChildren(newRoom);
   }
 
   public updateRoomField<K extends keyof RoomPreview>(
@@ -162,17 +160,13 @@ export default class RoomsTable extends BaseComponent {
     return this.tbody.children.filter((child) => this.isRoom(child));
   }
 
-  private switchLanguage(_state: State, action: Action): void {
-    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
-      if (!this.thRoom || !this.thPlayers || !this.thStatus) return;
-      this.thRoom.setContent(t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_ROOM));
-      this.thPlayers.setContent(t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_PLAYERS));
-      this.thStatus.setContent(t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_STATUS));
+  public switchLanguage(): void {
+    if (!this.thRoom || !this.thPlayers || !this.thStatus) return;
+    this.thRoom.setContent(t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_ROOM));
+    this.thPlayers.setContent(t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_PLAYERS));
+    this.thStatus.setContent(t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_STATUS));
+    for (const room of this.roomComponents) {
+      room.switchLanguage();
     }
-  }
-
-  public override destroy(): this {
-    this.unsubscribe();
-    return this;
   }
 }

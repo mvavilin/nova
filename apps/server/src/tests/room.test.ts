@@ -1,5 +1,4 @@
 import { expect, test } from 'vitest';
-import { Room } from './room.ts';
 import type {
   Player,
   RoomInfo,
@@ -7,6 +6,7 @@ import type {
   RoomSettings,
 } from '../../../../packages/shared/src/types/room.ts';
 import { v4 as uuid } from 'uuid';
+import { Room } from '../rooms/room.ts';
 
 test('The getRoomPreview method should return a summary of the room', () => {
   const roomSettings: RoomSettings = { name: 'unknown room', maxPlayers: 4 };

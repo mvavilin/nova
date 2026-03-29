@@ -1,8 +1,8 @@
 import { expect, test } from 'vitest';
-import { Game } from './game.ts';
 import { CardCounts } from '../../../../packages/shared/src/types/game.ts';
 import type { Player } from '../../../../packages/shared/src/types/room.ts';
 import { v4 as uuid } from 'uuid';
+import { Game } from '../rooms/game.ts';
 
 test('The game should create 25 cards', () => {
   const game = new Game('', 4);

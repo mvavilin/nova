@@ -6,8 +6,14 @@ import { TranslationKeys } from '@i18n/translationKeys';
 import { t } from '@i18n';
 
 export default class PlayerCountField extends ContainerComponent {
+  private label: TextComponent;
+
   constructor(onChange: (value: string) => void) {
-    const label = new TextComponent({
+    super({
+      classes: FORM_CLASSES.INPUT_CONTAINER,
+    });
+
+    this.label = new TextComponent({
       content: t(TranslationKeys.PLAYER_COUNT_FIELD_TITLE),
       classes: FORM_CLASSES.LABEL,
     });
@@ -27,9 +33,11 @@ export default class PlayerCountField extends ContainerComponent {
       onChange,
     });
 
-    super({
-      classes: FORM_CLASSES.INPUT_CONTAINER,
-      children: [label, radioGroup],
-    });
+    this.appendChildren([this.label, radioGroup]);
+  }
+
+  public switchLanguage(): void {
+    if (!this.label) return;
+    this.label.setContent(t(TranslationKeys.PLAYER_COUNT_FIELD_TITLE));
   }
 }

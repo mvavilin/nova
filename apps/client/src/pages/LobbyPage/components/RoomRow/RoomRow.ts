@@ -109,4 +109,14 @@ export default class RoomRow extends BaseComponent {
       this.syncJoinButton();
     }
   }
+
+  public switchLanguage(): void {
+    const statusText =
+      this.room.status === ROOM_STATUS.WAITING
+        ? t(TranslationKeys.ROOM_ROW_STATUS_WAITING)
+        : t(TranslationKeys.ROOM_ROW_STATUS_PLAYING);
+
+    this.statusTd.setContent(statusText);
+    this.joinButton?.switchLanguage();
+  }
 }

@@ -85,4 +85,10 @@ export default class SearchRoomForm extends FormComponent {
       }
     }
   }
+
+  public switchLanguage(): void {
+    this.roomLabel.setContent(t(TranslationKeys.SEARCH_ROOM_FIELD_TITLE));
+    this.roomInput.setPlaceholder(t(TranslationKeys.SEARCH_ROOM_FIELD_PLACEHOLDER));
+    this.searchRoomButton.setLabel(t(TranslationKeys.SEARCH_ROOM_FIELD_FIND_BUTTON_LABEL));
+  }
 }

@@ -1,4 +1,4 @@
-import type { GameInfo } from './types/game.ts';
+import type { CardColor, GameInfo } from './types/game.ts';
 import type { ProfileInfo } from './types/profile.ts';
 import type { Player, RoomInfo, RoomPreview, RoomSettings, Teams } from './types/room.ts';
 
@@ -45,9 +45,47 @@ export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME' | 'IN_PROFILE';
 
 export type GAME_PHASE = 'clue' | 'guess' | 'check' | 'finish';
 
+export type CardTestResult =
+  | {
+      type: 'own';
+      payload: { userId: string; question: string; question_en: string; observers: string[] };
+    }
+  | {
+      type: 'alien';
+      payload: {
+        spymasterId: string;
+        team: Teams;
+        cardId: string;
+        color: CardColor;
+        recipients: string[];
+      };
+    }
+  | {
+      type: 'bomb';
+      payload: {
+        spymasterId: string;
+        team: Teams;
+        cardId: string;
+        color: CardColor;
+        recipients: string[];
+      };
+    }
+  | {
+      type: 'neutral';
+      payload: {
+        spymasterId: string;
+        team: Teams;
+        cardId: string;
+        color: CardColor;
+        recipients: string[];
+      };
+    }
+  | { type: 'no-change'; payload: { spymasterId: string; team: Teams } };
+
 export const RECONNECT_MAX_TIME = 60_000;
 export const SECOND_COUNT_BEFORE_START_GAME = 15;
 export const SECOND_COUNT_FOR_ASK_CLUE = 30;
+export const SECOND_COUNT_FOR_GUESS = 60;
 
 export type ClientEvent =
   | { type: 'session:ask-status' }
@@ -87,6 +125,7 @@ export type ServerEvent =
   | { type: 'game:turn-changed'; payload: { team: Teams } }
   | { type: 'game:clue-given'; payload: { clue: string } }
   | { type: 'game:card-chosen'; payload: { cardId: string; players: Player[] } }
+  | { type: 'game:card-shown'; payload: { cardId: string; color: CardColor } }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
   | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };

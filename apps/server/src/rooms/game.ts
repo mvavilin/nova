@@ -9,9 +9,12 @@ import jsonData from '../../../../packages/shared/src/question-bank.json' with {
 import { v4 as uuid } from 'uuid';
 import {
   SECOND_COUNT_FOR_ASK_CLUE,
+  SECOND_COUNT_FOR_GUESS,
+  type CardTestResult,
   type ErrorCode,
   type GAME_PHASE,
 } from '../../../../packages/shared/src/socketEvents.ts';
+import type { CheckQuestion } from '../../../../packages/shared/src/types/question.ts';
 
 export class Game {
   private roomId: string;
@@ -23,6 +26,7 @@ export class Game {
   private clueTimer: NodeJS.Timeout | null = null;
   private gamePhase: GAME_PHASE = 'clue';
   private chosenCards: Map<string, string[]> = new Map();
+  private checkQuestion: CheckQuestion | null = null;
 
   constructor(roomId: string, maxPlayers: number) {
     this.roomId = roomId;
@@ -48,7 +52,7 @@ export class Game {
     const cards: Card[] = this.cards.map((card) => ({
       ...card,
       color:
-        card.status === 'revealed' || (player && player.role === 'spymaster')
+        (player && card.whoSees.has(player.team)) || (player && player.role === 'spymaster')
           ? card.color
           : 'unknown',
     }));
@@ -110,7 +114,7 @@ export class Game {
       const word = words[i];
       const color = colors[i];
       if (word && color) {
-        this.cards.push({ id: uuid(), word, color, status: 'hidden' });
+        this.cards.push({ id: uuid(), word, color, whoSees: new Set() });
       }
     }
   }
@@ -133,7 +137,8 @@ export class Game {
 
   public giveClue(
     userId: string,
-    clue: string
+    clue: string,
+    callback: (result: CardTestResult) => void
   ): { clue: string; agentIds: string[] } | { error: ErrorCode } {
     const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
     const spymaster = team.find((player) => player.role === 'spymaster' && player.id === userId);
@@ -144,6 +149,11 @@ export class Game {
         this.clueTimer = null;
       }
       this.gamePhase = 'guess';
+      const guessTimer = setTimeout(() => {
+        clearTimeout(guessTimer);
+        const result = this.guessTest();
+        callback(result);
+      }, SECOND_COUNT_FOR_GUESS * 1000);
       const agentIds = team.filter((player) => player.role === 'agent').map((player) => player.id);
       return { clue, agentIds };
     }
@@ -160,8 +170,8 @@ export class Game {
     if (agent && this.gamePhase === 'guess') {
       const card = this.cards.find((card) => card.id === cardId);
 
-      if (card && card.status === 'hidden') {
-        let choice = this.chosenCards.get(this.roomId);
+      if (card && !card.whoSees.has(agent.team)) {
+        let choice = this.chosenCards.get(cardId);
         if (choice) {
           if (choice.includes(userId)) {
             choice = choice.filter((id) => id !== userId);
@@ -171,7 +181,7 @@ export class Game {
         } else {
           choice = [userId];
         }
-        this.chosenCards.set(this.roomId, choice);
+        this.chosenCards.set(cardId, choice);
         const players = team.filter((player) => choice.includes(player.id));
         const recipients = team.map((player) => player.id);
         return { players, recipients };
@@ -190,5 +200,76 @@ export class Game {
       return spymaster.id;
     }
     return '';
+  }
+
+  private guessTest(): CardTestResult {
+    const termWithCardId = 0;
+    const termWithUserIds = 1;
+    let userIdCount = 0;
+    let choices = [...this.chosenCards.entries()];
+    for (const choice of choices) {
+      if (choice[termWithUserIds].length > userIdCount) {
+        userIdCount = choice[termWithUserIds].length;
+      }
+    }
+    if (userIdCount > 0) {
+      choices = choices.filter((choice) => choice[termWithUserIds].length === userIdCount);
+      const choice = choices[Math.floor(Math.random() * choices.length)];
+      if (choice) {
+        const cardId = choice[termWithCardId];
+        const card = this.cards.find((card) => card.id === cardId);
+        const opponentColor = this.currentTeam === 'red' ? 'blue' : 'red';
+        if (card) {
+          switch (card.color) {
+            case this.currentTeam: {
+              const userIds = choice[termWithUserIds];
+              const userId = userIds[Math.floor(Math.random() * userIds.length)];
+              const checkQuestion = this.getCheckQuestion(card.word);
+              if (userId && checkQuestion) {
+                this.checkQuestion = checkQuestion;
+                const { question, question_en } = this.checkQuestion;
+                const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+                const observers = team
+                  .filter((player) => player.id !== userId)
+                  .map((player) => player.id);
+                return { type: 'own', payload: { userId, question, question_en, observers } };
+              }
+              break;
+            }
+            case opponentColor:
+            case 'neutral': {
+              const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+              const recipients = team.map((player) => player.id);
+              card.whoSees.add(this.currentTeam);
+              const { id: cardId, color } = card;
+              const spymasterId = this.turnChange();
+              return {
+                type: card.color === opponentColor ? 'alien' : 'neutral',
+                payload: { spymasterId, team: this.currentTeam, cardId, color, recipients },
+              };
+            }
+          }
+        }
+      }
+    }
+
+    const spymasterId = this.turnChange();
+    return { type: 'no-change', payload: { team: this.currentTeam, spymasterId } };
+  }
+
+  private getCheckQuestion(word: string): CheckQuestion | undefined {
+    const termWithWord = 0;
+    const termWithCheckQuestions = 1;
+    const entries = Object.entries(jsonData);
+    const entry = entries.find((entry) => entry[termWithWord] === word);
+    if (entry) {
+      const list = entry[termWithCheckQuestions];
+      const checkQuestion = list[Math.floor(Math.random() * list.length)];
+      if (checkQuestion) {
+        return checkQuestion;
+      }
+    }
+
+    return;
   }
 }

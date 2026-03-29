@@ -15,7 +15,7 @@ export interface Card {
   id: string;
   word: string;
   color: CardColor;
-  status: CardStatus;
+  whoSees: Set<Teams>;
 }
 
 export interface GameInfo {

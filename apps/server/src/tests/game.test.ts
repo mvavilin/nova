@@ -3,7 +3,11 @@ import { CardCounts } from '../../../../packages/shared/src/types/game.ts';
 import type { Player } from '../../../../packages/shared/src/types/room.ts';
 import { v4 as uuid } from 'uuid';
 import { Game } from '../rooms/game.ts';
-import { SECOND_COUNT_FOR_ASK_CLUE } from '../../../../packages/shared/src/socketEvents.ts';
+import {
+  SECOND_COUNT_FOR_ASK_CLUE,
+  SECOND_COUNT_FOR_GUESS,
+  type CardTestResult,
+} from '../../../../packages/shared/src/socketEvents.ts';
 
 test('The game should create 25 cards', () => {
   const game = new Game('', 4);
@@ -217,7 +221,7 @@ test('The giveClue method should return the clue and the agent ids if current te
   game.addPlayer(agent2);
   game.initial();
   const clue = 'clue';
-  const result = game.giveClue(spymasterId, clue);
+  const result = game.giveClue(spymasterId, clue, () => {});
   expect(result).toEqual({ clue, agentIds: [agentId1, agentId2] });
 });
 
@@ -240,7 +244,7 @@ test('The giveClue method should return the clue and the agent ids if current te
   game.addPlayer(agent2);
   game.initial();
   const clue = 'clue';
-  const result = game.giveClue(spymasterId, clue);
+  const result = game.giveClue(spymasterId, clue, () => {});
   expect(result).toEqual({ clue, agentIds: [agentId1, agentId2] });
 });
 
@@ -251,7 +255,7 @@ test('The giveClue method should return an error if the player is not a spymaste
   game.addPlayer(agent);
   game.initial();
   const clue = 'clue';
-  const result = game.giveClue(agentId, clue);
+  const result = game.giveClue(agentId, clue, () => {});
   expect(result).toEqual({ error: 'ACTION_IS_PROHIBITED' });
 });
 
@@ -268,7 +272,7 @@ test('The giveClue method should return an error if the game phase is not clue',
   game.initial();
   game['gamePhase'] = 'guess';
   const clue = 'clue';
-  const result = game.giveClue(spymasterId, clue);
+  const result = game.giveClue(spymasterId, clue, () => {});
   expect(result).toEqual({ error: 'ACTION_IS_PROHIBITED' });
 });
 
@@ -286,7 +290,7 @@ test('The giveClue method should clear the clue timer', () => {
   game.askClue(() => {});
   expect(game['clueTimer']).not.toBeNull();
   const clue = 'clue';
-  game.giveClue(spymasterId, clue);
+  game.giveClue(spymasterId, clue, () => {});
   expect(game['clueTimer']).toBeNull();
 });
 
@@ -298,7 +302,7 @@ test('The chooseCard method should return the players and recipients if the play
   game.initial();
   game['gamePhase'] = 'guess';
   const cardId = uuid();
-  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'hidden' }];
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', whoSees: new Set() }];
   const result = game.chooseCard(agentId, cardId);
   expect(result).toEqual({ players: [agent], recipients: [agentId] });
 });
@@ -312,7 +316,7 @@ test('The chooseCard method should return the players and recipients if current 
   game['currentTeam'] = 'blue';
   game['gamePhase'] = 'guess';
   const cardId = uuid();
-  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'hidden' }];
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', whoSees: new Set() }];
   const result = game.chooseCard(agentId, cardId);
   expect(result).toEqual({ players: [agent], recipients: [agentId] });
 });
@@ -330,7 +334,7 @@ test('The chooseCard method should return an error if the player is not an agent
   game.initial();
   game['gamePhase'] = 'guess';
   const cardId = uuid();
-  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'hidden' }];
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', whoSees: new Set() }];
   const result = game.chooseCard(spymasterId, cardId);
   expect(result).toEqual({ error: 'ACTION_IS_PROHIBITED' });
 });
@@ -342,7 +346,7 @@ test('The chooseCard method should return an error if the game phase is not gues
   game.addPlayer(agent);
   game.initial();
   const cardId = uuid();
-  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'hidden' }];
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', whoSees: new Set() }];
   const result = game.chooseCard(agentId, cardId);
   expect(result).toEqual({ error: 'ACTION_IS_PROHIBITED' });
 });
@@ -355,33 +359,16 @@ test('The chooseCard method should update the chosen cards', () => {
   game.initial();
   game['gamePhase'] = 'guess';
   const cardId = uuid();
-  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'hidden' }];
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', whoSees: new Set() }];
   game.chooseCard(agentId, cardId);
-  let chosenCards = game['chosenCards'].get(game.getRoomId());
+  let chosenCards = game['chosenCards'].get(cardId);
   expect(chosenCards).toEqual([agentId]);
   game.chooseCard(agentId, cardId);
-  chosenCards = game['chosenCards'].get(game.getRoomId());
+  chosenCards = game['chosenCards'].get(cardId);
   expect(chosenCards).toEqual([]);
   game.chooseCard(agentId, cardId);
-  chosenCards = game['chosenCards'].get(game.getRoomId());
+  chosenCards = game['chosenCards'].get(cardId);
   expect(chosenCards).toEqual([agentId]);
-});
-
-test('The chooseCard method should toggle the chosen card for the player', () => {
-  const game = new Game('', 4);
-  const agentId = uuid();
-  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
-  game.addPlayer(agent);
-  game.initial();
-  game['gamePhase'] = 'guess';
-  const cardId = uuid();
-  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'hidden' }];
-  game.chooseCard(agentId, cardId);
-  let chosenCards = game['chosenCards'].get(game.getRoomId());
-  expect(chosenCards).toEqual([agentId]);
-  game.chooseCard(agentId, cardId);
-  chosenCards = game['chosenCards'].get(game.getRoomId());
-  expect(chosenCards).toEqual([]);
 });
 
 test('The chooseCard method should return error if card is not hidden', () => {
@@ -392,7 +379,217 @@ test('The chooseCard method should return error if card is not hidden', () => {
   game.initial();
   game['gamePhase'] = 'guess';
   const cardId = uuid();
-  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', status: 'revealed' }];
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', whoSees: new Set(['red']) }];
   const result = game.chooseCard(agentId, cardId);
   expect(result).toEqual({ error: 'ACTION_IS_PROHIBITED' });
+});
+
+test('The chooseCard method should return an error if the card does not exist', () => {
+  const game = new Game('', 4);
+  const agentId = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  game.addPlayer(agent);
+  game.initial();
+  game['gamePhase'] = 'guess';
+  const cardId = uuid();
+  game['cards'] = [{ id: cardId, word: 'word', color: 'unknown', whoSees: new Set() }];
+  const result = game.chooseCard(agentId, uuid());
+  expect(result).toEqual({ error: 'ACTION_IS_PROHIBITED' });
+});
+
+test('The giveClue method should set the check question', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  const spymasterId = uuid();
+  const spymaster: Player = {
+    id: spymasterId,
+    username: 'spymaster',
+    team: 'red',
+    role: 'spymaster',
+  };
+  const agentId: string = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  game.addPlayer(spymaster);
+  game.addPlayer(agent);
+  game.initial();
+  const clue = 'clue';
+  const result = game.giveClue(spymasterId, clue, () => {});
+  vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
+  expect(result).toEqual({ clue, agentIds: [agentId] });
+  expect(game['checkQuestion']).toBeDefined();
+});
+
+test('The giveClue method called the callback function with no-change type if card not chosen', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  const redSpymasterId = uuid();
+  const redSpymaster: Player = {
+    id: redSpymasterId,
+    username: 'spymaster',
+    team: 'red',
+    role: 'spymaster',
+  };
+  const agentId: string = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  const blueSpymasterId = uuid();
+  const blueSpymaster: Player = {
+    id: blueSpymasterId,
+    username: 'spymaster2',
+    team: 'blue',
+    role: 'spymaster',
+  };
+  game.addPlayer(redSpymaster);
+  game.addPlayer(agent);
+  game.addPlayer(blueSpymaster);
+  game.initial();
+  const clue = 'clue';
+  const callback = vi.fn();
+  game.giveClue(redSpymasterId, clue, callback);
+  expect(callback).not.toHaveBeenCalled();
+  vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
+  const result: CardTestResult = {
+    type: 'no-change',
+    payload: { spymasterId: blueSpymasterId, team: 'blue' },
+  };
+  expect(callback).toHaveBeenCalledWith(result);
+});
+
+test('The giveClue method called the callback function with alien type if chosen card is own', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  const redSpymasterId = uuid();
+  const redSpymaster: Player = {
+    id: redSpymasterId,
+    username: 'spymaster',
+    team: 'red',
+    role: 'spymaster',
+  };
+  const agentId: string = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  const blueSpymasterId = uuid();
+  const blueSpymaster: Player = {
+    id: blueSpymasterId,
+    username: 'spymaster2',
+    team: 'blue',
+    role: 'spymaster',
+  };
+  game.addPlayer(redSpymaster);
+  game.addPlayer(agent);
+  game.addPlayer(blueSpymaster);
+  game.initial();
+  const clue = 'clue';
+  const callback = vi.fn();
+  game['gamePhase'] = 'clue';
+  game.giveClue(redSpymasterId, clue, callback);
+  expect(callback).not.toHaveBeenCalled();
+  const card = game['cards'][0];
+  if (card) {
+    card.color = 'red';
+    const { id: cardId } = card;
+    game.chooseCard(agentId, cardId);
+    vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
+    const checkQuestion = game['checkQuestion'];
+    expect(checkQuestion).not.toBeNull();
+    if (checkQuestion) {
+      const { question, question_en } = checkQuestion;
+      const result: CardTestResult = {
+        type: 'own',
+        payload: { userId: agentId, question, question_en, observers: [redSpymasterId] },
+      };
+      expect(callback).toHaveBeenCalledWith(result);
+    }
+  }
+});
+
+test('The giveClue method called the callback function with alien type if chosen card is alien', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  const redSpymasterId = uuid();
+  const redSpymaster: Player = {
+    id: redSpymasterId,
+    username: 'spymaster',
+    team: 'red',
+    role: 'spymaster',
+  };
+  const agentId: string = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  const blueSpymasterId = uuid();
+  const blueSpymaster: Player = {
+    id: blueSpymasterId,
+    username: 'spymaster2',
+    team: 'blue',
+    role: 'spymaster',
+  };
+  game.addPlayer(redSpymaster);
+  game.addPlayer(agent);
+  game.addPlayer(blueSpymaster);
+  game.initial();
+  const clue = 'clue';
+  const callback = vi.fn();
+  game['gamePhase'] = 'clue';
+  game.giveClue(redSpymasterId, clue, callback);
+  expect(callback).not.toHaveBeenCalled();
+  const card = game['cards'][0];
+  if (card) {
+    card.color = 'blue';
+    const { id: cardId, color } = card;
+    game.chooseCard(agentId, cardId);
+    vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
+    const result: CardTestResult = {
+      type: 'alien',
+      payload: {
+        spymasterId: blueSpymasterId,
+        team: 'blue',
+        cardId,
+        color,
+        recipients: [redSpymasterId, agentId],
+      },
+    };
+    expect(callback).toHaveBeenCalledWith(result);
+  }
+});
+
+test('The giveClue method called the callback function with alien type if question in not found', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  const redSpymasterId = uuid();
+  const redSpymaster: Player = {
+    id: redSpymasterId,
+    username: 'spymaster',
+    team: 'red',
+    role: 'spymaster',
+  };
+  const agentId: string = uuid();
+  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
+  const blueSpymasterId = uuid();
+  const blueSpymaster: Player = {
+    id: blueSpymasterId,
+    username: 'spymaster2',
+    team: 'blue',
+    role: 'spymaster',
+  };
+  game.addPlayer(redSpymaster);
+  game.addPlayer(agent);
+  game.addPlayer(blueSpymaster);
+  game.initial();
+  const clue = 'clue';
+  const callback = vi.fn();
+  game['gamePhase'] = 'clue';
+  game.giveClue(redSpymasterId, clue, callback);
+  expect(callback).not.toHaveBeenCalled();
+  const card = game['cards'][0];
+  if (card) {
+    card.color = 'red';
+    card.word = 'word';
+    const { id: cardId } = card;
+    game.chooseCard(agentId, cardId);
+    vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
+    const checkQuestion = game['checkQuestion'];
+    expect(checkQuestion).toBeNull();
+    const result: CardTestResult = {
+      type: 'no-change',
+      payload: { spymasterId: blueSpymasterId, team: 'blue' },
+    };
+    expect(callback).toHaveBeenCalledWith(result);
+  }
 });

@@ -9,6 +9,7 @@ import jsonData from '../../../../packages/shared/src/question-bank.json' with {
 import { v4 as uuid } from 'uuid';
 
 export class Game {
+  private id: string;
   private roomId: string;
   private redTeam: Player[] = [];
   private blueTeam: Player[] = [];
@@ -17,6 +18,7 @@ export class Game {
   private currentTeam: Teams = 'red';
 
   constructor(roomId: string, maxPlayers: number) {
+    this.id = uuid();
     this.roomId = roomId;
     this.maxPlayers = maxPlayers;
   }
@@ -46,6 +48,7 @@ export class Game {
     }));
 
     return {
+      id: this.id,
       redTeam: this.redTeam,
       blueTeam: this.blueTeam,
       currentTeam: this.currentTeam,

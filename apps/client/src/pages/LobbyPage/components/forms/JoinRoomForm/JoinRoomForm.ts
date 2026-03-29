@@ -70,4 +70,10 @@ export default class JoinRoomForm extends FormComponent {
       payload: { roomId },
     });
   }
+
+  public switchLanguage(): void {
+    this.roomLabel.setContent(t(TranslationKeys.JOIN_ROOM_FIELD_TITLE));
+    this.roomInput.setPlaceholder(t(TranslationKeys.JOIN_ROOM_FIELD_PLACEHOLDER));
+    this.joinRoomButton.setLabel(t(TranslationKeys.JOIN_ROOM_FIELD_JOIN_BUTTON_LABEL));
+  }
 }

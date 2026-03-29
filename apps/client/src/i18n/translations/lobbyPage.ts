@@ -5,21 +5,21 @@ const lobbyPage = {
   [Language.EN]: {
     [TranslationKeys.LOBBY_TITLE]: 'Lobby',
 
-    [TranslationKeys.JOIN_ROOM_SECTION_TITLE]: 'Join Room',
-    [TranslationKeys.CREATE_ROOM_SECTION_TITLE]: 'Create Room',
-    [TranslationKeys.PUBLIC_ROOMS_SECTION_TITLE]: 'Public Rooms',
+    [TranslationKeys.JOIN_ROOM_SECTION_TITLE]: 'Join room',
+    [TranslationKeys.CREATE_ROOM_SECTION_TITLE]: 'Create room',
+    [TranslationKeys.PUBLIC_ROOMS_SECTION_TITLE]: 'Public rooms',
 
-    [TranslationKeys.PLAYER_COUNT_FIELD_TITLE]: 'Select Number of Players',
+    [TranslationKeys.PLAYER_COUNT_FIELD_TITLE]: 'Select number of players',
 
-    [TranslationKeys.ROOM_NAME_FIELD_TITLE]: 'Room Name',
+    [TranslationKeys.ROOM_NAME_FIELD_TITLE]: 'Room name',
     [TranslationKeys.ROOM_NAME_FIELD_PLACEHOLDER]: 'Enter room name',
     [TranslationKeys.ROOM_NAME_FIELD_CREATE_BUTTON_LABEL]: 'Create',
 
-    [TranslationKeys.JOIN_ROOM_FIELD_TITLE]: 'Join Room',
+    [TranslationKeys.JOIN_ROOM_FIELD_TITLE]: 'Join room',
     [TranslationKeys.JOIN_ROOM_FIELD_PLACEHOLDER]: 'Enter room ID',
     [TranslationKeys.JOIN_ROOM_FIELD_JOIN_BUTTON_LABEL]: 'Join',
 
-    [TranslationKeys.SEARCH_ROOM_FIELD_TITLE]: 'Search Room',
+    [TranslationKeys.SEARCH_ROOM_FIELD_TITLE]: 'Search room',
     [TranslationKeys.SEARCH_ROOM_FIELD_PLACEHOLDER]: 'Enter room name',
     [TranslationKeys.SEARCH_ROOM_FIELD_FIND_BUTTON_LABEL]: 'Find',
 

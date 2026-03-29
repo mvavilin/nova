@@ -106,4 +106,15 @@ export class Game {
       }
     }
   }
+
+  public askClue(): string | undefined {
+    const currentTeam = this.currentTeam;
+    const team = currentTeam === 'red' ? this.redTeam : this.blueTeam;
+    const spymaster = team.find((player) => player.role === 'spymaster');
+    if (spymaster) {
+      return spymaster.id;
+    }
+
+    return;
+  }
 }

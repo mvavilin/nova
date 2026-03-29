@@ -50,3 +50,23 @@ test('The agent does not see the color of the cards', () => {
   expect(cards).toHaveLength(CardCounts.ALL);
   expect(unknownCards).toHaveLength(CardCounts.ALL);
 });
+
+test('The askClue method should return the id of a spymaster', () => {
+  const game = new Game('', 4);
+  const spymasterId = uuid();
+  const player: Player = { id: spymasterId, username: 'username', team: 'red', role: 'spymaster' };
+  game.addPlayer(player);
+  game.initial();
+  const result = game.askClue();
+
+  expect(result).toBe(spymasterId);
+});
+
+test('The askClue method should return undefined if there is no spymaster', () => {
+  const game = new Game('', 4);
+  const player: Player = { id: uuid(), username: 'username', team: 'red', role: 'agent' };
+  game.addPlayer(player);
+  game.initial();
+  const result = game.askClue();
+  expect(result).toBeUndefined();
+});

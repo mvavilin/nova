@@ -38,6 +38,14 @@ function setupGameAddPlayer(
           io.to(socketId).emit('game:start', { gameInfo: game.getGameInfo(playerId) });
         }
       }
+
+      const spymasterId = game.askClue();
+      if (spymasterId) {
+        const socketId = socketIdMap.get(spymasterId);
+        if (socketId) {
+          io.to(socketId).emit('game:ask-clue');
+        }
+      }
     }
   });
 }

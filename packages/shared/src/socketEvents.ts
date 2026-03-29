@@ -44,16 +44,17 @@ export enum UserStatusType {
 export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME' | 'IN_PROFILE';
 
 export type ClientEvent =
+  | { type: 'session:ask-status' }
+  | { type: 'session:logout' }
   | { type: 'room:create'; payload: { settings: RoomSettings } }
   | { type: 'room:ask-list' }
   | { type: 'room:search'; payload: { name: string | undefined } }
   | { type: 'room:join'; payload: { roomId: string } }
   | { type: 'room:leave' }
   | { type: 'room:ask-room-info' }
-  | { type: 'session:ask-status' }
   | { type: 'team:change'; payload: { player: Player } }
   | { type: 'game:add-player' }
-  | { type: 'session:logout' }
+  | { type: 'game:give-clue'; payload: { clue: string } }
   | { type: 'profile:enter' }
   | { type: 'profile:leave' }
   | { type: 'profile:ask-info' };
@@ -74,6 +75,7 @@ export type ServerEvent =
   | { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
   | { type: 'game:start-timer' }
   | { type: 'game:start'; payload: { gameInfo: GameInfo } }
+  | { type: 'game:ask-clue' }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
   | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };

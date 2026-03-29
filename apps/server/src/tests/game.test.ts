@@ -171,6 +171,34 @@ test('The askClue method should clear the timer after the time is up', () => {
   expect(game['clueTimer']).toBeNull();
 });
 
+test('The askClue method should call the callback function after the time is up', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  const spymasterRedId = uuid();
+  const player1: Player = {
+    id: spymasterRedId,
+    username: 'username',
+    team: 'red',
+    role: 'spymaster',
+  };
+  const spymasterBlueId = uuid();
+  const player2: Player = {
+    id: spymasterBlueId,
+    username: 'username2',
+    team: 'blue',
+    role: 'spymaster',
+  };
+  game.addPlayer(player1);
+  game.addPlayer(player2);
+  game.initial();
+  const callback = vi.fn();
+  game.askClue(callback);
+  expect(callback).not.toHaveBeenCalled();
+
+  vi.advanceTimersByTime(SECOND_COUNT_FOR_ASK_CLUE * 1000);
+  expect(callback).toHaveBeenCalledWith(spymasterBlueId, 'blue');
+});
+
 test('The giveClue method should return the clue and the agent ids if current team is red', () => {
   const game = new Game('', 4);
   const spymasterId = uuid();

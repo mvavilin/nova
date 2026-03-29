@@ -1,6 +1,6 @@
 import type { GameInfo } from './types/game.ts';
 import type { ProfileInfo } from './types/profile.ts';
-import type { Player, RoomInfo, RoomPreview, RoomSettings } from './types/room.ts';
+import type { Player, RoomInfo, RoomPreview, RoomSettings, Teams } from './types/room.ts';
 
 export enum ClientEventType {
   ROOM_CREATE = 'room:create',
@@ -84,6 +84,7 @@ export type ServerEvent =
   | { type: 'game:start'; payload: { gameInfo: GameInfo } }
   | { type: 'game:ask-clue' }
   | { type: 'game:clue-timeout' }
+  | { type: 'game:turn-changed'; payload: { team: Teams } }
   | { type: 'game:clue-given'; payload: { clue: string } }
   | { type: 'game:card-chosen'; payload: { cardId: string; players: Player[] } }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }

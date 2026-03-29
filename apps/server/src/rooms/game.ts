@@ -115,14 +115,15 @@ export class Game {
     }
   }
 
-  public askClue(callback: () => void): string | undefined {
+  public askClue(callback: (value: string, team: Teams) => void): string | undefined {
     const currentTeam = this.currentTeam;
     const team = currentTeam === 'red' ? this.redTeam : this.blueTeam;
     const spymaster = team.find((player) => player.role === 'spymaster');
     if (spymaster) {
       this.clueTimer = setTimeout(() => {
         this.clueTimer = null;
-        callback();
+        const spymasterId = this.turnChange();
+        callback(spymasterId, this.currentTeam);
       }, SECOND_COUNT_FOR_ASK_CLUE * 1000);
       return spymaster.id;
     }
@@ -177,5 +178,17 @@ export class Game {
       }
     }
     return { error: 'ACTION_IS_PROHIBITED' };
+  }
+
+  private turnChange(): string {
+    this.currentTeam = this.currentTeam === 'red' ? 'blue' : 'red';
+    this.gamePhase = 'clue';
+    const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+    const spymaster = team.find((player) => player.role === 'spymaster');
+    this.chosenCards.clear();
+    if (spymaster) {
+      return spymaster.id;
+    }
+    return '';
   }
 }

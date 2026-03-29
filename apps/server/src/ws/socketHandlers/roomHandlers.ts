@@ -11,16 +11,16 @@ import { logger } from '../logger/logger.ts';
 export function setupRoomHandlers(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
-  setupCreateRoomHandlers(socket);
-  setupAskListHandlers(socket);
-  setupRoomSearchHandlers(socket);
-  setupRoomJoinEvent(socket);
-  setupRoomLeaveEvent(socket);
-  setupSendRoomInfoEvent(socket);
-  setupChooseTeam(socket);
+  setupCreateRoomHandler(socket);
+  setupAskListHandler(socket);
+  setupRoomSearchHandler(socket);
+  setupRoomJoinHandler(socket);
+  setupRoomLeaveHandler(socket);
+  setupSendRoomInfoHandler(socket);
+  setupChooseTeamHandler(socket);
 }
 
-function setupCreateRoomHandlers(
+function setupCreateRoomHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   const { userId } = socket.data;
@@ -48,7 +48,7 @@ function setupCreateRoomHandlers(
   });
 }
 
-function setupAskListHandlers(
+function setupAskListHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   const { userId } = socket.data;
@@ -64,7 +64,7 @@ function setupAskListHandlers(
   });
 }
 
-function setupRoomSearchHandlers(
+function setupRoomSearchHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   const { userId } = socket.data;
@@ -80,7 +80,7 @@ function setupRoomSearchHandlers(
   });
 }
 
-function setupRoomJoinEvent(
+function setupRoomJoinHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   const userId = socket.data.userId;
@@ -121,7 +121,7 @@ function setupRoomJoinEvent(
   });
 }
 
-function setupRoomLeaveEvent(
+function setupRoomLeaveHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   socket.on('room:leave', () => {
@@ -162,7 +162,7 @@ function setupRoomLeaveEvent(
   });
 }
 
-function setupSendRoomInfoEvent(
+function setupSendRoomInfoHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   const userId = socket.data.userId;
@@ -183,7 +183,7 @@ function setupSendRoomInfoEvent(
   });
 }
 
-function setupChooseTeam(
+function setupChooseTeamHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   const userId = socket.data.userId;

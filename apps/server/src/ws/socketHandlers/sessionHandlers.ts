@@ -17,7 +17,7 @@ const reconnectTimerMap = new Map<string, NodeJS.Timeout>();
 export const roomManager = new RoomManager();
 export const socketIdMap = new Map<string, string>();
 
-export function setupConnection(): void {
+export function setupConnectionHandler(): void {
   io.on(
     'connection',
     (socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>) => {
@@ -55,7 +55,7 @@ export function setupConnection(): void {
 
       socketIdMap.set(userId, socket.id);
 
-      setupDisconnect(socket);
+      setupDisconnectHandler(socket);
       setupAskStatusHandler(socket);
       setupRoomHandlers(socket);
       setupGameHandlers(socket);
@@ -65,7 +65,7 @@ export function setupConnection(): void {
   );
 }
 
-function setupDisconnect(
+function setupDisconnectHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   socket.on('disconnect', () => {

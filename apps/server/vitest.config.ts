@@ -6,5 +6,11 @@ export default defineConfig({
     environment: 'node',
     globals: true,
     root: 'src',
+    coverage: {
+      provider: 'v8',
+      include: ['./**/*.ts'],
+      exclude: ['prisma', 'types'],
+      reporter: ['text', 'json', 'html'],
+    },
   },
 });

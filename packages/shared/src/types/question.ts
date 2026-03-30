@@ -9,6 +9,6 @@ export interface CheckQuestion {
   question_en: string; // Текст вопроса на английском
   referenceAnswer: string; // Эталонный ответ с примерами кода
   referenceAnswer_en: string; // Эталонный ответ на английском
-  difficulty: 1 | 2 | 3; // Уровень сложности
+  difficulty: number; // Уровень сложности
   tags: string[]; // Массив тегов для категоризации
 }

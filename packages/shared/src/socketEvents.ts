@@ -1,5 +1,6 @@
-import type { GameInfo } from './types/game.ts';
-import type { Player, RoomInfo, RoomPreview, RoomSettings } from './types/room.ts';
+import type { CardColor, GameInfo } from './types/game.ts';
+import type { ProfileInfo } from './types/profile.ts';
+import type { Player, RoomInfo, RoomPreview, RoomSettings, Teams } from './types/room.ts';
 
 export enum ClientEventType {
   ROOM_CREATE = 'room:create',
@@ -9,6 +10,8 @@ export enum ClientEventType {
   ROOM_LEAVE = 'room:leave',
   ROOM_ASK_ROOM_INFO = 'room:ask-room-info',
   SESSION_PLAYER_EXIT = 'session:player-exit',
+  TEAM_CHANGE = 'team:change',
+  GAME_ADD_PLAYER = 'game:add-player',
 }
 
 export enum ServerEventType {
@@ -23,6 +26,9 @@ export enum ServerEventType {
   ROOM_UPDATE_PREVIEW = 'room:update-review',
   ROOM_PLAYER_JOINED = 'room:player-joined',
   ROOM_PLAYER_LEFT = 'room:player-left',
+  TEAM_CHANGED = 'team:changed',
+  GAME_START_TIMER = 'game:start-timer',
+  GAME_START = 'game:start',
   ERROR = 'error',
   CONNECT_ERROR = 'connect_error',
   CONNECT = 'connect',
@@ -40,18 +46,68 @@ export enum UserStatusType {
   IN_GAME = 'IN_GAME',
 }
 
-export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME';
+export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME' | 'IN_PROFILE';
+
+export type GAME_PHASE = 'clue' | 'guess' | 'check' | 'finish';
+
+export type CardTestResult =
+  | {
+      type: 'own';
+      payload: { userId: string; question: string; question_en: string; observers: string[] };
+    }
+  | {
+      type: 'alien';
+      payload: {
+        spymasterId: string;
+        team: Teams;
+        cardId: string;
+        color: CardColor;
+        recipients: string[];
+      };
+    }
+  | {
+      type: 'bomb';
+      payload: {
+        spymasterId: string;
+        team: Teams;
+        cardId: string;
+        color: CardColor;
+        recipients: string[];
+      };
+    }
+  | {
+      type: 'neutral';
+      payload: {
+        spymasterId: string;
+        team: Teams;
+        cardId: string;
+        color: CardColor;
+        recipients: string[];
+      };
+    }
+  | { type: 'no-change'; payload: { spymasterId: string; team: Teams } };
+
+export const RECONNECT_MAX_TIME = 60_000;
+export const SECOND_COUNT_BEFORE_START_GAME = 15;
+export const SECOND_COUNT_FOR_ASK_CLUE = 30;
+export const SECOND_COUNT_FOR_GUESS = 60;
 
 export type ClientEvent =
+  | { type: 'session:ask-status' }
+  | { type: 'session:logout' }
   | { type: 'room:create'; payload: { settings: RoomSettings } }
   | { type: 'room:ask-list' }
   | { type: 'room:search'; payload: { name: string | undefined } }
   | { type: 'room:join'; payload: { roomId: string } }
   | { type: 'room:leave' }
   | { type: 'room:ask-room-info' }
-  | { type: 'session:ask-status' }
   | { type: 'team:change'; payload: { player: Player } }
-  | { type: 'game:add-player' };
+  | { type: 'game:add-player' }
+  | { type: 'game:clue-give'; payload: { clue: string } }
+  | { type: 'game:card-choose'; payload: { cardId: string } }
+  | { type: 'profile:enter' }
+  | { type: 'profile:leave' }
+  | { type: 'profile:ask-info' };
 
 export type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
@@ -69,15 +125,28 @@ export type ServerEvent =
   | { type: 'team:changed'; payload: { roomInfo: RoomInfo } }
   | { type: 'game:start-timer' }
   | { type: 'game:start'; payload: { gameInfo: GameInfo } }
+  | { type: 'game:ask-clue' }
+  | { type: 'game:clue-timeout' }
+  | { type: 'game:turn-changed'; payload: { team: Teams } }
+  | { type: 'game:clue-given'; payload: { clue: string } }
+  | { type: 'game:card-chosen'; payload: { cardId: string; players: Player[] } }
+  | { type: 'game:card-shown'; payload: { cardId: string; color: CardColor } }
+  | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
+  | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };
 
 export type ErrorCode =
+  | 'PLAYER_NOT_FOUND'
   | 'ROOM_NOT_FOUND'
+  | 'GAME_NOT_FOUND'
   | 'ROOM_FULL'
+  | 'THERE_IS_ALREADY_SPYMASTER'
+  | 'THERE_ARE_ALREADY_AGENTS'
   | 'INVALID_ACTION'
   | 'AUTH_REQUIRED'
   | 'ALREADY_ONLINE'
-  | 'GAME_IS_NOT_FULL';
+  | 'GAME_IS_NOT_FULL'
+  | 'ACTION_IS_PROHIBITED';
 
 type EventName<T> = T extends { type: infer K } ? K : never;
 

@@ -29,8 +29,15 @@ export default class Timer extends ContainerComponent {
   private start(): void {
     this.intervalId = globalThis.setInterval(() => {
       if (this.countDown) {
-        if (this.time > 0) this.time -= 1;
-        else this.stop();
+        if (this.time > 0) {
+          this.time -= 1;
+          this.updateDisplay();
+
+          if (this.time === 0) {
+            this.stop();
+            if (this.onEnd) this.onEnd();
+          }
+        }
       } else {
         this.time += 1;
       }
@@ -67,4 +74,6 @@ export default class Timer extends ContainerComponent {
   public get currentTime(): number {
     return this.time;
   }
+
+  public onEnd?: () => void;
 }

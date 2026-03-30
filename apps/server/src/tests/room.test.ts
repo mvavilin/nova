@@ -1,5 +1,4 @@
 import { expect, test } from 'vitest';
-import { Room } from './room.ts';
 import type {
   Player,
   RoomInfo,
@@ -7,6 +6,7 @@ import type {
   RoomSettings,
 } from '../../../../packages/shared/src/types/room.ts';
 import { v4 as uuid } from 'uuid';
+import { Room } from '../rooms/room.ts';
 
 test('The getRoomPreview method should return a summary of the room', () => {
   const roomSettings: RoomSettings = { name: 'unknown room', maxPlayers: 4 };
@@ -138,4 +138,53 @@ test('The getRoomInfo method should return detailed information about the room',
   const result = room.getRoomInfo();
 
   expect(result).toEqual(resultExample);
+});
+
+test('The hasSpymaster method should check if there is a spymaster in the room', () => {
+  const roomSettings: RoomSettings = { name: 'room', maxPlayers: 4 };
+
+  const room = new Room(roomSettings);
+
+  const player: Player = { id: uuid(), username: 'username', team: 'red', role: 'spymaster' };
+
+  let hasRedSpymaster = room.hasSpymaster('red');
+  let hasBlueSpymaster = room.hasSpymaster('blue');
+
+  expect(hasRedSpymaster).toBeFalsy();
+  expect(hasBlueSpymaster).toBeFalsy();
+
+  room.addPlayer(player);
+
+  hasRedSpymaster = room.hasSpymaster('red');
+  hasBlueSpymaster = room.hasSpymaster('blue');
+
+  expect(hasRedSpymaster).toBeTruthy();
+  expect(hasBlueSpymaster).toBeFalsy();
+});
+
+test('The hasAllAgents method should check if all agents are in the room', () => {
+  const roomSettings: RoomSettings = { name: 'room', maxPlayers: 8 };
+
+  const room = new Room(roomSettings);
+
+  const player1: Player = { id: uuid(), username: 'username1', team: 'red', role: 'agent' };
+  const player2: Player = { id: uuid(), username: 'username2', team: 'red', role: 'agent' };
+  const player3: Player = { id: uuid(), username: 'username3', team: 'red', role: 'agent' };
+
+  room.addPlayer(player1);
+  room.addPlayer(player2);
+
+  let hasAllRedAgents = room.hasAllAgents('red');
+  let hasAllBlueAgents = room.hasAllAgents('blue');
+
+  expect(hasAllRedAgents).toBeFalsy();
+  expect(hasAllBlueAgents).toBeFalsy();
+
+  room.addPlayer(player3);
+
+  hasAllRedAgents = room.hasAllAgents('red');
+  hasAllBlueAgents = room.hasAllAgents('blue');
+
+  expect(hasAllRedAgents).toBeTruthy();
+  expect(hasAllBlueAgents).toBeFalsy();
 });

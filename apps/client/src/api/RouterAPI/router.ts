@@ -18,8 +18,13 @@ export default class Router {
 
   private render(): void {
     const children = this.app.children;
-    for (const child of children) child.destroy();
 
+    for (const child of children)
+      if ('destroyPage' in child && typeof child.destroyPage === 'function') {
+        child.destroyPage();
+      } else {
+        child.destroy();
+      }
     const path = globalThis.location.pathname;
     const route = this.routes.find((route) => route.path.test(path));
 

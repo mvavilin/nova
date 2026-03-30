@@ -1,19 +1,23 @@
 import type { Socket } from 'socket.io';
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
+import {
+  RECONNECT_MAX_TIME,
+  type ClientToServerEvents,
+  type ServerToClientEvents,
 } from '../../../../../packages/shared/src/socketEvents.ts';
 import { RoomManager } from '../../rooms/roomManager.ts';
-import { RECONNECT_MAX_TIME, type SocketData } from '../../types/types.ts';
+import { type SocketData } from '../../types/types.ts';
 import { setupRoomHandlers } from './roomHandlers.ts';
 import { io } from '../../app.ts';
 import { logger } from '../logger/logger.ts';
+import type { Player } from '../../../../../packages/shared/src/types/room.ts';
+import { setupGameHandlers } from './gameHandlers.ts';
+import { setupProfileHandlers } from './profileHandlers.ts';
 
 const reconnectTimerMap = new Map<string, NodeJS.Timeout>();
 export const roomManager = new RoomManager();
 export const socketIdMap = new Map<string, string>();
 
-export function setupConnection(): void {
+export function setupConnectionHandler(): void {
   io.on(
     'connection',
     (socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>) => {
@@ -51,14 +55,17 @@ export function setupConnection(): void {
 
       socketIdMap.set(userId, socket.id);
 
-      setupDisconnect(socket);
+      setupDisconnectHandler(socket);
       setupAskStatusHandler(socket);
       setupRoomHandlers(socket);
+      setupGameHandlers(socket);
+      setupLogoutHandler(socket);
+      setupProfileHandlers(socket);
     }
   );
 }
 
-function setupDisconnect(
+function setupDisconnectHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   socket.on('disconnect', () => {
@@ -78,26 +85,7 @@ function setupDisconnect(
     reconnectTimerMap.set(
       userId,
       setTimeout(() => {
-        for (const recipient of recipients) {
-          const socketId = socketIdMap.get(recipient);
-          if (socketId) {
-            io.to(socketId).emit('session:player-exit', { player });
-            logger.emit(recipient, 'session:player-exit', { player });
-          }
-        }
-
-        const response = roomManager.leaveRoom(userId);
-        if ('roomPreviews' in response) {
-          const { roomPreview, lobbyRecipients } = response;
-          for (const recipient of lobbyRecipients) {
-            const socketId = socketIdMap.get(recipient);
-            if (socketId) {
-              io.to(socketId).emit('room:update-review', { roomPreview });
-              logger.emit(recipient, 'room:update-review', { roomPreview });
-            }
-          }
-          roomManager.removePlayerFromLobby(userId);
-        }
+        exitPlayer(userId, player, recipients);
         reconnectTimerMap.delete(userId);
       }, RECONNECT_MAX_TIME)
     );
@@ -117,4 +105,54 @@ function setupAskStatusHandler(
       logger.emit(userId, 'session:send-status', { userStatus });
     }
   });
+}
+
+function setupLogoutHandler(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId, username } = socket.data;
+
+  socket.on('session:logout', () => {
+    const status = roomManager.getStatus(userId, username);
+    const { player, recipients } = status;
+
+    exitPlayer(userId, player, recipients);
+  });
+}
+
+function exitPlayer(userId: string, player: Player, recipients: string[]): void {
+  for (const recipient of recipients) {
+    const socketId = socketIdMap.get(recipient);
+    if (socketId) {
+      io.to(socketId).emit('session:player-exit', { player });
+      logger.emit(recipient, 'session:player-exit', { player });
+    }
+  }
+
+  // const gameResponse = roomManager.leaveGame(userId);
+  // if (!('error' in gameResponse)) {
+  //   const { roomInfo, roomRecipients } = gameResponse;
+  // }
+
+  const roomResponse = roomManager.leaveRoom(userId);
+  if (!('error' in roomResponse)) {
+    const { roomInfo, roomPreview, roomRecipients, lobbyRecipients } = roomResponse;
+
+    for (const recipient of roomRecipients) {
+      const socketId = socketIdMap.get(recipient);
+      if (socketId) {
+        io.to(socketId).emit('room:state', { roomInfo });
+        logger.emit(recipient, 'room:state', { roomInfo });
+      }
+    }
+
+    for (const recipient of lobbyRecipients) {
+      const socketId = socketIdMap.get(recipient);
+      if (socketId) {
+        io.to(socketId).emit('room:update-review', { roomPreview });
+        logger.emit(recipient, 'room:update-review', { roomPreview });
+      }
+    }
+    roomManager.removePlayerFromLobby(userId);
+  }
 }

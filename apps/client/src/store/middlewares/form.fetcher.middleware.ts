@@ -1,23 +1,12 @@
 import type { Middleware } from '@/api/StateAPI/types/types';
-import { FormActions } from '../actions/form.actions';
+import { FormActionTypes } from '../actions/form.actions';
 import type { AppActions } from '../types/action';
 import type { AuthResponse } from '@/types/user.types';
 import type { Overlay } from '@/components/ui';
 import { getLocalStorageData, saveLocalStorageData, showErrorToast } from '@utils';
 import { isObject } from '@/utils/isObject';
 import { LOCAL_STORAGE_KEYS } from '@/constants/localStorageKeys';
-// import { ServerUrl, Endpoints } from "@repo/shared",
-
-const Endpoints = {
-  BASE: '/',
-  LOGIN: '/api/auth/login',
-  REGISTRATION: '/api/auth/register',
-  USERS: '/api/users',
-};
-const ServerUrl = {
-  LOCAL_BASE: 'http://localhost:3000',
-  DEPLOY_BASE: 'https://nova-codenames-server.onrender.com',
-};
+import { ServerUrl, Endpoints } from '@shared/api.constants';
 
 const FORM_ENDPOINTS: Record<string, string> = {
   registration: Endpoints.REGISTRATION,
@@ -29,7 +18,7 @@ const AuthToken = 'auth_token';
 
 export default function fetcher<State>(): Middleware<State, AppActions> {
   return async function middleware(context) {
-    if (context.action.type === FormActions.FETCH_DATA) {
+    if (context.action.type === FormActionTypes.FETCH_DATA) {
       let currentLoader: Overlay | null = null;
       let onFinishedFunction: () => void = () => {};
       try {
@@ -68,7 +57,7 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
 
         if (isValidAuthResponse(user)) {
           return context.next({
-            type: FormActions.FETCH_SUCCESS,
+            type: FormActionTypes.FETCH_SUCCESS,
             payload: { user, token },
           });
         } else {

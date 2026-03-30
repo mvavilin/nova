@@ -5,6 +5,7 @@
     "rootDir": "../../../",
     "module": "nodenext",
     "target": "esnext",
+    "lib": ["ES2023.Array"],
     "types": [],
     "sourceMap": true,
     "declaration": true,

@@ -1,12 +1,12 @@
 import { LogMessageKeys } from '@repo/shared/src/types/logMessage';
 
 export const TranslationKeys = {
+  LANGUAGE_BUTTON: 'language-button',
   WELCOME_RULES: 'welcome-rules',
   WELCOME_ABOUT: 'welcome-about',
   WELCOME_LOGIN: 'welcome-login',
   WELCOME_LOBBY: 'welcome-lobby',
   WELCOME_HEADING: 'welcome-heading',
-  WELCOME_LANGUAGE: 'welcome-language',
   WELCOME_REGISTRATION: 'welcome-registration',
   WELCOME_DESCRIPTION: 'welcome-description',
 
@@ -76,11 +76,25 @@ export const TranslationKeys = {
 
   REGISTRATION_TITLE: 'registrationTitle',
   REGISTRATION_SUBMIT_BTN: 'registrationSubmitBtn',
-  REGISTRATION_LANG_BTN: 'registrationLangBtn',
 
   LOGIN_TITLE: 'loginTitle',
   LOGIN_SUBMIT_BTN: 'loginSubmitBtn',
-  LOGIN_LANG_BTN: 'loginLangBtn',
+
+  ROOM_TITLE: 'RoomTitle',
+  ROOM_INFO_TITLE: 'RoomInfoTitle',
+  ROOM_INFO_PLAYERS: 'RoomPlayersInfo',
+  ROOM_LEAVE_ROOM_BTN: 'RoomLeaveRoomBtn',
+  ROOM_RED_TITLE: 'RoomRedTitle',
+  ROOM_BLUE_TITLE: 'RoomBlueTitle',
+  ROOM_PLAYER: 'RoomPlayer',
+  ROOM_ROLE: 'RoomRole',
+  ROOM_SPYMASTER: 'RoomSpymaster',
+  ROOM_AGENT: 'RoomAgent',
+  ROOM_SPYMASTER_BTN: 'RoomSpymasterBtn',
+  ROOM_AGENT_BTN: 'RoomAgentBtn',
+  ROOM_LEAVE_TEAM_BTN: 'RoomLeaveTeamBtn',
+  ROOM_PLAYERS_CHOOSING: 'RoomPlayersChoosing',
+  ROOM_TIMER_MESSAGE: 'RoomTimerMessage',
 
   LOBBY_TITLE: 'lobbyTitle',
 
@@ -171,6 +185,31 @@ export const TranslationKeys = {
   ROLE_OPERATIVE: 'roleOperative',
 
   FORM_EMPTY_FIELD_WARNING: 'formEmptyFieldWarning',
+
+  PROFILE_TITLE: 'profileTitle',
+  PROFILE_USER_LANGUAGE: 'profileUserLanguage',
+  PROFILE_USER_ONLINE: 'profileUserOnline',
+  PROFILE_USER_LEVEL: 'profileUserLevel',
+  PROFILE_USER_WINRATE: 'profileUserWinrate',
+  PROFILE_USER_CORRECT: 'profileUserCorrect',
+  PROFILE_STATS_TITLE: 'profileStatsTitle',
+  PROFILE_STATS_GAMES: 'profileStatsGames',
+  PROFILE_STATS_WINS: 'profileStatsWins',
+  PROFILE_STATS_LOSSES: 'profileStatsLosses',
+  PROFILE_STATS_WINRATE: 'profileStatsWinrate',
+  PROFILE_ROLES_TITLE: 'profileRolesTitle',
+  PROFILE_ROLE_SPYMASTER: 'profileRoleSpymaster',
+  PROFILE_ROLE_AGENT: 'profileRoleAgent',
+  PROFILE_ROLE_WINRATE: 'profileRoleWinrate',
+  PROFILE_ROLE_CORRECT: 'profileRoleCorrect',
+  PROFILE_ROLE_ACCURACY: 'profileRoleAccuracy',
+  PROFILE_MATCH_HISTORY_TITLE: 'profileMatchHistoryTitle',
+  PROFILE_MATCH_WIN: 'profileMatchWin',
+  PROFILE_MATCH_LOSE: 'profileMatchLose',
+  PROFILE_ACHIEVEMENTS_TITLE: 'profileAchievementsTitle',
+  PROFILE_ACHIEVEMENT_STREAK: 'profileAchievementsStreak',
+  PROFILE_ACHIEVEMENT_ANSWERS: 'profileAchievementsAnswers',
+  PROFILE_ACHIEVEMENT_FIRST_WIN: 'profileAchievementsWin',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];

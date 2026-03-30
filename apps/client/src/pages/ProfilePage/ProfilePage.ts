@@ -7,6 +7,12 @@ import ProfileHero from './ProfileHero/ProfileHero';
 import { Header } from '@/components';
 import { UserMenu } from '../LobbyPage/components';
 import { TITLE_CLASSES } from '@/constants/styles';
+import { TranslationKeys } from '@/i18n/translationKeys';
+import { t } from '@/i18n';
+import store from '@/store/store';
+import type { State } from '@/store/types';
+import type { Action } from '@/api/StateAPI';
+import { AppActionTypes } from '@/store/actions/app.actions';
 
 export default class ProfilePage extends ContainerComponent {
   constructor({ ...rest }: ProfilePageProperties = {}) {
@@ -28,10 +34,25 @@ export default class ProfilePage extends ContainerComponent {
   private createHeader(): Header {
     return new Header({
       id: 'profile-header',
-      children: [
-        new HeadingComponent({ level: 1, content: 'Profile', classes: TITLE_CLASSES }),
-        new UserMenu(),
-      ],
+      children: [this.createHeading(), new UserMenu()],
     });
+  }
+
+  private createHeading(): HeadingComponent {
+    const heading = new HeadingComponent({
+      level: 1,
+      content: t(TranslationKeys.PROFILE_TITLE),
+      classes: TITLE_CLASSES,
+    });
+
+    heading.addSubscriptions([store.subscribe((state, action) => switchLanguage(state, action))]);
+
+    function switchLanguage(_state: State, action: Action): void {
+      if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
+        heading.setContent(t(TranslationKeys.PROFILE_TITLE));
+      }
+    }
+
+    return heading;
   }
 }

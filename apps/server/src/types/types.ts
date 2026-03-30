@@ -13,9 +13,7 @@ export interface SocketData {
   isReconnect: boolean;
 }
 
-export const RECONNECT_MAX_TIME = 60_000;
 export const VALUE_OF_KEY_FOR_SHOW_LOG = 'YES';
-export const SECOND_COUNT_BEFORE_START_GAME = 15;
 
 type LogName<T> = T extends { type: infer K } ? K : never;
 

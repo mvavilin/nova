@@ -1,10 +1,32 @@
-import LangButton from '@/pages/WelcomePage/LangButton/LangButton';
 import type { ProfileHeroProperties } from './ProfileHero.types';
 
 import { ContainerComponent, HeadingComponent, TextComponent } from '@ComponentsAPI';
 import store from '@/store/store';
+import { t } from '@/i18n';
+import { TranslationKeys } from '@/i18n/translationKeys';
+import type { State } from '@/store/types';
+import type { Action } from '@/api/StateAPI';
+import { AppActionTypes } from '@/store/actions';
+
+const stats = {
+  level: '12',
+  winrate: '68',
+  correct: '124',
+};
 
 export default class ProfileHero extends ContainerComponent {
+  private userCard: ContainerComponent | null = null;
+  private userAvatar: ContainerComponent | null = null;
+  private userInfo: ContainerComponent | null = null;
+  private userName: HeadingComponent | null = null;
+  private userLanguage: TextComponent | null = null;
+  private userOnline: TextComponent | null = null;
+
+  private userStats: ContainerComponent | null = null;
+  private userLevel: TextComponent | null = null;
+  private userWinrate: TextComponent | null = null;
+  private userCorrect: TextComponent | null = null;
+
   constructor({ ...rest }: ProfileHeroProperties = {}) {
     super({
       id: 'profile-hero',
@@ -12,57 +34,64 @@ export default class ProfileHero extends ContainerComponent {
       ...rest,
     });
 
-    this.setChildren([this.createUser(), this.createStats()]);
+    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
+
+    this.render();
   }
 
-  private createUser(): ContainerComponent {
-    return new ContainerComponent({
-      id: 'profile-user',
-      classes: 'flex items-center gap-4',
-      children: [
-        new ContainerComponent({
-          classes: 'w-16 h-16 rounded-full bg-gray-300',
-        }),
-        new ContainerComponent({
-          classes: 'flex flex-col self-start',
-          children: [
-            new HeadingComponent({
-              level: 2,
-              content: `${store.getState().username}`,
-              classes: 'text-2xl font-bold',
-            }),
-            new ContainerComponent({
-              classes: 'flex',
-              children: [
-                new TextComponent({
-                  classes: 'text-sm font-main font-normal text-gray-300',
-                  content: '🌐 Language:',
-                }),
-                new LangButton({
-                  classes:
-                    'font-main font-normal text-sm md:text-sm leading-[0.83] text-center text-[var(--color-light)] cursor-pointer transition-colors duration-200 hover:text-[var(--color-brand)] p-0 min-h-0 w-fit text-gray-300',
-                }),
-              ],
-            }),
-            new TextComponent({
-              content: '🟢 Online',
-              classes: 'text-sm font-main font-normal text-gray-300',
-            }),
-          ],
-        }),
-      ],
+  private render(): void {
+    this.setChildren([this.createUserCard(), this.createStats()]);
+  }
+
+  private createUserCard(): ContainerComponent {
+    this.userName = new HeadingComponent({
+      level: 2,
+      content: `${store.getState().username}`,
+      classes: 'text-2xl font-bold',
     });
+
+    this.userAvatar = new ContainerComponent({
+      classes: 'w-16 h-16 rounded-full bg-gray-300',
+    });
+
+    this.userLanguage = new TextComponent({
+      classes: 'text-sm font-main font-normal text-gray-300 capitalize',
+      content: `${t(TranslationKeys.PROFILE_USER_LANGUAGE)}${store.getState().language.toLowerCase()}`,
+    });
+
+    this.userOnline = new TextComponent({
+      content: t(TranslationKeys.PROFILE_USER_ONLINE),
+      classes: 'text-sm font-main font-normal text-gray-300',
+    });
+
+    this.userInfo = new ContainerComponent({
+      classes: 'flex flex-col self-start',
+      children: [this.userName, this.userLanguage, this.userOnline],
+    });
+
+    this.userCard = new ContainerComponent({
+      id: 'profile-user-card',
+      classes: 'flex items-center gap-4',
+      children: [this.userAvatar, this.userInfo],
+    });
+
+    return this.userCard;
   }
 
   private createStats(): ContainerComponent {
-    return new ContainerComponent({
+    this.userStats = new ContainerComponent({
       classes: 'flex flex-col mr-4',
       children: [
-        this.stat('🏆 Level', '12'),
-        this.stat('📊 Winrate', '68%'),
-        this.stat('🎯 Correct', '124'),
+        (this.userLevel = this.stat(t(TranslationKeys.PROFILE_USER_LEVEL), stats.level)),
+        (this.userWinrate = this.stat(
+          t(TranslationKeys.PROFILE_USER_WINRATE),
+          `${stats.winrate}%`
+        )),
+        (this.userCorrect = this.stat(t(TranslationKeys.PROFILE_USER_CORRECT), stats.correct)),
       ],
     });
+
+    return this.userStats;
   }
 
   private stat(label: string, value: string): TextComponent {
@@ -70,5 +99,17 @@ export default class ProfileHero extends ContainerComponent {
       tag: 'span',
       content: `${label}: ${value}`,
     });
+  }
+
+  private switchLanguage(_state: State, action: Action): void {
+    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
+      this.userLanguage?.setContent(
+        `${t(TranslationKeys.PROFILE_USER_LANGUAGE)}${store.getState().language.toLowerCase()}`
+      );
+      this.userOnline?.setContent(t(TranslationKeys.PROFILE_USER_ONLINE));
+      this.userLevel?.setContent(`${t(TranslationKeys.PROFILE_USER_LEVEL)}: ${stats.level}`);
+      this.userWinrate?.setContent(`${t(TranslationKeys.PROFILE_USER_WINRATE)}: ${stats.winrate}%`);
+      this.userCorrect?.setContent(`${t(TranslationKeys.PROFILE_USER_CORRECT)}: ${stats.correct}`);
+    }
   }
 }

@@ -12,7 +12,7 @@ import type {
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../../packages/shared/src/socketEvents.ts';
-import { setupConnection } from './ws/socketHandlers/sessionHandlers.ts';
+import { setupConnectionHandler } from './ws/socketHandlers/sessionHandlers.ts';
 import { sessionMiddleware } from './ws/sessionMiddleware.ts';
 
 const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
@@ -51,6 +51,6 @@ app.use(errorHandler);
 io.use(authMiddleware);
 io.use(sessionMiddleware);
 
-setupConnection();
+setupConnectionHandler();
 
 export default server;

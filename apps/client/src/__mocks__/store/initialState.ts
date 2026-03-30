@@ -24,4 +24,5 @@ export const initialState: State = {
   },
   profile: { fields: {}, isFormValid: false },
   rooms: [],
+  currentRoom: null,
 };

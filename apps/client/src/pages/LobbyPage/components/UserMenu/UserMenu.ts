@@ -2,8 +2,9 @@ import store from '@store';
 import { BaseComponent } from '@ComponentsAPI';
 import { ProfileSection } from '@pages/LobbyPage/components';
 import { ExitButton } from '@components';
+import LanguageButton from '@/components/LanguageButton/LanguageButton';
 
-const USER_MENU_CLASSES = `flex items-center justify-end gap-4 justify-self-end`;
+const USER_MENU_CLASSES = `flex items-center justify-between gap-8`;
 
 export default class UserMenu extends BaseComponent {
   constructor() {
@@ -14,7 +15,8 @@ export default class UserMenu extends BaseComponent {
 
   private render(): void {
     this.appendChildren([
-      new ProfileSection({ name: store.getState().username }),
+      new LanguageButton(),
+      new ProfileSection({ name: store.getState().username, id: store.getState().id }),
       new ExitButton(),
     ]);
   }

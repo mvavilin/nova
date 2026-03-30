@@ -106,17 +106,17 @@ form.submit();
 
 ### Методы:
 
-- [ ] `setValue(value: string): this` --- устанавливает значение поля.
-- [ ] `setName(name: string): this` --- задает атрибут name.
-- [ ] `setType(type: HTMLInputElement['type']): this` --- задает тип input (text, password и др.).
-- [ ] `setPlaceholder(placeholder: string): this` --- устанавливает placeholder.
-- [ ] `setDisabled(disabled: boolean): this` --- делает поле неактивным.
-- [ ] `setRequired(required: boolean): this` --- делает поле обязательным.
-- [ ] `isLengthBetween(min: number, max: number): boolean` --- проверяет длину значения.
-- [ ] `isValidByRegex(pattern: RegExp): boolean` --- валидирует значение по регулярному выражению.
-- [ ] `isValid(): boolean` --- проверяет встроенную HTML-валидацию.
-- [ ] `isEmpty(): boolean` --- проверяет, пустое ли поле.
-- [ ] `clear(): this` --- очищает значение.
+- [x] `setValue(value: string): this` --- устанавливает значение поля.
+- [x] `setName(name: string): this` --- задает атрибут name.
+- [x] `setType(type: HTMLInputElement['type']): this` --- задает тип input (text, password и др.).
+- [x] `setPlaceholder(placeholder: string): this` --- устанавливает placeholder.
+- [x] `setDisabled(disabled: boolean): this` --- делает поле неактивным.
+- [x] `setRequired(required: boolean): this` --- делает поле обязательным.
+- [x] `isLengthBetween(min: number, max: number): boolean` --- проверяет длину значения.
+- [x] `isValidByRegex(pattern: RegExp): boolean` --- валидирует значение по регулярному выражению.
+- [x] `isValid(): boolean` --- проверяет встроенную HTML-валидацию.
+- [x] `isEmpty(): boolean` --- проверяет, пустое ли поле.
+- [x] `clear(): this` --- очищает значение.
 
 **Пример:**
 

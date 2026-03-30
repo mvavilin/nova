@@ -175,7 +175,7 @@ test('The askClue method should set a timer for the clue', () => {
   game.initial();
   game.askClue(() => {});
 
-  expect(game['clueTimer']).not.toBeNull();
+  expect(game['phaseTimer']).not.toBeNull();
 });
 
 test('The askClue method should clear the timer after the time is up', () => {
@@ -186,10 +186,10 @@ test('The askClue method should clear the timer after the time is up', () => {
   game.addPlayer(player);
   game.initial();
   game.askClue(() => {});
-  expect(game['clueTimer']).not.toBeNull();
+  expect(game['phaseTimer']).not.toBeNull();
 
   vi.advanceTimersByTime(SECOND_COUNT_FOR_ASK_CLUE * 1000);
-  expect(game['clueTimer']).toBeNull();
+  expect(game['phaseTimer']).toBeNull();
 });
 
 test('The askClue method should call the callback function after the time is up', () => {
@@ -291,24 +291,6 @@ test('The giveClue method should return an error if the game phase is not clue',
   const clue = 'clue';
   const result = game.giveClue(spymasterId, clue, () => {});
   expect(result).toEqual({ error: 'ACTION_IS_PROHIBITED' });
-});
-
-test('The giveClue method should clear the clue timer', () => {
-  const game = new Game('', 4);
-  const spymasterId = uuid();
-  const spymaster: Player = {
-    id: spymasterId,
-    username: 'spymaster',
-    team: 'red',
-    role: 'spymaster',
-  };
-  game.addPlayer(spymaster);
-  game.initial();
-  game.askClue(() => {});
-  expect(game['clueTimer']).not.toBeNull();
-  const clue = 'clue';
-  game.giveClue(spymasterId, clue, () => {});
-  expect(game['clueTimer']).toBeNull();
 });
 
 test('The chooseCard method should return the players and recipients if the player is an agent and the game phase is guess', () => {

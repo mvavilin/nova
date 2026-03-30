@@ -91,6 +91,7 @@ export const RECONNECT_MAX_TIME = 60_000;
 export const SECOND_COUNT_BEFORE_START_GAME = 15;
 export const SECOND_COUNT_FOR_ASK_CLUE = 30;
 export const SECOND_COUNT_FOR_GUESS = 60;
+export const TIMER_INTERVAL = 1000;
 
 export type ClientEvent =
   | { type: 'session:ask-status' }

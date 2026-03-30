@@ -10,6 +10,7 @@ import { v4 as uuid } from 'uuid';
 import {
   SECOND_COUNT_FOR_ASK_CLUE,
   SECOND_COUNT_FOR_GUESS,
+  TIMER_INTERVAL,
   type CardTestResult,
   type ErrorCode,
   type GAME_PHASE,
@@ -24,12 +25,13 @@ export class Game {
   private maxPlayers: number;
   private cards: Card[] = [];
   private currentTeam: Teams = 'red';
-  private clueTimer: NodeJS.Timeout | null = null;
   private gamePhase: GAME_PHASE = 'clue';
   private chosenCards: Map<string, string[]> = new Map();
   private checkQuestion: CheckQuestion | null = null;
   private gameTimer: NodeJS.Timeout | null = null;
   private gameTime: number = 0;
+  private phaseTimer: NodeJS.Timeout | null = null;
+  private phaseTime: number = 0;
 
   constructor(roomId: string, maxPlayers: number) {
     this.id = uuid();
@@ -131,18 +133,20 @@ export class Game {
     const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
     const spymaster = team.find((player) => player.role === 'spymaster');
     if (spymaster) {
-      if (this.clueTimer) {
-        clearTimeout(this.clueTimer);
-      }
-
-      this.clueTimer = setTimeout(() => {
-        if (this.clueTimer) {
-          clearTimeout(this.clueTimer);
+      this.phaseTime = 0;
+      this.phaseTimer = setInterval(() => {
+        this.phaseTime += 1;
+        if (this.phaseTime >= SECOND_COUNT_FOR_ASK_CLUE) {
+          this.phaseTime = 0;
+          if (this.phaseTimer) {
+            clearInterval(this.phaseTimer);
+            this.phaseTimer = null;
+          }
+          this.turnChange();
+          callback(this.currentTeam);
         }
-        this.clueTimer = null;
-        this.turnChange();
-        callback(this.currentTeam);
-      }, SECOND_COUNT_FOR_ASK_CLUE * 1000);
+      }, TIMER_INTERVAL);
+
       return spymaster.id;
     }
 
@@ -158,16 +162,22 @@ export class Game {
     const spymaster = team.find((player) => player.role === 'spymaster' && player.id === userId);
 
     if (spymaster && this.gamePhase === 'clue') {
-      if (this.clueTimer) {
-        clearTimeout(this.clueTimer);
-        this.clueTimer = null;
-      }
       this.gamePhase = 'guess';
-      const guessTimer = setTimeout(() => {
-        clearTimeout(guessTimer);
-        const result = this.guessTest();
-        callback(result);
-      }, SECOND_COUNT_FOR_GUESS * 1000);
+
+      this.phaseTime = 0;
+      this.phaseTimer = setInterval(() => {
+        this.phaseTime += 1;
+        if (this.phaseTime >= SECOND_COUNT_FOR_GUESS) {
+          this.phaseTime = 0;
+          if (this.phaseTimer) {
+            clearInterval(this.phaseTimer);
+            this.phaseTimer = null;
+          }
+          const result = this.guessTest();
+          callback(result);
+        }
+      }, TIMER_INTERVAL);
+
       const agentIds = team.filter((player) => player.role === 'agent').map((player) => player.id);
       return { clue, agentIds };
     }

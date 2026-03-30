@@ -123,11 +123,17 @@ export class Game {
   }
 
   public askClue(callback: (team: Teams) => void): string | undefined {
-    const currentTeam = this.currentTeam;
-    const team = currentTeam === 'red' ? this.redTeam : this.blueTeam;
+    const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
     const spymaster = team.find((player) => player.role === 'spymaster');
     if (spymaster) {
+      if (this.clueTimer) {
+        clearTimeout(this.clueTimer);
+      }
+
       this.clueTimer = setTimeout(() => {
+        if (this.clueTimer) {
+          clearTimeout(this.clueTimer);
+        }
         this.clueTimer = null;
         this.turnChange();
         callback(this.currentTeam);

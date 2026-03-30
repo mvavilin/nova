@@ -1,5 +1,6 @@
 import type { Socket } from 'socket.io';
 import type {
+  CardTestResult,
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../../../../packages/shared/src/socketEvents.ts';
@@ -7,14 +8,17 @@ import { roomManager, socketIdMap } from './sessionHandlers.ts';
 import { io } from '../../app.ts';
 import { logger } from '../logger/logger.ts';
 import type { SocketData } from '../../types/types.ts';
+import type { Game } from '../../rooms/game.ts';
 
 export function setupGameHandlers(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
-  setupGameAddPlayer(socket);
+  setupGameAddPlayerHandler(socket);
+  setupClueGiveHandler(socket);
+  setupCardChooseHandler(socket);
 }
 
-function setupGameAddPlayer(
+function setupGameAddPlayerHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   const { userId } = socket.data;
@@ -36,6 +40,118 @@ function setupGameAddPlayer(
         const socketId = socketIdMap.get(playerId);
         if (socketId) {
           io.to(socketId).emit('game:start', { gameInfo: game.getGameInfo(playerId) });
+          logger.emit(playerId, 'game:start', { gameInfo: game.getGameInfo(playerId) });
+        }
+      }
+
+      startClueState(game);
+    }
+  });
+}
+
+function startClueState(game: Game): void {
+  const spymasterId = game.askClue((team) => {
+    if (spymasterId) {
+      const socketId = socketIdMap.get(spymasterId);
+      if (socketId) {
+        io.to(socketId).emit('game:clue-timeout');
+        logger.emit(spymasterId, 'game:clue-timeout');
+      }
+    }
+
+    const playerIds = game.getPlayerIds();
+    for (const playerId of playerIds) {
+      const socketId = socketIdMap.get(playerId);
+      if (socketId) {
+        io.to(socketId).emit('game:turn-changed', { team });
+        logger.emit(playerId, 'game:turn-changed', { team });
+      }
+    }
+
+    startClueState(game);
+  });
+
+  if (spymasterId) {
+    const socketId = socketIdMap.get(spymasterId);
+    if (socketId) {
+      io.to(socketId).emit('game:ask-clue');
+      logger.emit(spymasterId, 'game:ask-clue');
+    }
+  }
+}
+
+function setupClueGiveHandler(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId } = socket.data;
+  socket.on('game:clue-give', ({ clue }) => {
+    const game = roomManager.getGameByUserId(userId);
+
+    if (game) {
+      const response = game.giveClue(userId, clue, (result) => {
+        guessCallback(game, result);
+      });
+      if (!('error' in response)) {
+        const { clue, agentIds } = response;
+        for (const agentId of agentIds) {
+          const socketId = socketIdMap.get(agentId);
+          if (socketId) {
+            io.to(socketId).emit('game:clue-given', { clue });
+            logger.emit(agentId, 'game:clue-given', { clue });
+          }
+        }
+      }
+    }
+  });
+}
+
+function guessCallback(game: Game, result: CardTestResult): void {
+  const { type } = result;
+  switch (type) {
+    case 'neutral':
+    case 'alien': {
+      const { payload } = result;
+      const { spymasterId, team, cardId, color, recipients } = payload;
+      for (const recipient of recipients) {
+        const socketId = socketIdMap.get(recipient);
+        if (socketId) {
+          io.to(socketId).emit('game:card-shown', { cardId, color });
+          logger.emit(recipient, 'game:card-shown', { cardId, color });
+        }
+      }
+      const socketId = socketIdMap.get(spymasterId);
+      if (socketId) {
+        io.to(socketId).emit('game:ask-clue');
+        logger.emit(spymasterId, 'game:ask-clue');
+      }
+      const playerIds = game.getPlayerIds();
+      for (const playerId of playerIds) {
+        const socketId = socketIdMap.get(playerId);
+        if (socketId) {
+          io.to(socketId).emit('game:turn-changed', { team });
+          logger.emit(playerId, 'game:turn-changed', { team });
+        }
+      }
+    }
+  }
+}
+
+function setupCardChooseHandler(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId } = socket.data;
+  socket.on('game:card-choose', ({ cardId }) => {
+    const game = roomManager.getGameByUserId(userId);
+    if (game) {
+      const response = game.chooseCard(userId, cardId);
+      if (!('error' in response)) {
+        const { players, recipients } = response;
+        for (const recipient of recipients) {
+          const socketId = socketIdMap.get(recipient);
+          if (socketId) {
+            io.to(socketId).emit('game:card-chosen', { cardId, players });
+            logger.emit(recipient, 'game:card-chosen', { cardId, players });
+          }
         }
       }
     }

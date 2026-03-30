@@ -1,10 +1,11 @@
 import type { Socket } from 'socket.io';
-import type {
-  ClientToServerEvents,
-  ServerToClientEvents,
+import {
+  RECONNECT_MAX_TIME,
+  type ClientToServerEvents,
+  type ServerToClientEvents,
 } from '../../../../../packages/shared/src/socketEvents.ts';
 import { RoomManager } from '../../rooms/roomManager.ts';
-import { RECONNECT_MAX_TIME, type SocketData } from '../../types/types.ts';
+import { type SocketData } from '../../types/types.ts';
 import { setupRoomHandlers } from './roomHandlers.ts';
 import { io } from '../../app.ts';
 import { logger } from '../logger/logger.ts';
@@ -16,7 +17,7 @@ const reconnectTimerMap = new Map<string, NodeJS.Timeout>();
 export const roomManager = new RoomManager();
 export const socketIdMap = new Map<string, string>();
 
-export function setupConnection(): void {
+export function setupConnectionHandler(): void {
   io.on(
     'connection',
     (socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>) => {
@@ -54,7 +55,7 @@ export function setupConnection(): void {
 
       socketIdMap.set(userId, socket.id);
 
-      setupDisconnect(socket);
+      setupDisconnectHandler(socket);
       setupAskStatusHandler(socket);
       setupRoomHandlers(socket);
       setupGameHandlers(socket);
@@ -64,7 +65,7 @@ export function setupConnection(): void {
   );
 }
 
-function setupDisconnect(
+function setupDisconnectHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   socket.on('disconnect', () => {

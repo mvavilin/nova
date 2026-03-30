@@ -1,7 +1,7 @@
 import { VALUE_OF_KEY_FOR_SHOW_LOG, type LogEmit, type LogOn } from '../../types/types.ts';
 import colors from 'colors';
 
-class Logger {
+export class Logger {
   private isShow: boolean;
 
   constructor() {

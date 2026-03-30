@@ -118,6 +118,8 @@ export default [
       '**/src/pages/GamePage/components/modals/KnowledgeCheckModal/KnowledgeCheckModal.ts',
       '**/src/pages/RoomPage/RoomInfoBlock/RoomInfoBlock.ts',
       '**/src/pages/WelcomePage/AboutUs/AboutUs.ts',
+      '**/src/rooms/game.ts',
+      '**/src/tests/game.test.ts',
     ],
     rules: {
       'max-lines-per-function': 'off',

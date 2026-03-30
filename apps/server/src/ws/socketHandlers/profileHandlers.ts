@@ -11,12 +11,12 @@ import { logger } from '../logger/logger.ts';
 export function setupProfileHandlers(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
-  setupEnterToProfile(socket);
-  setupLeaveProfile(socket);
-  setupSendProfileInfo(socket);
+  setupEnterToProfileHandler(socket);
+  setupLeaveProfileHandler(socket);
+  setupSendProfileInfoHandler(socket);
 }
 
-function setupEnterToProfile(
+function setupEnterToProfileHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   const { userId } = socket.data;
@@ -41,7 +41,7 @@ function setupEnterToProfile(
   });
 }
 
-function setupLeaveProfile(
+function setupLeaveProfileHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   const { userId } = socket.data;
@@ -66,7 +66,7 @@ function setupLeaveProfile(
   });
 }
 
-function setupSendProfileInfo(
+function setupSendProfileInfoHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
 ): void {
   const { userId } = socket.data;

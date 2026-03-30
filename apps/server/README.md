@@ -391,7 +391,7 @@ The main disadvantage is that socket.io requires an authentication token during 
 - After logging out, disable socket.io
 
 ```
-  socket.disconnect(
+  socket.disconnect();
 ```
 
 - ### Socket.io methods for interacting with the server
@@ -424,13 +424,13 @@ The main disadvantage is that socket.io requires an authentication token during 
     - Authentication errors (incorrect token). Error message: `AUTH_REQUIRED`
 
     ```
-      socket.on('connect_error', (error) => { /.../ }
+      socket.on('connect_error', (error) => { /.../ })
     ```
 
     - Parallel connection attempt. Error code: `ALREADY_ONLINE`
 
     ```
-      socket.on('error', ({ code }) => { /.../ }
+      socket.on('error', ({ code }) => { /.../ })
     ```
 
     </details>
@@ -681,7 +681,7 @@ The main disadvantage is that socket.io requires an authentication token during 
     - Request to server
 
     ```
-      { type: 'team:change'; payload: { player: Player }
+      { type: 'team:change'; payload: { player: Player } }
     ```
 
     - Response to all users in room
@@ -704,7 +704,7 @@ The main disadvantage is that socket.io requires an authentication token during 
 
     </details>
 
-- ### List of events sent to the server when working with game (stored in the @repo/shared/src/socketEvents.ts)
+- ### List of events when working with game (stored in the @repo/shared/src/socketEvents.ts)
 
   **Important!** Data is not converted to JSON for transmission to and from the server
   - **Start game**
@@ -718,6 +718,93 @@ The main disadvantage is that socket.io requires an authentication token during 
 
     - If the game is not full after adding a user to the game, the user will receive a `GAME_IS_NOT_FULL` error message. However, this error can be ignored and the `game:start` message can be expected
 
+    </details>
+
+  - **Clue state**
+    <details>
+    At the beginning of the turn, the server requests a clue from spymaster by sending a message
+    ```
+      { type: 'game:ask-clue' }
+    ```
+
+    The server starts the control timer (30 s). The spymaster starts the visualization timer in parallel.
+
+    The spymaster sends a clue using a message
+
+    ```
+      { type: 'game:clue-give'; payload: { clue: string } }
+    ```
+
+    The server sends the received clue to the team's agents via a message
+
+    ```
+      { type: 'game:clue-given'; payload: { clue: string } }
+    ```
+
+    If the spymaster fails to provide a hint, the turn passes to another team. The spymaster receives the message
+
+    ```
+      { type: 'game:clue-timeout' }
+    ```
+
+    and the players receive
+
+    ```
+      { type: 'game:turn-changed'; payload: { team: Teams } }
+    ```
+
+    </details>
+
+  - **Guess state**
+    <details>
+    At the beginning of the guessing stage, the server starts a timer (60 seconds)
+
+    Agents select (click) cards and send a message
+
+    ```
+      { type: 'game:card-choose'; payload: { cardId: string } }
+    ```
+
+    If the player clicks on the card again, the selection is canceled. If the player clicks on the second card, the selection of the first card is canceled (not implemented).
+
+    After selecting a player or deselecting a player, the server sends a message to all team members
+
+    ```
+      { type: 'game:card-chosen'; payload: { cardId: string; players: Player[] } }
+    ```
+
+    When the timer expires, the server removes the timer and searches for the card with the most votes. If there are more than one such card, one is selected randomly.
+    - If the team color card is selected, then (not implemented)
+    - If an opponent's color card or a neutral card is selected, the turn passes to the opponent. Team members receive message
+
+      ```
+        { type: 'game:card-shown'; payload: { cardId: string; color: CardColor } }
+      ```
+
+      and the card is opened for them. Все участники игры получают сообщение
+
+      ```
+        { type: 'game:turn-changed'; payload: { team: Teams } }
+      ```
+
+    - If a bomb is selected, then (not implemented)
+    - If no cards are selected, then (not implemented)
+
+    </details>
+
+  - **Answer state**
+    <details>
+    Not implemented
+    </details>
+
+  - **Check state**
+    <details>
+    Not implemented
+    </details>
+
+  - **Finish state**
+    <details>
+    Not implemented
     </details>
 
 - ### List of events sent to the server when working with profile (stored in the @repo/shared/src/socketEvents.ts)

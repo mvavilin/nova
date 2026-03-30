@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { RoomManager } from './roomManager.ts';
+import { RoomManager } from '../rooms/roomManager.ts';
 import { v4 as uuid } from 'uuid';
 import type { Player } from '../../../../packages/shared/src/types/room.ts';
 import type { ErrorCode } from '../../../../packages/shared/src/socketEvents.ts';

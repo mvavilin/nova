@@ -97,6 +97,7 @@ export const RECONNECT_MAX_TIME = 60_000;
 export const SECOND_COUNT_BEFORE_START_GAME = 15;
 export const SECOND_COUNT_FOR_ASK_CLUE = 30;
 export const SECOND_COUNT_FOR_GUESS = 60;
+export const SECOND_COUNT_FOR_ANSWER = 60;
 export const TIMER_INTERVAL = 1000;
 
 export type ClientEvent =
@@ -142,6 +143,7 @@ export type ServerEvent =
       type: 'game:ask-answer';
       payload: { word: string; question: string; question_en: string; answer: boolean };
     }
+  | { type: 'game:answer-timeout' }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
   | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };

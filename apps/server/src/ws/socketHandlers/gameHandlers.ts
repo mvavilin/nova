@@ -124,6 +124,16 @@ function guessCallback(game: Game, result: CardTestResult): void {
           logger.emit(playerId, 'game:ask-answer', { word, question, question_en, answer });
         }
       }
+      game.startAnswerPhase((team) => {
+        for (const playerId of playerIds) {
+          const socketId = socketIdMap.get(playerId);
+          if (socketId) {
+            io.to(socketId).emit('game:answer-timeout');
+            logger.emit(playerId, 'game:answer-timeout');
+          }
+        }
+        turnChange(game, team);
+      });
       break;
     }
     case 'neutral':
@@ -142,7 +152,6 @@ function guessCallback(game: Game, result: CardTestResult): void {
         io.to(socketId).emit('game:ask-clue');
         logger.emit(spymasterId, 'game:ask-clue');
       }
-
       turnChange(game, team);
     }
   }

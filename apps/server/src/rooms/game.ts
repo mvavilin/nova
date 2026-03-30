@@ -8,6 +8,7 @@ import type { Player, Teams } from '../../../../packages/shared/src/types/room.t
 import jsonData from '../../../../packages/shared/src/question-bank.json' with { type: 'json' };
 import { v4 as uuid } from 'uuid';
 import {
+  SECOND_COUNT_FOR_ANSWER,
   SECOND_COUNT_FOR_ASK_CLUE,
   SECOND_COUNT_FOR_GUESS,
   TIMER_INTERVAL,
@@ -293,5 +294,27 @@ export class Game {
     }
 
     return;
+  }
+
+  public startAnswerPhase(callback: (team: Teams) => void): void {
+    if (this.phaseTimer) {
+      clearInterval(this.phaseTimer);
+      this.phaseTimer = null;
+    }
+    this.gamePhase = 'check';
+    this.phaseTime = 0;
+    this.phaseTimer = setInterval(() => {
+      this.phaseTime += 1;
+      if (this.phaseTime >= SECOND_COUNT_FOR_ANSWER) {
+        this.phaseTime = 0;
+        if (this.phaseTimer) {
+          clearInterval(this.phaseTimer);
+          this.phaseTimer = null;
+        }
+        this.checkQuestion = null;
+        this.turnChange();
+        callback(this.currentTeam);
+      }
+    }, TIMER_INTERVAL);
   }
 }

@@ -37,7 +37,7 @@ export default class InputForm extends ContainerComponent {
 
   private render(parameters: InputBlockProps): void {
     this.label = new LabelComponent({
-      classes: 'uppercase text-sm font-medium font-main',
+      classes: 'uppercase text-sm md:text-base font-medium font-main',
       content: t(this.labelKey),
       htmlFor: parameters.id,
     });
@@ -55,7 +55,7 @@ export default class InputForm extends ContainerComponent {
       placeholder: t(this.placeholderKey),
       autocomplete: parameters.autocomplete,
       classes:
-        'px-3 py-2 bg-white/60 border border-solid border-black rounded-md outline-none transition-colors duration-300 hover:border-green-600 focus:border-brand',
+        'text-sm md:text-base px-3 py-2 bg-white/60 border border-solid border-black rounded-md outline-none transition-colors duration-300 hover:border-green-600 focus:border-brand',
     });
 
     if (parameters.minLength) {

@@ -8,7 +8,7 @@ export const formInputValues: Record<FieldName, InputFieldProps> = {
     name: 'nameInput',
     autocomplete: 'off',
     minLength: '2',
-    maxLength: '20',
+    maxLength: '30',
     placeholderKey: TranslationKeys.FORM_PLACEHOLDER_NAME,
     labelTextKey: TranslationKeys.FORM_LABEL_NAME,
     errorKey: TranslationKeys.FORM_ERROR_MESSAGE_NAME,

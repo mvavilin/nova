@@ -71,7 +71,15 @@ export default function formReducer(state: State, action: AppActions): State {
       };
     }
 
-    case FormActionTypes.GO_TO_LOBBY_PAGE: {
+    case FormActionTypes.GO_TO_WELCOME_PAGE: {
+      return { ...state };
+    }
+
+    case FormActionTypes.GO_TO_LOGIN_PAGE: {
+      return { ...state };
+    }
+
+    case FormActionTypes.GO_TO_REGISTRATION_PAGE: {
       return { ...state };
     }
 

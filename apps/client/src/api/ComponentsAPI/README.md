@@ -192,9 +192,9 @@ console.log(paragraph.content); // 'Hello World!'
 
 ### Методы:
 
-- [ ] `setSrc(source: string): this` --- устанавливает путь к изображению.
-- [ ] `setAlt(alt: string): this` --- задает альтернативный текст.
-- [ ] `setDimensions(width?: number | string, height?: number | string): this` --- задает ширину и высоту.
+- [x] `setSrc(source: string): this` --- устанавливает путь к изображению.
+- [x] `setAlt(alt: string): this` --- задает альтернативный текст.
+- [x] `setDimensions(width?: number | string, height?: number | string): this` --- задает ширину и высоту.
 
 **Пример:**
 

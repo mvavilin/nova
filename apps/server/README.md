@@ -739,11 +739,12 @@ The main disadvantage is that socket.io requires an authentication token during 
       { type: 'game:clue-given'; payload: { clue: string } }
     ```
 
-    If the spymaster fails to provide a hint, the turn passes to another team. The spymaster receives the message 
+    If the agent does not send an answer, the turn passes to another team. The spymaster receives the message 
     ```
-      { type: 'game:clue-timeout' }
+      { type: 'game:answer-timeout' }
     ```
-    and the players receive 
+    
+    and all participants in the game receive 
     ```
       { type: 'game:turn-changed'; payload: { team: Teams } }
     ```
@@ -768,7 +769,16 @@ The main disadvantage is that socket.io requires an authentication token during 
 
     When the timer expires, the server removes the timer and searches for the card with the most votes. If there are more than one such card, one is selected randomly.
 
-    - If the team color card is selected, then (not implemented)
+    - If the team's color scheme is selected, the server randomly selects an agent from the agents who voted for the card to answer the card's question. The server then sends a message to all team members
+      ```
+        {
+          type: 'game:ask-answer';
+          payload: { word: string; question: string; question_en: string; answer: boolean };
+        }
+      ```
+
+      For the responding agent, the answer parameter is true, and for other team members, it is false
+      
     - If an opponent's color card or a neutral card is selected, the turn passes to the opponent. Team members receive message
 
       ```
@@ -786,7 +796,31 @@ The main disadvantage is that socket.io requires an authentication token during 
 
   - **Answer state**
     <details>
-    Not implemented
+ 
+    After sending a request to answer a card question, the server starts a timer (60 seconds)
+ 
+    The agent answers the card's question by sending a message to the server
+    ```
+      { type: 'game:answer-give'; payload: { answer: string } }
+    ```
+ 
+    If the server receives a user response, it sends a message to the opposing team
+    ```
+      {
+        type: 'game:ask-check';
+        payload: { answer: string; checkQuestion: CheckQuestion; check: boolean };
+      }
+    ```
+ 
+    If the spymaster fails to provide a hint, the turn passes to another team. The team members receive a message 
+    ```
+      { type: 'game:clue-timeout' }
+    ```
+    and all participants in the game receive 
+    ```
+      { type: 'game:turn-changed'; payload: { team: Teams } }
+    ```
+  
     </details>
 
   - **Check state**

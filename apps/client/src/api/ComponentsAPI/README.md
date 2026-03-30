@@ -153,7 +153,7 @@ console.log(container.getChildren());
 
 ### Методы:
 
-- [ ] ~~`setLevel(level: 1 | 2 | 3 | 4 | 5 | 6): this` --- изменяет уровень заголовка.~~
+- [x] `setLevel(level: 1 | 2 | 3 | 4 | 5 | 6): this` --- изменяет уровень заголовка.
 
 **Пример:**
 

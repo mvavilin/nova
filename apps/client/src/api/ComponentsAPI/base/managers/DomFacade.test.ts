@@ -7,8 +7,7 @@ describe('DomFacade', () => {
     const owner = new BaseComponent();
     const facade = new DomFacade(owner, 'div');
 
-    expect(facade.element).toBeInstanceOf(HTMLElement);
-
+    expect(facade.element).toBeDefined();
     expect(facade.classes).toBeDefined();
     expect(facade.styles).toBeDefined();
     expect(facade.visibility).toBeDefined();

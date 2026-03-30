@@ -17,6 +17,7 @@ import {
 import type { CheckQuestion } from '../../../../packages/shared/src/types/question.ts';
 
 export class Game {
+  private id: string;
   private roomId: string;
   private redTeam: Player[] = [];
   private blueTeam: Player[] = [];
@@ -29,6 +30,7 @@ export class Game {
   private checkQuestion: CheckQuestion | null = null;
 
   constructor(roomId: string, maxPlayers: number) {
+    this.id = uuid();
     this.roomId = roomId;
     this.maxPlayers = maxPlayers;
   }
@@ -58,6 +60,7 @@ export class Game {
     }));
 
     return {
+      id: this.id,
       redTeam: this.redTeam,
       blueTeam: this.blueTeam,
       currentTeam: this.currentTeam,

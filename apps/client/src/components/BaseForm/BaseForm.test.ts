@@ -4,7 +4,7 @@ import BaseForm from './BaseForm';
 import mockInitialState from '@__mocks__/store/state';
 import { HeadingComponent, ButtonComponent } from '@/api/ComponentsAPI';
 import type { BaseFormProps } from './BaseForm.types';
-import { FormActions } from '@/store/actions/form.actions';
+import { FormActionTypes } from '@/store/actions/form.actions';
 
 // 1. Мокаем стор
 vi.mock('@/store/store', () => ({
@@ -150,7 +150,7 @@ describe('BaseForm: обработка события Submit (отправка �
 
     expect(dispatchMock).toHaveBeenCalledWith(
       expect.objectContaining({
-        type: FormActions.FETCH_DATA,
+        type: FormActionTypes.FETCH_DATA,
         payload: expect.objectContaining({
           formId: 'registration',
           formData: { username: 'Alice', email: 'alice@example.com', password: '!Secret123' },

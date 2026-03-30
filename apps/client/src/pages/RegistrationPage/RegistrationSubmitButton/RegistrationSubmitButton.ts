@@ -4,7 +4,7 @@ import { t } from '@/i18n';
 import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 import store from '@/store/store';
-import { FormActions } from '@/store/actions/form.actions';
+import { AppActionTypes } from '@/store/actions';
 
 export default class RegistrationSubmitButton extends ButtonComponent {
   constructor() {
@@ -24,7 +24,7 @@ export default class RegistrationSubmitButton extends ButtonComponent {
   }
 
   private switchLanguage(_state: State, action: Action): void {
-    if (action.type === FormActions.SWITCH_LANGUAGE) {
+    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.setContent(t(TranslationKeys.REGISTRATION_SUBMIT_BTN));
     }
   }

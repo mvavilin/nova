@@ -182,6 +182,7 @@ export default class GameResultsModal extends Modal {
                   TEAM_HEADER_CLASSES.AVATAR_BORDER[playerData.player.team][playerData.player.role],
                 width: 25,
                 height: 25,
+                seed: playerData.player.id,
               }),
               new TextComponent({
                 content: `${playerData.player.username}`,

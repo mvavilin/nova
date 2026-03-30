@@ -1,4 +1,4 @@
-import LangButton from '@/pages/WelcomePage/LangButton/LangButton';
+import LanguageButton from '@/components/LanguageButton/LanguageButton';
 import type { ProfileHeroProperties } from './ProfileHero.types';
 
 import { ContainerComponent, HeadingComponent, TextComponent } from '@ComponentsAPI';
@@ -38,10 +38,11 @@ export default class ProfileHero extends ContainerComponent {
                   classes: 'text-sm font-main font-normal text-gray-300',
                   content: '🌐 Language:',
                 }),
-                new LangButton({
-                  classes:
-                    'font-main font-normal text-sm md:text-sm leading-[0.83] text-center text-[var(--color-light)] cursor-pointer transition-colors duration-200 hover:text-[var(--color-brand)] p-0 min-h-0 w-fit text-gray-300',
-                }),
+                new LanguageButton(),
+                // new LangButton({
+                //   classes:
+                //     'font-main font-normal text-sm md:text-sm leading-[0.83] text-center text-[var(--color-light)] cursor-pointer transition-colors duration-200 hover:text-[var(--color-brand)] p-0 min-h-0 w-fit text-gray-300',
+                // }),
               ],
             }),
             new TextComponent({

@@ -7,7 +7,6 @@ import store from '@store/store';
 import RegistrationButton from './RegistrationButton/RegistrationButton';
 import { WelcomeActions } from '@/store/actions/welcome.actions';
 import type { State } from '@store/types/state';
-import LangButton from './LangButton/LangButton';
 import RulesButton from './RulesButton/RulesButton';
 import GameDescription from './GameDescription/GameDescription';
 import LobbyButton from './LobbyButton/LobbyButton';
@@ -17,6 +16,7 @@ import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
 import AboutButton from './AboutButton/AboutButton';
 import AboutUs from './AboutUs/AboutUs';
+import LanguageButton from '@/components/LanguageButton/LanguageButton';
 
 export default class WelcomePage extends ContainerComponent {
   constructor({ ...rest }: WelcomePageProperties = {}) {
@@ -38,11 +38,11 @@ export default class WelcomePage extends ContainerComponent {
   private render(): void {
     const header = new ContainerComponent({
       tag: 'header',
-      classes: 'flex justify-end w-full max-w-[1440px]',
+      classes: 'flex justify-end items-center w-full max-w-[1440px]',
     });
     const nav = new ContainerComponent({ tag: 'nav', classes: 'flex' });
     header.appendChildren(nav);
-    header.appendChildren([new RulesButton(), new AboutButton(), new LangButton()]);
+    header.appendChildren([new RulesButton(), new AboutButton(), new LanguageButton()]);
 
     const content = new ContainerComponent({
       classes: 'grid grid-rows-[auto_1fr_auto] w-full h-full max-w-[1024px] gap-10',

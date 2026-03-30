@@ -2,7 +2,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import store from '@/store/store';
 import InputForm from './InputForm';
 import mockInitialState from '@__mocks__/store/state';
-import { FormActions } from '@/store/actions/form.actions';
+import { FormActionTypes } from '@/store/actions/form.actions';
 import type { InputBlockProps } from './InputForm.types';
 import { TranslationKeys } from '@/i18n/translationKeys';
 
@@ -71,7 +71,7 @@ describe('InputForm: правильное поведение при событи
     inputElement.dispatchEvent(new Event('input'));
 
     expect(dispatchMock).toHaveBeenCalledWith({
-      type: FormActions.FORM_UPDATE_FIELD,
+      type: FormActionTypes.FORM_UPDATE_FIELD,
       payload: {
         formId: 'registration',
         fieldName: 'username',
@@ -109,7 +109,7 @@ describe('InputForm: правильное поведение при событи
 
     const inputBlock = new InputForm(validParameters);
     // Вызываем обновление (обычно происходит через subscribe)
-    inputBlock['updateInputForm'](mockInitialState, { type: FormActions.FORM_UPDATE_FIELD });
+    inputBlock['updateInputForm'](mockInitialState, { type: FormActionTypes.FORM_UPDATE_FIELD });
 
     const span = inputBlock.element?.querySelector('span');
     expect(span?.textContent).toBe(validParameters.errorKey);

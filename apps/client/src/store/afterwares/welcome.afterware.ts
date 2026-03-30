@@ -4,6 +4,7 @@ import type { Afterware } from '@api/StateAPI';
 import { WelcomeActions } from '@store/actions/welcome.actions';
 import { localStorageProps } from '@/constants/localStorage.constants';
 import { getLocalStorageData, saveLocalStorageData } from '@/utils/localStorage';
+import { AppActionTypes } from '../actions';
 
 type StateWithLanguage = {
   language: string;
@@ -23,7 +24,7 @@ export default function welcomePageAfterware<State extends StateWithLanguage>():
       router.navigate(URLS.LOBBY());
     }
 
-    if (context.action.type === WelcomeActions.SWITCH_LANGUAGE) {
+    if (context.action.type === AppActionTypes.SWITCH_LANGUAGE) {
       const store = getLocalStorageData(localStorageProps.store) ?? {};
 
       saveLocalStorageData(localStorageProps.store, {

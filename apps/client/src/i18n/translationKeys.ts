@@ -185,6 +185,31 @@ export const TranslationKeys = {
   ROLE_OPERATIVE: 'roleOperative',
 
   FORM_EMPTY_FIELD_WARNING: 'formEmptyFieldWarning',
+
+  PROFILE_TITLE: 'profileTitle',
+  PROFILE_USER_LANGUAGE: 'profileUserLanguage',
+  PROFILE_USER_ONLINE: 'profileUserOnline',
+  PROFILE_USER_LEVEL: 'profileUserLevel',
+  PROFILE_USER_WINRATE: 'profileUserWinrate',
+  PROFILE_USER_CORRECT: 'profileUserCorrect',
+  PROFILE_STATS_TITLE: 'profileStatsTitle',
+  PROFILE_STATS_GAMES: 'profileStatsGames',
+  PROFILE_STATS_WINS: 'profileStatsWins',
+  PROFILE_STATS_LOSSES: 'profileStatsLosses',
+  PROFILE_STATS_WINRATE: 'profileStatsWinrate',
+  PROFILE_ROLES_TITLE: 'profileRolesTitle',
+  PROFILE_ROLE_SPYMASTER: 'profileRoleSpymaster',
+  PROFILE_ROLE_AGENT: 'profileRoleAgent',
+  PROFILE_ROLE_WINRATE: 'profileRoleWinrate',
+  PROFILE_ROLE_CORRECT: 'profileRoleCorrect',
+  PROFILE_ROLE_ACCURACY: 'profileRoleAccuracy',
+  PROFILE_MATCH_HISTORY_TITLE: 'profileMatchHistoryTitle',
+  PROFILE_MATCH_WIN: 'profileMatchWin',
+  PROFILE_MATCH_LOSE: 'profileMatchLose',
+  PROFILE_ACHIEVEMENTS_TITLE: 'profileAchievementsTitle',
+  PROFILE_ACHIEVEMENT_STREAK: 'profileAchievementsStreak',
+  PROFILE_ACHIEVEMENT_ANSWERS: 'profileAchievementsAnswers',
+  PROFILE_ACHIEVEMENT_FIRST_WIN: 'profileAchievementsWin',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];

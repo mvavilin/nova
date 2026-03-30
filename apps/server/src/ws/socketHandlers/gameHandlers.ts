@@ -17,6 +17,7 @@ export function setupGameHandlers(
   setupGameAddPlayerHandler(socket);
   setupClueGiveHandler(socket);
   setupCardChooseHandler(socket);
+  setupAnswerGiveHandler(socket);
 }
 
 function setupGameAddPlayerHandler(
@@ -172,6 +173,29 @@ function setupCardChooseHandler(
           if (socketId) {
             io.to(socketId).emit('game:card-chosen', { cardId, players });
             logger.emit(recipient, 'game:card-chosen', { cardId, players });
+          }
+        }
+      }
+    }
+  });
+}
+
+function setupAnswerGiveHandler(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId } = socket.data;
+  socket.on('game:answer-give', ({ answer }) => {
+    const game = roomManager.getGameByUserId(userId);
+    if (game) {
+      const response = game.giveAnswer(userId, answer);
+      if (!('error' in response)) {
+        const { answer, checkQuestion, spymasterId, playerIds } = response;
+        for (const playerId of playerIds) {
+          const check = playerId !== spymasterId;
+          const socketId = socketIdMap.get(playerId);
+          if (socketId) {
+            io.to(socketId).emit('game:ask-check', { answer, checkQuestion, check });
+            logger.emit(playerId, 'game:ask-check', { answer, checkQuestion, check });
           }
         }
       }

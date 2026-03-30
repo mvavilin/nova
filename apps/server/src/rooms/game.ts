@@ -33,6 +33,8 @@ export class Game {
   private gameTime: number = 0;
   private phaseTimer: NodeJS.Timeout | null = null;
   private phaseTime: number = 0;
+  private answerUserId: string | undefined;
+  private answerCard: Card | null = null;
 
   constructor(roomId: string, maxPlayers: number) {
     this.id = uuid();
@@ -255,6 +257,8 @@ export class Game {
                 const { word, question, question_en } = this.checkQuestion;
                 const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
                 const playerIds = team.map((player) => player.id);
+                this.answerUserId = userId;
+                this.answerCard = card;
                 return { type: 'own', payload: { userId, word, question, question_en, playerIds } };
               }
               break;
@@ -301,7 +305,7 @@ export class Game {
       clearInterval(this.phaseTimer);
       this.phaseTimer = null;
     }
-    this.gamePhase = 'check';
+    this.gamePhase = 'answer';
     this.phaseTime = 0;
     this.phaseTimer = setInterval(() => {
       this.phaseTime += 1;
@@ -316,5 +320,35 @@ export class Game {
         callback(this.currentTeam);
       }
     }, TIMER_INTERVAL);
+  }
+
+  public giveAnswer(
+    userId: string,
+    answer: string
+  ):
+    | { answer: string; checkQuestion: CheckQuestion; spymasterId: string; playerIds: string[] }
+    | { error: ErrorCode } {
+    if (this.gamePhase === 'answer' && this.answerUserId === userId && this.checkQuestion) {
+      this.phaseTime = 0;
+      if (this.phaseTimer) {
+        clearInterval(this.phaseTimer);
+        this.phaseTimer = null;
+      }
+
+      const opponentTeam = this.currentTeam === 'red' ? this.blueTeam : this.redTeam;
+      const playerIds = opponentTeam.map((player) => player.id);
+      const spymaster = opponentTeam.find((player) => player.role === 'spymaster');
+      if (spymaster) {
+        const spymasterId = spymaster.id;
+        return {
+          answer,
+          checkQuestion: this.checkQuestion,
+          spymasterId,
+          playerIds,
+        };
+      }
+    }
+
+    return { error: 'ACTION_IS_PROHIBITED' };
   }
 }

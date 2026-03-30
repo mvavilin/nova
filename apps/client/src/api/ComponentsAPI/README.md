@@ -297,8 +297,8 @@ select.addOption('2', 'Two');
 
 ### Методы:
 
-- [ ] `isChecked(): boolean` --- проверяет, выбрана ли радиокнопка.
-- [ ] `setChecked(state: boolean): this` --- устанавливает состояние выбора.
+- [x] `isChecked(): boolean` --- проверяет, выбрана ли радиокнопка.
+- [x] `setChecked(state: boolean): this` --- устанавливает состояние выбора.
 
 **Пример:**
 

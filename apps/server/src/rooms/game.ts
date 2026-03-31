@@ -252,31 +252,11 @@ export class Game {
         if (card) {
           switch (card.color) {
             case this.currentTeam: {
-              const userIds = choice[termWithUserIds];
-              const userId = userIds[Math.floor(Math.random() * userIds.length)];
-              const checkQuestion = this.getCheckQuestion(card.word);
-              if (userId && checkQuestion) {
-                this.checkQuestion = checkQuestion;
-                const { word, question, question_en } = this.checkQuestion;
-                const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
-                const playerIds = team.map((player) => player.id);
-                this.answerUserId = userId;
-                // this.answerCard = card;
-                return { type: 'own', payload: { userId, word, question, question_en, playerIds } };
-              }
-              break;
+              return this.chosenOwnCard(choice, card);
             }
             case opponentColor:
             case 'neutral': {
-              const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
-              const recipients = team.map((player) => player.id);
-              card.whoSees.add(this.currentTeam);
-              const { id: cardId, color } = card;
-              const spymasterId = this.turnChange();
-              return {
-                type: card.color === opponentColor ? 'alien' : 'neutral',
-                payload: { spymasterId, team: this.currentTeam, cardId, color, recipients },
-              };
+              return this.chosenOpponentCard(card);
             }
           }
         }
@@ -285,6 +265,37 @@ export class Game {
 
     const spymasterId = this.turnChange();
     return { type: 'no-change', payload: { team: this.currentTeam, spymasterId } };
+  }
+
+  private chosenOwnCard(choice: [string, string[]], card: Card): CardTestResult {
+    const termWithUserIds = 1;
+    const userIds = choice[termWithUserIds];
+    const userId = userIds[Math.floor(Math.random() * userIds.length)];
+    const checkQuestion = this.getCheckQuestion(card.word);
+    if (userId && checkQuestion) {
+      this.checkQuestion = checkQuestion;
+      const { word, question, question_en } = this.checkQuestion;
+      const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+      const playerIds = team.map((player) => player.id);
+      this.answerUserId = userId;
+      // this.answerCard = card;
+      return { type: 'own', payload: { userId, word, question, question_en, playerIds } };
+    }
+    const spymasterId = this.turnChange();
+    return { type: 'no-change', payload: { team: this.currentTeam, spymasterId } };
+  }
+
+  private chosenOpponentCard(card: Card): CardTestResult {
+    const opponentColor = this.currentTeam === 'red' ? 'blue' : 'red';
+    const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+    const recipients = team.map((player) => player.id);
+    card.whoSees.add(this.currentTeam);
+    const { id: cardId, color } = card;
+    const spymasterId = this.turnChange();
+    return {
+      type: card.color === opponentColor ? 'alien' : 'neutral',
+      payload: { spymasterId, team: this.currentTeam, cardId, color, recipients },
+    };
   }
 
   private getCheckQuestion(word: string): CheckQuestion | undefined {

@@ -8,9 +8,13 @@ import type { Player, Teams } from '../../../../packages/shared/src/types/room.t
 import jsonData from '../../../../packages/shared/src/question-bank.json' with { type: 'json' };
 import { v4 as uuid } from 'uuid';
 import {
+  SECOND_COUNT_FOR_ANSWER,
   SECOND_COUNT_FOR_ASK_CLUE,
+  SECOND_COUNT_FOR_CHECK,
   SECOND_COUNT_FOR_GUESS,
+  TIMER_INTERVAL,
   type CardTestResult,
+  type CheckResults,
   type ErrorCode,
   type GAME_PHASE,
 } from '../../../../packages/shared/src/socketEvents.ts';
@@ -24,10 +28,16 @@ export class Game {
   private maxPlayers: number;
   private cards: Card[] = [];
   private currentTeam: Teams = 'red';
-  private clueTimer: NodeJS.Timeout | null = null;
   private gamePhase: GAME_PHASE = 'clue';
   private chosenCards: Map<string, string[]> = new Map();
   private checkQuestion: CheckQuestion | null = null;
+  // private gameTimer: NodeJS.Timeout | null = null;
+  // private gameTime: number = 0;
+  private phaseTimer: NodeJS.Timeout | null = null;
+  private phaseTime: number = 0;
+  private answerUserId: string | undefined;
+  // private answerCard: Card | null = null;
+  private accepts: Array<{ userId: string; accept: boolean }> = [];
 
   constructor(roomId: string, maxPlayers: number) {
     this.id = uuid();
@@ -99,6 +109,9 @@ export class Game {
 
   public initial(): void {
     this.createCards();
+    // this.gameTimer = setInterval(() => {
+    //   this.gameTime += 1;
+    // }, 1000);
   }
 
   private createCards(): void {
@@ -123,15 +136,23 @@ export class Game {
   }
 
   public askClue(callback: (team: Teams) => void): string | undefined {
-    const currentTeam = this.currentTeam;
-    const team = currentTeam === 'red' ? this.redTeam : this.blueTeam;
+    const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
     const spymaster = team.find((player) => player.role === 'spymaster');
     if (spymaster) {
-      this.clueTimer = setTimeout(() => {
-        this.clueTimer = null;
-        this.turnChange();
-        callback(this.currentTeam);
-      }, SECOND_COUNT_FOR_ASK_CLUE * 1000);
+      this.phaseTime = 0;
+      this.phaseTimer = setInterval(() => {
+        this.phaseTime += 1;
+        if (this.phaseTime >= SECOND_COUNT_FOR_ASK_CLUE) {
+          this.phaseTime = 0;
+          if (this.phaseTimer) {
+            clearInterval(this.phaseTimer);
+            this.phaseTimer = null;
+          }
+          this.turnChange();
+          callback(this.currentTeam);
+        }
+      }, TIMER_INTERVAL);
+
       return spymaster.id;
     }
 
@@ -147,16 +168,22 @@ export class Game {
     const spymaster = team.find((player) => player.role === 'spymaster' && player.id === userId);
 
     if (spymaster && this.gamePhase === 'clue') {
-      if (this.clueTimer) {
-        clearTimeout(this.clueTimer);
-        this.clueTimer = null;
-      }
       this.gamePhase = 'guess';
-      const guessTimer = setTimeout(() => {
-        clearTimeout(guessTimer);
-        const result = this.guessTest();
-        callback(result);
-      }, SECOND_COUNT_FOR_GUESS * 1000);
+
+      this.phaseTime = 0;
+      this.phaseTimer = setInterval(() => {
+        this.phaseTime += 1;
+        if (this.phaseTime >= SECOND_COUNT_FOR_GUESS) {
+          this.phaseTime = 0;
+          if (this.phaseTimer) {
+            clearInterval(this.phaseTimer);
+            this.phaseTimer = null;
+          }
+          const result = this.guessTest();
+          callback(result);
+        }
+      }, TIMER_INTERVAL);
+
       const agentIds = team.filter((player) => player.role === 'agent').map((player) => player.id);
       return { clue, agentIds };
     }
@@ -230,12 +257,12 @@ export class Game {
               const checkQuestion = this.getCheckQuestion(card.word);
               if (userId && checkQuestion) {
                 this.checkQuestion = checkQuestion;
-                const { question, question_en } = this.checkQuestion;
+                const { word, question, question_en } = this.checkQuestion;
                 const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
-                const observers = team
-                  .filter((player) => player.id !== userId)
-                  .map((player) => player.id);
-                return { type: 'own', payload: { userId, question, question_en, observers } };
+                const playerIds = team.map((player) => player.id);
+                this.answerUserId = userId;
+                // this.answerCard = card;
+                return { type: 'own', payload: { userId, word, question, question_en, playerIds } };
               }
               break;
             }
@@ -274,5 +301,95 @@ export class Game {
     }
 
     return;
+  }
+
+  public startAnswerPhase(callback: (team: Teams) => void): void {
+    this.gamePhase = 'answer';
+    this.phaseTime = 0;
+    this.phaseTimer = setInterval(() => {
+      this.phaseTime += 1;
+      if (this.phaseTime >= SECOND_COUNT_FOR_ANSWER) {
+        this.phaseTime = 0;
+        if (this.phaseTimer) {
+          clearInterval(this.phaseTimer);
+          this.phaseTimer = null;
+        }
+        this.checkQuestion = null;
+        // this.answerCard = null;
+        this.answerUserId = undefined;
+        this.turnChange();
+        callback(this.currentTeam);
+      }
+    }, TIMER_INTERVAL);
+  }
+
+  public giveAnswer(
+    userId: string,
+    answer: string
+  ):
+    | { answer: string; checkQuestion: CheckQuestion; spymasterId: string; playerIds: string[] }
+    | { error: ErrorCode } {
+    if (this.gamePhase === 'answer' && this.answerUserId === userId && this.checkQuestion) {
+      this.phaseTime = 0;
+      if (this.phaseTimer) {
+        clearInterval(this.phaseTimer);
+        this.phaseTimer = null;
+      }
+
+      const opponentTeam = this.currentTeam === 'red' ? this.blueTeam : this.redTeam;
+      const playerIds = opponentTeam.map((player) => player.id);
+      const spymaster = opponentTeam.find((player) => player.role === 'spymaster');
+      if (spymaster) {
+        const spymasterId = spymaster.id;
+        return {
+          answer,
+          checkQuestion: this.checkQuestion,
+          spymasterId,
+          playerIds,
+        };
+      }
+    }
+
+    return { error: 'ACTION_IS_PROHIBITED' };
+  }
+
+  public startCheckPhase(callback: (results: CheckResults) => void): void {
+    this.gamePhase = 'check';
+    this.phaseTime = 0;
+    this.phaseTimer = setInterval(() => {
+      this.phaseTime += 1;
+      if (this.phaseTime >= SECOND_COUNT_FOR_CHECK) {
+        this.phaseTime = 0;
+        if (this.phaseTimer) {
+          clearInterval(this.phaseTimer);
+          this.phaseTimer = null;
+        }
+        const result = this.resultsProcessing();
+        callback(result);
+      }
+    }, TIMER_INTERVAL);
+  }
+
+  public giveCheck(userId: string, accept: boolean): void {
+    const opponentTeam = this.currentTeam === 'red' ? this.blueTeam : this.redTeam;
+    const agentIds = opponentTeam
+      .filter((player) => player.role === 'agent')
+      .map((player) => player.id);
+    if (this.gamePhase === 'check' && agentIds.includes(userId)) {
+      const userAccept = this.accepts.find((item) => item.userId === userId);
+      if (!userAccept) {
+        this.accepts.push({ userId, accept });
+      }
+    }
+  }
+
+  private resultsProcessing(): CheckResults {
+    const correct = this.accepts.length === 0 || this.accepts.some((item) => item.accept);
+    this.accepts = [];
+    this.checkQuestion = null;
+    // this.answerCard = null;
+    this.answerUserId = undefined;
+    this.turnChange();
+    return { type: 'turn-end', payload: { correct, team: this.currentTeam } };
   }
 }

@@ -120,6 +120,12 @@ export default [
       '**/src/pages/WelcomePage/AboutUs/AboutUs.ts',
       '**/src/rooms/game.ts',
       '**/src/tests/game.test.ts',
+      '**/src/ws/socketHandlers/gameHandlers.ts',
+      '**/src/api/ComponentsAPI/base/BaseComponent.test.ts',
+      '**/src/api/ComponentsAPI/forms/FormComponent/FormComponent.test.ts',
+      '**/src/api/ComponentsAPI/ui/LinkComponent/LinkComponent.test.ts',
+      '**/src/api/ComponentsAPI/ui/ImageComponent/ImageComponent.test.ts',
+      '**/src/api/ComponentsAPI/forms/SelectComponent/SelectComponent.test.ts',
     ],
     rules: {
       'max-lines-per-function': 'off',

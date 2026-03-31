@@ -14,7 +14,7 @@
 
 Базовый компонент с поддержкой DOM, иерархии, событий, классов, атрибутов, контента и стилей.
 
-- [ ] **Конструктор:** создает компонент с заданными свойствами.
+- [x] **Конструктор:** создает компонент с заданными свойствами.
 
 ```ts
 const app = new BaseComponent({ tag: 'div', content: 'Hello!', classes: 'app-class', id: 'app' });
@@ -22,38 +22,38 @@ const app = new BaseComponent({ tag: 'div', content: 'Hello!', classes: 'app-cla
 
 ### Свойства и методы:
 
-- [ ] **element** --- свойства доступа к элементу, родителю, детям и содержимому.
-- [ ] **parent** --- свойства доступа к элементу, родителю, детям и содержимому.
-- [ ] **children** --- свойства доступа к элементу, родителю, детям и содержимому.
-- [ ] **root** --- свойства доступа к элементу, родителю, детям и содержимому.
-- [ ] **id** --- свойства доступа к элементу, родителю, детям и содержимому.
-- [ ] **content** --- свойства доступа к элементу, родителю, детям и содержимому.
-- [ ] **setParent** --- управление иерархией компонентов.
-- [ ] **findParent** --- управление иерархией компонентов.
-- [ ] **findChild** --- управление иерархией компонентов.
-- [ ] **detach** --- управление иерархией компонентов.
-- [ ] **destroy** --- управление иерархией компонентов.
-- [ ] **setClasses** --- управление CSS-классами элемента.
-- [ ] **removeClasses** --- управление CSS-классами элемента.
-- [ ] **toggleClasses** --- управление CSS-классами элемента.
-- [ ] **hasClasses** --- управление CSS-классами элемента.
-- [ ] **setAttributes** --- работа с HTML-атрибутами.
-- [ ] **removeAttributes** --- работа с HTML-атрибутами.
-- [ ] **toggleAttributes** --- работа с HTML-атрибутами.
-- [ ] **hasAttribute** --- работа с HTML-атрибутами.
-- [ ] **setChildren** --- управление дочерними компонентами.
-- [ ] **appendChildren** --- управление дочерними компонентами.
-- [ ] **detachChildren** --- управление дочерними компонентами.
-- [ ] **destroyChildren** --- управление дочерними компонентами.
-- [ ] **setListeners** --- управление событиями и подписками.
-- [ ] **removeListeners** --- управление событиями и подписками.
-- [ ] **addSubscriptions** --- управление событиями и подписками.
-- [ ] **setContent** --- изменение и очистка содержимого.
-- [ ] **clearContent** --- изменение и очистка содержимого.
-- [ ] **setId** --- установка id и title.
-- [ ] **setTitle** --- установка id и title.
-- [ ] **setStyle** --- добавление и удаление inline-стилей.
-- [ ] **removeStyle** --- добавление и удаление inline-стилей.
+- [x] **element** --- свойства доступа к элементу, родителю, детям и содержимому.
+- [x] **parent** --- свойства доступа к элементу, родителю, детям и содержимому.
+- [x] **children** --- свойства доступа к элементу, родителю, детям и содержимому.
+- [x] **root** --- свойства доступа к элементу, родителю, детям и содержимому.
+- [x] **id** --- свойства доступа к элементу, родителю, детям и содержимому.
+- [x] **content** --- свойства доступа к элементу, родителю, детям и содержимому.
+- [x] **setParent** --- управление иерархией компонентов.
+- [x] **findParent** --- управление иерархией компонентов.
+- [x] **findChild** --- управление иерархией компонентов.
+- [x] **detach** --- управление иерархией компонентов.
+- [x] **destroy** --- управление иерархией компонентов.
+- [x] **setClasses** --- управление CSS-классами элемента.
+- [x] **removeClasses** --- управление CSS-классами элемента.
+- [x] **toggleClasses** --- управление CSS-классами элемента.
+- [x] **hasClasses** --- управление CSS-классами элемента.
+- [x] **setAttributes** --- работа с HTML-атрибутами.
+- [x] **removeAttributes** --- работа с HTML-атрибутами.
+- [x] **toggleAttributes** --- работа с HTML-атрибутами.
+- [x] **hasAttribute** --- работа с HTML-атрибутами.
+- [x] **setChildren** --- управление дочерними компонентами.
+- [x] **appendChildren** --- управление дочерними компонентами.
+- [x] **detachChildren** --- управление дочерними компонентами.
+- [x] **destroyChildren** --- управление дочерними компонентами.
+- [x] **setListeners** --- управление событиями и подписками.
+- [x] **removeListeners** --- управление событиями и подписками.
+- [x] **addSubscriptions** --- управление событиями и подписками.
+- [x] **setContent** --- изменение и очистка содержимого.
+- [x] **clearContent** --- изменение и очистка содержимого.
+- [x] **setId** --- установка id и title.
+- [x] **setTitle** --- установка id и title.
+- [x] **setStyle** --- добавление и удаление inline-стилей.
+- [x] **removeStyle** --- добавление и удаление inline-стилей.
 - [x] **show** --- управление видимостью элемента.
 - [x] **hide** --- управление видимостью элемента.
 
@@ -85,11 +85,11 @@ submitButton.setDisabled(false);
 
 ### Методы:
 
-- [ ] `setAction(action: string): this` --- задает URL отправки формы.
-- [ ] `setMethod(method: HTMLFormElement['method']): this` --- устанавливает HTTP-метод (get, post).
-- [ ] `submit(): void` --- программно отправляет форму.
-- [ ] `reset(): void` --- сбрасывает все поля формы.
-- [ ] `getFormData(): FormData` --- возвращает данные формы в виде FormData.
+- [x] `setAction(action: string): this` --- задает URL отправки формы.
+- [x] `setMethod(method: HTMLFormElement['method']): this` --- устанавливает HTTP-метод (get, post).
+- [x] `submit(): void` --- программно отправляет форму.
+- [x] `reset(): void` --- сбрасывает все поля формы.
+- [x] `getFormData(): FormData` --- возвращает данные формы в виде FormData.
 
 **Пример:**
 
@@ -106,17 +106,17 @@ form.submit();
 
 ### Методы:
 
-- [ ] `setValue(value: string): this` --- устанавливает значение поля.
-- [ ] `setName(name: string): this` --- задает атрибут name.
-- [ ] `setType(type: HTMLInputElement['type']): this` --- задает тип input (text, password и др.).
-- [ ] `setPlaceholder(placeholder: string): this` --- устанавливает placeholder.
-- [ ] `setDisabled(disabled: boolean): this` --- делает поле неактивным.
-- [ ] `setRequired(required: boolean): this` --- делает поле обязательным.
-- [ ] `isLengthBetween(min: number, max: number): boolean` --- проверяет длину значения.
-- [ ] `isValidByRegex(pattern: RegExp): boolean` --- валидирует значение по регулярному выражению.
-- [ ] `isValid(): boolean` --- проверяет встроенную HTML-валидацию.
-- [ ] `isEmpty(): boolean` --- проверяет, пустое ли поле.
-- [ ] `clear(): this` --- очищает значение.
+- [x] `setValue(value: string): this` --- устанавливает значение поля.
+- [x] `setName(name: string): this` --- задает атрибут name.
+- [x] `setType(type: HTMLInputElement['type']): this` --- задает тип input (text, password и др.).
+- [x] `setPlaceholder(placeholder: string): this` --- устанавливает placeholder.
+- [x] `setDisabled(disabled: boolean): this` --- делает поле неактивным.
+- [x] `setRequired(required: boolean): this` --- делает поле обязательным.
+- [x] `isLengthBetween(min: number, max: number): boolean` --- проверяет длину значения.
+- [x] `isValidByRegex(pattern: RegExp): boolean` --- валидирует значение по регулярному выражению.
+- [x] `isValid(): boolean` --- проверяет встроенную HTML-валидацию.
+- [x] `isEmpty(): boolean` --- проверяет, пустое ли поле.
+- [x] `clear(): this` --- очищает значение.
 
 **Пример:**
 
@@ -153,7 +153,7 @@ console.log(container.getChildren());
 
 ### Методы:
 
-- [ ] ~~`setLevel(level: 1 | 2 | 3 | 4 | 5 | 6): this` --- изменяет уровень заголовка.~~
+- [x] `setLevel(level: 1 | 2 | 3 | 4 | 5 | 6): this` --- изменяет уровень заголовка.
 
 **Пример:**
 
@@ -170,11 +170,11 @@ header.setLevel(3);
 
 ### Методы:
 
-- [ ] `appendText(text: string | number): this` --- добавляет текст в конец содержимого.
-- [ ] `prependText(text: string | number): this` --- добавляет текст в начало.
-- [ ] `uppercase(): this` --- переводит текст в верхний регистр.
-- [ ] `lowercase(): this` --- переводит текст в нижний регистр.
-- [ ] `capitalize(): this` --- делает заглавными первые буквы слов.
+- [x] `appendText(text: string | number): this` --- добавляет текст в конец содержимого.
+- [x] `prependText(text: string | number): this` --- добавляет текст в начало.
+- [x] `uppercase(): this` --- переводит текст в верхний регистр.
+- [x] `lowercase(): this` --- переводит текст в нижний регистр.
+- [x] `capitalize(): this` --- делает заглавными первые буквы слов.
 
 **Пример:**
 
@@ -192,9 +192,9 @@ console.log(paragraph.content); // 'Hello World!'
 
 ### Методы:
 
-- [ ] `setSrc(source: string): this` --- устанавливает путь к изображению.
-- [ ] `setAlt(alt: string): this` --- задает альтернативный текст.
-- [ ] `setDimensions(width?: number | string, height?: number | string): this` --- задает ширину и высоту.
+- [x] `setSrc(source: string): this` --- устанавливает путь к изображению.
+- [x] `setAlt(alt: string): this` --- задает альтернативный текст.
+- [x] `setDimensions(width?: number | string, height?: number | string): this` --- задает ширину и высоту.
 
 **Пример:**
 
@@ -211,9 +211,9 @@ img.setSrc('/new-logo.png');
 
 ### Методы:
 
-- [ ] `setHref(href: string): this` --- устанавливает адрес ссылки.
-- [ ] `setTarget(target: HTMLAnchorElement['target']): this` --- задает способ открытия ссылки.
-- [ ] `setRel(related: string): this` --- устанавливает атрибут rel.
+- [x] `setHref(href: string): this` --- устанавливает адрес ссылки.
+- [x] `setTarget(target: HTMLAnchorElement['target']): this` --- задает способ открытия ссылки.
+- [x] `setRel(related: string): this` --- устанавливает атрибут rel.
 
 **Пример:**
 
@@ -230,10 +230,10 @@ link.setRel('noopener noreferrer');
 
 ### Методы:
 
-- [ ] `setItems(items: (string | number)[]): this` --- полностью заменяет элементы списка.
-- [ ] `addItem(item: string | number): this` --- добавляет новый элемент.
-- [ ] `removeItem(index: number): this` --- удаляет элемент по индексу.
-- [ ] `clearItems(): this` --- очищает список.
+- [x] `setItems(items: (string | number)[]): this` --- полностью заменяет элементы списка.
+- [x] `addItem(item: string | number): this` --- добавляет новый элемент.
+- [x] `removeItem(index: number): this` --- удаляет элемент по индексу.
+- [x] `clearItems(): this` --- очищает список.
 
 **Пример:**
 
@@ -251,12 +251,12 @@ list.removeItem(0);
 
 ### Методы:
 
-- [ ] `getValue(): string` --- возвращает текущее значение.
-- [ ] `setValue(value: string): this` --- устанавливает текст.
-- [ ] `setPlaceholder(placeholder: string): this` --- задает placeholder.
-- [ ] `setRows(rows: number): this` --- устанавливает количество строк.
-- [ ] `setCols(cols: number): this` --- устанавливает количество колонок.
-- [ ] `clear(): this` --- очищает содержимое.
+- [x] `getValue(): string` --- возвращает текущее значение.
+- [x] `setValue(value: string): this` --- устанавливает текст.
+- [x] `setPlaceholder(placeholder: string): this` --- задает placeholder.
+- [x] `setRows(rows: number): this` --- устанавливает количество строк.
+- [x] `setCols(cols: number): this` --- устанавливает количество колонок.
+- [x] `clear(): this` --- очищает содержимое.
 
 **Пример:**
 
@@ -273,14 +273,14 @@ textarea.setValue('Hello');
 
 ### Методы:
 
-- [ ] `setOptions(options: { value: string; label: string; selected?: boolean }[]): this` --- полностью заменяет список опций.
-- [ ] `addOption(value: string, label: string, selected?: boolean): this` --- добавляет новую опцию.
-- [ ] `removeOption(value: string): this` --- удаляет опцию по значению.
-- [ ] `clearOptions(): this` --- очищает все опции.
-- [ ] `getValue(): string | string[]` --- возвращает выбранное значение (или массив при multiple).
-- [ ] `setValue(value: string | string[]): this` --- устанавливает выбранное значение.
-- [ ] `isMultiple(): boolean` --- проверяет, включен ли множественный выбор.
-- [ ] `setMultiple(multiple: boolean): this` --- включает или отключает режим multiple.
+- [x] `setOptions(options: { value: string; label: string; selected?: boolean }[]): this` --- полностью заменяет список опций.
+- [x] `addOption(value: string, label: string, selected?: boolean): this` --- добавляет новую опцию.
+- [x] `removeOption(value: string): this` --- удаляет опцию по значению.
+- [x] `clearOptions(): this` --- очищает все опции.
+- [x] `getValue(): string | string[]` --- возвращает выбранное значение (или массив при multiple).
+- [x] `setValue(value: string | string[]): this` --- устанавливает выбранное значение.
+- [x] `isMultiple(): boolean` --- проверяет, включен ли множественный выбор.
+- [x] `setMultiple(multiple: boolean): this` --- включает или отключает режим multiple.
 
 **Пример:**
 
@@ -297,8 +297,8 @@ select.addOption('2', 'Two');
 
 ### Методы:
 
-- [ ] `isChecked(): boolean` --- проверяет, выбрана ли радиокнопка.
-- [ ] `setChecked(state: boolean): this` --- устанавливает состояние выбора.
+- [x] `isChecked(): boolean` --- проверяет, выбрана ли радиокнопка.
+- [x] `setChecked(state: boolean): this` --- устанавливает состояние выбора.
 
 **Пример:**
 
@@ -315,9 +315,9 @@ radio.setChecked(false);
 
 ### Методы:
 
-- [ ] `isChecked(): boolean` --- проверяет, отмечен ли чекбокс.
-- [ ] `setChecked(state: boolean): this` --- устанавливает состояние.
-- [ ] `toggle(): this` --- переключает состояние чекбокса.
+- [x] `isChecked(): boolean` --- проверяет, отмечен ли чекбокс.
+- [x] `setChecked(state: boolean): this` --- устанавливает состояние.
+- [x] `toggle(): this` --- переключает состояние чекбокса.
 
 **Пример:**
 

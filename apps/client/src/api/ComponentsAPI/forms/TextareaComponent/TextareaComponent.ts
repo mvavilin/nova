@@ -58,6 +58,11 @@ export default class TextareaComponent extends BaseComponent {
     return this;
   }
 
+  public setRequired(required: boolean): this {
+    this.textarea.required = required;
+    return this;
+  }
+
   public setAutocomplete(autocomplete: 'on' | 'off'): this {
     this.textarea.autocomplete = autocomplete;
     return this;

@@ -1,6 +1,7 @@
 import type { Socket } from 'socket.io';
 import type {
   CardTestResult,
+  CheckResults,
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../../../../packages/shared/src/socketEvents.ts';
@@ -9,6 +10,7 @@ import { io } from '../../app.ts';
 import { logger } from '../logger/logger.ts';
 import type { SocketData } from '../../types/types.ts';
 import type { Game } from '../../rooms/game.ts';
+import type { Teams } from '../../../../../packages/shared/src/types/room.ts';
 
 export function setupGameHandlers(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
@@ -16,6 +18,8 @@ export function setupGameHandlers(
   setupGameAddPlayerHandler(socket);
   setupClueGiveHandler(socket);
   setupCardChooseHandler(socket);
+  setupAnswerGiveHandler(socket);
+  setupCheckGiveHandler(socket);
 }
 
 function setupGameAddPlayerHandler(
@@ -59,14 +63,7 @@ function startClueState(game: Game): void {
       }
     }
 
-    const playerIds = game.getPlayerIds();
-    for (const playerId of playerIds) {
-      const socketId = socketIdMap.get(playerId);
-      if (socketId) {
-        io.to(socketId).emit('game:turn-changed', { team });
-        logger.emit(playerId, 'game:turn-changed', { team });
-      }
-    }
+    turnChange(game, team);
 
     startClueState(game);
   });
@@ -76,6 +73,17 @@ function startClueState(game: Game): void {
     if (socketId) {
       io.to(socketId).emit('game:ask-clue');
       logger.emit(spymasterId, 'game:ask-clue');
+    }
+  }
+}
+
+function turnChange(game: Game, team: Teams): void {
+  const playerIds = game.getPlayerIds();
+  for (const playerId of playerIds) {
+    const socketId = socketIdMap.get(playerId);
+    if (socketId) {
+      io.to(socketId).emit('game:turn-changed', { team });
+      logger.emit(playerId, 'game:turn-changed', { team });
     }
   }
 }
@@ -108,6 +116,29 @@ function setupClueGiveHandler(
 function guessCallback(game: Game, result: CardTestResult): void {
   const { type } = result;
   switch (type) {
+    case 'own': {
+      const { payload } = result;
+      const { userId, word, question, question_en, playerIds } = payload;
+      for (const playerId of playerIds) {
+        const socketId = socketIdMap.get(playerId);
+        if (socketId) {
+          const answer = playerId === userId;
+          io.to(socketId).emit('game:ask-answer', { word, question, question_en, answer });
+          logger.emit(playerId, 'game:ask-answer', { word, question, question_en, answer });
+        }
+      }
+      game.startAnswerPhase((team) => {
+        for (const playerId of playerIds) {
+          const socketId = socketIdMap.get(playerId);
+          if (socketId) {
+            io.to(socketId).emit('game:answer-timeout');
+            logger.emit(playerId, 'game:answer-timeout');
+          }
+        }
+        turnChange(game, team);
+      });
+      break;
+    }
     case 'neutral':
     case 'alien': {
       const { payload } = result;
@@ -124,14 +155,7 @@ function guessCallback(game: Game, result: CardTestResult): void {
         io.to(socketId).emit('game:ask-clue');
         logger.emit(spymasterId, 'game:ask-clue');
       }
-      const playerIds = game.getPlayerIds();
-      for (const playerId of playerIds) {
-        const socketId = socketIdMap.get(playerId);
-        if (socketId) {
-          io.to(socketId).emit('game:turn-changed', { team });
-          logger.emit(playerId, 'game:turn-changed', { team });
-        }
-      }
+      turnChange(game, team);
     }
   }
 }
@@ -153,7 +177,63 @@ function setupCardChooseHandler(
             logger.emit(recipient, 'game:card-chosen', { cardId, players });
           }
         }
+        game.startCheckPhase((results) => {
+          sendResults(game, results);
+        });
       }
     }
   });
+}
+
+function setupAnswerGiveHandler(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId } = socket.data;
+  socket.on('game:answer-give', ({ answer }) => {
+    const game = roomManager.getGameByUserId(userId);
+    if (game) {
+      const response = game.giveAnswer(userId, answer);
+      if (!('error' in response)) {
+        const { answer, checkQuestion, spymasterId, playerIds } = response;
+        for (const playerId of playerIds) {
+          const check = playerId !== spymasterId;
+          const socketId = socketIdMap.get(playerId);
+          if (socketId) {
+            io.to(socketId).emit('game:ask-check', { answer, checkQuestion, check });
+            logger.emit(playerId, 'game:ask-check', { answer, checkQuestion, check });
+          }
+        }
+      }
+    }
+  });
+}
+
+function setupCheckGiveHandler(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId } = socket.data;
+  socket.on('game:check-give', ({ accept }) => {
+    const game = roomManager.getGameByUserId(userId);
+    if (game) {
+      game.giveCheck(userId, accept);
+    }
+  });
+}
+
+function sendResults(game: Game, results: CheckResults): void {
+  const { type, payload } = results;
+  if (type === 'turn-end') {
+    const playerIds = game.getPlayerIds();
+    const { correct, team } = payload;
+    for (const playerId of playerIds) {
+      const socketId = socketIdMap.get(playerId);
+      if (socketId) {
+        io.to(socketId).emit('game:check-results', { correct });
+        logger.emit(playerId, 'game:check-results', { correct });
+
+        io.to(socketId).emit('game:turn-changed', { team });
+        logger.emit(playerId, 'game:turn-changed', { team });
+      }
+    }
+  }
 }

@@ -437,8 +437,7 @@ The main disadvantage is that socket.io requires an authentication token during 
 
   - **Connecting / reconnecting**
     <details>
-      
-      - A message to a user who has connected or reconnected. Transmits the user's status
+    - A message to a user who has connected or reconnected. Transmits the user's status
 
     ```
       { type: 'session:connect'; payload: { userStatus: UserStatus } }
@@ -518,8 +517,7 @@ The main disadvantage is that socket.io requires an authentication token during 
 
   - **The outdated content will be removed in the future**
     <details>
-      
-      - Getting a session token
+    - Getting a session token
 
     ```
       { type: 'session:token'; payload: { sessionToken: string } }
@@ -532,12 +530,12 @@ The main disadvantage is that socket.io requires an authentication token during 
   **Important!** Data is not converted to JSON for transmission to and from the server
   - **Create room and join the room**
     <details>
-      
-      - Request to server
-      
-      ```
-        { type: 'room:create'; payload: { settings: RoomSettings } }
-      ```
+    - Request to server
+
+    ```
+      { type: 'room:create'; payload: { settings: RoomSettings } }
+    ```
+
     - Response to user who sent the request
 
     ```
@@ -555,8 +553,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   - **Requesting a list of all rooms**
 
     <details>
-      
-      - Request to server
+    - Request to server
 
     ```
       { type: 'room:ask-list' }
@@ -573,8 +570,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   - **Requesting a list of rooms with a filter by name**
 
     <details>
-      
-      - Request to server
+    - Request to server
 
     ```
       { type: 'room:search'; payload: { name: string | undefined } }
@@ -592,8 +588,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   - **Join a room**
 
     <details>
-      
-      - Request to server
+    - Request to server
 
     ```
       { type: 'room:join'; payload: { roomId: string } }
@@ -647,7 +642,6 @@ The main disadvantage is that socket.io requires an authentication token during 
   - **Leave the room**
 
     <details>
-      
     - Request to server
 
     ```
@@ -677,7 +671,6 @@ The main disadvantage is that socket.io requires an authentication token during 
   - **Change the player's team and role**
 
     <details>
-      
     - Request to server
 
     ```
@@ -741,13 +734,13 @@ The main disadvantage is that socket.io requires an authentication token during 
       { type: 'game:clue-given'; payload: { clue: string } }
     ```
 
-    If the spymaster fails to provide a hint, the turn passes to another team. The spymaster receives the message
+    If the agent does not send an answer, the turn passes to another team. The spymaster receives the message
 
     ```
-      { type: 'game:clue-timeout' }
+      { type: 'game:answer-timeout' }
     ```
 
-    and the players receive
+    and all participants in the game receive
 
     ```
       { type: 'game:turn-changed'; payload: { team: Teams } }
@@ -774,7 +767,17 @@ The main disadvantage is that socket.io requires an authentication token during 
     ```
 
     When the timer expires, the server removes the timer and searches for the card with the most votes. If there are more than one such card, one is selected randomly.
-    - If the team color card is selected, then (not implemented)
+    - If the team's color scheme is selected, the server randomly selects an agent from the agents who voted for the card to answer the card's question. The server then sends a message to all team members
+
+      ```
+        {
+          type: 'game:ask-answer';
+          payload: { word: string; question: string; question_en: string; answer: boolean };
+        }
+      ```
+
+      For the responding agent, the answer parameter is true, and for other team members, it is false
+
     - If an opponent's color card or a neutral card is selected, the turn passes to the opponent. Team members receive message
 
       ```
@@ -794,12 +797,74 @@ The main disadvantage is that socket.io requires an authentication token during 
 
   - **Answer state**
     <details>
-    Not implemented
+
+    After sending a request to answer a card question, the server starts a timer (60 seconds)
+
+    The agent answers the card's question by sending a message to the server
+
+    ```
+      { type: 'game:answer-give'; payload: { answer: string } }
+    ```
+
+    If the server receives a user response, it sends a message to the opposing team
+
+    ```
+      {
+        type: 'game:ask-check';
+        payload: { answer: string; checkQuestion: CheckQuestion; check: boolean };
+      }
+    ```
+
+    If the agent did not respond, the turn passes to another team. The team members receive a message
+
+    ```
+      { type: 'game:clue-timeout' }
+    ```
+
+    and all participants in the game receive
+
+    ```
+      { type: 'game:turn-changed'; payload: { team: Teams } }
+    ```
+
     </details>
 
   - **Check state**
     <details>
-    Not implemented
+
+    After receiving a card response, the server starts a timer (60 s) and sends a message to all players on the opposing team
+
+    ```
+      {
+        type: 'game:ask-check';
+        payload: { answer: string; checkQuestion: CheckQuestion; check: boolean };
+      }
+    ```
+
+    If check is true, the player can respond (agent), and if check is false, the player cannot respond (spymaster)
+
+    Opponent users send messages to the server to accept or reject the response
+
+    ```
+      { type: 'game:check-give'; payload: { accept: boolean } }
+    ```
+
+    When the timer expires, the server processes the opponent's messages. If no one has voted or at least one has accepted the response, the response is counted
+
+    If the game is not over yet, the server sends a message to all game participants about the results of checking the answer to the card question
+
+    ```
+      { type: 'game:check-results'; payload: { correct: boolean } }
+    ```
+
+    and a message about queue transfer
+
+    ```
+      { type: 'game:turn-changed'; payload: { team: Teams } }
+    ```
+
+    If the team wins, then (not implemented)
+
     </details>
 
   - **Finish state**
@@ -874,7 +939,8 @@ The main disadvantage is that socket.io requires an authentication token during 
       | 'INVALID_ACTION'
       | 'AUTH_REQUIRED'
       | 'ALREADY_ONLINE'
-      | 'GAME_IS_NOT_FULL';
+      | 'GAME_IS_NOT_FULL'
+      | 'ACTION_IS_PROHIBITED';
   ```
 
     </details>
@@ -884,8 +950,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   **Important!** Data is not converted to JSON for transmission to and from the server
 
   <details>
-    
-    - User statuses
+  - User statuses
 
   ```
     type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME' | 'IN_PROFILE';

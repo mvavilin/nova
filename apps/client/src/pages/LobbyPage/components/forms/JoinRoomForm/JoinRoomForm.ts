@@ -3,6 +3,8 @@ import store from '@store';
 import { SocketActionTypes } from '@actions';
 import { FORM_CLASSES } from '@constants/styles';
 import { InputText, Button, FieldLabel } from '@components/ui';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 export default class JoinRoomForm extends FormComponent {
   private roomLabel: FieldLabel;
@@ -14,7 +16,7 @@ export default class JoinRoomForm extends FormComponent {
     super({ classes: FORM_CLASSES.FORM });
 
     this.roomLabel = new FieldLabel({
-      text: 'Введите ID комнаты',
+      text: t(TranslationKeys.JOIN_ROOM_FIELD_TITLE),
       htmlFor: 'roomID',
       classes: 'w-full',
     });
@@ -22,7 +24,7 @@ export default class JoinRoomForm extends FormComponent {
     this.roomInput = new InputText({
       id: 'roomID',
       name: 'roomID',
-      placeholder: 'ID комнаты',
+      placeholder: t(TranslationKeys.JOIN_ROOM_FIELD_PLACEHOLDER),
       classes: FORM_CLASSES.INPUT,
       listeners: {
         input: (): void => {
@@ -32,7 +34,7 @@ export default class JoinRoomForm extends FormComponent {
     });
 
     this.joinRoomButton = new Button({
-      label: 'Присоединиться',
+      label: t(TranslationKeys.JOIN_ROOM_FIELD_JOIN_BUTTON_LABEL),
       classes: FORM_CLASSES.BUTTON,
       listeners: {
         click: (): void => this.handleJoinRoom(),
@@ -67,5 +69,11 @@ export default class JoinRoomForm extends FormComponent {
       type: SocketActionTypes.SOCKET_JOIN_ROOM,
       payload: { roomId },
     });
+  }
+
+  public switchLanguage(): void {
+    this.roomLabel.setContent(t(TranslationKeys.JOIN_ROOM_FIELD_TITLE));
+    this.roomInput.setPlaceholder(t(TranslationKeys.JOIN_ROOM_FIELD_PLACEHOLDER));
+    this.joinRoomButton.setLabel(t(TranslationKeys.JOIN_ROOM_FIELD_JOIN_BUTTON_LABEL));
   }
 }

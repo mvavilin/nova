@@ -1,17 +1,19 @@
 import type { State } from '../types/state';
-import { FormActions } from '../actions/form.actions';
-import type { AppActions } from '../types/action';
+import { FormActionTypes } from '../actions/form.actions';
 import type { FieldName } from '@/components/InputForm/InputForm.types';
 import type { FieldState } from '@/components/BaseForm/BaseForm.types';
 import store from '../store';
-import { saveSessionStorageData } from '@/utils/sessionStorage';
+import { saveSessionStorageData, getSessionStorageData } from '@/utils';
 import { sessionStorageProps } from '@/constants/sessionStorage.constants';
-import { Language } from '@/types';
 import { SocketActionTypes } from '../actions/socket.actions';
+import { AppActionTypes } from '../actions';
+import type { AppActions } from '../types';
+import { isObject } from '@/utils/isObject';
+import { LOCAL_STORAGE_KEYS } from '@/constants/localStorageKeys';
 
 export default function formReducer(state: State, action: AppActions): State {
   switch (action.type) {
-    case FormActions.FORM_UPDATE_FIELD: {
+    case FormActionTypes.FORM_UPDATE_FIELD: {
       const { formId, fieldName, value, isValid } = action.payload;
       const currentForm = state[formId];
       if (!currentForm) return state;
@@ -35,9 +37,19 @@ export default function formReducer(state: State, action: AppActions): State {
       };
     }
 
-    case FormActions.FETCH_SUCCESS: {
+    case FormActionTypes.FETCH_SUCCESS: {
       if (action.payload.token) {
         saveSessionStorageData(sessionStorageProps.authToken, action.payload.token);
+
+        const storeLS = getSessionStorageData(LOCAL_STORAGE_KEYS.STORE);
+        if (isObject(action.payload.user)) {
+          if (isObject(storeLS))
+            saveSessionStorageData(LOCAL_STORAGE_KEYS.STORE, {
+              ...storeLS,
+              ...action.payload.user,
+            });
+          else saveSessionStorageData(LOCAL_STORAGE_KEYS.STORE, { ...action.payload.user });
+        }
 
         store.dispatch({
           type: SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN,
@@ -59,17 +71,20 @@ export default function formReducer(state: State, action: AppActions): State {
       };
     }
 
-    case FormActions.GO_TO_LOBBY_PAGE: {
+    case FormActionTypes.GO_TO_WELCOME_PAGE: {
       return { ...state };
     }
 
-    case FormActions.SWITCH_LANGUAGE: {
-      const nextLanguage = state.language === Language.RU ? Language.EN : Language.RU;
+    case FormActionTypes.GO_TO_LOGIN_PAGE: {
+      return { ...state };
+    }
 
-      return {
-        ...state,
-        language: nextLanguage,
-      };
+    case FormActionTypes.GO_TO_REGISTRATION_PAGE: {
+      return { ...state };
+    }
+
+    case AppActionTypes.SWITCH_LANGUAGE: {
+      return { ...state };
     }
 
     default: {

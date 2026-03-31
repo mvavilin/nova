@@ -18,9 +18,24 @@ export default class HeadingComponent extends TextComponent {
   }
 
   public setLevel(level: HeadingLevel): this {
-    const currentContent = this.content ?? '';
-    this.heading.remove();
-    this.constructor({ ...this, level, content: currentContent });
+    const oldElement = this.heading;
+    const newElement = document.createElement(`h${level}`);
+
+    newElement.textContent = oldElement.textContent;
+    newElement.className = oldElement.className;
+
+    for (const attribute of oldElement.attributes) {
+      newElement.setAttribute(attribute.name, attribute.value);
+    }
+
+    oldElement.replaceWith(newElement);
+
+    this.setElement(newElement);
+
     return this;
+  }
+
+  protected override isValidElement(element: HTMLElement | SVGElement): boolean {
+    return element instanceof HTMLHeadingElement;
   }
 }

@@ -7,3 +7,5 @@ export { default as testReducer } from '@reducers/test.reducer';
 export { default as welcomeReducer } from '@reducers/welcome.reducer';
 
 export { default as appReducer } from '@reducers/app.reducer';
+
+export { default as roomReducer } from '@reducers/room.reducer';

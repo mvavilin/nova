@@ -10,7 +10,7 @@ export interface InputFieldProps {
   autocomplete: 'on' | 'off';
   minLength?: string;
   maxLength?: string;
-  pattern: RegExp;
+  pattern?: RegExp;
   placeholderKey: TranslationKey;
   labelTextKey: TranslationKey;
   errorKey: TranslationKey;

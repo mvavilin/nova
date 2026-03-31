@@ -4,11 +4,11 @@ import { ClientEventType, ServerEventType, UserStatusType } from '@repo/shared/s
 
 import { socketClient } from '@SocketClientAPI';
 import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
-import { SocketActionTypes } from '@actions';
+import { RoomPageActionTypes, SocketActionTypes } from '@actions';
 import { URLS } from '@RouterAPI/router.constants';
 import { router } from '@router';
 
-import TOKENS from '@constants/tokens';
+import { TOKENS } from '@constants/tokens';
 import { saveSessionStorageData, showErrorToast } from '@utils';
 import store from '@store';
 import { Toast } from '@components';
@@ -29,7 +29,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         });
 
         socketClient.onSessionConnect(({ userStatus }) => {
-          if (userStatus === UserStatusType.IN_LOBBY) router.navigate(URLS.LOBBY());
+          if (userStatus === UserStatusType.IN_LOBBY) router.init(URLS.LOBBY());
           if (userStatus === UserStatusType.IN_ROOM)
             store.dispatch({
               type: SocketActionTypes.ROOM_ASK_ROOM_INFO,
@@ -57,10 +57,21 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
 
     if (context.action.type === SocketActionTypes.SOCKET_CREATE_ROOM) {
       try {
-        socketClient.onRoomCreated(({ roomPreview }) => {
-          router.navigate(URLS.ROOM(roomPreview.id));
+        socketClient.onRoomState(({ roomInfo }) => {
+          socketClient.off(ServerEventType.ROOM_STATE);
 
-          socketClient.off(ServerEventType.ROOM_CREATED);
+          socketClient.onError(({ code }) => {
+            showErrorToast(code, SOCKET_ERROR_MESSAGES.ON_ERROR);
+
+            socketClient.off(ServerEventType.ERROR);
+          });
+
+          context.next({
+            type: RoomPageActionTypes.SET_ROOM_DATA,
+            payload: { roomInfo },
+          });
+
+          router.navigate(URLS.ROOM(roomInfo.id));
         });
 
         const { name, maxPlayers } = context.action.payload;
@@ -90,10 +101,15 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.off(ServerEventType.ERROR);
         });
 
-        socketClient.onRoomState(() => {
-          router.navigate(URLS.ROOM(roomId));
-
+        socketClient.onRoomState(({ roomInfo }) => {
           socketClient.off(ServerEventType.ROOM_STATE);
+
+          context.next({
+            type: RoomPageActionTypes.SET_ROOM_DATA,
+            payload: { roomInfo },
+          });
+
+          router.navigate(URLS.ROOM(roomId));
         });
 
         socketClient.onSessionPlayerConnected(({ player }) => {
@@ -127,9 +143,14 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
     if (context.action.type === SocketActionTypes.ROOM_ASK_ROOM_INFO) {
       try {
         socketClient.onRoomState(({ roomInfo }) => {
-          router.navigate(URLS.ROOM(roomInfo.id));
-
           socketClient.off(ServerEventType.ROOM_STATE);
+
+          context.next({
+            type: RoomPageActionTypes.SET_ROOM_DATA,
+            payload: { roomInfo },
+          });
+
+          router.navigate(URLS.ROOM(roomInfo.id));
         });
 
         socketClient.onSessionPlayerConnected(({ player }) => {

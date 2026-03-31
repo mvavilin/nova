@@ -4,40 +4,46 @@ import type {
   UpdateFieldPayload,
 } from '@/components/BaseForm/BaseForm.types';
 
-export enum FormActions {
+export enum FormActionTypes {
   FORM_UPDATE_FIELD = 'FORM/UPDATE_FIELD',
   FETCH_DATA = 'FORM/FETCH_DATA',
   FETCH_SUCCESS = 'FORM/FETCH_SUCCESS',
-  GO_TO_LOBBY_PAGE = 'FORM/GO_TO_LOBBY_PAGE',
-  SWITCH_LANGUAGE = 'FORM/SWITCH_LANGUAGE',
+  GO_TO_WELCOME_PAGE = 'FORM/GO_TO_WELCOME_PAGE',
+  GO_TO_LOGIN_PAGE = 'FORM/GO_TO_LOGIN_PAGE',
+  GO_TO_REGISTRATION_PAGE = 'FORM/GO_TO_REGISTRATION_PAGE',
 }
 
 export type FormUpdateAction = {
-  type: FormActions.FORM_UPDATE_FIELD;
+  type: FormActionTypes.FORM_UPDATE_FIELD;
   payload: UpdateFieldPayload;
 };
 
 export type FormFetchData = {
-  type: FormActions.FETCH_DATA;
+  type: FormActionTypes.FETCH_DATA;
   payload: FormFetchDataPayload;
 };
 
 export type FormFetchSuccess = {
-  type: FormActions.FETCH_SUCCESS;
+  type: FormActionTypes.FETCH_SUCCESS;
   payload: FormFetchSuccessPayload;
 };
 
-export type FormGoToLobbyPage = {
-  type: FormActions.GO_TO_LOBBY_PAGE;
+export type FormGoToWelcomePage = {
+  type: FormActionTypes.GO_TO_WELCOME_PAGE;
 };
 
-export type SwitchLanguage = {
-  type: FormActions.SWITCH_LANGUAGE;
+export type FormGoToLoginPage = {
+  type: FormActionTypes.GO_TO_LOGIN_PAGE;
 };
 
-export type FormActionsTypes =
+export type FormGoToRegistrationPage = {
+  type: FormActionTypes.GO_TO_REGISTRATION_PAGE;
+};
+
+export type FormActions =
   | FormUpdateAction
   | FormFetchData
   | FormFetchSuccess
-  | FormGoToLobbyPage
-  | SwitchLanguage;
+  | FormGoToWelcomePage
+  | FormGoToLoginPage
+  | FormGoToRegistrationPage;

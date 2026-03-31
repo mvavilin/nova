@@ -1,10 +1,19 @@
 import type { WelcomePageActions } from '@actions/welcome.actions';
+import type { LobbyPageActions } from '../actions/lobby.actions';
 
-import type { TestPageActions, FormActionsTypes, SocketActions, LocalAppActions } from '@actions';
+import type {
+  TestPageActions,
+  FormActions,
+  SocketActions,
+  LocalAppActions,
+  RoomPageActions,
+} from '@actions';
 
 export type AppActions =
   | WelcomePageActions
   | TestPageActions
-  | FormActionsTypes
+  | FormActions
   | SocketActions
-  | LocalAppActions;
+  | LocalAppActions
+  | RoomPageActions
+  | LobbyPageActions;

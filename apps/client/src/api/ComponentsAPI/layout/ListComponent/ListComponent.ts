@@ -25,7 +25,7 @@ export default class ListComponent extends BaseComponent {
 
   public removeItem(index: number): this {
     const child = this.children[index];
-    child?.destroy();
+    if (child) this.destroyChildren(child);
     return this;
   }
 

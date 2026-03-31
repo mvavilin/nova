@@ -9,6 +9,8 @@ import {
 import { Timer } from '@pages/GamePage/components';
 import { Toast } from '@components';
 import MessageType from '@constants/messageType';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 const ANSWER_DURATION_S = 60;
 
@@ -43,7 +45,7 @@ export default class KnowledgeCheckModal extends Modal {
   public render(): void {
     const modalTitle = new HeadingComponent({
       level: 2,
-      content: `Проверка знаний`,
+      content: t(TranslationKeys.KNOWLEDGE_CHECK_TITLE),
       classes: THIS_CLASSES.TITLE,
     });
 
@@ -52,7 +54,7 @@ export default class KnowledgeCheckModal extends Modal {
       children: [
         new HeadingComponent({
           level: 3,
-          content: `Вопрос на тему: ${this.topic}`,
+          content: `${t(TranslationKeys.QUESTION_TOPIC)} ${this.topic}`,
           classes: THIS_CLASSES.BLOCK_TITLE,
         }),
         new TextComponent({ content: this.question }),
@@ -66,19 +68,19 @@ export default class KnowledgeCheckModal extends Modal {
       children: [
         new HeadingComponent({
           level: 3,
-          content: `Введите ваш ответ`,
+          content: t(TranslationKeys.ENTER_ANSWER),
           classes: THIS_CLASSES.BLOCK_TITLE,
         }),
         answerField,
         // feat: add dispatch action for sending response
         new Button({
-          label: `Отправить`,
+          label: t(TranslationKeys.SEND_BUTTON),
           listeners: {
             click: (): void => {
               if (answerField.getValue() === '') {
                 new Toast({
                   type: MessageType.WARNING,
-                  message: `Поле не может быть пустым`,
+                  message: t(TranslationKeys.ANSWER_EMPTY_WARNING),
                 });
                 return;
               }

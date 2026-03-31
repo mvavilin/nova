@@ -6,14 +6,29 @@ import { getLocalStorageData } from '@utils';
 import type { State } from '@State';
 import type { AppActions } from '@AppActions';
 
-import { testReducer, welcomeReducer, formReducer, socketReducer, appReducer } from '@reducers';
+import {
+  testReducer,
+  welcomeReducer,
+  formReducer,
+  socketReducer,
+  appReducer,
+  roomReducer,
+} from '@reducers';
 import {
   testSenderMiddleware,
   testFetcherMiddleware,
   formFetcherMiddleware,
   socketMiddleware,
+  roomMiddleware,
 } from '@middlewares';
-import { loggerAfterware, welcomePageAfterware, socketAfterware, appAfterware } from '@afterwares';
+import {
+  loggerAfterware,
+  welcomePageAfterware,
+  socketAfterware,
+  appAfterware,
+  formAfterware,
+} from '@afterwares';
+import lobbyPageAfterware from './afterwares/lobby.afterware';
 // chore: remove in production
 // import { initialState } from '@__mocks__/store/initialState';
 
@@ -24,13 +39,21 @@ function loadState(): State {
 
 const store = new StateAPI<State, AppActions>(loadState());
 
-store.addReducer(testReducer, welcomeReducer, formReducer, socketReducer, appReducer);
+store.addReducer(testReducer, welcomeReducer, formReducer, socketReducer, appReducer, roomReducer);
 store.addMiddleware(
   testSenderMiddleware(),
   testFetcherMiddleware(),
   formFetcherMiddleware(),
-  socketMiddleware()
+  socketMiddleware(),
+  roomMiddleware()
 );
-store.addAfterware(loggerAfterware(), welcomePageAfterware(), socketAfterware(), appAfterware());
+store.addAfterware(
+  loggerAfterware(),
+  welcomePageAfterware(),
+  socketAfterware(),
+  appAfterware(),
+  lobbyPageAfterware(),
+  formAfterware()
+);
 
 export default store;

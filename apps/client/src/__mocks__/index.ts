@@ -22,7 +22,8 @@ export const initialRooms: RoomPreview[] = [
 ];
 
 export type Player = {
-  avatarUrl: string;
+  id: string;
+  username: string;
   role: Role;
   team: Team;
 } & Partial<User>;

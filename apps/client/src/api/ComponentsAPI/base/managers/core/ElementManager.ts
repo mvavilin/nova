@@ -22,4 +22,9 @@ export default class ElementManager {
     if (!this.element) throw new Error('Element not created');
     return this.element;
   }
+
+  public setElement(element: DOMElement): this {
+    this.element = element;
+    return this;
+  }
 }

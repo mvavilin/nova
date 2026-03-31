@@ -4,13 +4,13 @@ import { t } from '@/i18n';
 import type { State } from '@/store/types/state';
 import type { Action } from '@/api/StateAPI';
 import store from '@/store/store';
-import { FormActions } from '@/store/actions/form.actions';
+import { AppActionTypes } from '@/store/actions';
 
 export default class LoginHeading extends HeadingComponent {
   constructor() {
     super({
       classes:
-        'mb-4 text-2xl font-brand font-black text-black [text-stroke:0.1px_#FFE81F] [-webkit-text-stroke:0.1px_#FFE81F] drop-shadow-[0_0_10px_rgba(255,232,31,0.4)] paint-order: stroke fill;',
+        'mb-4 text-xl md:text-2xl font-brand font-black text-black [text-stroke:0.5px_#FFE81F] [-webkit-text-stroke:0.5px_#FFE81F] drop-shadow-[0_0_10px_rgba(255,232,31,0.4)] paint-order: stroke fill;',
     });
 
     this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
@@ -25,7 +25,7 @@ export default class LoginHeading extends HeadingComponent {
   }
 
   private switchLanguage(_state: State, action: Action): void {
-    if (action.type === FormActions.SWITCH_LANGUAGE) {
+    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.setContent(t(TranslationKeys.LOGIN_TITLE));
     }
   }

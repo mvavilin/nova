@@ -44,3 +44,15 @@ describe('ElementManager error handling', () => {
     expect(() => manager.domElement).toThrow('Element not created');
   });
 });
+
+describe('ElementManager setElement', () => {
+  it('replaces internal element', () => {
+    const manager = new ElementManager('div');
+    const newElement = document.createElement('span');
+
+    manager.setElement(newElement);
+
+    expect(manager.domElement).toBe(newElement);
+    expect(manager.domElement.tagName).toBe('SPAN');
+  });
+});

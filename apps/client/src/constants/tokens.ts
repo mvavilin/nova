@@ -1,6 +1,7 @@
-const TOKENS = {
+export const TOKENS = {
   SESSION: 'nova-session-token',
   AUTH: 'nova-auth-token',
 } as const;
 
-export default TOKENS;
+//token name in headers
+export const AUTH_TOKEN = 'auth_token';

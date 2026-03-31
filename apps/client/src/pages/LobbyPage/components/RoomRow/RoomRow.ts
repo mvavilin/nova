@@ -1,7 +1,9 @@
-import { ROOM_STATUS_RU, type RoomPreview, ROOM_PREVIEW_FIELDS } from '@types';
+import { type RoomPreview, ROOM_PREVIEW_FIELDS, ROOM_STATUS } from '@types';
 import { BaseComponent } from '@ComponentsAPI';
 import { JoinButton } from '@pages/LobbyPage/components';
 import { TABLE_CLASSES } from '@constants/styles';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 export default class RoomRow extends BaseComponent {
   private _room: RoomPreview;
@@ -30,7 +32,10 @@ export default class RoomRow extends BaseComponent {
 
     this.statusTd = new BaseComponent({
       tag: 'td',
-      content: ROOM_STATUS_RU[this.room.status],
+      content:
+        this.room.status === ROOM_STATUS.WAITING
+          ? t(TranslationKeys.ROOM_ROW_STATUS_WAITING)
+          : t(TranslationKeys.ROOM_ROW_STATUS_PLAYING),
       classes: TABLE_CLASSES.TBODY.TD.BASE,
     });
 
@@ -92,12 +97,26 @@ export default class RoomRow extends BaseComponent {
     }
 
     if (key === ROOM_PREVIEW_FIELDS.STATUS) {
-      this.statusTd.setContent(ROOM_STATUS_RU[this.room.status]);
+      this.statusTd.setContent(
+        this.room.status === ROOM_STATUS.WAITING
+          ? t(TranslationKeys.ROOM_ROW_STATUS_WAITING)
+          : t(TranslationKeys.ROOM_ROW_STATUS_PLAYING)
+      );
     }
 
     if (key === ROOM_PREVIEW_FIELDS.PLAYER_COUNT || key === ROOM_PREVIEW_FIELDS.MAX_PLAYERS) {
       this.playersTd.setContent(this.playersText);
       this.syncJoinButton();
     }
+  }
+
+  public switchLanguage(): void {
+    const statusText =
+      this.room.status === ROOM_STATUS.WAITING
+        ? t(TranslationKeys.ROOM_ROW_STATUS_WAITING)
+        : t(TranslationKeys.ROOM_ROW_STATUS_PLAYING);
+
+    this.statusTd.setContent(statusText);
+    this.joinButton?.switchLanguage();
   }
 }

@@ -6,6 +6,7 @@ import { t } from '@/i18n';
 import { TranslationKeys } from '@/i18n/translationKeys';
 import type { State } from '@store/types/state';
 import type { Action } from '@/api/StateAPI';
+import { AppActionTypes } from '@/store/actions';
 
 export default class AboutButton extends ButtonComponent {
   constructor({ ...rest }: AboutButtonProperties = {}) {
@@ -31,7 +32,7 @@ export default class AboutButton extends ButtonComponent {
   }
 
   private switchLanguage(_state: State, action: Action): void {
-    if (action.type === WelcomeActions.SWITCH_LANGUAGE) {
+    if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.setContent(t(TranslationKeys.WELCOME_ABOUT));
     }
   }

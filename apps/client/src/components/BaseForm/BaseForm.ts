@@ -2,7 +2,7 @@ import { ButtonComponent, FormComponent, HeadingComponent } from '@/api/Componen
 import type { BaseFormProps, FormType } from './BaseForm.types';
 import store from '@/store/store';
 import type InputForm from '../InputForm/InputForm';
-import { FormActions } from '@/store/actions/form.actions';
+import { FormActionTypes } from '@/store/actions/form.actions';
 import { Overlay } from '../ui';
 import Loader from '../ui/Loader/Loader';
 
@@ -19,7 +19,7 @@ export default class BaseForm extends FormComponent {
     super({
       method: 'post',
       classes:
-        'w-91 p-8 bg-white/65 rounded-xl my-auto flex flex-col justify-center items-center gap-2 m-0',
+        'w-82 p-8 md:w-92 md:p-10 bg-white/45 rounded-xl my-auto flex flex-col justify-center items-center gap-2 m-0',
     });
 
     this.formId = parameters.formId;
@@ -89,7 +89,7 @@ export default class BaseForm extends FormComponent {
     const data = this.getFormInputValues();
 
     store.dispatch({
-      type: FormActions.FETCH_DATA,
+      type: FormActionTypes.FETCH_DATA,
       payload: {
         formId: this.formId,
         formData: data,

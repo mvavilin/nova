@@ -30,21 +30,18 @@ export const redTeam = {
     {
       id: '1',
       username: 'Алексей',
-      avatarUrl: 'https://example.com/avatars/alex.png',
       role: Role.SPYMASTER,
       team: Team.RED,
     },
     {
       id: '2',
       username: 'Мария',
-      avatarUrl: 'https://example.com/avatars/maria.png',
       role: Role.OPERATIVE,
       team: Team.RED,
     },
     {
       id: '3',
       username: 'Игорь',
-      avatarUrl: 'https://example.com/avatars/igor.png',
       role: Role.OPERATIVE,
       team: Team.RED,
     },
@@ -58,21 +55,18 @@ export const blueTeam = {
     {
       id: '4',
       username: 'Екатерина',
-      avatarUrl: 'https://example.com/avatars/katya.png',
       role: Role.SPYMASTER,
       team: Team.BLUE,
     },
     {
       id: '5',
       username: 'Дмитрий',
-      avatarUrl: 'https://example.com/avatars/dmitry.png',
       role: Role.OPERATIVE,
       team: Team.BLUE,
     },
     {
       id: '6',
       username: 'Ольга',
-      avatarUrl: 'https://example.com/avatars/olga.png',
       role: Role.OPERATIVE,
       team: Team.BLUE,
     },
@@ -293,7 +287,6 @@ export const gameResults: GameResultsModalProperties = {
   redTeamPlayers: [
     {
       player: {
-        avatarUrl: '/avatars/red1.png',
         role: Role.SPYMASTER,
         team: Team.RED,
         id: 'u1',
@@ -304,7 +297,6 @@ export const gameResults: GameResultsModalProperties = {
     },
     {
       player: {
-        avatarUrl: '/avatars/red2.png',
         role: Role.OPERATIVE,
         team: Team.RED,
         id: 'u2',
@@ -318,7 +310,6 @@ export const gameResults: GameResultsModalProperties = {
   blueTeamPlayers: [
     {
       player: {
-        avatarUrl: '/avatars/blue1.png',
         role: Role.SPYMASTER,
         team: Team.BLUE,
         id: 'u3',
@@ -329,7 +320,6 @@ export const gameResults: GameResultsModalProperties = {
     },
     {
       player: {
-        avatarUrl: '/avatars/blue2.png',
         role: Role.OPERATIVE,
         team: Team.BLUE,
         id: 'u4',

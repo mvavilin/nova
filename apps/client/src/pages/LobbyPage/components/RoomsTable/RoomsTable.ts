@@ -1,14 +1,20 @@
 import { type RoomPreview, ROOM_PREVIEW_FIELDS } from '@types';
 import { BaseComponent } from '@ComponentsAPI';
 import { RoomRow } from '@pages/LobbyPage/components';
-import { TABLE_CLASSES, HEADER_TITLES } from '@constants/styles';
+import { TABLE_CLASSES } from '@constants/styles';
 import store from '@store';
 import { socketClient } from '@SocketClientAPI';
 import { SocketActionTypes } from '@actions';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 export default class RoomsTable extends BaseComponent {
   private rooms: RoomPreview[] = [];
   private tbody: BaseComponent;
+  private thRoom: BaseComponent | null = null;
+  private thPlayers: BaseComponent | null = null;
+  private thStatus: BaseComponent | null = null;
+  private roomComponents: RoomRow[] = [];
 
   constructor() {
     super({ tag: 'table', classes: TABLE_CLASSES.TABLE });
@@ -31,15 +37,33 @@ export default class RoomsTable extends BaseComponent {
     const thead = new BaseComponent({ tag: 'thead' });
     const tr = new BaseComponent({ tag: 'tr', classes: TABLE_CLASSES.THEAD.TR });
 
-    for (const [index, text] of HEADER_TITLES.entries()) {
-      const th = new BaseComponent({
-        tag: 'th',
-        content: text,
-        classes: (index === 0 ? TABLE_CLASSES.THEAD.TH.FIRST : TABLE_CLASSES.THEAD.TH.BASE).trim(),
-      });
+    this.thRoom = new BaseComponent({
+      tag: 'th',
+      content: t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_ROOM),
+      classes: TABLE_CLASSES.THEAD.TH.FIRST,
+    });
 
-      tr.appendChildren(th);
-    }
+    tr.appendChildren(this.thRoom);
+
+    this.thPlayers = new BaseComponent({
+      tag: 'th',
+      content: t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_PLAYERS),
+      classes: TABLE_CLASSES.THEAD.TH.BASE,
+    });
+    tr.appendChildren(this.thPlayers);
+
+    this.thStatus = new BaseComponent({
+      tag: 'th',
+      content: t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_STATUS),
+      classes: TABLE_CLASSES.THEAD.TH.BASE,
+    });
+    tr.appendChildren(this.thStatus);
+
+    const thEmpty = new BaseComponent({
+      tag: 'th',
+      classes: TABLE_CLASSES.THEAD.TH.BASE,
+    });
+    tr.appendChildren(thEmpty);
 
     thead.appendChildren(tr);
 
@@ -80,7 +104,9 @@ export default class RoomsTable extends BaseComponent {
 
   public addRoom(room: RoomPreview): void {
     this.rooms.push(room);
-    this.tbody.appendChildren(new RoomRow(room));
+    const newRoom = new RoomRow(room);
+    this.roomComponents.push(newRoom);
+    this.tbody.appendChildren(newRoom);
   }
 
   public updateRoomField<K extends keyof RoomPreview>(
@@ -132,5 +158,15 @@ export default class RoomsTable extends BaseComponent {
 
   public getAllRows(): RoomRow[] {
     return this.tbody.children.filter((child) => this.isRoom(child));
+  }
+
+  public switchLanguage(): void {
+    if (!this.thRoom || !this.thPlayers || !this.thStatus) return;
+    this.thRoom.setContent(t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_ROOM));
+    this.thPlayers.setContent(t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_PLAYERS));
+    this.thStatus.setContent(t(TranslationKeys.ROOMS_TABLE_HEADER_TITLES_STATUS));
+    for (const room of this.roomComponents) {
+      room.switchLanguage();
+    }
   }
 }

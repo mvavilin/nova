@@ -6,9 +6,10 @@ import {
   HeadingComponent,
   type ContainerComponentProperties,
 } from '@ComponentsAPI';
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 
 type TeamHeaderProperties = {
-  title: string;
   team: Team;
   players: Player[];
 } & ContainerComponentProperties;
@@ -26,24 +27,22 @@ export const TEAM_HEADER_CLASSES = {
   DIVIDER: 'min-h-full w-px bg-slate-900',
   AVATAR_BORDER: {
     [Team.RED]: {
-      [Role.SPYMASTER]: 'border-red-600',
-      [Role.OPERATIVE]: 'border-red-400',
+      [Role.SPYMASTER]: 'rounded-full w-10 h-10 object-cover shrink-0 border-2 border-red-600',
+      [Role.OPERATIVE]: 'rounded-full w-10 h-10 object-cover shrink-0 border-2 border-red-400',
     },
     [Team.BLUE]: {
-      [Role.SPYMASTER]: 'border-blue-600',
-      [Role.OPERATIVE]: 'border-blue-400',
+      [Role.SPYMASTER]: 'rounded-full w-10 h-10 object-cover shrink-0 border-2 border-blue-600',
+      [Role.OPERATIVE]: 'rounded-full w-10 h-10 object-cover shrink-0 border-2 border-blue-400',
     },
   },
 };
 
 export default class TeamHeader extends ContainerComponent {
-  private title: string;
   private team: Team;
   private players: Player[];
 
-  constructor({ title, team, players, classes, ...properties }: TeamHeaderProperties) {
+  constructor({ team, players, classes, ...properties }: TeamHeaderProperties) {
     super({ classes: `${TEAM_HEADER_CLASSES.CONTAINER} ${classes}`, ...properties });
-    this.title = title;
     this.team = team;
     this.players = players;
     this.render();
@@ -52,7 +51,7 @@ export default class TeamHeader extends ContainerComponent {
   private render(): void {
     const header = new HeadingComponent({
       level: 2,
-      content: this.title,
+      content: this.team === Team.BLUE ? t(TranslationKeys.BLUE_TEAM) : t(TranslationKeys.RED_TEAM),
       classes: `${TEAM_HEADER_CLASSES.HEADER} ${TEAM_HEADER_CLASSES.HEADER_COLOR[this.team]}`,
     });
 
@@ -68,6 +67,7 @@ export default class TeamHeader extends ContainerComponent {
       const avatar = new Avatar({
         ...AVATAR_SIZE,
         classes: TEAM_HEADER_CLASSES.AVATAR_BORDER[player.team][player.role],
+        seed: player.id,
       });
 
       if (this.team === Team.BLUE && player.role === Role.SPYMASTER) {

@@ -30,7 +30,7 @@ export default class BaseComponent {
   // ===== Core Properties =====
 
   public get element(): HTMLElement | SVGElement | null {
-    return this._dom.element;
+    return this._dom.element.domElement;
   }
 
   public get parent(): BaseComponent | null {
@@ -52,6 +52,18 @@ export default class BaseComponent {
   public get content(): string | null {
     if (this._dom.children.list.length > 0) return null;
     return this.element?.textContent ?? '';
+  }
+
+  protected setElement(element: HTMLElement | SVGElement): void {
+    if (!this.isValidElement(element)) {
+      throw new TypeError('Invalid element for this component');
+    }
+
+    this._dom.element.setElement(element);
+  }
+
+  protected isValidElement(element: HTMLElement | SVGElement): boolean {
+    return !!element;
   }
 
   // ===== Parent / Hierarchy =====

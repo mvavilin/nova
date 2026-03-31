@@ -3,7 +3,7 @@ import { AppActionTypes } from '@actions';
 import { socketClient } from '@SocketClientAPI';
 import { removeLocalStorageData, removeSessionStorageData, showErrorToast } from '@utils';
 import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
-import TOKENS from '@constants/tokens';
+import { TOKENS } from '@constants/tokens';
 import { router } from '@router';
 import { URLS } from '@RouterAPI/router.constants';
 import { LOCAL_STORAGE_KEYS } from '@constants/localStorageKeys';

@@ -3,11 +3,13 @@ import { FormActionTypes } from '../actions/form.actions';
 import type { FieldName } from '@/components/InputForm/InputForm.types';
 import type { FieldState } from '@/components/BaseForm/BaseForm.types';
 import store from '../store';
-import { saveSessionStorageData } from '@/utils/sessionStorage';
+import { saveSessionStorageData, getSessionStorageData } from '@/utils';
 import { sessionStorageProps } from '@/constants/sessionStorage.constants';
 import { SocketActionTypes } from '../actions/socket.actions';
 import { AppActionTypes } from '../actions';
 import type { AppActions } from '../types';
+import { isObject } from '@/utils/isObject';
+import { LOCAL_STORAGE_KEYS } from '@/constants/localStorageKeys';
 
 export default function formReducer(state: State, action: AppActions): State {
   switch (action.type) {
@@ -39,6 +41,16 @@ export default function formReducer(state: State, action: AppActions): State {
       if (action.payload.token) {
         saveSessionStorageData(sessionStorageProps.authToken, action.payload.token);
 
+        const storeLS = getSessionStorageData(LOCAL_STORAGE_KEYS.STORE);
+        if (isObject(action.payload.user)) {
+          if (isObject(storeLS))
+            saveSessionStorageData(LOCAL_STORAGE_KEYS.STORE, {
+              ...storeLS,
+              ...action.payload.user,
+            });
+          else saveSessionStorageData(LOCAL_STORAGE_KEYS.STORE, { ...action.payload.user });
+        }
+
         store.dispatch({
           type: SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN,
           payload: { authToken: action.payload.token },
@@ -59,7 +71,15 @@ export default function formReducer(state: State, action: AppActions): State {
       };
     }
 
-    case FormActionTypes.GO_TO_LOBBY_PAGE: {
+    case FormActionTypes.GO_TO_WELCOME_PAGE: {
+      return { ...state };
+    }
+
+    case FormActionTypes.GO_TO_LOGIN_PAGE: {
+      return { ...state };
+    }
+
+    case FormActionTypes.GO_TO_REGISTRATION_PAGE: {
       return { ...state };
     }
 

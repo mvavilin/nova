@@ -1,5 +1,5 @@
 import type BaseComponent from '../BaseComponent';
-import type { DOMElement, Namespace } from '../BaseComponent.types';
+import type { Namespace } from '../BaseComponent.types';
 
 import {
   ElementManager,
@@ -57,8 +57,8 @@ export default class DomFacade {
 
   // ===== Core =====
 
-  public get element(): DOMElement {
-    return this.core.element.domElement;
+  public get element(): ElementManager {
+    return this.core.element;
   }
 
   public get hierarchy(): HierarchyManager {

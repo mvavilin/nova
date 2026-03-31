@@ -7,3 +7,5 @@ export { default as localStorageAfterware } from '@afterwares/storage.afterware'
 export { default as welcomePageAfterware } from '@afterwares/welcome.afterware';
 
 export { default as appAfterware } from '@afterwares/app.afterware';
+
+export { default as formAfterware } from '@/store/afterwares/form.afterware';

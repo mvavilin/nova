@@ -10,7 +10,7 @@ export default class RegistrationSubmitButton extends ButtonComponent {
   constructor() {
     super({
       classes:
-        'mt-6 bg-cyan-600 w-36 h-9 rounded-md font-main font-bold hover:cursor-pointer hover:bg-green-600 hover:transition-colors hover:duration-300',
+        'mt-6 bg-green-600 text-sm w-30 h-8 md:w-36 md:h-9 md:text-base rounded-md font-main font-bold hover:cursor-pointer hover:bg-green-700 hover:transition-colors hover:duration-300',
       type: 'submit',
     });
 

@@ -1,11 +1,5 @@
 import InputComponent from '../InputComponent/InputComponent';
-import type { BaseComponentProperties } from '../../base/BaseComponent.types';
-
-export type RadioComponentProperties = {
-  checked?: boolean;
-  name?: string;
-  value?: string;
-} & Omit<BaseComponentProperties, 'tag'>;
+import type { RadioComponentProperties } from './RadioComponent.types';
 
 export default class RadioComponent extends InputComponent {
   constructor({ checked, value, ...properties }: RadioComponentProperties = {}) {

@@ -73,6 +73,13 @@ export const TranslationKeys = {
   FORM_ERROR_MESSAGE_NAME: 'errorMessageName',
   FORM_ERROR_MESSAGE_EMAIL: 'errorMessageEmail',
   FORM_ERROR_MESSAGE_PASSWORD: 'errorMessagePassword',
+  FORM_ERROR: 'formError',
+  FORM_ERROR_400: 'formError400',
+  FORM_ERROR_403: 'formError403',
+  FORM_ERROR_409: 'formError409',
+  FORM_ERROR_500: 'formError500',
+  FORM_ERROR_UNKNOWN: 'formErrorUnknown',
+  FORM_ERROR_CONNECTION: 'formErrorConnection',
 
   REGISTRATION_TITLE: 'registrationTitle',
   REGISTRATION_SUBMIT_BTN: 'registrationSubmitBtn',

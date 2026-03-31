@@ -4,7 +4,7 @@ import Router from '@RouterAPI/router';
 import store from '@store';
 import { SocketActionTypes } from '@actions';
 import { getSessionStorageData } from '@utils';
-import TOKENS from '@constants/tokens';
+import { TOKENS } from '@constants/tokens';
 import SoundManager from './sound/SoundManager';
 import { soundPaths } from './sound/soundKeys';
 

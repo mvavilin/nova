@@ -19,7 +19,7 @@ export default class BaseForm extends FormComponent {
     super({
       method: 'post',
       classes:
-        'w-91 p-8 bg-white/65 rounded-xl my-auto flex flex-col justify-center items-center gap-2 m-0',
+        'w-82 p-8 md:w-92 md:p-10 bg-white/45 rounded-xl my-auto flex flex-col justify-center items-center gap-2 m-0',
     });
 
     this.formId = parameters.formId;

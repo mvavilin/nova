@@ -8,7 +8,7 @@ import { RoomPageActionTypes, SocketActionTypes } from '@actions';
 import { URLS } from '@RouterAPI/router.constants';
 import { router } from '@router';
 
-import TOKENS from '@constants/tokens';
+import { TOKENS } from '@constants/tokens';
 import { saveSessionStorageData, showErrorToast } from '@utils';
 import store from '@store';
 import { Toast } from '@components';

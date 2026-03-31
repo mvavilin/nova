@@ -1,5 +1,6 @@
 import type { CardColor, GameInfo } from './types/game.ts';
 import type { ProfileInfo } from './types/profile.ts';
+import type { CheckQuestion } from './types/question.ts';
 import type { Player, RoomInfo, RoomPreview, RoomSettings, Teams } from './types/room.ts';
 
 export enum ClientEventType {
@@ -48,12 +49,18 @@ export enum UserStatusType {
 
 export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME' | 'IN_PROFILE';
 
-export type GAME_PHASE = 'clue' | 'guess' | 'check' | 'finish';
+export type GAME_PHASE = 'clue' | 'guess' | 'answer' | 'check' | 'finish';
 
 export type CardTestResult =
   | {
       type: 'own';
-      payload: { userId: string; question: string; question_en: string; observers: string[] };
+      payload: {
+        userId: string;
+        word: string;
+        question: string;
+        question_en: string;
+        playerIds: string[];
+      };
     }
   | {
       type: 'alien';
@@ -87,10 +94,20 @@ export type CardTestResult =
     }
   | { type: 'no-change'; payload: { spymasterId: string; team: Teams } };
 
+export type CheckResults =
+  | {
+      type: 'turn-end';
+      payload: { correct: boolean; team: Teams };
+    }
+  | { type: 'game-end'; payload: { winningTeam: Teams } };
+
 export const RECONNECT_MAX_TIME = 60_000;
 export const SECOND_COUNT_BEFORE_START_GAME = 15;
 export const SECOND_COUNT_FOR_ASK_CLUE = 30;
 export const SECOND_COUNT_FOR_GUESS = 60;
+export const SECOND_COUNT_FOR_ANSWER = 60;
+export const SECOND_COUNT_FOR_CHECK = 60;
+export const TIMER_INTERVAL = 1000;
 
 export type ClientEvent =
   | { type: 'session:ask-status' }
@@ -105,6 +122,8 @@ export type ClientEvent =
   | { type: 'game:add-player' }
   | { type: 'game:clue-give'; payload: { clue: string } }
   | { type: 'game:card-choose'; payload: { cardId: string } }
+  | { type: 'game:answer-give'; payload: { answer: string } }
+  | { type: 'game:check-give'; payload: { accept: boolean } }
   | { type: 'profile:enter' }
   | { type: 'profile:leave' }
   | { type: 'profile:ask-info' };
@@ -131,6 +150,16 @@ export type ServerEvent =
   | { type: 'game:clue-given'; payload: { clue: string } }
   | { type: 'game:card-chosen'; payload: { cardId: string; players: Player[] } }
   | { type: 'game:card-shown'; payload: { cardId: string; color: CardColor } }
+  | {
+      type: 'game:ask-answer';
+      payload: { word: string; question: string; question_en: string; answer: boolean };
+    }
+  | { type: 'game:answer-timeout' }
+  | {
+      type: 'game:ask-check';
+      payload: { answer: string; checkQuestion: CheckQuestion; check: boolean };
+    }
+  | { type: 'game:check-results'; payload: { correct: boolean } }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
   | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };

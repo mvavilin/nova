@@ -3,18 +3,20 @@ import { FormActionTypes } from '../actions/form.actions';
 import type { AppActions } from '../types/action';
 import type { AuthResponse } from '@/types/user.types';
 import type { Overlay } from '@/components/ui';
-import { getLocalStorageData, saveLocalStorageData, showErrorToast } from '@utils';
-import { isObject } from '@/utils/isObject';
-import { LOCAL_STORAGE_KEYS } from '@/constants/localStorageKeys';
+import { showErrorToast } from '@utils';
+// import { getLocalStorageData, saveLocalStorageData, showErrorToast } from '@utils';
+// import { isObject } from '@/utils/isObject';
+// import { LOCAL_STORAGE_KEYS } from '@/constants/localStorageKeys';
 import { ServerUrl, Endpoints } from '@shared/api.constants';
+import { AUTH_TOKEN } from '@/constants/tokens';
+import { t } from 'i18n';
+import { TranslationKeys } from '@/i18n/translationKeys';
 
 const FORM_ENDPOINTS: Record<string, string> = {
   registration: Endpoints.REGISTRATION,
   login: Endpoints.LOGIN,
   // profile: Endpoints.????
 };
-
-const AuthToken = 'auth_token';
 
 export default function fetcher<State>(): Middleware<State, AppActions> {
   return async function middleware(context) {
@@ -41,19 +43,18 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
         });
 
         if (!response.ok) {
-          throw new Error(`Failed to post user data: ${response.status}`);
+          getError(response.status);
         }
 
-        console.log(response);
-        const token = response.headers.get(AuthToken);
+        const token = response.headers.get(AUTH_TOKEN);
         const user: unknown = await response.json();
 
-        const store = getLocalStorageData(LOCAL_STORAGE_KEYS.STORE);
-        if (isObject(user)) {
-          if (isObject(store))
-            saveLocalStorageData(LOCAL_STORAGE_KEYS.STORE, { ...store, ...user });
-          else saveLocalStorageData(LOCAL_STORAGE_KEYS.STORE, { ...user });
-        }
+        // const store = getLocalStorageData(LOCAL_STORAGE_KEYS.STORE);
+        // if (isObject(user)) {
+        //   if (isObject(store))
+        //     saveLocalStorageData(LOCAL_STORAGE_KEYS.STORE, { ...store, ...user });
+        //   else saveLocalStorageData(LOCAL_STORAGE_KEYS.STORE, { ...user });
+        // }
 
         if (isValidAuthResponse(user)) {
           return context.next({
@@ -61,18 +62,24 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
             payload: { user, token },
           });
         } else {
-          console.error('The received data is incorrect');
+          console.error('The received data is incorrect.');
         }
       } catch (error) {
-        showErrorToast(error, `Вход невозможен`);
+        let finalMessage = '';
 
-        console.error('Fetch failed:', error);
+        if (error instanceof TypeError) {
+          finalMessage = t(TranslationKeys.FORM_ERROR_CONNECTION);
+        } else if (error instanceof Error) {
+          finalMessage = error.message;
+        } else {
+          finalMessage = t(TranslationKeys.FORM_ERROR_UNKNOWN);
+        }
+        showErrorToast(finalMessage, t(TranslationKeys.FORM_ERROR));
+
         return context.next(context.action);
       } finally {
         currentLoader?.hide();
-        if (typeof onFinishedFunction === 'function') {
-          onFinishedFunction();
-        }
+        onFinishedFunction?.();
       }
     }
 
@@ -91,4 +98,24 @@ function isValidAuthResponse(data: unknown): data is AuthResponse {
     'email' in data &&
     typeof data.email === 'string'
   );
+}
+
+function getError(responseStatus: number): void {
+  switch (responseStatus) {
+    case 400: {
+      throw new Error(t(TranslationKeys.FORM_ERROR_400));
+    }
+    case 403: {
+      throw new Error(t(TranslationKeys.FORM_ERROR_403));
+    }
+    case 409: {
+      throw new Error(t(TranslationKeys.FORM_ERROR_409));
+    }
+    case 500: {
+      throw new Error(t(TranslationKeys.FORM_ERROR_500));
+    }
+    default: {
+      throw new Error(t(TranslationKeys.FORM_ERROR_UNKNOWN));
+    }
+  }
 }

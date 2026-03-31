@@ -812,7 +812,7 @@ The main disadvantage is that socket.io requires an authentication token during 
       }
     ```
  
-    If the spymaster fails to provide a hint, the turn passes to another team. The team members receive a message 
+    If the agent did not respond, the turn passes to another team. The team members receive a message 
     ```
       { type: 'game:clue-timeout' }
     ```
@@ -825,7 +825,35 @@ The main disadvantage is that socket.io requires an authentication token during 
 
   - **Check state**
     <details>
-    Not implemented
+    
+    After receiving a card response, the server starts a timer (60 s) and sends a message to all players on the opposing team
+    ```
+      {
+        type: 'game:ask-check';
+        payload: { answer: string; checkQuestion: CheckQuestion; check: boolean };
+      }
+    ```
+    If check is true, the player can respond (agent), and if check is false, the player cannot respond (spymaster)
+ 
+    Opponent users send messages to the server to accept or reject the response
+    ```
+      { type: 'game:check-give'; payload: { accept: boolean } }
+    ```
+ 
+    When the timer expires, the server processes the opponent's messages. If no one has voted or at least one has accepted the response, the response is counted
+ 
+    If the game is not over yet, the server sends a message to all game participants about the results of checking the answer to the card question
+    ```
+      { type: 'game:check-results'; payload: { correct: boolean } }
+    ```
+ 
+    and a message about queue transfer
+    ```
+      { type: 'game:turn-changed'; payload: { team: Teams } }
+    ```
+ 
+    If the team wins, then (not implemented)
+    
     </details>
 
   - **Finish state**
@@ -900,7 +928,8 @@ The main disadvantage is that socket.io requires an authentication token during 
       | 'INVALID_ACTION'
       | 'AUTH_REQUIRED'
       | 'ALREADY_ONLINE'
-      | 'GAME_IS_NOT_FULL';
+      | 'GAME_IS_NOT_FULL'
+      | 'ACTION_IS_PROHIBITED';
   ```
 
     </details>

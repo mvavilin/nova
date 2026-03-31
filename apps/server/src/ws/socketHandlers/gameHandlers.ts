@@ -11,6 +11,7 @@ import { logger } from '../logger/logger.ts';
 import type { SocketData } from '../../types/types.ts';
 import type { Game } from '../../rooms/game.ts';
 import type { Teams } from '../../../../../packages/shared/src/types/room.ts';
+import type { CardColor } from '../../../../../packages/shared/src/types/game.ts';
 
 export function setupGameHandlers(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
@@ -118,46 +119,73 @@ function guessCallback(game: Game, result: CardTestResult): void {
   switch (type) {
     case 'own': {
       const { payload } = result;
-      const { userId, word, question, question_en, playerIds } = payload;
-      for (const playerId of playerIds) {
-        const socketId = socketIdMap.get(playerId);
-        if (socketId) {
-          const answer = playerId === userId;
-          io.to(socketId).emit('game:ask-answer', { word, question, question_en, answer });
-          logger.emit(playerId, 'game:ask-answer', { word, question, question_en, answer });
-        }
-      }
-      game.startAnswerPhase((team) => {
-        for (const playerId of playerIds) {
-          const socketId = socketIdMap.get(playerId);
-          if (socketId) {
-            io.to(socketId).emit('game:answer-timeout');
-            logger.emit(playerId, 'game:answer-timeout');
-          }
-        }
-        turnChange(game, team);
-      });
+      guessOwnCardCallback(game, payload);
       break;
     }
     case 'neutral':
     case 'alien': {
       const { payload } = result;
-      const { spymasterId, team, cardId, color, recipients } = payload;
-      for (const recipient of recipients) {
-        const socketId = socketIdMap.get(recipient);
-        if (socketId) {
-          io.to(socketId).emit('game:card-shown', { cardId, color });
-          logger.emit(recipient, 'game:card-shown', { cardId, color });
-        }
-      }
-      const socketId = socketIdMap.get(spymasterId);
-      if (socketId) {
-        io.to(socketId).emit('game:ask-clue');
-        logger.emit(spymasterId, 'game:ask-clue');
-      }
-      turnChange(game, team);
+      guessAlienCardCallback(game, payload);
+      break;
     }
   }
+}
+
+function guessOwnCardCallback(
+  game: Game,
+  payload: {
+    userId: string;
+    word: string;
+    question: string;
+    question_en: string;
+    playerIds: string[];
+  }
+): void {
+  const { userId, word, question, question_en, playerIds } = payload;
+  for (const playerId of playerIds) {
+    const socketId = socketIdMap.get(playerId);
+    if (socketId) {
+      const answer = playerId === userId;
+      io.to(socketId).emit('game:ask-answer', { word, question, question_en, answer });
+      logger.emit(playerId, 'game:ask-answer', { word, question, question_en, answer });
+    }
+  }
+  game.startAnswerPhase((team) => {
+    for (const playerId of playerIds) {
+      const socketId = socketIdMap.get(playerId);
+      if (socketId) {
+        io.to(socketId).emit('game:answer-timeout');
+        logger.emit(playerId, 'game:answer-timeout');
+      }
+    }
+    turnChange(game, team);
+  });
+}
+
+function guessAlienCardCallback(
+  game: Game,
+  payload: {
+    spymasterId: string;
+    team: Teams;
+    cardId: string;
+    color: CardColor;
+    recipients: string[];
+  }
+): void {
+  const { spymasterId, team, cardId, color, recipients } = payload;
+  for (const recipient of recipients) {
+    const socketId = socketIdMap.get(recipient);
+    if (socketId) {
+      io.to(socketId).emit('game:card-shown', { cardId, color });
+      logger.emit(recipient, 'game:card-shown', { cardId, color });
+    }
+  }
+  const socketId = socketIdMap.get(spymasterId);
+  if (socketId) {
+    io.to(socketId).emit('game:ask-clue');
+    logger.emit(spymasterId, 'game:ask-clue');
+  }
+  turnChange(game, team);
 }
 
 function setupCardChooseHandler(

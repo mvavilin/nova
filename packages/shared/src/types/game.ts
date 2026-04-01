@@ -2,6 +2,7 @@ import type { Player, Teams } from './room.ts';
 
 export type CardColor = 'red' | 'blue' | 'neutral' | 'bomb' | 'unknown';
 export type CardStatus = 'hidden' | 'revealed';
+export type GAME_PHASE = 'clue' | 'guess' | 'answer' | 'check' | 'finish';
 
 export enum CardCounts {
   RED = 9,
@@ -33,15 +34,65 @@ export interface PlayerScore {
   attempts: number;
 }
 
+export type Score = {
+  red: number;
+  blue: number;
+};
+
 export interface GameEndInfo {
   winningTeam: Teams;
   win: boolean;
   bombRevealed: boolean;
-  score: {
-    red: number;
-    blue: number;
-  };
+  score: Score;
   time: number;
   redPlayerScores: PlayerScore[];
   bluePlayerScores: PlayerScore[];
 }
+
+export interface ChosenCard {
+  cardId: string;
+  players: Player[];
+}
+
+export interface GuessStateInfo {
+  chosenCards: ChosenCard[];
+}
+
+export interface AnswerStateInfo {
+  word: string;
+  question: string;
+  question_en: string;
+}
+
+export interface CheckStateInfo {
+  word: string;
+  question: string;
+  question_en: string;
+  referenceAnswer: string;
+  referenceAnswer_en: string;
+}
+
+export interface GameFinishInfo {
+  gameEndInfo: GameEndInfo;
+}
+
+export interface GameStateInfo {
+  guessStateInfo: GuessStateInfo | null;
+  answerStateInfo: AnswerStateInfo | null;
+  checkStateInfo: CheckStateInfo | null;
+  gameFinishInfo: GameFinishInfo | null;
+}
+
+export type GameStateForClient = {
+  id: string;
+  cards: Card[];
+  currentTeam: Teams;
+  isSpymaster: boolean;
+  redTeam: Player[];
+  blueTeam: Player[];
+  gamePhase: GAME_PHASE;
+  gameTime: number;
+  phaseTime: number;
+  score: Score;
+  gameStateInfo: GameStateInfo;
+};

@@ -1,4 +1,11 @@
-import type { Card, CardColor, GameEndInfo, GameInfo } from './types/game.ts';
+import type {
+  Card,
+  CardColor,
+  GameEndInfo,
+  GameInfo,
+  GameStateForClient,
+  Score,
+} from './types/game.ts';
 import type { ProfileInfo } from './types/profile.ts';
 import type { CheckQuestion } from './types/question.ts';
 import type { Player, RoomInfo, RoomPreview, RoomSettings, Teams } from './types/room.ts';
@@ -49,8 +56,6 @@ export enum UserStatusType {
 
 export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME' | 'IN_PROFILE';
 
-export type GAME_PHASE = 'clue' | 'guess' | 'answer' | 'check' | 'finish';
-
 export type CardTestResult =
   | {
       type: 'own';
@@ -84,11 +89,6 @@ export type CardTestResult =
     }
   | { type: 'no-change'; payload: { spymasterId: string; team: Teams } };
 
-export type Score = {
-  red: number;
-  blue: number;
-};
-
 export type CheckResults =
   | {
       type: 'turn-end';
@@ -119,6 +119,7 @@ export type ClientEvent =
   | { type: 'game:card-choose'; payload: { cardId: string } }
   | { type: 'game:answer-give'; payload: { answer: string } }
   | { type: 'game:check-give'; payload: { accept: boolean } }
+  | { type: 'game:adk-game-info' }
   | { type: 'profile:enter' }
   | { type: 'profile:leave' }
   | { type: 'profile:ask-info' };
@@ -157,6 +158,7 @@ export type ServerEvent =
   | { type: 'game:check-results'; payload: { correct: boolean } }
   | { type: 'game:send-score'; payload: { score: Score } }
   | { type: 'game:game-end'; payload: { gameEndInfo: GameEndInfo } }
+  | { type: 'game:state'; payload: { gameState: GameStateForClient } }
   | { type: 'profile:entered'; payload: { profileInfo: ProfileInfo } }
   | { type: 'profile:left'; payload: { roomPreviews: RoomPreview[] } }
   | { type: 'error'; payload: { code: ErrorCode } };

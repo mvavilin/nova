@@ -2,9 +2,14 @@ import {
   CardCounts,
   type Card,
   type CardColor,
+  type ChosenCard,
+  type GAME_PHASE,
   type GameEndInfo,
   type GameInfo,
+  type GameStateForClient,
+  type GameStateInfo,
   type PlayerScore,
+  type Score,
 } from '../../../../packages/shared/src/types/game.ts';
 import type { Player, Teams } from '../../../../packages/shared/src/types/room.ts';
 import jsonData from '../../../../packages/shared/src/question-bank.json' with { type: 'json' };
@@ -18,8 +23,6 @@ import {
   type CardTestResult,
   type CheckResults,
   type ErrorCode,
-  type GAME_PHASE,
-  type Score,
 } from '../../../../packages/shared/src/socketEvents.ts';
 import type { CheckQuestion } from '../../../../packages/shared/src/types/question.ts';
 
@@ -484,5 +487,65 @@ export class Game {
     const answers = this.playerAnswers.get(player.id) || [];
     const score = answers.filter((answer) => answer === true).length;
     return { id: player.id, username: player.username, score, attempts: answers.length };
+  }
+
+  private getChosenCards(): ChosenCard[] {
+    return [...this.chosenCards.entries()].map(([cardId, userIds]) => ({
+      cardId,
+      players: this.getAllPlayers().filter((player) => userIds.includes(player.id)),
+    }));
+  }
+
+  private getGameStateInfo(): GameStateInfo {
+    const guessStateInfo =
+      this.gamePhase === 'guess' ? { chosenCards: this.getChosenCards() } : null;
+    const answerStateInfo =
+      this.gamePhase === 'answer' && this.checkQuestion
+        ? {
+            word: this.checkQuestion.word,
+            question: this.checkQuestion.question,
+            question_en: this.checkQuestion.question_en,
+          }
+        : null;
+    const checkStateInfo =
+      this.gamePhase === 'check' && this.checkQuestion
+        ? {
+            word: this.checkQuestion.word,
+            question: this.checkQuestion.question,
+            question_en: this.checkQuestion.question_en,
+            referenceAnswer: this.checkQuestion.referenceAnswer,
+            referenceAnswer_en: this.checkQuestion.referenceAnswer_en,
+          }
+        : null;
+    const gameFinishInfo =
+      this.gamePhase === 'finish' ? { gameEndInfo: this.getGameEndInfo() } : null;
+
+    return { guessStateInfo, answerStateInfo, checkStateInfo, gameFinishInfo };
+  }
+
+  private getGameStateForClient(userId: string): GameStateForClient {
+    const player = this.getPlayer(userId);
+
+    const cards: Card[] = this.cards.map((card) => ({
+      ...card,
+      color:
+        (player && card.whoSees.has(player.team)) || (player && player.role === 'spymaster')
+          ? card.color
+          : 'unknown',
+    }));
+
+    return {
+      id: this.id,
+      cards,
+      currentTeam: this.currentTeam,
+      isSpymaster: player ? player.role === 'spymaster' : false,
+      redTeam: this.redTeam,
+      blueTeam: this.blueTeam,
+      gamePhase: this.gamePhase,
+      gameTime: this.gameTime,
+      phaseTime: this.phaseTime,
+      score: this.score,
+      gameStateInfo: this.getGameStateInfo(),
+    };
   }
 }

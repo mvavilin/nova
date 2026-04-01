@@ -20,6 +20,7 @@ export function setupGameHandlers(
   setupCardChooseHandler(socket);
   setupAnswerGiveHandler(socket);
   setupCheckGiveHandler(socket);
+  setupGameStateHandler(socket);
 }
 
 function setupGameAddPlayerHandler(
@@ -292,4 +293,21 @@ function sendResults(game: Game, results: CheckResults): void {
       }
     }
   }
+}
+
+function setupGameStateHandler(
+  socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>
+): void {
+  const { userId } = socket.data;
+  socket.on('game:ask-game-state', () => {
+    const game = roomManager.getGameByUserId(userId);
+    if (game) {
+      const gameState = game.getGameStateForClient(userId);
+      const socketId = socketIdMap.get(userId);
+      if (socketId) {
+        io.to(socketId).emit('game:state', { gameState });
+        logger.emit(userId, 'game:state', { gameState });
+      }
+    }
+  });
 }

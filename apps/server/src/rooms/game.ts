@@ -523,7 +523,7 @@ export class Game {
     return { guessStateInfo, answerStateInfo, checkStateInfo, gameFinishInfo };
   }
 
-  private getGameStateForClient(userId: string): GameStateForClient {
+  public getGameStateForClient(userId: string): GameStateForClient {
     const player = this.getPlayer(userId);
 
     const cards: Card[] = this.cards.map((card) => ({

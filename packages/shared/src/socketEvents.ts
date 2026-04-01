@@ -119,7 +119,7 @@ export type ClientEvent =
   | { type: 'game:card-choose'; payload: { cardId: string } }
   | { type: 'game:answer-give'; payload: { answer: string } }
   | { type: 'game:check-give'; payload: { accept: boolean } }
-  | { type: 'game:adk-game-info' }
+  | { type: 'game:ask-game-state' }
   | { type: 'profile:enter' }
   | { type: 'profile:leave' }
   | { type: 'profile:ask-info' };

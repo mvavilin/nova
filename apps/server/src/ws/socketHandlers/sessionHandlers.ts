@@ -35,8 +35,8 @@ export function setupConnectionHandler(): void {
         const status = roomManager.getStatus(userId, username);
         const { userStatus, player, recipients } = status;
 
-        socket.emit('session:connect', { userStatus });
-        logger.emit(userId, 'session:connect', { userStatus });
+        socket.emit('session:connect', { userStatus, userId, username });
+        logger.emit(userId, 'session:connect', { userStatus, userId, username });
 
         socket.emit('session:token', { sessionToken: socket.data.sessionToken });
         logger.emit(userId, 'session:token', { sessionToken: socket.data.sessionToken });

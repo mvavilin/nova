@@ -126,7 +126,10 @@ export type ClientEvent =
 
 export type ServerEvent =
   | { type: 'session:token'; payload: { sessionToken: string } }
-  | { type: 'session:connect'; payload: { userStatus: UserStatus } }
+  | {
+      type: 'session:connect';
+      payload: { userStatus: UserStatus; userId: string; username: string };
+    }
   | { type: 'session:player-connected'; payload: { player: Player } }
   | { type: 'session:player-disconnected'; payload: { player: Player } }
   | { type: 'session:player-exit'; payload: { player: Player } }

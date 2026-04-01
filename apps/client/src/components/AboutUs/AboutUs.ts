@@ -117,33 +117,43 @@ export default class AboutUs extends ContainerComponent {
 
     return new ContainerComponent({
       children: [
-        new ContainerComponent({
-          children: [
-            new ImageComponent({
-              source: avatarUrl,
-              alt: name,
-              classes: 'w-10 h-10 rounded-full border border-[var(--color-primary)]',
-            }),
-
-            new LinkComponent({
-              content: t(titleKey),
-              href: profileUrl,
-              target: '_blank',
-              classes:
-                'text-lg font-semibold text-[var(--color-brand)] uppercase tracking-wide hover:underline',
-            }),
-          ],
-          classes: 'flex items-center gap-3',
-        }),
-
-        new ListComponent({
-          content: t(listKey),
-          classes:
-            'whitespace-pre-line font-[var(--font-text)] text-sm text-[var(--color-light)]/80',
-        }),
+        this.createDeveloperHeader(name, avatarUrl, profileUrl, titleKey),
+        this.createDeveloperList(listKey),
       ],
       classes:
         'flex flex-col gap-3 p-4 border border-[var(--color-primary)] rounded-md bg-black/40 hover:bg-black/60 transition',
+    });
+  }
+
+  private createDeveloperHeader(
+    name: string,
+    avatarUrl: string,
+    profileUrl: string,
+    titleKey: TranslationKey
+  ): ContainerComponent {
+    return new ContainerComponent({
+      children: [
+        new ImageComponent({
+          source: avatarUrl,
+          alt: name,
+          classes: 'w-10 h-10 rounded-full border border-[var(--color-primary)]',
+        }),
+        new LinkComponent({
+          content: t(titleKey),
+          href: profileUrl,
+          target: '_blank',
+          classes:
+            'text-lg font-semibold text-[var(--color-brand)] uppercase tracking-wide hover:underline',
+        }),
+      ],
+      classes: 'flex items-center gap-3',
+    });
+  }
+
+  private createDeveloperList(listKey: TranslationKey): ListComponent {
+    return new ListComponent({
+      content: t(listKey),
+      classes: 'whitespace-pre-line font-[var(--font-text)] text-sm text-[var(--color-light)]/80',
     });
   }
 }

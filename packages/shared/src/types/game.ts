@@ -54,17 +54,17 @@ export interface ChosenCard {
   players: Player[];
 }
 
-export interface GuessStateInfo {
+export interface GuessPhaseInfo {
   chosenCards: ChosenCard[];
 }
 
-export interface AnswerStateInfo {
+export interface AnswerPhaseInfo {
   word: string;
   question: string;
   question_en: string;
 }
 
-export interface CheckStateInfo {
+export interface CheckPhaseInfo {
   word: string;
   question: string;
   question_en: string;
@@ -72,15 +72,15 @@ export interface CheckStateInfo {
   referenceAnswer_en: string;
 }
 
-export interface GameFinishInfo {
+export interface FinishPhaseInfo {
   gameEndInfo: GameEndInfo;
 }
 
-export interface GameStateInfo {
-  guessStateInfo: GuessStateInfo | null;
-  answerStateInfo: AnswerStateInfo | null;
-  checkStateInfo: CheckStateInfo | null;
-  gameFinishInfo: GameFinishInfo | null;
+export interface GamePhaseInfo {
+  guessPhaseInfo: GuessPhaseInfo | null;
+  answerPhaseInfo: AnswerPhaseInfo | null;
+  checkPhaseInfo: CheckPhaseInfo | null;
+  finishPhaseInfo: FinishPhaseInfo | null;
 }
 
 export type GameStateForClient = {
@@ -94,5 +94,5 @@ export type GameStateForClient = {
   gameTime: number;
   phaseTime: number;
   score: Score;
-  gameStateInfo: GameStateInfo;
+  gamePhaseInfo: GamePhaseInfo;
 };

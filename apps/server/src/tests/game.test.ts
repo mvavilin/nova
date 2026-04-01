@@ -823,3 +823,37 @@ test('The guessTest method should ', () => {
 
   expect(result).toEqual(cardTestResult);
 });
+
+test('The getGameStateForClient should return gameStateInfo', () => {
+  const game = new Game('', 4);
+  game.addPlayer(blueSpymaster);
+  game.addPlayer(redAgent);
+  game.initial();
+  const neutralCard: Card = { id: uuid(), word: 'word', color: 'neutral', whoSees: new Set() };
+  game['cards'] = [neutralCard];
+  const gameInfo = game.getGameInfo(redAgentId);
+  game['gamePhase'] = 'guess';
+  const cards = gameInfo.cards;
+  game.chooseCard(redAgentId, neutralCard.id);
+  const result = game.getGameStateForClient(redAgentId);
+  expect(result).toEqual({
+    id: game['id'],
+    cards,
+    currentTeam: game['currentTeam'],
+    isSpymaster: false,
+    redTeam: game['redTeam'],
+    blueTeam: game['blueTeam'],
+    gamePhase: game['gamePhase'],
+    gameTime: game['gameTime'],
+    phaseTime: game['phaseTime'],
+    score: game['score'],
+    gamePhaseInfo: {
+      guessPhaseInfo: {
+        chosenCards: [{ cardId: neutralCard.id, players: [redAgent] }],
+      },
+      answerPhaseInfo: null,
+      checkPhaseInfo: null,
+      finishPhaseInfo: null,
+    },
+  });
+});

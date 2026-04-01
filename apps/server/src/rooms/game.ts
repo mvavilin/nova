@@ -7,7 +7,7 @@ import {
   type GameEndInfo,
   type GameInfo,
   type GameStateForClient,
-  type GameStateInfo,
+  type GamePhaseInfo,
   type PlayerScore,
   type Score,
 } from '../../../../packages/shared/src/types/game.ts';
@@ -496,10 +496,10 @@ export class Game {
     }));
   }
 
-  private getGameStateInfo(): GameStateInfo {
-    const guessStateInfo =
+  private getGamePhaseInfo(): GamePhaseInfo {
+    const guessPhaseInfo =
       this.gamePhase === 'guess' ? { chosenCards: this.getChosenCards() } : null;
-    const answerStateInfo =
+    const answerPhaseInfo =
       this.gamePhase === 'answer' && this.checkQuestion
         ? {
             word: this.checkQuestion.word,
@@ -507,7 +507,7 @@ export class Game {
             question_en: this.checkQuestion.question_en,
           }
         : null;
-    const checkStateInfo =
+    const checkPhaseInfo =
       this.gamePhase === 'check' && this.checkQuestion
         ? {
             word: this.checkQuestion.word,
@@ -517,10 +517,10 @@ export class Game {
             referenceAnswer_en: this.checkQuestion.referenceAnswer_en,
           }
         : null;
-    const gameFinishInfo =
+    const finishPhaseInfo =
       this.gamePhase === 'finish' ? { gameEndInfo: this.getGameEndInfo() } : null;
 
-    return { guessStateInfo, answerStateInfo, checkStateInfo, gameFinishInfo };
+    return { guessPhaseInfo, answerPhaseInfo, checkPhaseInfo, finishPhaseInfo };
   }
 
   public getGameStateForClient(userId: string): GameStateForClient {
@@ -545,7 +545,7 @@ export class Game {
       gameTime: this.gameTime,
       phaseTime: this.phaseTime,
       score: this.score,
-      gameStateInfo: this.getGameStateInfo(),
+      gamePhaseInfo: this.getGamePhaseInfo(),
     };
   }
 }

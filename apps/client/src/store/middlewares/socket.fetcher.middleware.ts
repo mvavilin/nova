@@ -4,7 +4,7 @@ import { ClientEventType, ServerEventType, UserStatusType } from '@repo/shared/s
 
 import { socketClient } from '@SocketClientAPI';
 import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
-import { RoomPageActionTypes, SocketActionTypes } from '@actions';
+import { AppActionTypes, RoomPageActionTypes, SocketActionTypes } from '@actions';
 import { URLS } from '@RouterAPI/router.constants';
 import { router } from '@router';
 
@@ -28,7 +28,12 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.off(ServerEventType.SESSION_TOKEN);
         });
 
-        socketClient.onSessionConnect(({ userStatus }) => {
+        socketClient.onSessionConnect(({ userStatus, userId, username }) => {
+          context.next({
+            type: AppActionTypes.UPDATE_STORE,
+            payload: { userId, username },
+          });
+
           if (userStatus === UserStatusType.IN_LOBBY) router.init(URLS.LOBBY());
           if (userStatus === UserStatusType.IN_ROOM)
             store.dispatch({
@@ -43,9 +48,14 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         });
 
         socketClient.onError(({ code }) => {
+          console.log(code);
           showErrorToast(code, SOCKET_ERROR_MESSAGES.GENERAL_ERROR);
 
-          socketClient.off(ServerEventType.SESSION_TOKEN);
+          context.next({
+            type: AppActionTypes.RESET_DATA,
+          });
+
+          socketClient.off(ServerEventType.ERROR);
         });
 
         socketClient.connect(authToken);

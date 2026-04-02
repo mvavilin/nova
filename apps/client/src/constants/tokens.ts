@@ -4,4 +4,4 @@ export const TOKENS = {
 } as const;
 
 //token name in headers
-export const AUTH_TOKEN = 'auth_token';
+export const AUTH_TOKEN = 'Auth_token';

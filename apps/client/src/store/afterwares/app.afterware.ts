@@ -23,5 +23,19 @@ export default function appAfterware<State>(): Afterware<State> {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
       }
     }
+
+    if (context.action.type === AppActionTypes.RESET_DATA) {
+      try {
+        removeSessionStorageData(TOKENS.AUTH);
+        removeSessionStorageData(TOKENS.SESSION);
+        removeLocalStorageData(LOCAL_STORAGE_KEYS.STORE);
+
+        router.navigate(URLS.LOGIN());
+
+        // socketClient.disconnect();
+      } catch (error) {
+        showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
+      }
+    }
   };
 }

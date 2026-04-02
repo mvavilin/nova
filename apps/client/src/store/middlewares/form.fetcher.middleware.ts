@@ -49,13 +49,6 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
         const token = response.headers.get(AUTH_TOKEN);
         const user: unknown = await response.json();
 
-        // const store = getLocalStorageData(LOCAL_STORAGE_KEYS.STORE);
-        // if (isObject(user)) {
-        //   if (isObject(store))
-        //     saveLocalStorageData(LOCAL_STORAGE_KEYS.STORE, { ...store, ...user });
-        //   else saveLocalStorageData(LOCAL_STORAGE_KEYS.STORE, { ...user });
-        // }
-
         if (isValidAuthResponse(user)) {
           return context.next({
             type: FormActionTypes.FETCH_SUCCESS,

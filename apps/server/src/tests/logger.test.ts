@@ -6,7 +6,11 @@ test('Logger should not log when SHOW_LOG is not set', () => {
   const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
   const logger = new Logger();
 
-  logger.emit('user-id', 'session:connect', { userStatus: 'IN_ROOM' });
+  logger.emit('user-id', 'session:connect', {
+    userStatus: 'IN_ROOM',
+    userId: 'user-id',
+    username: 'username',
+  });
   expect(consoleSpy).not.toHaveBeenCalled();
 
   logger.on('user-id', 'room:ask-list');
@@ -30,7 +34,11 @@ test('Logger should log emit', () => {
     'user-id'
   );
 
-  logger.emit('user-id', 'session:connect', { userStatus: 'IN_ROOM' });
+  logger.emit('user-id', 'session:connect', {
+    userStatus: 'IN_ROOM',
+    userId: 'user-id',
+    username: 'username',
+  });
   expect(consoleSpy).toHaveBeenCalledWith(
     expect.stringContaining('session:connect'),
     expect.stringContaining('TO:'),

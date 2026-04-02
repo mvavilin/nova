@@ -13,7 +13,7 @@ export default class RulesButton extends ButtonComponent {
     super({
       id: 'rules-button',
       classes:
-        'font-main font-normal text-1xl md:text-2xl leading-[0.83] underline text-center text-[var(--color-light)] cursor-pointer transition-colors duration-200 hover:text-[var(--color-brand)] min-h-[78px] px-[20px]',
+        'font-main font-normal text-1xl md:text-2xl leading-[0.83] text-center text-[var(--color-light)] cursor-pointer transition-colors duration-200 hover:text-[var(--color-brand)] min-h-[78px]',
       ...rest,
     });
 

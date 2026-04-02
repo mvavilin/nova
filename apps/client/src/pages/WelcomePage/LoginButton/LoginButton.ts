@@ -13,7 +13,7 @@ export default class LoginButton extends ButtonComponent {
     super({
       id: 'login-button',
       classes:
-        'font-brand px-6 py-2 text-[var(--color-dark)] rounded-lg bg-[var(--color-light)] font-medium transition duration-200 ease-in-out active:scale-95 cursor-pointer justify-self-center text-xs md:text-base',
+        'font-main font-bold px-6 py-2 text-[var(--color-dark)] rounded-lg bg-[var(--color-light)] font-medium ease-in-out active:scale-95 cursor-pointer justify-self-center text-base md:text-lg uppercase',
       ...rest,
     });
 

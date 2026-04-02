@@ -7,6 +7,7 @@ import { TranslationKeys } from '@/i18n/translationKeys';
 import type { State } from '@/store/types';
 import type { Action } from '@/api/StateAPI';
 import { AppActionTypes } from '@/store/actions';
+import { Avatar } from '@/components';
 
 const stats = {
   level: '12',
@@ -16,7 +17,7 @@ const stats = {
 
 export default class ProfileHero extends ContainerComponent {
   private userCard: ContainerComponent | null = null;
-  private userAvatar: ContainerComponent | null = null;
+  private userAvatar: Avatar | undefined;
   private userInfo: ContainerComponent | null = null;
   private userName: HeadingComponent | null = null;
   private userLanguage: TextComponent | null = null;
@@ -30,7 +31,7 @@ export default class ProfileHero extends ContainerComponent {
   constructor({ ...rest }: ProfileHeroProperties = {}) {
     super({
       id: 'profile-hero',
-      classes: `flex justify-between bg-white/25 text-white rounded p-4`,
+      classes: `flex justify-between w-full bg-white/25 text-white rounded p-4 max-w-7xl`,
       ...rest,
     });
 
@@ -50,8 +51,9 @@ export default class ProfileHero extends ContainerComponent {
       classes: 'text-2xl font-bold',
     });
 
-    this.userAvatar = new ContainerComponent({
-      classes: 'w-16 h-16 rounded-full bg-gray-300',
+    this.userAvatar = new Avatar({
+      seed: store.getState().id,
+      classes: 'rounded-full w-16 h-16 object-cover border-2 border-white shrink-0',
     });
 
     this.userLanguage = new TextComponent({

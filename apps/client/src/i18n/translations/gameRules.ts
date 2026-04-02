@@ -51,7 +51,7 @@ const gameRules = {
     [TranslationKeys.GAME_RULES_VICTORY_P1]: 'A team wins when it reveals all of its cards.',
     [TranslationKeys.GAME_RULES_VICTORY_P2]:
       'If the assassin card is revealed, that team instantly loses.',
-    [TranslationKeys.GAME_RULES_CLOSE_BTN]: 'got it!',
+    [TranslationKeys.GAME_RULES_CLOSE_BTN]: 'got it',
   },
 
   [Language.RU]: {
@@ -101,7 +101,7 @@ const gameRules = {
       'Команда побеждает, когда открывает все свои карточки.',
     [TranslationKeys.GAME_RULES_VICTORY_P2]:
       'Если открыта карточка убийцы — команда сразу проигрывает.',
-    [TranslationKeys.GAME_RULES_CLOSE_BTN]: 'понятно!',
+    [TranslationKeys.GAME_RULES_CLOSE_BTN]: 'понятно',
   },
 };
 

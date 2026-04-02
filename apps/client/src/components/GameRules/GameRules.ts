@@ -5,8 +5,8 @@ import { TranslationKeys } from '@/i18n/translationKeys';
 export default class GameRules extends ContainerComponent {
   constructor() {
     super({
-      classes:
-        'flex flex-col gap-6 max-w-3xl mx-auto p-8 rounded-lg bg-[var(--color-dark)] text-[var(--color-light)]',
+      classes: 'flex flex-col gap-6 max-w-3xl mx-auto p-8 rounded-lg text-[var(--color-light)]',
+      // 'bg-white/25 backdrop-blur border border-white/20 text-white rounded p-4',
     });
 
     this.render();

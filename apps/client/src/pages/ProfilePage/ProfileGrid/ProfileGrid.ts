@@ -11,7 +11,7 @@ export default class ProfileGrid extends ContainerComponent {
   constructor({ ...rest }: ProfileGridProperties = {}) {
     super({
       tag: 'main',
-      classes: 'grid grid-cols-1 md:grid-cols-2 gap-5',
+      classes: 'grid w-full grid-cols-1 md:grid-cols-2 gap-5 max-w-7xl',
       ...rest,
     });
 

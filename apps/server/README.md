@@ -440,7 +440,10 @@ The main disadvantage is that socket.io requires an authentication token during 
     - A message to a user who has connected or reconnected. Transmits the user's status
 
     ```
-      { type: 'session:connect'; payload: { userStatus: UserStatus } }
+      {
+        type: 'session:connect';
+        payload: { userStatus: UserStatus; userId: string; username: string };
+      }
     ```
 
     - Message to users in the room (game) about the user's connection/reconnection. Passes the Player object
@@ -478,7 +481,10 @@ The main disadvantage is that socket.io requires an authentication token during 
     - Response to the user who sent the request
 
     ```
-      { type: 'session:send-status'; payload: { userStatus: UserStatus } }
+      {
+        type: 'session:send-status';
+        payload: { userStatus: UserStatus; userId: string; username: string };
+      }
     ```
 
     </details>
@@ -790,7 +796,16 @@ The main disadvantage is that socket.io requires an authentication token during 
         { type: 'game:turn-changed'; payload: { team: Teams } }
       ```
 
-    - If a bomb is selected, then (not implemented)
+    - If a bomb is selected, the game is lost. Messages are sent to all participants with the characters
+      ```
+        { type: 'game:card-shown'; payload: { cardId: string; color: CardColor } }
+      ```
+      and
+      ```
+        { type: 'game:game-end'; payload: { gameEndInfo: GameEndInfo } }
+      ```
+      The bombRevealed field in gameEndInfo will be true
+ 
     - If no cards are selected, then (not implemented)
 
     </details>
@@ -849,7 +864,11 @@ The main disadvantage is that socket.io requires an authentication token during 
       { type: 'game:check-give'; payload: { accept: boolean } }
     ```
 
-    When the timer expires, the server processes the opponent's messages. If no one has voted or at least one has accepted the response, the response is counted
+    When the timer expires, the server sends a  message
+    ```
+      { type: 'game:check-timeout' }
+    ```
+    to the checking players and processes the opponent's messages. If no one has voted or at least one has accepted the response, the response is counted
 
     If the game is not over yet, the server sends a message to all game participants about the results of checking the answer to the card question
 
@@ -863,13 +882,37 @@ The main disadvantage is that socket.io requires an authentication token during 
       { type: 'game:turn-changed'; payload: { team: Teams } }
     ```
 
-    If the team wins, then (not implemented)
+    If the team wins, the server sends a message to all game participants
+    ```
+      { type: 'game:check-results'; payload: { correct: boolean } }
+    ```
+    and
+    ```
+      { type: 'game:game-end'; payload: { gameEndInfo: GameEndInfo } }
+    ```
+    The bombRevealed field in gameEndInfo will be true
 
     </details>
 
   - **Finish state**
     <details>
     Not implemented
+    </details>
+
+  - **Get game state**
+    <details>
+    - Request to server
+
+    ```
+      { type: 'game:ask-game-state' }
+    ```
+
+    - Response to the user who sent the request
+
+    ```
+      { type: 'game:state'; payload: { gameState: GameStateForClient } }
+    ```
+  
     </details>
 
 - ### List of events sent to the server when working with profile (stored in the @repo/shared/src/socketEvents.ts)
@@ -1052,6 +1095,96 @@ The main disadvantage is that socket.io requires an authentication token during 
       currentTeam: Teams;
       cards: Card[];
     }
+  ```
+
+  - Game score
+  ```
+    export type Score = {
+      red: number;
+      blue: number;
+    };
+  ```
+
+  - Game end information
+  ```
+    export interface GameEndInfo {
+      winningTeam: Teams;
+      win: boolean;
+      bombRevealed: boolean;
+      score: Score;
+      time: number;
+      redPlayerScores: PlayerScore[];
+      bluePlayerScores: PlayerScore[];
+    }
+  ```
+
+  - Chosen card
+  ```
+    export interface ChosenCard {
+      cardId: string;
+      players: Player[];
+    }
+  ```
+  
+  - Guess phase information
+  ```
+    export interface GuessPhaseInfo {
+      chosenCards: ChosenCard[];
+    }
+  ```
+
+  - Answer phase information
+  ```
+    export interface AnswerPhaseInfo {
+      word: string;
+      question: string;
+      question_en: string;
+    }
+  ```
+
+  - Check phase information
+  ```
+    export interface CheckPhaseInfo {
+      word: string;
+      question: string;
+      question_en: string;
+      referenceAnswer: string;
+      referenceAnswer_en: string;
+    }
+  ```
+
+  - Finish phase information
+  ```
+    export interface FinishPhaseInfo {
+      gameEndInfo: GameEndInfo;
+    }
+  ```
+
+  - Game phase information
+  ```
+    export interface GamePhaseInfo {
+      guessPhaseInfo: GuessPhaseInfo | null;
+      answerPhaseInfo: AnswerPhaseInfo | null;
+      checkPhaseInfo: CheckPhaseInfo | null;
+      finishPhaseInfo: FinishPhaseInfo | null;
+    }
+  ```
+
+  - Game state for client during reconnect
+  ```
+    export type GameStateForClient = {
+      id: string;
+      cards: Card[];
+      currentTeam: Teams;
+      isSpymaster: boolean;
+      redTeam: Player[];
+      blueTeam: Player[];
+      gamePhase: GAME_PHASE;
+      gameTime: number;
+      phaseTime: number;
+      score: Score;
+      gamePhaseInfo: GamePhaseInfo;
+    };
   ```
 
   </details>

@@ -2,7 +2,14 @@ import {
   CardCounts,
   type Card,
   type CardColor,
+  type ChosenCard,
+  type GAME_PHASE,
+  type GameEndInfo,
   type GameInfo,
+  type GameStateForClient,
+  type GamePhaseInfo,
+  type PlayerScore,
+  type Score,
 } from '../../../../packages/shared/src/types/game.ts';
 import type { Player, Teams } from '../../../../packages/shared/src/types/room.ts';
 import jsonData from '../../../../packages/shared/src/question-bank.json' with { type: 'json' };
@@ -16,7 +23,6 @@ import {
   type CardTestResult,
   type CheckResults,
   type ErrorCode,
-  type GAME_PHASE,
 } from '../../../../packages/shared/src/socketEvents.ts';
 import type { CheckQuestion } from '../../../../packages/shared/src/types/question.ts';
 
@@ -31,13 +37,15 @@ export class Game {
   private gamePhase: GAME_PHASE = 'clue';
   private chosenCards: Map<string, string[]> = new Map();
   private checkQuestion: CheckQuestion | null = null;
-  // private gameTimer: NodeJS.Timeout | null = null;
-  // private gameTime: number = 0;
+  private gameTimer: NodeJS.Timeout | null = null;
+  private gameTime: number = 0;
   private phaseTimer: NodeJS.Timeout | null = null;
   private phaseTime: number = 0;
   private answerUserId: string | undefined;
-  // private answerCard: Card | null = null;
+  private answerCard: Card | null = null;
   private accepts: Array<{ userId: string; accept: boolean }> = [];
+  private score: Score = { red: 0, blue: 0 };
+  private playerAnswers = new Map<string, boolean[]>();
 
   constructor(roomId: string, maxPlayers: number) {
     this.id = uuid();
@@ -109,9 +117,9 @@ export class Game {
 
   public initial(): void {
     this.createCards();
-    // this.gameTimer = setInterval(() => {
-    //   this.gameTime += 1;
-    // }, 1000);
+    this.gameTimer = setInterval(() => {
+      this.gameTime += 1;
+    }, 1000);
   }
 
   private createCards(): void {
@@ -251,40 +259,79 @@ export class Game {
         const opponentColor = this.currentTeam === 'red' ? 'blue' : 'red';
         if (card) {
           switch (card.color) {
-            case this.currentTeam: {
-              const userIds = choice[termWithUserIds];
-              const userId = userIds[Math.floor(Math.random() * userIds.length)];
-              const checkQuestion = this.getCheckQuestion(card.word);
-              if (userId && checkQuestion) {
-                this.checkQuestion = checkQuestion;
-                const { word, question, question_en } = this.checkQuestion;
-                const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
-                const playerIds = team.map((player) => player.id);
-                this.answerUserId = userId;
-                // this.answerCard = card;
-                return { type: 'own', payload: { userId, word, question, question_en, playerIds } };
-              }
-              break;
-            }
-            case opponentColor:
+            case this.currentTeam:
             case 'neutral': {
-              const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
-              const recipients = team.map((player) => player.id);
-              card.whoSees.add(this.currentTeam);
-              const { id: cardId, color } = card;
-              const spymasterId = this.turnChange();
-              return {
-                type: card.color === opponentColor ? 'alien' : 'neutral',
-                payload: { spymasterId, team: this.currentTeam, cardId, color, recipients },
-              };
+              return this.chosenOwnCard(choice, card);
+            }
+            case opponentColor: {
+              return this.chosenOpponentCard(card);
+            }
+            case 'bomb': {
+              return this.chosenBombCard(card);
             }
           }
         }
       }
     }
 
+    const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+    const playerIds = team.map((player) => player.id);
     const spymasterId = this.turnChange();
-    return { type: 'no-change', payload: { team: this.currentTeam, spymasterId } };
+    return { type: 'no-change', payload: { team: this.currentTeam, spymasterId, playerIds } };
+  }
+
+  private chosenOwnCard(choice: [string, string[]], card: Card): CardTestResult {
+    const termWithUserIds = 1;
+    const userIds = choice[termWithUserIds];
+    const userId = userIds[Math.floor(Math.random() * userIds.length)];
+    const checkQuestion = this.getCheckQuestion(card.word);
+    if (userId && checkQuestion) {
+      this.checkQuestion = checkQuestion;
+      const { question, question_en } = this.checkQuestion;
+      const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+      const playerIds = team.map((player) => player.id);
+      card.whoSees.add(this.currentTeam);
+      card.whoSees.add(this.currentTeam === 'red' ? 'blue' : 'red');
+      this.answerUserId = userId;
+      this.answerCard = card;
+      this.updateScore();
+      const score = this.score;
+      return { type: 'own', payload: { userId, question, question_en, card, score, playerIds } };
+    }
+    const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+    const playerIds = team.map((player) => player.id);
+    const spymasterId = this.turnChange();
+    return { type: 'no-change', payload: { team: this.currentTeam, spymasterId, playerIds } };
+  }
+
+  private chosenOpponentCard(card: Card): CardTestResult {
+    const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+    const recipients = team.map((player) => player.id);
+    card.whoSees.add(this.currentTeam);
+    const { id: cardId, color } = card;
+    const spymasterId = this.turnChange();
+    return {
+      type: 'alien',
+      payload: { spymasterId, team: this.currentTeam, cardId, color, recipients },
+    };
+  }
+
+  private chosenBombCard(card: Card): CardTestResult {
+    const opponentTeam = this.currentTeam === 'red' ? this.blueTeam : this.redTeam;
+    const winPlayerIds = opponentTeam.map((player) => player.id);
+    const gameEndInfo = this.getGameEndInfo(true);
+    card.whoSees.add(this.currentTeam);
+    gameEndInfo.winningTeam = opponentTeam === this.redTeam ? 'red' : 'blue';
+    this.gamePhase = 'finish';
+    return {
+      type: 'bomb',
+      payload: {
+        cardId: card.id,
+        color: card.color,
+        gameEndInfo,
+        winPlayerIds,
+      },
+    };
   }
 
   private getCheckQuestion(word: string): CheckQuestion | undefined {
@@ -315,7 +362,7 @@ export class Game {
           this.phaseTimer = null;
         }
         this.checkQuestion = null;
-        // this.answerCard = null;
+        this.answerCard = null;
         this.answerUserId = undefined;
         this.turnChange();
         callback(this.currentTeam);
@@ -385,11 +432,124 @@ export class Game {
 
   private resultsProcessing(): CheckResults {
     const correct = this.accepts.length === 0 || this.accepts.some((item) => item.accept);
+    this.setCheckResult(correct);
+
+    const isEnd = this.score.red >= CardCounts.RED || this.score.blue >= CardCounts.BLUE;
+    if (isEnd) {
+      this.gamePhase = 'finish';
+      const gameEndInfo = this.getGameEndInfo();
+      const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+      const winPlayerIds = team.map((player) => player.id);
+      return { type: 'game-end', payload: { gameEndInfo, winPlayerIds } };
+    }
+
     this.accepts = [];
     this.checkQuestion = null;
-    // this.answerCard = null;
+    this.answerCard = null;
     this.answerUserId = undefined;
     this.turnChange();
     return { type: 'turn-end', payload: { correct, team: this.currentTeam } };
+  }
+
+  private updateScore(): void {
+    if (this.answerCard?.color === this.currentTeam) {
+      if (this.currentTeam === 'red') {
+        this.score.red += 1;
+      } else {
+        this.score.blue += 1;
+      }
+    }
+  }
+
+  private getGameEndInfo(bombRevealed: boolean = false): GameEndInfo {
+    if (this.gameTimer) {
+      clearInterval(this.gameTimer);
+    }
+    const winningTeam = this.score.red >= CardCounts.RED ? 'red' : 'blue';
+    const redPlayerScores = this.redTeam.map((player) => this.getPlayerScore(player));
+    const bluePlayerScores = this.blueTeam.map((player) => this.getPlayerScore(player));
+    return {
+      winningTeam,
+      win: false,
+      bombRevealed,
+      score: this.score,
+      time: this.gameTime,
+      redPlayerScores,
+      bluePlayerScores,
+    };
+  }
+
+  private setCheckResult(correct: boolean): void {
+    if (this.answerUserId) {
+      const userAnswers = this.playerAnswers.get(this.answerUserId) || [];
+      userAnswers.push(correct);
+      this.playerAnswers.set(this.answerUserId, userAnswers);
+    }
+  }
+
+  private getPlayerScore(player: Player): PlayerScore {
+    const answers = this.playerAnswers.get(player.id) || [];
+    const score = answers.filter((answer) => answer === true).length;
+    return { id: player.id, username: player.username, score, attempts: answers.length };
+  }
+
+  private getChosenCards(): ChosenCard[] {
+    return [...this.chosenCards.entries()].map(([cardId, userIds]) => ({
+      cardId,
+      players: this.getAllPlayers().filter((player) => userIds.includes(player.id)),
+    }));
+  }
+
+  private getGamePhaseInfo(): GamePhaseInfo {
+    const guessPhaseInfo =
+      this.gamePhase === 'guess' ? { chosenCards: this.getChosenCards() } : null;
+    const answerPhaseInfo =
+      this.gamePhase === 'answer' && this.checkQuestion
+        ? {
+            word: this.checkQuestion.word,
+            question: this.checkQuestion.question,
+            question_en: this.checkQuestion.question_en,
+          }
+        : null;
+    const checkPhaseInfo =
+      this.gamePhase === 'check' && this.checkQuestion
+        ? {
+            word: this.checkQuestion.word,
+            question: this.checkQuestion.question,
+            question_en: this.checkQuestion.question_en,
+            referenceAnswer: this.checkQuestion.referenceAnswer,
+            referenceAnswer_en: this.checkQuestion.referenceAnswer_en,
+          }
+        : null;
+    const finishPhaseInfo =
+      this.gamePhase === 'finish' ? { gameEndInfo: this.getGameEndInfo() } : null;
+
+    return { guessPhaseInfo, answerPhaseInfo, checkPhaseInfo, finishPhaseInfo };
+  }
+
+  public getGameStateForClient(userId: string): GameStateForClient {
+    const player = this.getPlayer(userId);
+
+    const cards: Card[] = this.cards.map((card) => ({
+      ...card,
+      color:
+        (player && card.whoSees.has(player.team)) || (player && player.role === 'spymaster')
+          ? card.color
+          : 'unknown',
+    }));
+
+    return {
+      id: this.id,
+      cards,
+      currentTeam: this.currentTeam,
+      isSpymaster: player ? player.role === 'spymaster' : false,
+      redTeam: this.redTeam,
+      blueTeam: this.blueTeam,
+      gamePhase: this.gamePhase,
+      gameTime: this.gameTime,
+      phaseTime: this.phaseTime,
+      score: this.score,
+      gamePhaseInfo: this.getGamePhaseInfo(),
+    };
   }
 }

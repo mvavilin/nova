@@ -13,7 +13,7 @@ import type {
   ServerToClientEvents,
 } from '../../../packages/shared/src/socketEvents.ts';
 import { setupConnectionHandler } from './ws/socketHandlers/sessionHandlers.ts';
-import { sessionMiddleware } from './ws/sessionMiddleware.ts';
+// import { sessionMiddleware } from './ws/sessionMiddleware.ts';
 
 const FRONTEND_URL = process.env.FRONTEND_URL || ServerConstants.DEFAULT_FRONTEND_URL;
 const FRONTEND_URL_BACKUP = process.env.FRONTEND_URL_BACKUP;
@@ -49,7 +49,7 @@ app.use('', authRouter);
 app.use(errorHandler);
 
 io.use(authMiddleware);
-io.use(sessionMiddleware);
+// io.use(sessionMiddleware);
 
 setupConnectionHandler();
 

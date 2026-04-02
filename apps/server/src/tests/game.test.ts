@@ -1,5 +1,9 @@
 import { expect, test, vi } from 'vitest';
-import { CardCounts } from '../../../../packages/shared/src/types/game.ts';
+import {
+  CardCounts,
+  type Card,
+  type GameEndInfo,
+} from '../../../../packages/shared/src/types/game.ts';
 import type { Player } from '../../../../packages/shared/src/types/room.ts';
 import { v4 as uuid } from 'uuid';
 import { Game } from '../rooms/game.ts';
@@ -11,6 +15,24 @@ import {
   type CardTestResult,
 } from '../../../../packages/shared/src/socketEvents.ts';
 import type { CheckQuestion } from '../../../../packages/shared/src/types/question.ts';
+
+const redSpymasterId = uuid();
+const redSpymaster: Player = {
+  id: redSpymasterId,
+  username: 'redSpymaster',
+  team: 'red',
+  role: 'spymaster',
+};
+const redAgentId: string = uuid();
+const redAgent: Player = { id: redAgentId, username: 'redAgent', team: 'red', role: 'agent' };
+
+const blueSpymasterId = uuid();
+const blueSpymaster: Player = {
+  id: blueSpymasterId,
+  username: 'blueSpymaster',
+  team: 'blue',
+  role: 'spymaster',
+};
 
 test('The game should create 25 cards', () => {
   const game = new Game('', 4);
@@ -451,7 +473,7 @@ test('The giveClue method called the callback function with no-change type if ca
   vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
   const result: CardTestResult = {
     type: 'no-change',
-    payload: { spymasterId: blueSpymasterId, team: 'blue' },
+    payload: { spymasterId: blueSpymasterId, team: 'blue', playerIds: [redSpymasterId, agentId] },
   };
   expect(callback).toHaveBeenCalledWith(result);
 });
@@ -459,24 +481,8 @@ test('The giveClue method called the callback function with no-change type if ca
 test('The giveClue method called the callback function with alien type if chosen card is own', () => {
   vi.useFakeTimers();
   const game = new Game('', 4);
-  const redSpymasterId = uuid();
-  const redSpymaster: Player = {
-    id: redSpymasterId,
-    username: 'spymaster',
-    team: 'red',
-    role: 'spymaster',
-  };
-  const agentId: string = uuid();
-  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
-  const blueSpymasterId = uuid();
-  const blueSpymaster: Player = {
-    id: blueSpymasterId,
-    username: 'spymaster2',
-    team: 'blue',
-    role: 'spymaster',
-  };
   game.addPlayer(redSpymaster);
-  game.addPlayer(agent);
+  game.addPlayer(redAgent);
   game.addPlayer(blueSpymaster);
   game.initial();
   const clue = 'clue';
@@ -488,16 +494,17 @@ test('The giveClue method called the callback function with alien type if chosen
   if (card) {
     card.color = 'red';
     const { id: cardId } = card;
-    game.chooseCard(agentId, cardId);
+    game.chooseCard(redAgentId, cardId);
     vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
     const checkQuestion = game['checkQuestion'];
     expect(checkQuestion).not.toBeNull();
     if (checkQuestion) {
-      const { word, question, question_en } = checkQuestion;
+      const { question, question_en } = checkQuestion;
       const playerIds = game['redTeam'].map((player) => player.id);
+      const score = { red: 1, blue: 0 };
       const result: CardTestResult = {
         type: 'own',
-        payload: { userId: agentId, word, question, question_en, playerIds },
+        payload: { userId: redAgentId, question, question_en, card, score, playerIds },
       };
       expect(callback).toHaveBeenCalledWith(result);
     }
@@ -507,24 +514,8 @@ test('The giveClue method called the callback function with alien type if chosen
 test('The giveClue method called the callback function with alien type if chosen card is alien', () => {
   vi.useFakeTimers();
   const game = new Game('', 4);
-  const redSpymasterId = uuid();
-  const redSpymaster: Player = {
-    id: redSpymasterId,
-    username: 'spymaster',
-    team: 'red',
-    role: 'spymaster',
-  };
-  const agentId: string = uuid();
-  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
-  const blueSpymasterId = uuid();
-  const blueSpymaster: Player = {
-    id: blueSpymasterId,
-    username: 'spymaster2',
-    team: 'blue',
-    role: 'spymaster',
-  };
   game.addPlayer(redSpymaster);
-  game.addPlayer(agent);
+  game.addPlayer(redAgent);
   game.addPlayer(blueSpymaster);
   game.initial();
   const clue = 'clue';
@@ -536,7 +527,7 @@ test('The giveClue method called the callback function with alien type if chosen
   if (card) {
     card.color = 'blue';
     const { id: cardId, color } = card;
-    game.chooseCard(agentId, cardId);
+    game.chooseCard(redAgentId, cardId);
     vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
     const result: CardTestResult = {
       type: 'alien',
@@ -545,7 +536,7 @@ test('The giveClue method called the callback function with alien type if chosen
         team: 'blue',
         cardId,
         color,
-        recipients: [redSpymasterId, agentId],
+        recipients: [redSpymasterId, redAgentId],
       },
     };
     expect(callback).toHaveBeenCalledWith(result);
@@ -555,24 +546,8 @@ test('The giveClue method called the callback function with alien type if chosen
 test('The giveClue method called the callback function with alien type if question in not found', () => {
   vi.useFakeTimers();
   const game = new Game('', 4);
-  const redSpymasterId = uuid();
-  const redSpymaster: Player = {
-    id: redSpymasterId,
-    username: 'spymaster',
-    team: 'red',
-    role: 'spymaster',
-  };
-  const agentId: string = uuid();
-  const agent: Player = { id: agentId, username: 'agent', team: 'red', role: 'agent' };
-  const blueSpymasterId = uuid();
-  const blueSpymaster: Player = {
-    id: blueSpymasterId,
-    username: 'spymaster2',
-    team: 'blue',
-    role: 'spymaster',
-  };
   game.addPlayer(redSpymaster);
-  game.addPlayer(agent);
+  game.addPlayer(redAgent);
   game.addPlayer(blueSpymaster);
   game.initial();
   const clue = 'clue';
@@ -585,13 +560,17 @@ test('The giveClue method called the callback function with alien type if questi
     card.color = 'red';
     card.word = 'word';
     const { id: cardId } = card;
-    game.chooseCard(agentId, cardId);
+    game.chooseCard(redAgentId, cardId);
     vi.advanceTimersByTime(SECOND_COUNT_FOR_GUESS * 1000);
     const checkQuestion = game['checkQuestion'];
     expect(checkQuestion).toBeNull();
     const result: CardTestResult = {
       type: 'no-change',
-      payload: { spymasterId: blueSpymasterId, team: 'blue' },
+      payload: {
+        spymasterId: blueSpymasterId,
+        team: 'blue',
+        playerIds: [redSpymasterId, redAgentId],
+      },
     };
     expect(callback).toHaveBeenCalledWith(result);
   }
@@ -763,4 +742,122 @@ test('The giveCheck method should return the result of the check', () => {
   game['gamePhase'] = 'check';
   game.giveCheck(playerId, true);
   expect(game['accepts']).toEqual([{ userId: playerId, accept: true }]);
+});
+
+test('The updateScore method should update the score of the teams', () => {
+  const game = new Game('', 4);
+  game['score'] = { red: 1, blue: 2 };
+  game['currentTeam'] = 'red';
+  game['answerCard'] = { id: uuid(), word: 'word', color: 'red', whoSees: new Set() };
+  game['updateScore']();
+  expect(game['score']).toEqual({ red: 2, blue: 2 });
+  game['currentTeam'] = 'blue';
+  game['answerCard'] = { id: uuid(), word: 'word', color: 'blue', whoSees: new Set() };
+  game['updateScore']();
+  expect(game['score']).toEqual({ red: 2, blue: 3 });
+});
+
+test('The resultsProcessing method should return the winning team if a team has won', () => {
+  const game = new Game('', 4);
+  game.addPlayer(redAgent);
+  game['answerUserId'] = redAgentId;
+  game['score'] = { red: 9, blue: 8 };
+  const gameEndInfo: GameEndInfo = {
+    bluePlayerScores: [],
+    redPlayerScores: [
+      {
+        id: redAgentId,
+        username: 'redAgent',
+        score: 1,
+        attempts: 1,
+      },
+    ],
+    winningTeam: 'red',
+    win: false,
+    bombRevealed: false,
+    score: { red: 9, blue: 8 },
+    time: 0,
+  };
+  let result = game['resultsProcessing']();
+  expect(result).toEqual({
+    type: 'game-end',
+    payload: { gameEndInfo, winPlayerIds: [redAgentId] },
+  });
+  game['answerUserId'] = undefined;
+  game['score'] = { red: 8, blue: 9 };
+  game['currentTeam'] = 'blue';
+  gameEndInfo.winningTeam = 'blue';
+  gameEndInfo.score = { red: 8, blue: 9 };
+  result = game['resultsProcessing']();
+  expect(result).toEqual({ type: 'game-end', payload: { gameEndInfo, winPlayerIds: [] } });
+});
+
+test('The getGameEndInfo method should stop the game timer and return the game end info', () => {
+  vi.useFakeTimers();
+  const game = new Game('', 4);
+  game.addPlayer(blueSpymaster);
+  game.initial();
+  vi.advanceTimersByTime(5000);
+  expect(game['gameTime']).toBe(5);
+  game['getGameEndInfo']();
+  vi.advanceTimersByTime(1000);
+  expect(game['gameTime']).toBe(5);
+});
+
+test('The guessTest method should ', () => {
+  const game = new Game('', 4);
+  game.addPlayer(redAgent);
+  game.addPlayer(blueSpymaster);
+  game.initial();
+  game['gamePhase'] = 'guess';
+  const bombCard: Card = { id: uuid(), word: 'word', color: 'bomb', whoSees: new Set() };
+  game['cards'] = [bombCard];
+  game.chooseCard(redAgentId, bombCard.id);
+  const result = game['guessTest']();
+  const gameEndInfo = game['getGameEndInfo'](true);
+  const cardTestResult: CardTestResult = {
+    type: 'bomb',
+    payload: {
+      cardId: bombCard.id,
+      color: bombCard.color,
+      winPlayerIds: [blueSpymasterId],
+      gameEndInfo,
+    },
+  };
+
+  expect(result).toEqual(cardTestResult);
+});
+
+test('The getGameStateForClient should return gameStateInfo', () => {
+  const game = new Game('', 4);
+  game.addPlayer(blueSpymaster);
+  game.addPlayer(redAgent);
+  game.initial();
+  const neutralCard: Card = { id: uuid(), word: 'word', color: 'neutral', whoSees: new Set() };
+  game['cards'] = [neutralCard];
+  const gameInfo = game.getGameInfo(redAgentId);
+  game['gamePhase'] = 'guess';
+  const cards = gameInfo.cards;
+  game.chooseCard(redAgentId, neutralCard.id);
+  const result = game.getGameStateForClient(redAgentId);
+  expect(result).toEqual({
+    id: game['id'],
+    cards,
+    currentTeam: game['currentTeam'],
+    isSpymaster: false,
+    redTeam: game['redTeam'],
+    blueTeam: game['blueTeam'],
+    gamePhase: game['gamePhase'],
+    gameTime: game['gameTime'],
+    phaseTime: game['phaseTime'],
+    score: game['score'],
+    gamePhaseInfo: {
+      guessPhaseInfo: {
+        chosenCards: [{ cardId: neutralCard.id, players: [redAgent] }],
+      },
+      answerPhaseInfo: null,
+      checkPhaseInfo: null,
+      finishPhaseInfo: null,
+    },
+  });
 });

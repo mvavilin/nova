@@ -7,7 +7,6 @@ import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
 import { AppActionTypes, RoomPageActionTypes, SocketActionTypes } from '@actions';
 import { URLS } from '@RouterAPI/router.constants';
 import { router } from '@router';
-
 import { TOKENS } from '@constants/tokens';
 import { saveSessionStorageData, showErrorToast } from '@utils';
 import store from '@store';
@@ -16,6 +15,50 @@ import MessageType from '@constants/messageType';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
+    // if (context.action.type === SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN) {
+    //   try {
+    //     const authToken = context.action.payload.authToken;
+
+    //     if (authToken === null) throw new Error('Authorization token not found');
+
+    //     socketClient.onSessionToken(({ sessionToken }) => {
+    //       saveSessionStorageData(TOKENS.SESSION, sessionToken);
+
+    //       socketClient.off(ServerEventType.SESSION_TOKEN);
+    //     });
+
+    //     socketClient.onSessionConnect(({ userStatus, userId, username }) => {
+    //       context.next({
+    //         type: AppActionTypes.UPDATE_STORE,
+    //         payload: { userId, username },
+    //       });
+
+    //       if (userStatus === UserStatusType.IN_LOBBY) router.init(URLS.LOBBY());
+    //       if (userStatus === UserStatusType.IN_ROOM)
+    //         store.dispatch({
+    //           type: SocketActionTypes.ROOM_ASK_ROOM_INFO,
+    //         });
+
+    //       // if (userStatus === UserStatusType.IN_GAME) {
+
+    //       // }
+
+    //       socketClient.off(ServerEventType.SESSION_TOKEN);
+    //     });
+
+    //     socketClient.onError(({ code }) => {
+    //       showErrorToast(code, SOCKET_ERROR_MESSAGES.GENERAL_ERROR);
+
+    //       socketClient.off(ServerEventType.ERROR);
+    //     });
+
+    //     socketClient.connect(authToken);
+    //   } catch (error) {
+    //     router.navigate(URLS.LOGIN());
+    //     showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_SESSION_TOKEN);
+    //   }
+    // }
+
     if (context.action.type === SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN) {
       try {
         const authToken = context.action.payload.authToken;
@@ -72,7 +115,6 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
 
           socketClient.onError(({ code }) => {
             showErrorToast(code, SOCKET_ERROR_MESSAGES.ON_ERROR);
-
             socketClient.off(ServerEventType.ERROR);
           });
 
@@ -107,11 +149,14 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
 
         socketClient.onError(({ code }) => {
           showErrorToast(code, SOCKET_ERROR_MESSAGES.ON_ERROR);
-
           socketClient.off(ServerEventType.ERROR);
         });
 
+        const randomId = Math.random();
+        console.log(`[${randomId}] Подписываюсь на ROOM_STATE`);
+
         socketClient.onRoomState(({ roomInfo }) => {
+          console.log(`[${randomId}] ROOM_STATE получен!`);
           socketClient.off(ServerEventType.ROOM_STATE);
 
           context.next({

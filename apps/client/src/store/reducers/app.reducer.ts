@@ -37,8 +37,11 @@ export default function appReducer(state: State, action: AppActions): State {
 
     case AppActionTypes.RESET_DATA: {
       return {
-        ...initialState,
+        ...state,
         authStatus: false,
+        id: null,
+        username: null,
+        email: null,
       };
     }
 

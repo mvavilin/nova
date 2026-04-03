@@ -29,9 +29,12 @@ export default function appAfterware<State>(): Afterware<State> {
         removeSessionStorageData(TOKENS.AUTH);
         removeSessionStorageData(TOKENS.SESSION);
 
-        router.navigate(URLS.LOGIN());
+        const currentPath = globalThis.location.pathname;
+        if (currentPath !== URLS.LOGIN()) {
+          router.navigate(URLS.LOGIN());
+        }
 
-        // socketClient.disconnect();
+        socketClient.disconnect();
       } catch (error) {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
       }

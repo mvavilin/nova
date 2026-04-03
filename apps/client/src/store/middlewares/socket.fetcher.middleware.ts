@@ -18,6 +18,8 @@ import { Toast } from '@components';
 import MessageType from '@constants/messageType';
 import { SESSION_STORAGE_KEYS } from '@constants/sessionStorageKeys';
 import { isObject } from '@utils/isObject';
+import { t } from 'i18n';
+import { TranslationKeys } from '@/i18n/translationKeys';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
@@ -44,8 +46,11 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
 
         socketClient.onError(({ code }) => {
           if (code === SocketErrorCode.ALREADY_ONLINE) {
-            showErrorToast(code, SOCKET_ERROR_MESSAGES.GENERAL_ERROR);
-
+            // showErrorToast(code, SOCKET_ERROR_MESSAGES.GENERAL_ERROR);
+            showErrorToast(
+              t(TranslationKeys.SOCKET_ERROR_ALREADY_ONLINE),
+              t(TranslationKeys.SOCKET_ERROR)
+            );
             context.next({
               type: AppActionTypes.RESET_DATA,
             });

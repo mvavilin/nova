@@ -1,7 +1,7 @@
 import StateAPI from '@StateAPI';
 import { initialState } from '@initialState';
 import { localStorageProps } from '@constants/localStorage.constants';
-import { getLocalStorageData } from '@utils';
+import { getSessionStorageData } from '@utils';
 
 import type { State } from '@State';
 import type { AppActions } from '@AppActions';
@@ -13,6 +13,7 @@ import {
   socketReducer,
   appReducer,
   roomReducer,
+  gameReducer,
 } from '@reducers';
 import {
   testSenderMiddleware,
@@ -20,40 +21,43 @@ import {
   formFetcherMiddleware,
   socketMiddleware,
   roomMiddleware,
+  gameMiddleware,
 } from '@middlewares';
-import {
-  loggerAfterware,
-  welcomePageAfterware,
-  socketAfterware,
-  appAfterware,
-  formAfterware,
-} from '@afterwares';
+import { loggerAfterware, welcomePageAfterware, socketAfterware, appAfterware } from '@afterwares';
 import lobbyPageAfterware from './afterwares/lobby.afterware';
 // chore: remove in production
 // import { initialState } from '@__mocks__/store/initialState';
 
 function loadState(): State {
-  const saved = getLocalStorageData<Partial<State>>(localStorageProps.store);
+  const saved = getSessionStorageData<Partial<State>>(localStorageProps.store);
   return { ...initialState, ...saved };
 }
 
 const store = new StateAPI<State, AppActions>(loadState());
 
-store.addReducer(testReducer, welcomeReducer, formReducer, socketReducer, appReducer, roomReducer);
+store.addReducer(
+  testReducer,
+  welcomeReducer,
+  formReducer,
+  socketReducer,
+  appReducer,
+  roomReducer,
+  gameReducer
+);
 store.addMiddleware(
   testSenderMiddleware(),
   testFetcherMiddleware(),
   formFetcherMiddleware(),
   socketMiddleware(),
-  roomMiddleware()
+  roomMiddleware(),
+  gameMiddleware()
 );
 store.addAfterware(
   loggerAfterware(),
   welcomePageAfterware(),
   socketAfterware(),
   appAfterware(),
-  lobbyPageAfterware(),
-  formAfterware()
+  lobbyPageAfterware()
 );
 
 export default store;

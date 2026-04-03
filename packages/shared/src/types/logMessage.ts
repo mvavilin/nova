@@ -19,6 +19,8 @@ export const LogMessageKeys = {
   LOG_ANSWER_COUNTED_RED: 'LOG_ANSWER_COUNTED_RED',
   LOG_ANSWER_COUNTED_BLUE: 'LOG_ANSWER_COUNTED_BLUE',
   LOG_SCORE_POINT: 'LOG_SCORE_POINT',
+
+  LOG_HINT_PHASE_STARTED: 'LOG_HINT_PHASE_STARTED',
 } as const;
 
 export type LogMessageKey = (typeof LogMessageKeys)[keyof typeof LogMessageKeys];

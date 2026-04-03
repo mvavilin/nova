@@ -7,6 +7,7 @@ import type {
   SocketActions,
   LocalAppActions,
   RoomPageActions,
+  GameActions,
 } from '@actions';
 
 export type AppActions =
@@ -16,4 +17,5 @@ export type AppActions =
   | SocketActions
   | LocalAppActions
   | RoomPageActions
-  | LobbyPageActions;
+  | LobbyPageActions
+  | GameActions;

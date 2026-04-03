@@ -797,15 +797,19 @@ The main disadvantage is that socket.io requires an authentication token during 
       ```
 
     - If a bomb is selected, the game is lost. Messages are sent to all participants with the characters
+
       ```
         { type: 'game:card-shown'; payload: { cardId: string; color: CardColor } }
       ```
+
       and
+
       ```
         { type: 'game:game-end'; payload: { gameEndInfo: GameEndInfo } }
       ```
+
       The bombRevealed field in gameEndInfo will be true
- 
+
     - If no cards are selected, then (not implemented)
 
     </details>
@@ -864,10 +868,12 @@ The main disadvantage is that socket.io requires an authentication token during 
       { type: 'game:check-give'; payload: { accept: boolean } }
     ```
 
-    When the timer expires, the server sends a  message
+    When the timer expires, the server sends a message
+
     ```
       { type: 'game:check-timeout' }
     ```
+
     to the checking players and processes the opponent's messages. If no one has voted or at least one has accepted the response, the response is counted
 
     If the game is not over yet, the server sends a message to all game participants about the results of checking the answer to the card question
@@ -883,13 +889,17 @@ The main disadvantage is that socket.io requires an authentication token during 
     ```
 
     If the team wins, the server sends a message to all game participants
+
     ```
       { type: 'game:check-results'; payload: { correct: boolean } }
     ```
+
     and
+
     ```
       { type: 'game:game-end'; payload: { gameEndInfo: GameEndInfo } }
     ```
+
     The bombRevealed field in gameEndInfo will be true
 
     </details>
@@ -912,7 +922,7 @@ The main disadvantage is that socket.io requires an authentication token during 
     ```
       { type: 'game:state'; payload: { gameState: GameStateForClient } }
     ```
-  
+
     </details>
 
 - ### List of events sent to the server when working with profile (stored in the @repo/shared/src/socketEvents.ts)
@@ -1098,6 +1108,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   ```
 
   - Game score
+
   ```
     export type Score = {
       red: number;
@@ -1106,6 +1117,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   ```
 
   - Game end information
+
   ```
     export interface GameEndInfo {
       winningTeam: Teams;
@@ -1119,14 +1131,16 @@ The main disadvantage is that socket.io requires an authentication token during 
   ```
 
   - Chosen card
+
   ```
     export interface ChosenCard {
       cardId: string;
       players: Player[];
     }
   ```
-  
+
   - Guess phase information
+
   ```
     export interface GuessPhaseInfo {
       chosenCards: ChosenCard[];
@@ -1134,6 +1148,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   ```
 
   - Answer phase information
+
   ```
     export interface AnswerPhaseInfo {
       word: string;
@@ -1143,6 +1158,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   ```
 
   - Check phase information
+
   ```
     export interface CheckPhaseInfo {
       word: string;
@@ -1154,6 +1170,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   ```
 
   - Finish phase information
+
   ```
     export interface FinishPhaseInfo {
       gameEndInfo: GameEndInfo;
@@ -1161,6 +1178,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   ```
 
   - Game phase information
+
   ```
     export interface GamePhaseInfo {
       guessPhaseInfo: GuessPhaseInfo | null;
@@ -1171,6 +1189,7 @@ The main disadvantage is that socket.io requires an authentication token during 
   ```
 
   - Game state for client during reconnect
+
   ```
     export type GameStateForClient = {
       id: string;

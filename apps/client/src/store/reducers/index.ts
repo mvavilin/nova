@@ -9,3 +9,5 @@ export { default as welcomeReducer } from '@reducers/welcome.reducer';
 export { default as appReducer } from '@reducers/app.reducer';
 
 export { default as roomReducer } from '@reducers/room.reducer';
+
+export { default as gameReducer } from '@reducers/game.reducer';

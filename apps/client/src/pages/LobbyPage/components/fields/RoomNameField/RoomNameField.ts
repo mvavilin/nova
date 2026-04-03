@@ -21,6 +21,11 @@ export default class RoomNameField extends ContainerComponent {
     this.render();
   }
 
+  private handleCreateRoom(): void {
+    if (!this.input || this.input.isEmpty()) return;
+    this.onSubmit();
+  }
+
   private render(): void {
     this.label = new FieldLabel({
       text: t(TranslationKeys.ROOM_NAME_FIELD_TITLE),
@@ -37,8 +42,10 @@ export default class RoomNameField extends ContainerComponent {
         input: (): void => {
           if (!this.input) return;
           this.input.isEmpty();
-
           this.onInput(this.input.value);
+        },
+        keydown: (event: Event): void => {
+          if (event instanceof KeyboardEvent && event.key === 'Enter') this.handleCreateRoom();
         },
       },
     });
@@ -46,13 +53,7 @@ export default class RoomNameField extends ContainerComponent {
     this.button = new Button({
       label: t(TranslationKeys.ROOM_NAME_FIELD_CREATE_BUTTON_LABEL),
       classes: FORM_CLASSES.BUTTON,
-      listeners: {
-        click: (): void => {
-          if (this.input?.isEmpty()) return;
-
-          this.onSubmit();
-        },
-      },
+      listeners: { click: (): void => this.handleCreateRoom() },
     });
 
     const inputRow = new ContainerComponent({

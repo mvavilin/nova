@@ -11,15 +11,27 @@ import type { CheckQuestion } from './types/question.ts';
 import type { Player, RoomInfo, RoomPreview, RoomSettings, Teams } from './types/room.ts';
 
 export enum ClientEventType {
+  SESSION_ASK_STATUS = 'session:ask-status',
+  SESSION_LOGOUT = 'session:logout',
+  // Room events
   ROOM_CREATE = 'room:create',
   ROOM_ASK_LIST = 'room:ask-list',
   ROOM_SEARCH = 'room:search',
   ROOM_JOIN = 'room:join',
   ROOM_LEAVE = 'room:leave',
   ROOM_ASK_ROOM_INFO = 'room:ask-room-info',
-  SESSION_PLAYER_EXIT = 'session:player-exit',
+  // Team events
   TEAM_CHANGE = 'team:change',
+  // Game events
   GAME_ADD_PLAYER = 'game:add-player',
+  GAME_CLUE_GIVE = 'game:clue-give',
+  GAME_CARD_CHOOSE = 'game:card-choose',
+  GAME_ANSWER_GIVE = 'game:answer-give',
+  GAME_CHECK_GIVE = 'game:check-give',
+  // Profile events
+  PROFILE_ENTER = 'profile:enter',
+  PROFILE_LEAVE = 'profile:leave',
+  PROFILE_ASK_INFO = 'profile:ask-info',
 }
 
 export enum ServerEventType {
@@ -28,33 +40,62 @@ export enum ServerEventType {
   SESSION_PLAYER_CONNECTED = 'session:player-connected',
   SESSION_PLAYER_DISCONNECTED = 'session:player-disconnected',
   SESSION_PLAYER_EXIT = 'session:player-exit',
+  SESSION_SEND_STATUS = 'session:send-status',
+  // Room events
   ROOM_SEND_LIST = 'room:send-list',
   ROOM_CREATED = 'room:created',
   ROOM_STATE = 'room:state',
   ROOM_UPDATE_PREVIEW = 'room:update-review',
   ROOM_PLAYER_JOINED = 'room:player-joined',
   ROOM_PLAYER_LEFT = 'room:player-left',
+  // Team events
   TEAM_CHANGED = 'team:changed',
+  // Game events
   GAME_START_TIMER = 'game:start-timer',
   GAME_START = 'game:start',
+  GAME_ASK_CLUE = 'game:ask-clue',
+  GAME_CLUE_TIMEOUT = 'game:clue-timeout',
+  GAME_TURN_CHANGED = 'game:turn-changed',
+  GAME_CLUE_GIVEN = 'game:clue-given',
+  GAME_CARD_CHOSEN = 'game:card-chosen',
+  GAME_CARD_SHOWN = 'game:card-shown',
+  GAME_ASK_ANSWER = 'game:ask-answer',
+  GAME_ANSWER_TIMEOUT = 'game:answer-timeout',
+  GAME_ASK_CHECK = 'game:ask-check',
+  GAME_CHECK_RESULTS = 'game:check-results',
+  // Profile events
+  PROFILE_ENTERED = 'profile:entered',
+  PROFILE_LEFT = 'profile:left',
+  // Connection errors
   ERROR = 'error',
   CONNECT_ERROR = 'connect_error',
   CONNECT = 'connect',
 }
 
 export enum SocketErrorCode {
+  PLAYER_NOT_FOUND = 'PLAYER_NOT_FOUND',
   ROOM_NOT_FOUND = 'ROOM_NOT_FOUND',
+  GAME_NOT_FOUND = 'GAME_NOT_FOUND',
   ROOM_FULL = 'ROOM_FULL',
+  THERE_IS_ALREADY_SPYMASTER = 'THERE_IS_ALREADY_SPYMASTER',
+  THERE_ARE_ALREADY_AGENTS = 'THERE_ARE_ALREADY_AGENTS',
   INVALID_ACTION = 'INVALID_ACTION',
+  AUTH_REQUIRED = 'AUTH_REQUIRED',
+  ALREADY_ONLINE = 'ALREADY_ONLINE',
+  GAME_IS_NOT_FULL = 'GAME_IS_NOT_FULL',
+  ACTION_IS_PROHIBITED = 'ACTION_IS_PROHIBITED',
 }
 
 export enum UserStatusType {
   IN_LOBBY = 'IN_LOBBY',
   IN_ROOM = 'IN_ROOM',
   IN_GAME = 'IN_GAME',
+  IN_PROFILE = 'IN_PROFILE',
 }
 
 export type UserStatus = 'IN_LOBBY' | 'IN_ROOM' | 'IN_GAME' | 'IN_PROFILE';
+
+export type GAME_PHASE = 'clue' | 'guess' | 'answer' | 'check' | 'finish';
 
 export type CardTestResult =
   | {

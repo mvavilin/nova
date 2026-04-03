@@ -27,7 +27,7 @@ export const FORM_CLASSES = {
   INPUT_CONTAINER: `flex flex-col gap-2 w-full`,
   INPUT_ROW: `flex gap-2 items-center relative`,
   INPUT: `flex-[2] text-xs sm:text-base`,
-  INPUT_INVAVLID: 'outline outline-1 outline-red-600',
+  INPUT_INVAVLID: 'outline outline-1 outline-brand',
   BUTTON: `flex-[1] text-sm sm:text-base`,
   LABEL: `w-full block font-bold`,
 } as const;

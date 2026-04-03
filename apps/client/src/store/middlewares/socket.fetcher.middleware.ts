@@ -1,6 +1,11 @@
 import type { Middleware } from '@StateAPI';
 import type { AppActions } from '@AppActions';
-import { ClientEventType, ServerEventType, UserStatusType } from '@repo/shared/src/socketEvents';
+import {
+  ClientEventType,
+  ServerEventType,
+  SocketErrorCode,
+  UserStatusType,
+} from '@repo/shared/src/socketEvents';
 
 import { socketClient } from '@SocketClientAPI';
 import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
@@ -9,10 +14,17 @@ import { URLS } from '@RouterAPI/router.constants';
 import { router } from '@router';
 
 import { TOKENS } from '@constants/tokens';
-import { saveSessionStorageData, showErrorToast } from '@utils';
+import {
+  saveSessionStorageData,
+  showErrorToast,
+  removeSessionStorageData,
+  getSessionStorageData,
+} from '@utils';
 import store from '@store';
 import { Toast } from '@components';
 import MessageType from '@constants/messageType';
+import { SESSION_STORAGE_KEYS } from '@constants/sessionStorageKeys';
+import { isObject } from '@utils/isObject';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
@@ -31,19 +43,23 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         socketClient.onSessionConnect(({ userStatus }) => {
           if (userStatus === UserStatusType.IN_LOBBY) router.init(URLS.LOBBY());
           if (userStatus === UserStatusType.IN_ROOM)
-            store.dispatch({
-              type: SocketActionTypes.ROOM_ASK_ROOM_INFO,
-            });
-
-          // if (userStatus === UserStatusType.IN_GAME) {
-
-          // }
+            store.dispatch({ type: SocketActionTypes.ROOM_ASK_ROOM_INFO });
+          if (userStatus === UserStatusType.IN_GAME)
+            store.dispatch({ type: SocketActionTypes.ROOM_ASK_GAME_INFO });
 
           socketClient.off(ServerEventType.SESSION_TOKEN);
         });
 
         socketClient.onError(({ code }) => {
-          showErrorToast(code, SOCKET_ERROR_MESSAGES.GENERAL_ERROR);
+          if (code === SocketErrorCode.ALREADY_ONLINE) {
+            showErrorToast(code, SOCKET_ERROR_MESSAGES.GENERAL_ERROR);
+
+            removeSessionStorageData(TOKENS.AUTH);
+            removeSessionStorageData(TOKENS.SESSION);
+            removeSessionStorageData(SESSION_STORAGE_KEYS.STORE);
+
+            socketClient.disconnect();
+          }
 
           socketClient.off(ServerEventType.SESSION_TOKEN);
         });
@@ -96,7 +112,8 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         const { roomId } = context.action.payload;
 
         socketClient.onError(({ code }) => {
-          showErrorToast(code, SOCKET_ERROR_MESSAGES.ON_ERROR);
+          if (code === SocketErrorCode.ROOM_NOT_FOUND)
+            showErrorToast(code, SOCKET_ERROR_MESSAGES.ON_ERROR);
 
           socketClient.off(ServerEventType.ERROR);
         });
@@ -175,6 +192,18 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         });
 
         socketClient.emit(ClientEventType.ROOM_ASK_ROOM_INFO);
+      } catch (error) {
+        showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
+      }
+    }
+
+    // точка реконнекта пользователя, включающая запрос информации об игре и навигацию в нее
+    if (context.action.type === SocketActionTypes.ROOM_ASK_GAME_INFO) {
+      try {
+        const gameInfo = getSessionStorageData(SESSION_STORAGE_KEYS.GAME_INFO);
+
+        if (isObject(gameInfo) && 'id' in gameInfo && typeof gameInfo['id'] === 'string')
+          router.init(URLS.GAME(gameInfo['id']));
       } catch (error) {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
       }

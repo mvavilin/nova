@@ -5,7 +5,7 @@ export default class App extends ContainerComponent {
   constructor({ ...rest }: AppProperties = {}) {
     super({
       id: 'app',
-      classes: 'flex items-center min-h-screen my-auto',
+      classes: 'flex items-center min-h-screen my-auto bg-slate-400',
       ...rest,
     });
   }

@@ -136,6 +136,7 @@ export const TranslationKeys = {
 
   RED_TURN: 'redTurn',
   BLUE_TURN: 'blueTurn',
+  CHOOSING_TURN: 'choosingTurn',
 
   RED_TEAM: 'redTeam',
   BLUE_TEAM: 'blueTeam',
@@ -157,6 +158,7 @@ export const TranslationKeys = {
   [LogMessageKeys.LOG_ANSWER_COUNTED_RED]: 'logAnswerCountedRed',
   [LogMessageKeys.LOG_ANSWER_COUNTED_BLUE]: 'logAnswerCountedBlue',
   [LogMessageKeys.LOG_SCORE_POINT]: 'logScorePoint',
+  [LogMessageKeys.LOG_HINT_PHASE_STARTED]: 'logHintPhaseStarted',
 
   UNDO_LABEL: 'undoLabel',
 

@@ -15,7 +15,7 @@ const lobbyPage = {
     [TranslationKeys.ROOM_NAME_FIELD_PLACEHOLDER]: 'Enter room name',
     [TranslationKeys.ROOM_NAME_FIELD_CREATE_BUTTON_LABEL]: 'Create',
 
-    [TranslationKeys.JOIN_ROOM_FIELD_TITLE]: 'Join room',
+    [TranslationKeys.JOIN_ROOM_FIELD_TITLE]: 'Join room by ID',
     [TranslationKeys.JOIN_ROOM_FIELD_PLACEHOLDER]: 'Enter room ID',
     [TranslationKeys.JOIN_ROOM_FIELD_JOIN_BUTTON_LABEL]: 'Join',
 
@@ -48,7 +48,7 @@ const lobbyPage = {
     [TranslationKeys.ROOM_NAME_FIELD_PLACEHOLDER]: 'Введите название комнаты',
     [TranslationKeys.ROOM_NAME_FIELD_CREATE_BUTTON_LABEL]: 'Создать',
 
-    [TranslationKeys.JOIN_ROOM_FIELD_TITLE]: 'Присоединиться к комнате',
+    [TranslationKeys.JOIN_ROOM_FIELD_TITLE]: 'Присоединиться к комнате по ID',
     [TranslationKeys.JOIN_ROOM_FIELD_PLACEHOLDER]: 'Введите ID комнаты',
     [TranslationKeys.JOIN_ROOM_FIELD_JOIN_BUTTON_LABEL]: 'Вступить',
 

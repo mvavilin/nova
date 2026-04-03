@@ -13,7 +13,10 @@ export default class SearchRoomForm extends FormComponent {
   private roomsTable: RoomsTable;
 
   constructor(roomsTable: RoomsTable) {
-    super({ classes: FORM_CLASSES.FORM });
+    super({
+      classes: FORM_CLASSES.FORM,
+      listeners: { submit: (event: Event) => event.preventDefault() },
+    });
 
     this.roomsTable = roomsTable;
 
@@ -29,7 +32,7 @@ export default class SearchRoomForm extends FormComponent {
       placeholder: t(TranslationKeys.SEARCH_ROOM_FIELD_PLACEHOLDER),
       classes: FORM_CLASSES.INPUT,
       listeners: {
-        input: (): void => this.onInputChange(),
+        input: (): void => this.onSearch(),
       },
     });
 
@@ -72,17 +75,6 @@ export default class SearchRoomForm extends FormComponent {
 
       if (name.includes(query)) row.show();
       else row.hide();
-    }
-  }
-
-  private onInputChange(): void {
-    const query = this.roomInput.value.trim();
-
-    if (!query) {
-      const allRows = this.roomsTable.getAllRows();
-      for (const row of allRows) {
-        row.show();
-      }
     }
   }
 

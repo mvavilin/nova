@@ -7,6 +7,7 @@ const gamePage = {
 
     [TranslationKeys.RED_TURN]: 'Red team turn',
     [TranslationKeys.BLUE_TURN]: 'Blue team turn',
+    [TranslationKeys.CHOOSING_TURN]: 'Choosing turn',
 
     [TranslationKeys.RED_TEAM]: 'Red Team',
     [TranslationKeys.BLUE_TEAM]: 'Blue Team',
@@ -15,8 +16,8 @@ const gamePage = {
     [TranslationKeys.CHAT_INPUT_PLACEHOLDER]: 'Enter a hint',
 
     [TranslationKeys.LOG_START_GAME]: 'Game started!',
-    [TranslationKeys.LOG_HINT_RED]: 'Captain of the red team gives a hint: ',
-    [TranslationKeys.LOG_HINT_BLUE]: 'Captain of the blue team gives a hint: ',
+    [TranslationKeys.LOG_HINT_RED]: 'Captain of the red team gives a hint.',
+    [TranslationKeys.LOG_HINT_BLUE]: 'Captain of the blue team gives a hint.',
     [TranslationKeys.LOG_VOTE_STARTED]: 'Card selection voting started',
     [TranslationKeys.LOG_VOTE_ENDED]: 'Card selection voting ended',
     [TranslationKeys.LOG_OWN_CARD_CHOSEN_RED]: 'Red team operatives chose their own card: ',
@@ -28,12 +29,14 @@ const gamePage = {
     [TranslationKeys.LOG_ANSWER_COUNTED_RED]: 'Red team counts the answer',
     [TranslationKeys.LOG_ANSWER_COUNTED_BLUE]: 'Blue team counts the answer',
     [TranslationKeys.LOG_SCORE_POINT]: 'Team gets 1 point',
+    [TranslationKeys.LOG_HINT_PHASE_STARTED]: 'Hint phase started',
   },
   [Language.RU]: {
     [TranslationKeys.GAME_TITLE]: 'Игра',
 
     [TranslationKeys.RED_TURN]: 'Ход красной команды',
     [TranslationKeys.BLUE_TURN]: 'Ход синей команды',
+    [TranslationKeys.CHOOSING_TURN]: 'Выбор хода',
 
     [TranslationKeys.RED_TEAM]: 'Красная команда',
     [TranslationKeys.BLUE_TEAM]: 'Синяя команда',
@@ -42,8 +45,8 @@ const gamePage = {
     [TranslationKeys.CHAT_INPUT_PLACEHOLDER]: 'Введите подсказку',
 
     [TranslationKeys.LOG_START_GAME]: 'Игра началась!',
-    [TranslationKeys.LOG_HINT_RED]: 'Капитан красной команды дает подсказку: ',
-    [TranslationKeys.LOG_HINT_BLUE]: 'Капитан синей команды дает подсказку: ',
+    [TranslationKeys.LOG_HINT_RED]: 'Капитан красной команды дает подсказку.',
+    [TranslationKeys.LOG_HINT_BLUE]: 'Капитан синей команды дает подсказку.',
     [TranslationKeys.LOG_VOTE_STARTED]: 'Голосование выбора карточки запущено',
     [TranslationKeys.LOG_VOTE_ENDED]: 'Голосование выбора карточки завершено',
     [TranslationKeys.LOG_OWN_CARD_CHOSEN_RED]:
@@ -59,6 +62,7 @@ const gamePage = {
     [TranslationKeys.LOG_ANSWER_COUNTED_RED]: 'Красная команда засчитывает ответ',
     [TranslationKeys.LOG_ANSWER_COUNTED_BLUE]: 'Синяя команда засчитывает ответ',
     [TranslationKeys.LOG_SCORE_POINT]: 'Команда получает 1 балл',
+    [TranslationKeys.LOG_HINT_PHASE_STARTED]: 'Старт фазы подсказки',
   },
 } as const;
 

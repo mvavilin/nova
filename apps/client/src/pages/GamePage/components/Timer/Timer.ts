@@ -1,3 +1,4 @@
+import { saveSessionStorageData } from '@/utils';
 import { ContainerComponent, TextComponent } from '@api/ComponentsAPI';
 
 const TIMER_CLASSES = `bg-white px-2 py-1 rounded-lg flex items-center justify-center select-none`;
@@ -9,11 +10,13 @@ export default class Timer extends ContainerComponent {
   private intervalId?: ReturnType<typeof setInterval>;
   private digits: TextComponent[] = [];
   private countDown: boolean;
+  private storageKey: string;
 
-  constructor(startTime = 0, countDown = false) {
+  constructor(startTime = 0, countDown = false, storageKey = '') {
     super({ id: 'timer', classes: TIMER_CLASSES });
     this.time = startTime;
     this.countDown = countDown;
+    this.storageKey = storageKey;
 
     this.digits = [
       new TextComponent({ content: '0', classes: DIGIT_CLASSES }),
@@ -38,9 +41,9 @@ export default class Timer extends ContainerComponent {
             if (this.onEnd) this.onEnd();
           }
         }
-      } else {
-        this.time += 1;
-      }
+      } else this.time += 1;
+
+      if (this.storageKey) saveSessionStorageData(this.storageKey, this.time);
       this.updateDisplay();
     }, TIMER_INTERVAL_MS);
   }

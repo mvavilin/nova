@@ -13,6 +13,12 @@ export interface RoomPreview {
   status: RoomStatus;
 }
 
+export enum TeamsEnum {
+  RED = 'red',
+  BLUE = 'blue',
+  CHOOSING = 'choosing',
+}
+
 export type Teams = 'red' | 'blue' | 'choosing';
 
 export type Roles = 'spymaster' | 'agent' | 'choosing';

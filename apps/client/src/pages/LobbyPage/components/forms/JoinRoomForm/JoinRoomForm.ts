@@ -13,12 +13,15 @@ export default class JoinRoomForm extends FormComponent {
   private joinRoomButton: Button;
 
   constructor() {
-    super({ classes: FORM_CLASSES.FORM });
+    super({
+      classes: FORM_CLASSES.FORM,
+      listeners: { submit: (event: Event) => event.preventDefault() },
+    });
 
     this.roomLabel = new FieldLabel({
       text: t(TranslationKeys.JOIN_ROOM_FIELD_TITLE),
       htmlFor: 'roomID',
-      classes: 'w-full',
+      // classes: 'w-full',
     });
 
     this.roomInput = new InputText({
@@ -30,15 +33,16 @@ export default class JoinRoomForm extends FormComponent {
         input: (): void => {
           this.roomInput.isEmpty();
         },
+        keydown: (event: Event): void => {
+          if (event instanceof KeyboardEvent && event.key === 'Enter') this.handleJoinRoom();
+        },
       },
     });
 
     this.joinRoomButton = new Button({
       label: t(TranslationKeys.JOIN_ROOM_FIELD_JOIN_BUTTON_LABEL),
       classes: FORM_CLASSES.BUTTON,
-      listeners: {
-        click: (): void => this.handleJoinRoom(),
-      },
+      listeners: { click: (): void => this.handleJoinRoom() },
     });
 
     this.inputContainer = new ContainerComponent({

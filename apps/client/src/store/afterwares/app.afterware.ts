@@ -13,11 +13,11 @@ export default function appAfterware<State>(): Afterware<State> {
     if (context.action.type === AppActionTypes.EXIT_APP) {
       try {
         removeSessionStorageData(TOKENS.AUTH);
-        removeSessionStorageData(TOKENS.SESSION);
+
+        socketClient.emit(ClientEventType.SESSION_LOGOUT);
 
         router.navigate(URLS.LOGIN());
 
-        socketClient.emit(ClientEventType.SESSION_LOGOUT);
         socketClient.disconnect();
       } catch (error) {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
@@ -27,7 +27,6 @@ export default function appAfterware<State>(): Afterware<State> {
     if (context.action.type === AppActionTypes.RESET_DATA) {
       try {
         removeSessionStorageData(TOKENS.AUTH);
-        removeSessionStorageData(TOKENS.SESSION);
 
         const currentPath = globalThis.location.pathname;
         if (currentPath !== URLS.LOGIN()) {

@@ -60,9 +60,15 @@ export default function formReducer(state: State, action: AppActions): State {
       };
     }
 
-    case FormActionTypes.GO_TO_WELCOME_PAGE:
-    case FormActionTypes.GO_TO_LOGIN_PAGE:
-    case FormActionTypes.GO_TO_REGISTRATION_PAGE:
+    case FormActionTypes.GO_TO_WELCOME_PAGE: {
+      return { ...state };
+    }
+    case FormActionTypes.GO_TO_LOGIN_PAGE: {
+      return { ...state };
+    }
+    case FormActionTypes.GO_TO_REGISTRATION_PAGE: {
+      return { ...state };
+    }
     case AppActionTypes.SWITCH_LANGUAGE: {
       return { ...state };
     }

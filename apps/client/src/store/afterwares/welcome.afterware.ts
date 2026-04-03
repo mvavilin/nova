@@ -3,7 +3,7 @@ import { router } from '@/main';
 import type { Afterware } from '@api/StateAPI';
 import { WelcomeActions } from '@store/actions/welcome.actions';
 import { localStorageProps } from '@/constants/localStorage.constants';
-import { getLocalStorageData, saveLocalStorageData } from '@/utils/localStorage';
+import { getSessionStorageData, saveSessionStorageData } from '@/utils/sessionStorage';
 import { AppActionTypes } from '../actions';
 
 type StateWithLanguage = {
@@ -25,9 +25,9 @@ export default function welcomePageAfterware<State extends StateWithLanguage>():
     }
 
     if (context.action.type === AppActionTypes.SWITCH_LANGUAGE) {
-      const store = getLocalStorageData(localStorageProps.store) ?? {};
+      const store = getSessionStorageData(localStorageProps.store) ?? {};
 
-      saveLocalStorageData(localStorageProps.store, {
+      saveSessionStorageData(localStorageProps.store, {
         ...store,
         language: context.nextState.language,
       });

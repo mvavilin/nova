@@ -7,7 +7,7 @@ const gameRules = {
 
     [TranslationKeys.GAME_RULES_PREPARATION_TITLE]: 'Preparation:',
     [TranslationKeys.GAME_RULES_PREPARATION_P1]:
-      'The game is played by 4 players divided into two teams — red and blue.',
+      'The game is played by 4 players divided into two teams — red and blue. Red goes first.',
     [TranslationKeys.GAME_RULES_PREPARATION_P2]:
       'Each team has a Spymaster (gives clues) and a Field Agent (guesses words).',
     [TranslationKeys.GAME_RULES_PREPARATION_P3]:
@@ -15,8 +15,8 @@ const gameRules = {
 
     [TranslationKeys.GAME_RULES_CARD_TYPES_TITLE]: 'Card types:',
     [TranslationKeys.GAME_RULES_CARD_TYPES_RED]: '9 — red team agents',
-    [TranslationKeys.GAME_RULES_CARD_TYPES_BLUE]: '9 — blue team agents',
-    [TranslationKeys.GAME_RULES_CARD_TYPES_CIVIL]: '6 — civilians',
+    [TranslationKeys.GAME_RULES_CARD_TYPES_BLUE]: '8 — blue team agents',
+    [TranslationKeys.GAME_RULES_CARD_TYPES_CIVIL]: '7 — civilians',
     [TranslationKeys.GAME_RULES_CARD_TYPES_KILLER]: '1 — assassin',
     [TranslationKeys.GAME_RULES_CARD_TYPES_DESC]:
       'The Spymaster sees the card colors while agents only see the words.',
@@ -59,7 +59,7 @@ const gameRules = {
 
     [TranslationKeys.GAME_RULES_PREPARATION_TITLE]: 'Подготовка:',
     [TranslationKeys.GAME_RULES_PREPARATION_P1]:
-      'В игре участвуют 4 игрока, разделённые на две команды — красную и синюю.',
+      'В игре участвуют 4 игрока, разделённые на две команды — красную и синюю. Красные ходят первыми.',
     [TranslationKeys.GAME_RULES_PREPARATION_P2]:
       'В каждой команде есть Spymaster (даёт подсказки) и Field Agent (угадывает слова).',
     [TranslationKeys.GAME_RULES_PREPARATION_P3]:
@@ -67,8 +67,8 @@ const gameRules = {
 
     [TranslationKeys.GAME_RULES_CARD_TYPES_TITLE]: 'Типы карточек:',
     [TranslationKeys.GAME_RULES_CARD_TYPES_RED]: '9 — агенты красной команды',
-    [TranslationKeys.GAME_RULES_CARD_TYPES_BLUE]: '9 — агенты синей команды',
-    [TranslationKeys.GAME_RULES_CARD_TYPES_CIVIL]: '6 — мирные жители',
+    [TranslationKeys.GAME_RULES_CARD_TYPES_BLUE]: '8 — агенты синей команды',
+    [TranslationKeys.GAME_RULES_CARD_TYPES_CIVIL]: '7 — мирные жители',
     [TranslationKeys.GAME_RULES_CARD_TYPES_KILLER]: '1 — убийца',
     [TranslationKeys.GAME_RULES_CARD_TYPES_DESC]:
       'Spymaster видит карту с цветами карточек, а агенты видят только слова.',

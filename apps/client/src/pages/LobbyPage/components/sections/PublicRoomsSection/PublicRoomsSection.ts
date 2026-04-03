@@ -1,14 +1,14 @@
+import { t } from '@i18n';
+import { TranslationKeys } from '@i18n/translationKeys';
 import { BaseComponent, HeadingComponent } from '@ComponentsAPI';
 import { SECTION_CLASSES } from '@constants/styles';
 import { SectionHeading } from '@components';
 import { RoomsTable } from '@pages/LobbyPage/components';
 import { SearchRoomForm } from '@pages/LobbyPage/components/forms';
-import { t } from '@i18n';
-import { TranslationKeys } from '@i18n/translationKeys';
-import type { State } from '@/store/types/state';
-import type { Action } from '@/api/StateAPI';
-import store from '@/store/store';
-import { AppActionTypes } from '@/store/actions';
+import type { State } from '@State';
+import type { Action } from '@StateAPI';
+import store from '@store';
+import { AppActionTypes } from '@actions';
 
 export default class PublicRoomsSection extends BaseComponent {
   private heading: HeadingComponent;

@@ -22,6 +22,7 @@ export default class InputForm extends ContainerComponent {
   private placeholderKey: TranslationKey;
   private errorKey: TranslationKey;
   private pattern?: RegExp;
+  private unsubscribe: () => void;
 
   constructor(parameters: InputBlockProps) {
     super({ classes: 'w-full flex flex-col self-center gap-1' });
@@ -31,8 +32,10 @@ export default class InputForm extends ContainerComponent {
     this.placeholderKey = parameters.placeholderKey;
     this.errorKey = parameters.errorKey;
     if (parameters.pattern) this.pattern = parameters.pattern;
+
     this.render(parameters);
-    this.addSubscribe();
+
+    this.unsubscribe = store.subscribe((state, action) => this.updateInputForm(state, action));
   }
 
   private render(parameters: InputBlockProps): void {
@@ -97,12 +100,6 @@ export default class InputForm extends ContainerComponent {
     });
   }
 
-  private addSubscribe(): void {
-    this.addSubscriptions([
-      store.subscribe((state, action) => this.updateInputForm(state, action)),
-    ]);
-  }
-
   private updateInputForm(_state: State, action: Action): void {
     const isFieldUpdate = action.type === FormActionTypes.FORM_UPDATE_FIELD;
     const isLanguageSwitch = action.type === AppActionTypes.SWITCH_LANGUAGE;
@@ -134,5 +131,11 @@ export default class InputForm extends ContainerComponent {
     this.input.toggleClasses('border-red-500', !isValid);
     this.input.toggleClasses('focus:border-yellow-500', isValid);
     this.tooltip.setContent(isValid ? '' : t(this.errorKey));
+  }
+
+  public override destroy(): this {
+    this.unsubscribe();
+    super.destroy();
+    return this;
   }
 }

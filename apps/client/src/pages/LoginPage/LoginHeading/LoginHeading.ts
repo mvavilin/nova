@@ -7,15 +7,16 @@ import store from '@/store/store';
 import { AppActionTypes } from '@/store/actions';
 
 export default class LoginHeading extends HeadingComponent {
+  private unsubscribe: () => void;
   constructor() {
     super({
       classes:
         'mb-4 text-xl md:text-2xl font-brand font-black text-black [text-stroke:0.5px_#FFE81F] [-webkit-text-stroke:0.5px_#FFE81F] drop-shadow-[0_0_10px_rgba(255,232,31,0.4)] paint-order: stroke fill;',
     });
 
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
-
     this.render();
+
+    this.unsubscribe = store.subscribe((state, action) => this.switchLanguage(state, action));
   }
   private render(): void {
     const context = t(TranslationKeys.LOGIN_TITLE);
@@ -28,5 +29,11 @@ export default class LoginHeading extends HeadingComponent {
     if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.setContent(t(TranslationKeys.LOGIN_TITLE));
     }
+  }
+
+  public override destroy(): this {
+    this.unsubscribe();
+    super.destroy();
+    return this;
   }
 }

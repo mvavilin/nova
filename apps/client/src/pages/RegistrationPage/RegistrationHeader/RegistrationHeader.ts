@@ -19,12 +19,14 @@ const styles = {
 export default class RegistrationHeader extends ContainerComponent {
   private logo: TextComponent | null = null;
   private loginLink: TextComponent | null = null;
+  private unsubscribe: () => void;
 
   constructor() {
     super({ tag: 'header', classes: styles.header });
 
     this.render();
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
+
+    this.unsubscribe = store.subscribe((state, action) => this.switchLanguage(state, action));
   }
 
   private render(): void {
@@ -59,5 +61,11 @@ export default class RegistrationHeader extends ContainerComponent {
     if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.loginLink?.setContent(t(TranslationKeys.LOGIN_TITLE));
     }
+  }
+
+  public override destroy(): this {
+    this.unsubscribe();
+    super.destroy();
+    return this;
   }
 }

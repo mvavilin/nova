@@ -14,6 +14,7 @@ export default class BaseForm extends FormComponent {
   protected inputArray: InputForm[];
   protected buttonSubmit: ButtonComponent;
   protected isSubmiting = false;
+  private unsubscribe: () => void;
 
   constructor(parameters: BaseFormProps) {
     super({
@@ -28,12 +29,11 @@ export default class BaseForm extends FormComponent {
     this.buttonSubmit = parameters.buttonSubmit;
 
     this.init();
+    this.unsubscribe = store.subscribe(() => this.updateUI());
   }
 
   private init(): void {
     this.appendChildren([this.title, ...this.inputArray, this.buttonSubmit]);
-
-    this.addSubscriptions([store.subscribe(() => this.updateUI())]);
 
     this.setListeners({
       submit: (event: Event) => {
@@ -99,5 +99,15 @@ export default class BaseForm extends FormComponent {
         },
       },
     });
+  }
+
+  public override destroy(): this {
+    this.unsubscribe();
+    for (const input of this.inputArray) input.destroy();
+    this.title.destroy();
+    this.buttonSubmit.destroy();
+
+    super.destroy();
+    return this;
   }
 }

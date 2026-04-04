@@ -4,7 +4,7 @@ import { SocketActionTypes } from '@actions';
 
 export default function socketReducer(state: State, action: AppActions): State {
   switch (action.type) {
-    case SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN: {
+    case SocketActionTypes.SOCKET_CONNECT: {
       return { ...state, authStatus: true };
     }
 

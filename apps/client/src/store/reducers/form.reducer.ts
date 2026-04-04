@@ -3,13 +3,12 @@ import { FormActionTypes } from '../actions/form.actions';
 import type { FieldName } from '@/components/InputForm/InputForm.types';
 import type { FieldState } from '@/components/BaseForm/BaseForm.types';
 import store from '../store';
-import { saveSessionStorageData, getSessionStorageData } from '@/utils';
-import { sessionStorageProps } from '@/constants/sessionStorage.constants';
+import { saveSessionStorageData } from '@/utils';
+
 import { SocketActionTypes } from '../actions/socket.actions';
 import { AppActionTypes } from '../actions';
 import type { AppActions } from '../types';
-import { isObject } from '@/utils/isObject';
-import { LOCAL_STORAGE_KEYS } from '@/constants/localStorageKeys';
+import { TOKENS } from '@/constants/tokens';
 
 export default function formReducer(state: State, action: AppActions): State {
   switch (action.type) {
@@ -39,20 +38,10 @@ export default function formReducer(state: State, action: AppActions): State {
 
     case FormActionTypes.FETCH_SUCCESS: {
       if (action.payload.token) {
-        saveSessionStorageData(sessionStorageProps.authToken, action.payload.token);
-
-        const storeLS = getSessionStorageData(LOCAL_STORAGE_KEYS.STORE);
-        if (isObject(action.payload.user)) {
-          if (isObject(storeLS))
-            saveSessionStorageData(LOCAL_STORAGE_KEYS.STORE, {
-              ...storeLS,
-              ...action.payload.user,
-            });
-          else saveSessionStorageData(LOCAL_STORAGE_KEYS.STORE, { ...action.payload.user });
-        }
+        saveSessionStorageData(TOKENS.AUTH, action.payload.token);
 
         store.dispatch({
-          type: SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN,
+          type: SocketActionTypes.SOCKET_CONNECT,
           payload: { authToken: action.payload.token },
         });
       }
@@ -63,26 +52,23 @@ export default function formReducer(state: State, action: AppActions): State {
         id: action.payload.user.id,
         email: action.payload.user.email,
         username: action.payload.user.username,
-        registration: {
-          fields: {},
-          isFormValid: false,
-        },
-        login: { fields: {}, isFormValid: false },
+        // registration: {
+        //   fields: {},
+        //   isFormValid: false,
+        // },
+        // login: { fields: {}, isFormValid: false },
       };
     }
 
     case FormActionTypes.GO_TO_WELCOME_PAGE: {
       return { ...state };
     }
-
     case FormActionTypes.GO_TO_LOGIN_PAGE: {
       return { ...state };
     }
-
     case FormActionTypes.GO_TO_REGISTRATION_PAGE: {
       return { ...state };
     }
-
     case AppActionTypes.SWITCH_LANGUAGE: {
       return { ...state };
     }

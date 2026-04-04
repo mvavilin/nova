@@ -11,7 +11,11 @@ export default abstract class BaseSocketClient {
   protected _socket: Socket<ServerToClientEvents, ClientToServerEvents>;
 
   constructor(serverUrl: string) {
-    this._socket = io(serverUrl, { autoConnect: false });
+    this._socket = io(serverUrl, {
+      autoConnect: false,
+      forceNew: true,
+      multiplex: false,
+    });
 
     this._socket.on(ServerEventType.CONNECT_ERROR, (error: unknown) => {
       store.dispatch({ type: SocketActionTypes.SOCKET_AUTH_FAILED, payload: { error } });

@@ -23,7 +23,7 @@ globalThis.addEventListener('load', () => {
   const authToken = getSessionStorageData<string>(TOKENS.AUTH);
   if (authToken) {
     store.dispatch({
-      type: SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN,
+      type: SocketActionTypes.SOCKET_CONNECT,
       payload: { authToken },
     });
   } else router.init();

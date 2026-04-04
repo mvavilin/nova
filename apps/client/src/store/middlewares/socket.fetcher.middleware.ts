@@ -9,65 +9,60 @@ import {
 
 import { socketClient } from '@SocketClientAPI';
 import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
-import { RoomPageActionTypes, SocketActionTypes } from '@actions';
+import { AppActionTypes, RoomPageActionTypes, SocketActionTypes } from '@actions';
 import { URLS } from '@RouterAPI/router.constants';
 import { router } from '@router';
-
-import { TOKENS } from '@constants/tokens';
-import {
-  saveSessionStorageData,
-  showErrorToast,
-  removeSessionStorageData,
-  getSessionStorageData,
-} from '@utils';
+import { showErrorToast, getSessionStorageData } from '@utils';
 import store from '@store';
 import { Toast } from '@components';
 import MessageType from '@constants/messageType';
 import { SESSION_STORAGE_KEYS } from '@constants/sessionStorageKeys';
 import { isObject } from '@utils/isObject';
+import { t } from 'i18n';
+import { TranslationKeys } from '@/i18n/translationKeys';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
-    if (context.action.type === SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN) {
+    if (context.action.type === SocketActionTypes.SOCKET_CONNECT) {
       try {
         const authToken = context.action.payload.authToken;
 
         if (authToken === null) throw new Error('Authorization token not found');
 
-        socketClient.onSessionToken(({ sessionToken }) => {
-          saveSessionStorageData(TOKENS.SESSION, sessionToken);
+        socketClient.onSessionConnect(({ userStatus, userId, username }) => {
+          context.next({
+            type: AppActionTypes.UPDATE_STORE,
+            payload: { userId, username },
+          });
 
-          socketClient.off(ServerEventType.SESSION_TOKEN);
-        });
-
-        socketClient.onSessionConnect(({ userStatus }) => {
           if (userStatus === UserStatusType.IN_LOBBY) router.init(URLS.LOBBY());
           if (userStatus === UserStatusType.IN_ROOM)
             store.dispatch({ type: SocketActionTypes.ROOM_ASK_ROOM_INFO });
           if (userStatus === UserStatusType.IN_GAME)
             store.dispatch({ type: SocketActionTypes.ROOM_ASK_GAME_INFO });
 
-          socketClient.off(ServerEventType.SESSION_TOKEN);
+          socketClient.off(ServerEventType.SESSION_CONNECT);
         });
 
         socketClient.onError(({ code }) => {
           if (code === SocketErrorCode.ALREADY_ONLINE) {
-            showErrorToast(code, SOCKET_ERROR_MESSAGES.GENERAL_ERROR);
-
-            removeSessionStorageData(TOKENS.AUTH);
-            removeSessionStorageData(TOKENS.SESSION);
-            removeSessionStorageData(SESSION_STORAGE_KEYS.STORE);
-
-            socketClient.disconnect();
+            // showErrorToast(code, SOCKET_ERROR_MESSAGES.GENERAL_ERROR);
+            showErrorToast(
+              t(TranslationKeys.SOCKET_ERROR_ALREADY_ONLINE),
+              t(TranslationKeys.SOCKET_ERROR)
+            );
+            context.next({
+              type: AppActionTypes.RESET_DATA,
+            });
           }
 
-          socketClient.off(ServerEventType.SESSION_TOKEN);
+          socketClient.off(ServerEventType.ERROR);
         });
 
         socketClient.connect(authToken);
       } catch (error) {
         router.navigate(URLS.LOGIN());
-        showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_SESSION_TOKEN);
+        showErrorToast(error, SOCKET_ERROR_MESSAGES.CONNECT_ERROR);
       }
     }
 
@@ -78,7 +73,6 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
 
           socketClient.onError(({ code }) => {
             showErrorToast(code, SOCKET_ERROR_MESSAGES.ON_ERROR);
-
             socketClient.off(ServerEventType.ERROR);
           });
 
@@ -112,13 +106,18 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
         const { roomId } = context.action.payload;
 
         socketClient.onError(({ code }) => {
+          showErrorToast(code, SOCKET_ERROR_MESSAGES.ON_ERROR);
           if (code === SocketErrorCode.ROOM_NOT_FOUND)
             showErrorToast(code, SOCKET_ERROR_MESSAGES.ON_ERROR);
 
           socketClient.off(ServerEventType.ERROR);
         });
 
+        const randomId = Math.random();
+        console.log(`[${randomId}] Подписываюсь на ROOM_STATE`);
+
         socketClient.onRoomState(({ roomInfo }) => {
+          console.log(`[${randomId}] ROOM_STATE получен!`);
           socketClient.off(ServerEventType.ROOM_STATE);
 
           context.next({

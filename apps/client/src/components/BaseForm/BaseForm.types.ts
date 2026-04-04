@@ -4,7 +4,7 @@ import type InputForm from '../InputForm/InputForm';
 import type { AuthResponse } from '@/types/user.types';
 import type { Overlay } from '../ui';
 
-export type FormType = 'registration' | 'login' | 'profile';
+export type FormType = 'registration' | 'login';
 
 export interface BaseFormProps {
   formId: FormType;

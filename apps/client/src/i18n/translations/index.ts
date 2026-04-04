@@ -15,6 +15,7 @@ import toast from '@i18n/translations/toast';
 import answerRatingModal from '@i18n/translations/answerRatingModal';
 import gameResultsModal from '@i18n/translations/gameResultsModal';
 import profilePage from './profilePage';
+import socketErrors from './socketErrors';
 
 export const translations: Record<Language, Record<TranslationKey, string>> = {
   [Language.EN]: {
@@ -33,6 +34,7 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     ...answerRatingModal[Language.EN],
     ...gameResultsModal[Language.EN],
     ...profilePage[Language.EN],
+    ...socketErrors[Language.EN],
   },
   [Language.RU]: {
     ...appLanguage[Language.RU],
@@ -51,5 +53,6 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     ...answerRatingModal[Language.RU],
     ...gameResultsModal[Language.RU],
     ...profilePage[Language.RU],
+    ...socketErrors[Language.RU],
   },
 };

@@ -4,9 +4,6 @@ import type { AppActions } from '../types/action';
 import type { AuthResponse } from '@/types/user.types';
 import type { Overlay } from '@/components/ui';
 import { showErrorToast } from '@utils';
-// import { getLocalStorageData, saveLocalStorageData, showErrorToast } from '@utils';
-// import { isObject } from '@/utils/isObject';
-// import { LOCAL_STORAGE_KEYS } from '@/constants/localStorageKeys';
 import { ServerUrl, Endpoints } from '@shared/api.constants';
 import { AUTH_TOKEN } from '@/constants/tokens';
 import { t } from 'i18n';
@@ -15,7 +12,6 @@ import { TranslationKeys } from '@/i18n/translationKeys';
 const FORM_ENDPOINTS: Record<string, string> = {
   registration: Endpoints.REGISTRATION,
   login: Endpoints.LOGIN,
-  // profile: Endpoints.????
 };
 
 export default function fetcher<State>(): Middleware<State, AppActions> {
@@ -48,13 +44,6 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
 
         const token = response.headers.get(AUTH_TOKEN);
         const user: unknown = await response.json();
-
-        // const store = getLocalStorageData(LOCAL_STORAGE_KEYS.STORE);
-        // if (isObject(user)) {
-        //   if (isObject(store))
-        //     saveLocalStorageData(LOCAL_STORAGE_KEYS.STORE, { ...store, ...user });
-        //   else saveLocalStorageData(LOCAL_STORAGE_KEYS.STORE, { ...user });
-        // }
 
         if (isValidAuthResponse(user)) {
           return context.next({

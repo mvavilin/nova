@@ -8,6 +8,9 @@ import Loader from '../ui/Loader/Loader';
 
 const messageToUser = 'Sending data to server...';
 
+const styles = {
+  form: 'w-70 p-6 sm:w-80 sm:p-8 md:w-90 md:p-10 bg-white/45 rounded-xl my-auto flex flex-col justify-center items-center gap-2 m-0',
+};
 export default class BaseForm extends FormComponent {
   private formId: FormType;
   protected title: HeadingComponent;
@@ -19,8 +22,7 @@ export default class BaseForm extends FormComponent {
   constructor(parameters: BaseFormProps) {
     super({
       method: 'post',
-      classes:
-        'w-82 p-8 md:w-92 md:p-10 bg-white/45 rounded-xl my-auto flex flex-col justify-center items-center gap-2 m-0',
+      classes: styles.form,
     });
 
     this.formId = parameters.formId;

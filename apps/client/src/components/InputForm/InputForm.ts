@@ -17,7 +17,7 @@ const styles = {
   container: 'w-full flex flex-col self-center gap-1',
   label: 'uppercase text-sm md:text-base font-medium font-main',
   tooltip:
-    'min-h-[32px] whitespace-pre-line text-red-600 text-xs font-medium transition-opacity duration-200',
+    'min-h-[32px] whitespace-pre-line text-red-600 text-[10px] sm:text-[11px] md:text-xs font-medium transition-opacity duration-200',
   input:
     'text-sm md:text-base px-3 py-2 bg-white/60 border border-solid border-black rounded-md outline-none transition-colors duration-300 hover:border-green-600 focus:border-brand',
 };

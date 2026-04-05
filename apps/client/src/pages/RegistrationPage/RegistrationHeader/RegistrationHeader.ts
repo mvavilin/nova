@@ -10,7 +10,7 @@ import type { Action } from '@/api/StateAPI';
 
 const styles = {
   header:
-    'w-full max-w-7xl flex flex-col md:flex-row gap-8 p-4 justify-between items-center bg-white/35 text-white rounded',
+    'min-w-[280px] w-full max-w-7xl flex flex-col md:flex-row gap-8 p-4 justify-between items-center bg-white/35 text-white rounded',
   container: 'flex justify-between items-center gap-5',
   title: 'text-2xl text-center font-bold',
   link: 'text-xl md:text-2xl text-center hover:cursor-pointer hover:text-brand',

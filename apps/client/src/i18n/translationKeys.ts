@@ -241,6 +241,9 @@ export const TranslationKeys = {
   PROFILE_ACHIEVEMENT_STREAK: 'profileAchievementsStreak',
   PROFILE_ACHIEVEMENT_ANSWERS: 'profileAchievementsAnswers',
   PROFILE_ACHIEVEMENT_FIRST_WIN: 'profileAchievementsWin',
+
+  SOCKET_ERROR: 'socketError',
+  SOCKET_ERROR_ALREADY_ONLINE: 'socketErrorAlreadyOnline',
 } as const;
 
 export type TranslationKey = (typeof TranslationKeys)[keyof typeof TranslationKeys];

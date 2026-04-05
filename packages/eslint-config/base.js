@@ -111,6 +111,7 @@ export default [
       '**/src/components/InputForm/InputForm.test.ts',
       '**/src/store/reducers/form.reducer.ts',
       '**/src/store/reducers/game.reducer.ts',
+      '**/src/store/reducers/app.reducer.ts',
       '**/src/store/middlewares/socket.fetcher.middleware.ts',
       '**/src/store/middlewares/form.fetcher.middleware.ts',
       '**/src/store/middlewares/room.fetcher.middleware.ts',

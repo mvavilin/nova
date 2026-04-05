@@ -10,11 +10,14 @@ import { showErrorToast } from '@utils';
 import type { CheckQuestion } from '@repo/shared/src/types/question';
 
 class SocketClient extends BaseSocketClient {
+  // private tabId: string;
   constructor(serverUrl: string) {
     super(serverUrl);
+
+    // this.tabId = Math.random().toString(36).substring(7);
+    // console.log(`[SocketInit] Вкладка: ${this.tabId}, ID сокета: ${this.socket.id}`);
   }
 
-  // Session events
   public onSessionToken(handler: (payload: { sessionToken: string }) => void): void {
     this.socket.on(ServerEventType.SESSION_TOKEN, handler);
   }
@@ -86,7 +89,7 @@ class SocketClient extends BaseSocketClient {
   }
 
   public offTeamChanged(listener: (payload: { roomInfo: RoomInfo }) => void): void {
-    this._socket.off(ServerEventType.TEAM_CHANGED, listener);
+    this.socket.off(ServerEventType.TEAM_CHANGED, listener);
   }
 
   // Game events
@@ -95,7 +98,7 @@ class SocketClient extends BaseSocketClient {
   }
 
   public offGameStartTimer(listener: () => void): void {
-    this._socket.off(ServerEventType.GAME_START_TIMER, listener);
+    this.socket.off(ServerEventType.GAME_START_TIMER, listener);
   }
 
   public onGameStart(handler: (payload: { gameInfo: GameInfo }) => void): void {
@@ -103,7 +106,7 @@ class SocketClient extends BaseSocketClient {
   }
 
   public offGameStart(listener: (payload: { gameInfo: GameInfo }) => void): void {
-    this._socket.off(ServerEventType.GAME_START, listener);
+    this.socket.off(ServerEventType.GAME_START, listener);
   }
 
   public onGameAskClue(handler: () => void): void {
@@ -199,4 +202,7 @@ class SocketClient extends BaseSocketClient {
 }
 
 const socketClient = new SocketClient(ServerUrl.DEPLOY_BASE);
+// socketClient.socket.onAny((eventName, ...args) => {
+//   console.log(`>>> [ANY EVENT] Пришло событие: ${eventName}`, args);
+// });
 export default socketClient;

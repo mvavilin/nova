@@ -1,7 +1,7 @@
 import type { RoomInfo, RoomSettings, Player } from '@repo/shared/src/types/room';
 
 export enum SocketActionTypes {
-  SOCKET_REQUEST_SESSION_TOKEN = 'SOCKET/REQUEST_SESSION_TOKEN',
+  SOCKET_CONNECT = 'SOCKET/SOCKET_CONNECT',
   SOCKET_AUTH_FAILED = 'SOCKET/AUTH_FAILED',
   SOCKET_CREATE_ROOM = 'SOCKET/CREATE_ROOM',
   SOCKET_REQUEST_ROOM_LIST = 'SOCKET/REQUEST_ROOM_LIST',
@@ -14,8 +14,8 @@ export enum SocketActionTypes {
   ROOM_ASK_GAME_INFO = 'SOCKET/ROOM_ASK_GAME_INFO',
 }
 
-type SocketRequestSessionToken = {
-  type: SocketActionTypes.SOCKET_REQUEST_SESSION_TOKEN;
+type SocketConnect = {
+  type: SocketActionTypes.SOCKET_CONNECT;
   payload: { authToken: string | null };
 };
 
@@ -65,7 +65,7 @@ type SocketGameAskGameInfo = {
 };
 
 export type SocketActions =
-  | SocketRequestSessionToken
+  | SocketConnect
   | SocketAuthFailed
   | SocketCreateRoom
   | SocketRequestRoomList

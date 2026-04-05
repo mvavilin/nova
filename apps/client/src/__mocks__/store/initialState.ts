@@ -22,7 +22,6 @@ export const initialState: State = {
     },
     isFormValid: false,
   },
-  profile: { fields: {}, isFormValid: false },
   rooms: [],
   currentRoom: null,
 

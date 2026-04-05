@@ -12,7 +12,6 @@ export type State = {
   language: Language;
   registration: FormState;
   login: FormState;
-  profile: FormState;
   rooms: RoomPreview[];
   currentRoom: RoomInfo | null;
 

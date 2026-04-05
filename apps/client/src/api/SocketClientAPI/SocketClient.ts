@@ -91,7 +91,6 @@ class SocketClient extends BaseSocketClient {
 
   // Game events
   public onGameStartTimer(handler: () => void): void {
-    console.log('[SocketClient] Подписка на событие: GAME_START_TIMER (таймер перед стартом игры)');
     this.socket.on(ServerEventType.GAME_START_TIMER, handler);
   }
 
@@ -100,13 +99,7 @@ class SocketClient extends BaseSocketClient {
   }
 
   public onGameStart(handler: (payload: { gameInfo: GameInfo }) => void): void {
-    console.log(
-      '[SocketClient] Подписка на событие: GAME_START (старт игры, получение игровой информации)'
-    );
-    this.socket.on(ServerEventType.GAME_START, (payload) => {
-      console.log('[SocketClient] Получено событие GAME_START:', { gameInfo: payload.gameInfo });
-      handler(payload);
-    });
+    this.socket.on(ServerEventType.GAME_START, handler);
   }
 
   public offGameStart(listener: (payload: { gameInfo: GameInfo }) => void): void {
@@ -114,57 +107,27 @@ class SocketClient extends BaseSocketClient {
   }
 
   public onGameAskClue(handler: () => void): void {
-    console.log('[SocketClient] Подписка на событие: GAME_ASK_CLUE (запрос подсказки у шпиона)');
-    this.socket.on(ServerEventType.GAME_ASK_CLUE, () => {
-      console.log('[SocketClient] Получено событие GAME_ASK_CLUE');
-      handler();
-    });
+    this.socket.on(ServerEventType.GAME_ASK_CLUE, handler);
   }
 
   public onGameClueTimeout(handler: () => void): void {
-    console.log('[SocketClient] Подписка на событие: GAME_CLUE_TIMEOUT (время подсказки истекло)');
-    this.socket.on(ServerEventType.GAME_CLUE_TIMEOUT, () => {
-      console.log('[SocketClient] Получено событие GAME_CLUE_TIMEOUT');
-      handler();
-    });
+    this.socket.on(ServerEventType.GAME_CLUE_TIMEOUT, handler);
   }
 
   public onGameTurnChanged(handler: (payload: { team: Teams }) => void): void {
-    console.log('[SocketClient] Подписка на событие: GAME_TURN_CHANGED (смена хода)');
-    this.socket.on(ServerEventType.GAME_TURN_CHANGED, (payload) => {
-      console.log('[SocketClient] Получено событие GAME_TURN_CHANGED:', { team: payload.team });
-      handler(payload);
-    });
+    this.socket.on(ServerEventType.GAME_TURN_CHANGED, handler);
   }
 
   public onGameClueGiven(handler: (payload: { clue: string }) => void): void {
-    console.log('[SocketClient] Подписка на событие: GAME_CLUE_GIVEN (подсказка передана агентам)');
-    this.socket.on(ServerEventType.GAME_CLUE_GIVEN, (payload) => {
-      console.log('[SocketClient] Получено событие GAME_CLUE_GIVEN:', { clue: payload.clue });
-      handler(payload);
-    });
+    this.socket.on(ServerEventType.GAME_CLUE_GIVEN, handler);
   }
 
   public onGameCardChosen(handler: (payload: { cardId: string; players: Player[] }) => void): void {
-    console.log('[SocketClient] Подписка на событие: GAME_CARD_CHOSEN (выбор карты игроками)');
-    this.socket.on(ServerEventType.GAME_CARD_CHOSEN, (payload) => {
-      console.log('[SocketClient] Получено событие GAME_CARD_CHOSEN:', {
-        cardId: payload.cardId,
-        players: payload.players,
-      });
-      handler(payload);
-    });
+    this.socket.on(ServerEventType.GAME_CARD_CHOSEN, handler);
   }
 
   public onGameCardShown(handler: (payload: { cardId: string; color: CardColor }) => void): void {
-    console.log('[SocketClient] Подписка на событие: GAME_CARD_SHOWN (карта открыта)');
-    this.socket.on(ServerEventType.GAME_CARD_SHOWN, (payload) => {
-      console.log('[SocketClient] Получено событие GAME_CARD_SHOWN:', {
-        cardId: payload.cardId,
-        color: payload.color,
-      });
-      handler(payload);
-    });
+    this.socket.on(ServerEventType.GAME_CARD_SHOWN, handler);
   }
 
   public onGameAskAnswer(
@@ -175,86 +138,37 @@ class SocketClient extends BaseSocketClient {
       answer: boolean;
     }) => void
   ): void {
-    console.log(
-      '[SocketClient] Подписка на событие: GAME_ASK_ANSWER (запрос ответа на вопрос карты)'
-    );
-    this.socket.on(ServerEventType.GAME_ASK_ANSWER, (payload) => {
-      console.log('[SocketClient] Получено событие GAME_ASK_ANSWER:', {
-        word: payload.word,
-        question: payload.question,
-        answer: payload.answer,
-      });
-      handler(payload);
-    });
+    this.socket.on(ServerEventType.GAME_ASK_ANSWER, handler);
   }
 
   public onGameAnswerTimeout(handler: () => void): void {
-    console.log('[SocketClient] Подписка на событие: GAME_ANSWER_TIMEOUT (время ответа истекло)');
-    this.socket.on(ServerEventType.GAME_ANSWER_TIMEOUT, () => {
-      console.log('[SocketClient] Получено событие GAME_ANSWER_TIMEOUT');
-      handler();
-    });
+    this.socket.on(ServerEventType.GAME_ANSWER_TIMEOUT, handler);
   }
 
   public onGameAskCheck(
     handler: (payload: { answer: string; checkQuestion: CheckQuestion; check: boolean }) => void
   ): void {
-    console.log(
-      '[SocketClient] Подписка на событие: GAME_ASK_CHECK (запрос проверки ответа у противоположной команды)'
-    );
-    this.socket.on(ServerEventType.GAME_ASK_CHECK, (payload) => {
-      console.log('[SocketClient] Получено событие GAME_ASK_CHECK:', {
-        answer: payload.answer,
-        check: payload.check,
-      });
-      handler(payload);
-    });
+    this.socket.on(ServerEventType.GAME_ASK_CHECK, handler);
   }
 
   public onGameCheckResults(handler: (payload: { correct: boolean }) => void): void {
-    console.log(
-      '[SocketClient] Подписка на событие: GAME_CHECK_RESULTS (результаты проверки ответа)'
-    );
-    this.socket.on(ServerEventType.GAME_CHECK_RESULTS, (payload) => {
-      console.log('[SocketClient] Получено событие GAME_CHECK_RESULTS:', {
-        correct: payload.correct,
-      });
-      handler(payload);
-    });
+    this.socket.on(ServerEventType.GAME_CHECK_RESULTS, handler);
   }
 
   public onGameCheckTimeout(handler: () => void): void {
-    console.log('[SocketClient] Подписка на событие: GAME_CHECK_TIMEOUT (время проверки истекло)');
-    this.socket.on(ServerEventType.GAME_CHECK_TIMEOUT, () => {
-      console.log('[SocketClient] Получено событие GAME_CHECK_TIMEOUT');
-      handler();
-    });
+    this.socket.on(ServerEventType.GAME_CHECK_TIMEOUT, handler);
   }
 
   public onGameSendScore(handler: (payload: { score: Score }) => void): void {
-    console.log('[SocketClient] Подписка на событие: GAME_SEND_SCORE (отправка счета)');
-    this.socket.on(ServerEventType.GAME_SEND_SCORE, (payload) => {
-      console.log('[SocketClient] Получено событие GAME_SEND_SCORE:', { score: payload.score });
-      handler(payload);
-    });
+    this.socket.on(ServerEventType.GAME_SEND_SCORE, handler);
   }
 
   public onGameGameEnd(handler: (payload: { gameEndInfo: GameEndInfo }) => void): void {
-    console.log('[SocketClient] Подписка на событие: GAME_GAME_END (конец игры)');
-    this.socket.on(ServerEventType.GAME_GAME_END, (payload) => {
-      console.log('[SocketClient] Получено событие GAME_GAME_END:', {
-        gameEndInfo: payload.gameEndInfo,
-      });
-      handler(payload);
-    });
+    this.socket.on(ServerEventType.GAME_GAME_END, handler);
   }
 
   public onGameState(handler: (payload: { gameState: GameStateForClient }) => void): void {
-    console.log('[SocketClient] Подписка на событие: GAME_STATE (текущее состояние игры)');
-    this.socket.on(ServerEventType.GAME_STATE, (payload) => {
-      console.log('[SocketClient] Получено событие GAME_STATE:', { gameState: payload.gameState });
-      handler(payload);
-    });
+    this.socket.on(ServerEventType.GAME_STATE, handler);
   }
 
   // Profile events

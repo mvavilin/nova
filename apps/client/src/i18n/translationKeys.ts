@@ -145,20 +145,40 @@ export const TranslationKeys = {
   CHAT_INPUT_PLACEHOLDER: 'chatInputPlaceholder',
 
   [LogMessageKeys.LOG_START_GAME]: 'logStartGame',
+
   [LogMessageKeys.LOG_HINT_RED]: 'logHintRed',
   [LogMessageKeys.LOG_HINT_BLUE]: 'logHintBlue',
+  [LogMessageKeys.LOG_HINT_TIMEOUT]: 'logHintTimeout',
+  [LogMessageKeys.LOG_HINT_PHASE_STARTED]: 'logHintPhaseStarted',
+  [LogMessageKeys.LOG_HINT_REQUEST]: 'logHintRequest',
+
   [LogMessageKeys.LOG_VOTE_STARTED]: 'logVoteStarted',
   [LogMessageKeys.LOG_VOTE_ENDED]: 'logVoteEnded',
+
   [LogMessageKeys.LOG_OWN_CARD_CHOSEN_RED]: 'logOwnCardChosenRed',
   [LogMessageKeys.LOG_OWN_CARD_CHOSEN_BLUE]: 'logOwnCardChosenBlue',
   [LogMessageKeys.LOG_OTHER_CARD_CHOSEN_RED]: 'logOtherCardChosenRed',
   [LogMessageKeys.LOG_OTHER_CARD_CHOSEN_BLUE]: 'logOtherCardChosenBlue',
+
+  [LogMessageKeys.LOG_CARD_REVEALED_RED]: 'logCardRevealedRed',
+  [LogMessageKeys.LOG_CARD_REVEALED_BLUE]: 'logCardRevealedBlue',
+  [LogMessageKeys.LOG_CARD_REVEALED_NEUTRAL]: 'logCardRevealedNeutral',
+  [LogMessageKeys.LOG_CARD_REVEALED_BOMB]: 'logCardRevealedBomb',
+
   [LogMessageKeys.LOG_CHECKING_ANSWER_RED]: 'logCheckingAnswerRed',
   [LogMessageKeys.LOG_CHECKING_ANSWER_BLUE]: 'logCheckingAnswerBlue',
   [LogMessageKeys.LOG_ANSWER_COUNTED_RED]: 'logAnswerCountedRed',
   [LogMessageKeys.LOG_ANSWER_COUNTED_BLUE]: 'logAnswerCountedBlue',
   [LogMessageKeys.LOG_SCORE_POINT]: 'logScorePoint',
-  [LogMessageKeys.LOG_HINT_PHASE_STARTED]: 'logHintPhaseStarted',
+
+  [LogMessageKeys.LOG_ANSWER_TIMEOUT]: 'logAnswerTimeout',
+  [LogMessageKeys.LOG_CHECK_TIMEOUT]: 'logCheckTimeout',
+
+  [LogMessageKeys.LOG_TURN_CHANGED_RED]: 'logTurnChangedRed',
+  [LogMessageKeys.LOG_TURN_CHANGED_BLUE]: 'logTurnChangedBlue',
+
+  [LogMessageKeys.LOG_GAME_END_RED_WIN]: 'logGameEndRedWin',
+  [LogMessageKeys.LOG_GAME_END_BLUE_WIN]: 'logGameEndBlueWin',
 
   UNDO_LABEL: 'undoLabel',
 

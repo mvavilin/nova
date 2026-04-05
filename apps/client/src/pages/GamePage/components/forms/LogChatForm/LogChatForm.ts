@@ -27,12 +27,11 @@ export default class LogChatForm extends FormComponent {
     this.initOutput();
 
     // feat: add role verification
+
     this.initControls();
   }
 
   private initOutput(): void {
-    logOutput.addMessage({ key: LogMessageKeys.LOG_START_GAME });
-
     this.appendChildren([logOutput]);
   }
 

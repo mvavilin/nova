@@ -2,6 +2,8 @@ import { URLS, ROUTES } from '@api/RouterAPI/router.constants';
 import { isRouteAccessible } from '@api/RouterAPI/router.utilities';
 import type App from '@components/App/App';
 import { NotFoundPage } from '@pages';
+import store from '@/store/store';
+import { FormActionTypes } from '@/store/actions';
 
 export default class Router {
   private app: App;
@@ -26,6 +28,13 @@ export default class Router {
         child.destroy();
       }
     const path = globalThis.location.pathname;
+
+    //нужно для сброса форм при нажатии кнопок вперед/назад и переходе со стр
+    const isUnAuthPage = path === URLS.LOGIN() || path === URLS.REGISTRATION();
+    if (isUnAuthPage) {
+      store.dispatch({ type: FormActionTypes.CLEAN_DATA });
+    }
+
     const route = this.routes.find((route) => route.path.test(path));
 
     if (!route) {

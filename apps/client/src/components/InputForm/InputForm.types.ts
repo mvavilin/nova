@@ -1,7 +1,7 @@
 import type { TranslationKey } from '@/i18n/translationKeys';
 import type { FormType } from '../BaseForm/BaseForm.types';
 
-export type FieldName = 'username' | 'email' | 'password';
+export type FieldName = 'username' | 'email' | 'password' | 'confirmPassword';
 
 export interface InputFieldProps {
   id: string;

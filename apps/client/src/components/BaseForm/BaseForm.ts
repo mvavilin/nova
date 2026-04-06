@@ -8,18 +8,21 @@ import Loader from '../ui/Loader/Loader';
 
 const messageToUser = 'Sending data to server...';
 
+const styles = {
+  form: 'w-70 p-6 sm:w-80 sm:p-8 md:w-90 md:p-10 bg-white/45 rounded-xl my-auto flex flex-col justify-center items-center gap-2 m-0',
+};
 export default class BaseForm extends FormComponent {
   private formId: FormType;
   protected title: HeadingComponent;
   protected inputArray: InputForm[];
   protected buttonSubmit: ButtonComponent;
   protected isSubmiting = false;
+  private unsubscribe: () => void;
 
   constructor(parameters: BaseFormProps) {
     super({
       method: 'post',
-      classes:
-        'w-82 p-8 md:w-92 md:p-10 bg-white/45 rounded-xl my-auto flex flex-col justify-center items-center gap-2 m-0',
+      classes: styles.form,
     });
 
     this.formId = parameters.formId;
@@ -28,12 +31,11 @@ export default class BaseForm extends FormComponent {
     this.buttonSubmit = parameters.buttonSubmit;
 
     this.init();
+    this.unsubscribe = store.subscribe(() => this.updateUI());
   }
 
   private init(): void {
     this.appendChildren([this.title, ...this.inputArray, this.buttonSubmit]);
-
-    this.addSubscriptions([store.subscribe(() => this.updateUI())]);
 
     this.setListeners({
       submit: (event: Event) => {
@@ -54,16 +56,6 @@ export default class BaseForm extends FormComponent {
     else this.buttonSubmit.setAttributes({ disabled: 'disabled' });
 
     this.buttonSubmit.toggleClasses('disabled-state', !isValid);
-
-    //Для изменения инпутов через состояние формы
-    for (const input of this.inputArray) {
-      const fieldName = input.getFieldName();
-      const fieldData = state.fields[fieldName];
-
-      if (fieldData?.isChanged) {
-        input.updateStatus(fieldData.isValid);
-      }
-    }
   }
 
   public getFormInputValues(): Record<string, string> {
@@ -99,5 +91,15 @@ export default class BaseForm extends FormComponent {
         },
       },
     });
+  }
+
+  public override destroy(): this {
+    this.unsubscribe();
+    for (const input of this.inputArray) input.destroy();
+    this.title.destroy();
+    this.buttonSubmit.destroy();
+
+    super.destroy();
+    return this;
   }
 }

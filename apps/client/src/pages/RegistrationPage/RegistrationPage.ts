@@ -3,6 +3,8 @@ import RegistrationForm from './RegistrationForm.ts/RegistrationForm';
 import RegistrationHeader from './RegistrationHeader/RegistrationHeader';
 
 export default class RegistrationPage extends ContainerComponent {
+  private header: RegistrationHeader | null = null;
+  private form: RegistrationForm | null = null;
   constructor() {
     super({
       tag: 'section',
@@ -14,8 +16,16 @@ export default class RegistrationPage extends ContainerComponent {
   }
 
   private render(): void {
-    const header = new RegistrationHeader();
-    const form = new RegistrationForm();
-    this.appendChildren([header, form]);
+    this.header = new RegistrationHeader();
+    this.form = new RegistrationForm();
+    this.appendChildren([this.header, this.form]);
+  }
+
+  public override destroy(): this {
+    this.header?.destroy();
+    this.form?.destroy();
+
+    super.destroy();
+    return this;
   }
 }

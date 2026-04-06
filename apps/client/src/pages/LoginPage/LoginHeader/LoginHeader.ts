@@ -10,7 +10,7 @@ import type { Action } from '@/api/StateAPI';
 
 const styles = {
   header:
-    'w-full max-w-7xl flex flex-col md:flex-row gap-8 p-4 justify-between items-center bg-white/35 text-white rounded',
+    'min-w-[280px] w-full max-w-7xl flex flex-col md:flex-row gap-8 p-4 justify-between items-center bg-white/35 text-white rounded',
   container: 'flex justify-between items-center gap-5',
   title: 'text-2xl text-center font-bold',
   link: 'text-xl md:text-2xl text-center hover:cursor-pointer hover:text-brand',
@@ -19,24 +19,18 @@ const styles = {
 export default class LoginHeader extends ContainerComponent {
   private logo: TextComponent | null = null;
   private loginLink: TextComponent | null = null;
+  private unsubscribe: () => void;
 
   constructor() {
     super({ tag: 'header', classes: styles.header });
 
     this.render();
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
+
+    this.unsubscribe = store.subscribe((state, action) => this.switchLanguage(state, action));
   }
 
   private render(): void {
     this.logo = new Logo();
-    this.logo.setClasses('hover:cursor-pointer');
-    this.logo.setListeners({
-      click: (): void => {
-        store.dispatch({
-          type: FormActionTypes.GO_TO_WELCOME_PAGE,
-        });
-      },
-    });
 
     const container = new ContainerComponent({ classes: styles.container });
     this.loginLink = new TextComponent({
@@ -59,5 +53,11 @@ export default class LoginHeader extends ContainerComponent {
     if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.loginLink?.setContent(t(TranslationKeys.REGISTRATION_TITLE));
     }
+  }
+
+  public override destroy(): this {
+    this.unsubscribe();
+    super.destroy();
+    return this;
   }
 }

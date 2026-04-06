@@ -7,6 +7,7 @@ import store from '@/store/store';
 import { AppActionTypes } from '@/store/actions';
 
 export default class LoginSubmitButton extends ButtonComponent {
+  private unsubscribe: () => void;
   constructor() {
     super({
       classes:
@@ -14,9 +15,9 @@ export default class LoginSubmitButton extends ButtonComponent {
       type: 'submit',
     });
 
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
-
     this.render();
+
+    this.unsubscribe = store.subscribe((state, action) => this.switchLanguage(state, action));
   }
 
   private render(): void {
@@ -27,5 +28,11 @@ export default class LoginSubmitButton extends ButtonComponent {
     if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.setContent(t(TranslationKeys.LOGIN_SUBMIT_BTN));
     }
+  }
+
+  public override destroy(): this {
+    this.unsubscribe();
+    super.destroy();
+    return this;
   }
 }

@@ -19,7 +19,7 @@
     "@repo/shared": "^0.0.1",
     "@tailwindcss/cli": "^4.2.1",
     "@tailwindcss/vite": "^4.2.0",
-    "jsdom": "^28.1.0",
+    "jsdom": "^22.1.0",
     "tailwindcss": "^4.2.0",
     "typescript": "~5.9.3",
     "vite": "^7.3.1",

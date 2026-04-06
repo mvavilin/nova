@@ -25,12 +25,18 @@ export default class RegistrationForm extends BaseForm {
       fieldName: 'password',
     });
 
+    const confirmPasswordInput = new InputForm({
+      ...formInputValues.confirmPassword,
+      formId: 'registration',
+      fieldName: 'confirmPassword',
+    });
+
     const submitButton = new RegistrationSubmitButton();
 
     super({
       formId: 'registration',
       title: title,
-      inputArray: [nameInput, emailInput, passwordInput],
+      inputArray: [nameInput, emailInput, passwordInput, confirmPasswordInput],
       buttonSubmit: submitButton,
     });
   }

@@ -12,6 +12,7 @@ export const initialState: State = {
       username: { value: '', isValid: false, isChanged: false },
       email: { value: '', isValid: false, isChanged: false },
       password: { value: '', isValid: false, isChanged: false },
+      confirmPassword: { value: '', isValid: false, isChanged: false },
     },
     isFormValid: false,
   },

@@ -10,7 +10,17 @@ import type { State } from '@/store/types/state';
 import store from '@/store/store';
 import { t } from '@/i18n';
 import type { TranslationKey } from '@/i18n/translationKeys';
+import { TranslationKeys } from '@/i18n/translationKeys';
 import { AppActionTypes } from '@/store/actions';
+
+const styles = {
+  container: 'w-full flex flex-col self-center gap-1',
+  label: 'uppercase text-sm md:text-base font-medium font-main',
+  tooltip:
+    'min-h-[32px] whitespace-pre-line text-red-600 text-[10px] sm:text-[11px] md:text-xs font-medium transition-opacity duration-200',
+  input:
+    'text-sm md:text-base px-3 py-2 bg-white/60 border border-solid border-black rounded-md outline-none transition-colors duration-300 hover:border-green-600 focus:border-brand',
+};
 
 export default class InputForm extends ContainerComponent {
   private formId: FormType;
@@ -22,30 +32,32 @@ export default class InputForm extends ContainerComponent {
   private placeholderKey: TranslationKey;
   private errorKey: TranslationKey;
   private pattern?: RegExp;
+  private unsubscribe: () => void;
 
   constructor(parameters: InputBlockProps) {
-    super({ classes: 'w-full flex flex-col self-center gap-1' });
+    super({ classes: styles.container });
     this.formId = parameters.formId;
     this.fieldName = parameters.fieldName;
     this.labelKey = parameters.labelTextKey;
     this.placeholderKey = parameters.placeholderKey;
     this.errorKey = parameters.errorKey;
     if (parameters.pattern) this.pattern = parameters.pattern;
+
     this.render(parameters);
-    this.addSubscribe();
+
+    this.unsubscribe = store.subscribe((state, action) => this.updateInputForm(state, action));
   }
 
   private render(parameters: InputBlockProps): void {
     this.label = new LabelComponent({
-      classes: 'uppercase text-sm md:text-base font-medium font-main',
+      classes: styles.label,
       content: t(this.labelKey),
       htmlFor: parameters.id,
     });
 
     this.tooltip = new TextComponent({
       tag: 'span',
-      classes:
-        'min-h-[32px] whitespace-pre-line text-red-600 text-xs font-medium transition-opacity duration-200',
+      classes: styles.tooltip,
     });
 
     this.input = new InputComponent({
@@ -54,8 +66,7 @@ export default class InputForm extends ContainerComponent {
       name: parameters.name,
       placeholder: t(this.placeholderKey),
       autocomplete: parameters.autocomplete,
-      classes:
-        'text-sm md:text-base px-3 py-2 bg-white/60 border border-solid border-black rounded-md outline-none transition-colors duration-300 hover:border-green-600 focus:border-brand',
+      classes: styles.input,
     });
 
     if (parameters.minLength) {
@@ -82,9 +93,24 @@ export default class InputForm extends ContainerComponent {
     if (!(event.target instanceof HTMLInputElement)) return;
     const value = event.target.value.trim().replaceAll(/\s+/g, ' ');
 
-    const isValid = this.pattern
-      ? this.pattern.test(value) && value.length >= Number(event.target.minLength)
-      : value.length >= Number(event.target.minLength);
+    let isValid = true;
+
+    if (this.fieldName === 'password') {
+      if (!/^[A-Za-z0-9!@#$%^&*]*$/.test(value)) {
+        this.errorKey = TranslationKeys.FORM_ERROR_MESSAGE_PASSWORD_ONLY_ENGLISH;
+        isValid = false;
+      } else if (!/(?=.*[A-Z])(?=.*[!@#$%^&*])/.test(value)) {
+        this.errorKey = TranslationKeys.FORM_ERROR_MESSAGE_PASSWORD_REQUIREMENTS;
+        isValid = false;
+      } else if (value.length < 6) {
+        this.errorKey = TranslationKeys.FORM_ERROR_MESSAGE_PASSWORD_MIN_LENGTH;
+        isValid = false;
+      }
+    } else {
+      isValid = this.pattern
+        ? this.pattern.test(value) && value.length >= Number(event.target.minLength)
+        : value.length >= Number(event.target.minLength);
+    }
 
     store.dispatch({
       type: FormActionTypes.FORM_UPDATE_FIELD,
@@ -97,16 +123,12 @@ export default class InputForm extends ContainerComponent {
     });
   }
 
-  private addSubscribe(): void {
-    this.addSubscriptions([
-      store.subscribe((state, action) => this.updateInputForm(state, action)),
-    ]);
-  }
-
   private updateInputForm(_state: State, action: Action): void {
     const isFieldUpdate = action.type === FormActionTypes.FORM_UPDATE_FIELD;
     const isLanguageSwitch = action.type === AppActionTypes.SWITCH_LANGUAGE;
-    if (isFieldUpdate || isLanguageSwitch) {
+    const isCleanData = action.type === FormActionTypes.CLEAN_DATA;
+
+    if (isFieldUpdate || isLanguageSwitch || isCleanData) {
       const formState = store.getState()[this.formId];
       const fieldState = formState.fields[this.fieldName];
       if (!fieldState || !this.input || !this.label || !this.tooltip) return;
@@ -124,15 +146,9 @@ export default class InputForm extends ContainerComponent {
     }
   }
 
-  //Для возможности изменения инпутов через состояние формы
-  public getFieldName(): FieldName {
-    return this.fieldName;
-  }
-
-  public updateStatus(isValid: boolean): void {
-    if (!this.input || !this.tooltip) return;
-    this.input.toggleClasses('border-red-500', !isValid);
-    this.input.toggleClasses('focus:border-yellow-500', isValid);
-    this.tooltip.setContent(isValid ? '' : t(this.errorKey));
+  public override destroy(): this {
+    this.unsubscribe();
+    super.destroy();
+    return this;
   }
 }

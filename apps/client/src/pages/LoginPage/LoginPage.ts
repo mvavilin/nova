@@ -3,6 +3,8 @@ import LoginForm from './LoginForm/LoginForm';
 import LoginHeader from './LoginHeader/LoginHeader';
 
 export default class LoginPage extends ContainerComponent {
+  private header: LoginHeader | null = null;
+  private form: LoginForm | null = null;
   constructor() {
     super({
       tag: 'section',
@@ -14,8 +16,16 @@ export default class LoginPage extends ContainerComponent {
   }
 
   private render(): void {
-    const header = new LoginHeader();
-    const form = new LoginForm();
-    this.appendChildren([header, form]);
+    this.header = new LoginHeader();
+    this.form = new LoginForm();
+    this.appendChildren([this.header, this.form]);
+  }
+
+  public override destroy(): this {
+    this.header?.destroy();
+    this.form?.destroy();
+
+    super.destroy();
+    return this;
   }
 }

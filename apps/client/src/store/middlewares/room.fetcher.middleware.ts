@@ -3,11 +3,11 @@ import type { AppActions } from '@AppActions';
 import { ClientEventType, ServerEventType } from '@repo/shared/src/socketEvents';
 import { socketClient } from '@SocketClientAPI';
 import { SOCKET_ERROR_MESSAGES } from '@SocketClientAPI/socket.constants';
-import { RoomPageActionTypes, SocketActionTypes } from '@actions';
-import { saveSessionStorageData, showErrorToast } from '@utils';
+import { GameActionTypes, RoomPageActionTypes, SocketActionTypes } from '@actions';
+import { showErrorToast } from '@utils';
 import { URLS } from '@RouterAPI/router.constants';
 import { router } from '@router';
-import { SESSION_STORAGE_KEYS } from '@constants/sessionStorageKeys';
+import store from '@store';
 
 export default function socketFetcher<State>(): Middleware<State, AppActions> {
   return function middleware(context) {
@@ -49,22 +49,17 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
       try {
         socketClient.onError(({ code }) => {
           showErrorToast(code, SOCKET_ERROR_MESSAGES.ON_ERROR);
+
           socketClient.off(ServerEventType.ERROR);
         });
 
-        socketClient.onGameStart(({ gameInfo }) => {
+        socketClient.onGameStart(() => {
+          store.dispatch({ type: GameActionTypes.GAME_ASK_GAME_STATE });
+
           socketClient.off(ServerEventType.GAME_START);
-
-          saveSessionStorageData(SESSION_STORAGE_KEYS.GAME_INFO, gameInfo);
-
-          const gameId = gameInfo.id;
-
-          router.navigate(URLS.GAME(gameId));
         });
 
-        context.next({
-          type: RoomPageActionTypes.CLEAR_ROOM_DATA,
-        });
+        context.next({ type: RoomPageActionTypes.CLEAR_ROOM_DATA });
 
         socketClient.emit(ClientEventType.GAME_ADD_PLAYER);
       } catch (error) {

@@ -11,6 +11,8 @@ const mockInitialState: State = {
   login: { fields: {}, isFormValid: false },
   rooms: [],
   currentRoom: null,
+
+  game: null,
 };
 
 export default mockInitialState;

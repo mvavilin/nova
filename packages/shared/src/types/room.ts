@@ -21,6 +21,12 @@ export enum TeamsEnum {
 
 export type Teams = 'red' | 'blue' | 'choosing';
 
+export enum RolesEnum {
+  SPYMASTER = 'spymaster',
+  AGENT = 'agent',
+  CHOOSING = 'choosing',
+}
+
 export type Roles = 'spymaster' | 'agent' | 'choosing';
 
 export type Player = {

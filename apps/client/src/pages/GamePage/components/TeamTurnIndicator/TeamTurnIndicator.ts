@@ -3,17 +3,15 @@ import { TextComponent } from '@ComponentsAPI';
 import { t } from '@i18n';
 import { TranslationKeys } from '@i18n/translationKeys';
 import { socketClient } from '@SocketClientAPI';
-// import { LogMessageType, LogMessageKeys } from '@repo/shared/src/types/logMessage';
-// import { logOutput } from '@pages/GamePage/components';
 import { SESSION_STORAGE_KEYS } from '@constants/sessionStorageKeys';
-import { getSessionStorageData, saveSessionStorageData } from '@utils';
+import { getSessionStorageData } from '@utils';
 
 type TeamTurnIndicatorProperties = {
-  team: TeamsEnum;
+  team: Teams | undefined;
 };
 
 const TEAM_TURN_INDICATOR = {
-  CONTAINER: `px-2 py-1 rounded-lg font-bold text-lg uppercase text-white`,
+  CONTAINER: `px-2 py-1 w-48 rounded-lg font-bold text-md uppercase text-white text-center`,
   COLORS: {
     [TeamsEnum.RED]: 'bg-red-400',
     [TeamsEnum.BLUE]: 'bg-blue-400',
@@ -24,7 +22,7 @@ const TEAM_TURN_INDICATOR = {
 export default class TeamTurnIndicator extends TextComponent {
   private currentTeam: Teams;
 
-  constructor({ team }: TeamTurnIndicatorProperties) {
+  constructor({ team = TeamsEnum.RED }: TeamTurnIndicatorProperties) {
     const content = TeamTurnIndicator.getContent(team);
     super({
       content,
@@ -32,18 +30,8 @@ export default class TeamTurnIndicator extends TextComponent {
     });
 
     this.currentTeam = getSessionStorageData<Teams>(SESSION_STORAGE_KEYS.GAME_TURN) || team;
-    saveSessionStorageData(SESSION_STORAGE_KEYS.GAME_TURN, this.currentTeam);
 
-    socketClient.onGameTurnChanged((payload: { team: Teams }) => {
-      saveSessionStorageData(SESSION_STORAGE_KEYS.GAME_TURN, payload.team);
-
-      // logOutput.addMessage({
-      //   type: payload.team === 'red' ? LogMessageType.RED : LogMessageType.BLUE,
-      //   key: payload.team === 'red' ? LogMessageKeys.LOG_HINT_RED : LogMessageKeys.LOG_HINT_BLUE,
-      // });
-
-      this.updateTurn(payload.team);
-    });
+    socketClient.onGameTurnChanged((payload: { team: Teams }) => this.updateTurn(payload.team));
   }
 
   private static getContent(team: Teams): string {

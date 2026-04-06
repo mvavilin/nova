@@ -1,6 +1,6 @@
 import type { Player, RoomInfo, RoomPreview, Teams } from '@repo/shared/src/types/room';
-import type { CardColor } from '@repo/shared/src/types/game';
-import type { GameInfo } from '@shared/types/game';
+import type { CardColor, GameStateForClient, Score } from '@repo/shared/src/types/game';
+import type { GameInfo, GameEndInfo } from '@shared/types/game';
 import type { ProfileInfo } from '@shared/types/profile';
 import { ServerEventType, type ErrorCode, type UserStatus } from '@repo/shared/src/socketEvents';
 import { ServerUrl } from '@repo/shared/src/api.constants';
@@ -40,7 +40,9 @@ class SocketClient extends BaseSocketClient {
     this.socket.on(ServerEventType.SESSION_PLAYER_EXIT, handler);
   }
 
-  public onSessionSendStatus(handler: (payload: { userStatus: UserStatus }) => void): void {
+  public onSessionSendStatus(
+    handler: (payload: { userStatus: UserStatus; userId: string; username: string }) => void
+  ): void {
     this.socket.on(ServerEventType.SESSION_SEND_STATUS, handler);
   }
 
@@ -154,6 +156,22 @@ class SocketClient extends BaseSocketClient {
 
   public onGameCheckResults(handler: (payload: { correct: boolean }) => void): void {
     this.socket.on(ServerEventType.GAME_CHECK_RESULTS, handler);
+  }
+
+  public onGameCheckTimeout(handler: () => void): void {
+    this.socket.on(ServerEventType.GAME_CHECK_TIMEOUT, handler);
+  }
+
+  public onGameSendScore(handler: (payload: { score: Score }) => void): void {
+    this.socket.on(ServerEventType.GAME_SEND_SCORE, handler);
+  }
+
+  public onGameGameEnd(handler: (payload: { gameEndInfo: GameEndInfo }) => void): void {
+    this.socket.on(ServerEventType.GAME_GAME_END, handler);
+  }
+
+  public onGameState(handler: (payload: { gameState: GameStateForClient }) => void): void {
+    this.socket.on(ServerEventType.GAME_STATE, handler);
   }
 
   // Profile events

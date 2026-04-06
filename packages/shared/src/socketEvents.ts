@@ -11,8 +11,10 @@ import type { CheckQuestion } from './types/question.ts';
 import type { Player, RoomInfo, RoomPreview, RoomSettings, Teams } from './types/room.ts';
 
 export enum ClientEventType {
+  // Session events
   SESSION_ASK_STATUS = 'session:ask-status',
   SESSION_LOGOUT = 'session:logout',
+
   // Room events
   ROOM_CREATE = 'room:create',
   ROOM_ASK_LIST = 'room:ask-list',
@@ -20,15 +22,19 @@ export enum ClientEventType {
   ROOM_JOIN = 'room:join',
   ROOM_LEAVE = 'room:leave',
   ROOM_ASK_ROOM_INFO = 'room:ask-room-info',
+
   SESSION_PLAYER_EXIT = 'session:player-exit',
   // Team events
   TEAM_CHANGE = 'team:change',
+
   // Game events
   GAME_ADD_PLAYER = 'game:add-player',
   GAME_CLUE_GIVE = 'game:clue-give',
   GAME_CARD_CHOOSE = 'game:card-choose',
   GAME_ANSWER_GIVE = 'game:answer-give',
   GAME_CHECK_GIVE = 'game:check-give',
+  GAME_ASK_GAME_STATE = 'game:ask-game-state',
+
   // Profile events
   PROFILE_ENTER = 'profile:enter',
   PROFILE_LEAVE = 'profile:leave',
@@ -36,12 +42,14 @@ export enum ClientEventType {
 }
 
 export enum ServerEventType {
+  // Session events
   SESSION_TOKEN = 'session:token',
   SESSION_CONNECT = 'session:connect',
   SESSION_PLAYER_CONNECTED = 'session:player-connected',
   SESSION_PLAYER_DISCONNECTED = 'session:player-disconnected',
   SESSION_PLAYER_EXIT = 'session:player-exit',
   SESSION_SEND_STATUS = 'session:send-status',
+
   // Room events
   ROOM_SEND_LIST = 'room:send-list',
   ROOM_CREATED = 'room:created',
@@ -49,8 +57,10 @@ export enum ServerEventType {
   ROOM_UPDATE_PREVIEW = 'room:update-review',
   ROOM_PLAYER_JOINED = 'room:player-joined',
   ROOM_PLAYER_LEFT = 'room:player-left',
+
   // Team events
   TEAM_CHANGED = 'team:changed',
+
   // Game events
   GAME_START_TIMER = 'game:start-timer',
   GAME_START = 'game:start',
@@ -64,9 +74,15 @@ export enum ServerEventType {
   GAME_ANSWER_TIMEOUT = 'game:answer-timeout',
   GAME_ASK_CHECK = 'game:ask-check',
   GAME_CHECK_RESULTS = 'game:check-results',
+  GAME_CHECK_TIMEOUT = 'game:check-timeout',
+  GAME_SEND_SCORE = 'game:send-score',
+  GAME_GAME_END = 'game:game-end',
+  GAME_STATE = 'game:state',
+
   // Profile events
   PROFILE_ENTERED = 'profile:entered',
   PROFILE_LEFT = 'profile:left',
+
   // Connection errors
   ERROR = 'error',
   CONNECT_ERROR = 'connect_error',

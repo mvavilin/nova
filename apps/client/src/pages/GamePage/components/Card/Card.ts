@@ -1,9 +1,9 @@
-import { Role, type Card, CardColor, CardStatus } from '@__mocks__';
 import { BaseComponent, ContainerComponent } from '@ComponentsAPI';
+import { type Card, CardColorEnum } from '@repo/shared/src/types/game';
 
 type CardProperties = {
   card: Card;
-  role: Role;
+  isSpymaster: boolean;
 };
 
 const CARD_CLASSES = {
@@ -12,12 +12,12 @@ const CARD_CLASSES = {
 };
 
 export default class CardComponent extends BaseComponent {
-  constructor({ card, role }: CardProperties) {
-    super({ classes: `${CARD_CLASSES.CONTAINER} ${CardColor.NEUTRAL}` });
+  constructor({ card, isSpymaster }: CardProperties) {
+    super({ classes: `${CARD_CLASSES.CONTAINER} ${CardColorEnum.neutral}` });
 
-    if (role === Role.SPYMASTER || card.status === CardStatus.REVEALED) {
-      this.removeClasses(CardColor.NEUTRAL);
-      this.setClasses(card.color);
+    if (isSpymaster) {
+      this.removeClasses(CardColorEnum.neutral);
+      this.setClasses(CardColorEnum[card.color]);
     }
 
     this.render(card.word);

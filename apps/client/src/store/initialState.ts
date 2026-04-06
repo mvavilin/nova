@@ -25,4 +25,6 @@ export const initialState: State = {
   },
   rooms: [],
   currentRoom: null,
+
+  game: null,
 };

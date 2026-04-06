@@ -1,5 +1,13 @@
 import type { Player, Teams } from './room.ts';
 
+export enum CardColorEnum {
+  red = 'bg-red-400 hover:bg-red-500',
+  blue = 'bg-blue-400 hover:bg-blue-500',
+  neutral = 'bg-orange-300 hover:bg-orange-400',
+  bomb = 'bg-slate-400 hover:bg-slate-500',
+  unknown = 'bg-green-400 hover:bg-green-500',
+}
+
 export type CardColor = 'red' | 'blue' | 'neutral' | 'bomb' | 'unknown';
 export type CardStatus = 'hidden' | 'revealed';
 export type GAME_PHASE = 'clue' | 'guess' | 'answer' | 'check' | 'finish';

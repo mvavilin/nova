@@ -3,7 +3,7 @@ import { GAME_RESULTS_MODAL_BACKGROUND } from '@assets/backgrounds';
 import { BaseComponent, ContainerComponent, HeadingComponent, TextComponent } from '@ComponentsAPI';
 import { Role, Team, type GameResultData } from '@__mocks__';
 import { Avatar } from '@components';
-import { TEAM_HEADER_CLASSES } from '@pages/GamePage/components/TeamHeader/TeamHeader';
+// import { TEAM_HEADER_CLASSES } from '@pages/GamePage/components/TeamHeader/TeamHeader';
 import { t } from '@i18n';
 import { TranslationKeys } from '@i18n/translationKeys';
 
@@ -178,8 +178,8 @@ export default class GameResultsModal extends Modal {
             classes: `flex gap-2 justify-center`,
             children: [
               new Avatar({
-                classes:
-                  TEAM_HEADER_CLASSES.AVATAR_BORDER[playerData.player.team][playerData.player.role],
+                // classes:
+                //   TEAM_HEADER_CLASSES.AVATAR_BORDER[playerData.player.team][playerData.player.role],
                 width: 25,
                 height: 25,
                 seed: playerData.player.id,

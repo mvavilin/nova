@@ -7,26 +7,31 @@ import store from '@/store/store';
 import { AppActionTypes } from '@/store/actions';
 
 export default class RegistrationHeading extends HeadingComponent {
+  private unsubscribe: () => void;
   constructor() {
     super({
       classes:
         'mb-4 text-xl md:text-2xl font-brand font-black text-black [text-stroke:0.5px_#FFE81F] [-webkit-text-stroke:0.5px_#FFE81F] drop-shadow-[0_0_10px_rgba(255,232,31,0.4)] paint-order: stroke fill;',
     });
 
-    this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);
-
     this.render();
+
+    this.unsubscribe = store.subscribe((state, action) => this.switchLanguage(state, action));
   }
+
   private render(): void {
-    const context = t(TranslationKeys.REGISTRATION_TITLE);
-    if (typeof context === 'string') {
-      this.setContent(context);
-    }
+    this.setContent(t(TranslationKeys.REGISTRATION_TITLE));
   }
 
   private switchLanguage(_state: State, action: Action): void {
     if (action.type === AppActionTypes.SWITCH_LANGUAGE) {
       this.setContent(t(TranslationKeys.REGISTRATION_TITLE));
     }
+  }
+
+  public override destroy(): this {
+    this.unsubscribe();
+    super.destroy();
+    return this;
   }
 }

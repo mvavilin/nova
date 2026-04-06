@@ -109,6 +109,7 @@ describe('BaseForm: сбор данных (getFormInputValues)', () => {
           username: { value: 'Alice', isValid: true, isChanged: true },
           email: { value: 'alice@example.com', isValid: true, isChanged: true },
           password: { value: '!Secret123', isValid: true, isChanged: true },
+          confirmPassword: { value: '!Secret123', isValid: true, isChanged: true },
         },
       },
     });
@@ -120,6 +121,7 @@ describe('BaseForm: сбор данных (getFormInputValues)', () => {
       username: 'Alice',
       email: 'alice@example.com',
       password: '!Secret123',
+      confirmPassword: '!Secret123',
     });
   });
 });
@@ -140,6 +142,7 @@ describe('BaseForm: обработка события Submit (отправка �
           username: { value: 'Alice', isValid: true, isChanged: true },
           email: { value: 'alice@example.com', isValid: true, isChanged: true },
           password: { value: '!Secret123', isValid: true, isChanged: true },
+          confirmPassword: { value: '!Secret123', isValid: true, isChanged: true },
         },
         isFormValid: true,
       },
@@ -153,7 +156,12 @@ describe('BaseForm: обработка события Submit (отправка �
         type: FormActionTypes.FETCH_DATA,
         payload: expect.objectContaining({
           formId: 'registration',
-          formData: { username: 'Alice', email: 'alice@example.com', password: '!Secret123' },
+          formData: {
+            username: 'Alice',
+            email: 'alice@example.com',
+            password: '!Secret123',
+            confirmPassword: '!Secret123',
+          },
           loader: expect.any(Object),
           onFinished: expect.any(Function),
         }),

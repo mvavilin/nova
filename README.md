@@ -79,12 +79,12 @@ Meeting Notes (ссылки на 3+ записей)
 
 **Pull Requests:**
 
-[![GitHub](https://img.shields.io/badge/Mikhail_Vavilin-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/214)
+[![GitHub](https://img.shields.io/badge/Mikhail_Vavilin-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/216)
 [![GitHub](https://img.shields.io/badge/Elena_Valiullina-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/211)
 [![GitHub](https://img.shields.io/badge/Andrey_Zharkikh-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/205)
 
 **Файлы:**
 
-[![GitHub](https://img.shields.io/badge/self--assessment_mvavilin-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/blob/dev/development-notes/mvavilin/self-assessment.md)
-[![GitHub](https://img.shields.io/badge/self--assessment_peccopa-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/blob/dev/development-notes/peccopa/self-assessment.md)
-[![GitHub](https://img.shields.io/badge/self--assessment_walle908-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/blob/dev/development-notes/walle908/self-assessment.md)
+[![GitHub](https://img.shields.io/badge/self--assessment_mvavilin-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/blob/main/development-notes/mvavilin/self-assessment.md)
+[![GitHub](https://img.shields.io/badge/self--assessment_peccopa-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/blob/main/development-notes/peccopa/self-assessment.md)
+[![GitHub](https://img.shields.io/badge/self--assessment_walle908-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/blob/main/development-notes/walle908/self-assessment.md)

@@ -6,7 +6,7 @@
 
 **PR с самооценкой:**
 
-[![GitHub](https://img.shields.io/badge/PR_№xxx-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/xxx)
+[![GitHub](https://img.shields.io/badge/PR_№216-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/mvavilin/Nova-Codenames/pull/216)
 
 ## 🧩 Таблица выполненных фич
 

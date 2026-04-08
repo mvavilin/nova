@@ -38,5 +38,9 @@ export default function appAfterware<State>(): Afterware<State> {
         showErrorToast(error, SOCKET_ERROR_MESSAGES.ON_ERROR);
       }
     }
+
+    if (context.action.type === AppActionTypes.GO_TO_WELCOME_PAGE) {
+      router.navigate();
+    }
   };
 }

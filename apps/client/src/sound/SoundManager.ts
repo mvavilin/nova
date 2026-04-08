@@ -23,6 +23,7 @@ export default class SoundManager {
     }
 
     const audio = new Audio(source);
+    audio.volume = 0.1;
     audio.play().catch(() => console.warn(`Failed to play sound: ${key}`));
   }
 

@@ -31,29 +31,30 @@ export function setupConnectionHandler(): void {
         socket.emit('error', { code: 'ALREADY_ONLINE' });
         logger.emit(userId, 'error', { code: 'ALREADY_ONLINE' });
         socket.disconnect();
-      } else {
-        const status = roomManager.getStatus(userId, username);
-        const { userStatus, player, recipients } = status;
-
-        socket.emit('session:connect', { userStatus, userId, username });
-        logger.emit(userId, 'session:connect', { userStatus, userId, username });
-
-        socket.emit('session:token', { sessionToken: socket.data.sessionToken });
-        logger.emit(userId, 'session:token', { sessionToken: socket.data.sessionToken });
-
-        for (const recipient of recipients) {
-          const socketId = socketIdMap.get(recipient);
-          if (socketId) {
-            io.to(socketId).emit('session:player-connected', { player });
-            logger.emit(recipient, 'session:player-connected', { player });
-          }
-        }
-        clearTimeout(reconnectTimerMap.get(userId));
-        reconnectTimerMap.delete(userId);
-        logger.info('connect:', userId);
+        return;
       }
 
       socketIdMap.set(userId, socket.id);
+
+      const status = roomManager.getStatus(userId, username);
+      const { userStatus, player, recipients } = status;
+
+      socket.emit('session:connect', { userStatus, userId, username });
+      logger.emit(userId, 'session:connect', { userStatus, userId, username });
+
+      socket.emit('session:token', { sessionToken: socket.data.sessionToken });
+      logger.emit(userId, 'session:token', { sessionToken: socket.data.sessionToken });
+
+      for (const recipient of recipients) {
+        const socketId = socketIdMap.get(recipient);
+        if (socketId) {
+          io.to(socketId).emit('session:player-connected', { player });
+          logger.emit(recipient, 'session:player-connected', { player });
+        }
+      }
+      clearTimeout(reconnectTimerMap.get(userId));
+      reconnectTimerMap.delete(userId);
+      logger.info('connect:', userId);
 
       setupDisconnectHandler(socket);
       setupAskStatusHandler(socket);
@@ -71,6 +72,10 @@ function setupDisconnectHandler(
   socket.on('disconnect', () => {
     const { userId, username } = socket.data;
     logger.info('disconnect:', userId);
+
+    if (socketIdMap.get(userId) === socket.id) {
+      socketIdMap.delete(userId);
+    }
 
     const status = roomManager.getStatus(userId, username);
     const { player, recipients } = status;

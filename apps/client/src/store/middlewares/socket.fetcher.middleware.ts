@@ -44,7 +44,6 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
 
         socketClient.onError(({ code }) => {
           if (code === SocketErrorCode.ALREADY_ONLINE) {
-            // showErrorToast(code, SOCKET_ERROR_MESSAGES.GENERAL_ERROR);
             showErrorToast(
               t(TranslationKeys.SOCKET_ERROR_ALREADY_ONLINE),
               t(TranslationKeys.SOCKET_ERROR)
@@ -111,11 +110,7 @@ export default function socketFetcher<State>(): Middleware<State, AppActions> {
           socketClient.off(ServerEventType.ERROR);
         });
 
-        const randomId = Math.random();
-        console.log(`[${randomId}] Подписываюсь на ROOM_STATE`);
-
         socketClient.onRoomState(({ roomInfo }) => {
-          console.log(`[${randomId}] ROOM_STATE получен!`);
           socketClient.off(ServerEventType.ROOM_STATE);
 
           context.next({

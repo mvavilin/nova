@@ -19,7 +19,6 @@ import {
   SECOND_COUNT_FOR_ASK_CLUE,
   SECOND_COUNT_FOR_CHECK,
   SECOND_COUNT_FOR_GUESS,
-  TIMER_INTERVAL,
   type CardTestResult,
   type CheckResults,
   type ErrorCode,
@@ -146,25 +145,16 @@ export class Game {
   public askClue(callback: (team: Teams) => void): string | undefined {
     const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
     const spymaster = team.find((player) => player.role === 'spymaster');
-    if (spymaster) {
-      this.phaseTime = 0;
-      this.phaseTimer = setInterval(() => {
-        this.phaseTime += 1;
-        if (this.phaseTime >= SECOND_COUNT_FOR_ASK_CLUE) {
-          this.phaseTime = 0;
-          if (this.phaseTimer) {
-            clearInterval(this.phaseTimer);
-            this.phaseTimer = null;
-          }
-          this.turnChange();
-          callback(this.currentTeam);
-        }
-      }, TIMER_INTERVAL);
+    if (!spymaster) return;
 
-      return spymaster.id;
-    }
+    this.gamePhase = 'clue';
 
-    return;
+    this.runPhaseTimer(SECOND_COUNT_FOR_ASK_CLUE, () => {
+      this.turnChange();
+      callback(this.currentTeam);
+    });
+
+    return spymaster.id;
   }
 
   public giveClue(
@@ -175,27 +165,18 @@ export class Game {
     const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
     const spymaster = team.find((player) => player.role === 'spymaster' && player.id === userId);
 
-    if (spymaster && this.gamePhase === 'clue') {
-      this.gamePhase = 'guess';
-
-      this.phaseTime = 0;
-      this.phaseTimer = setInterval(() => {
-        this.phaseTime += 1;
-        if (this.phaseTime >= SECOND_COUNT_FOR_GUESS) {
-          this.phaseTime = 0;
-          if (this.phaseTimer) {
-            clearInterval(this.phaseTimer);
-            this.phaseTimer = null;
-          }
-          const result = this.guessTest();
-          callback(result);
-        }
-      }, TIMER_INTERVAL);
-
-      const agentIds = team.filter((player) => player.role === 'agent').map((player) => player.id);
-      return { clue, agentIds };
+    if (!spymaster || this.gamePhase !== 'clue') {
+      return { error: 'ACTION_IS_PROHIBITED' };
     }
-    return { error: 'ACTION_IS_PROHIBITED' };
+
+    this.gamePhase = 'guess';
+    this.runPhaseTimer(SECOND_COUNT_FOR_GUESS, () => {
+      const result = this.guessTest();
+      callback(result);
+    });
+
+    const agentIds = team.filter((player) => player.role === 'agent').map((player) => player.id);
+    return { clue, agentIds };
   }
 
   public chooseCard(
@@ -241,6 +222,7 @@ export class Game {
   }
 
   private guessTest(): CardTestResult {
+    this.stopPhaseTimer();
     const termWithCardId = 0;
     const termWithUserIds = 1;
     let userIdCount = 0;
@@ -317,6 +299,7 @@ export class Game {
   }
 
   private chosenBombCard(card: Card): CardTestResult {
+    this.stopPhaseTimer();
     const opponentTeam = this.currentTeam === 'red' ? this.blueTeam : this.redTeam;
     const winPlayerIds = opponentTeam.map((player) => player.id);
     const gameEndInfo = this.getGameEndInfo(true);
@@ -352,22 +335,14 @@ export class Game {
 
   public startAnswerPhase(callback: (team: Teams) => void): void {
     this.gamePhase = 'answer';
-    this.phaseTime = 0;
-    this.phaseTimer = setInterval(() => {
-      this.phaseTime += 1;
-      if (this.phaseTime >= SECOND_COUNT_FOR_ANSWER) {
-        this.phaseTime = 0;
-        if (this.phaseTimer) {
-          clearInterval(this.phaseTimer);
-          this.phaseTimer = null;
-        }
-        this.checkQuestion = null;
-        this.answerCard = null;
-        this.answerUserId = undefined;
-        this.turnChange();
-        callback(this.currentTeam);
-      }
-    }, TIMER_INTERVAL);
+
+    this.runPhaseTimer(SECOND_COUNT_FOR_ANSWER, () => {
+      this.checkQuestion = null;
+      this.answerCard = null;
+      this.answerUserId = undefined;
+      this.turnChange();
+      callback(this.currentTeam);
+    });
   }
 
   public giveAnswer(
@@ -377,11 +352,7 @@ export class Game {
     | { answer: string; checkQuestion: CheckQuestion; spymasterId: string; playerIds: string[] }
     | { error: ErrorCode } {
     if (this.gamePhase === 'answer' && this.answerUserId === userId && this.checkQuestion) {
-      this.phaseTime = 0;
-      if (this.phaseTimer) {
-        clearInterval(this.phaseTimer);
-        this.phaseTimer = null;
-      }
+      this.stopPhaseTimer();
 
       const opponentTeam = this.currentTeam === 'red' ? this.blueTeam : this.redTeam;
       const playerIds = opponentTeam.map((player) => player.id);
@@ -402,19 +373,11 @@ export class Game {
 
   public startCheckPhase(callback: (results: CheckResults) => void): void {
     this.gamePhase = 'check';
-    this.phaseTime = 0;
-    this.phaseTimer = setInterval(() => {
-      this.phaseTime += 1;
-      if (this.phaseTime >= SECOND_COUNT_FOR_CHECK) {
-        this.phaseTime = 0;
-        if (this.phaseTimer) {
-          clearInterval(this.phaseTimer);
-          this.phaseTimer = null;
-        }
-        const result = this.resultsProcessing();
-        callback(result);
-      }
-    }, TIMER_INTERVAL);
+
+    this.runPhaseTimer(SECOND_COUNT_FOR_CHECK, () => {
+      const result = this.resultsProcessing();
+      callback(result);
+    });
   }
 
   public giveCheck(userId: string, accept: boolean): void {
@@ -431,6 +394,7 @@ export class Game {
   }
 
   private resultsProcessing(): CheckResults {
+    this.stopPhaseTimer();
     const correct = this.accepts.length === 0 || this.accepts.some((item) => item.accept);
     this.setCheckResult(correct);
 
@@ -462,6 +426,7 @@ export class Game {
   }
 
   private getGameEndInfo(bombRevealed: boolean = false): GameEndInfo {
+    this.stopPhaseTimer();
     if (this.gameTimer) {
       clearInterval(this.gameTimer);
     }
@@ -551,5 +516,38 @@ export class Game {
       score: this.score,
       gamePhaseInfo: this.getGamePhaseInfo(),
     };
+  }
+
+  private runPhaseTimer(durationSec: number, onEnd: () => void): void {
+    if (this.phaseTimer) {
+      clearTimeout(this.phaseTimer);
+      this.phaseTimer = null;
+    }
+
+    this.phaseTime = 0;
+
+    const start = Date.now();
+
+    const tick = (): void => {
+      const elapsed = Math.floor((Date.now() - start) / 1000);
+      this.phaseTime = elapsed;
+
+      if (elapsed >= durationSec) {
+        this.phaseTimer = null;
+        onEnd();
+        return;
+      }
+
+      this.phaseTimer = setTimeout(tick, 200); // обновление UI каждые 200мс
+    };
+
+    tick();
+  }
+
+  private stopPhaseTimer(): void {
+    if (this.phaseTimer) {
+      clearTimeout(this.phaseTimer);
+      this.phaseTimer = null;
+    }
   }
 }

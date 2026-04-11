@@ -30,7 +30,7 @@ export default function fetcher<State>(): Middleware<State, AppActions> {
           return context.next(context.action);
         }
 
-        const response = await fetch(`${ServerUrl.DEPLOY_BASE}${endpoint}`, {
+        const response = await fetch(`${ServerUrl.LOCAL_BASE}${endpoint}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json;charset=utf-8',

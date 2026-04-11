@@ -197,6 +197,6 @@ class SocketClient extends BaseSocketClient {
   }
 }
 
-const socketClient = new SocketClient(ServerUrl.DEPLOY_BASE);
+const socketClient = new SocketClient(ServerUrl.LOCAL_BASE);
 
 export default socketClient;

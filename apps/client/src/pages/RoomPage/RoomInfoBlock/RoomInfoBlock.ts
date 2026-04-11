@@ -14,7 +14,7 @@ const styles = {
     'flex flex-col justify-center max-[640px]:w-full sm:flex-row sm:justify-between items-center gap-8 text-white text-xl min-[450px]:text-2xl font-bold bg-white/25 px-4 py-4 rounded',
   textContainerRow: 'w-full flex gap-2 items-center',
   textContainerCol: 'flex flex-col self-center flex-1',
-  span: 'max-w-[200px] text-brand truncate',
+  span: 'max-w-[150px] min-[450px]:max-w-[200px] text-brand truncate',
   button:
     'w-44 min-h-9 h-12 shrink-0 bg-blue-500 rounded-md whitespace-normal leading-tight text-sm min-[450px]:text-base hover:cursor-pointer hover:bg-blue-600 hover:transition-colors hover:duration-300 flex-1',
   timerContainer:

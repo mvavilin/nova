@@ -86,6 +86,7 @@ export const TranslationKeys = {
   FORM_ERROR_500: 'formError500',
   FORM_ERROR_UNKNOWN: 'formErrorUnknown',
   FORM_ERROR_CONNECTION: 'formErrorConnection',
+  FORM_MESSAGE_TO_USER: 'formMessageToUser',
 
   REGISTRATION_TITLE: 'registrationTitle',
   REGISTRATION_SUBMIT_BTN: 'registrationSubmitBtn',
@@ -108,6 +109,7 @@ export const TranslationKeys = {
   ROOM_LEAVE_TEAM_BTN: 'RoomLeaveTeamBtn',
   ROOM_PLAYERS_CHOOSING: 'RoomPlayersChoosing',
   ROOM_TIMER_MESSAGE: 'RoomTimerMessage',
+  ROOM_COPY_MESSAGE: 'RoomCopyMessage',
 
   LOBBY_TITLE: 'lobbyTitle',
 

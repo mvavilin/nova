@@ -16,11 +16,11 @@ const styles = {
     'w-full min-h-screen px-5 sm:px-15 py-5 flex flex-col gap-10 items-center bg-[url(/src/assets/backgrounds/lobby-page-background.jpg)] bg-center bg-cover bg-no-repeat',
   main: 'w-full max-w-7xl flex-1 flex flex-col justify-start items-center gap-8',
   teamContainer:
-    'w-full h-full flex flex-col min-[950px]:flex-row justify-center min-[950px]:justify-between items-center min-[950px]:items-start gap-10',
+    'w-full h-full flex flex-col min-[950px]:flex-row justify-center min-[950px]:justify-between items-center min-[950px]:items-start gap-8',
 };
 
 export default class RoomPage extends ContainerComponent {
-  private static currentUnsubscribe: (() => void) | null = null;
+  private static unsubscribe: (() => void) | null = null;
 
   private redTeamSection: RoomTeamSection | null = null;
   private blueTeamSection: RoomTeamSection | null = null;
@@ -28,9 +28,9 @@ export default class RoomPage extends ContainerComponent {
   private roomInfoBlock: RoomInfoBlock | null = null;
 
   constructor() {
-    if (RoomPage.currentUnsubscribe) {
-      RoomPage.currentUnsubscribe();
-      RoomPage.currentUnsubscribe = null;
+    if (RoomPage.unsubscribe) {
+      RoomPage.unsubscribe();
+      RoomPage.unsubscribe = null;
     }
 
     super({
@@ -38,9 +38,7 @@ export default class RoomPage extends ContainerComponent {
       classes: styles.pageContainer,
     });
 
-    RoomPage.currentUnsubscribe = store.subscribe((state, action) =>
-      this.refreshFromStore(state, action)
-    );
+    RoomPage.unsubscribe = store.subscribe((state, action) => this.refreshFromStore(state, action));
 
     this.subscribeToSocket();
 
@@ -103,11 +101,7 @@ export default class RoomPage extends ContainerComponent {
 
   private render(): void {
     const roomInfo = store.getState().currentRoom;
-
-    if (!roomInfo) {
-      //Loader
-      return;
-    }
+    if (!roomInfo) return;
 
     const main = new ContainerComponent({ tag: 'main', classes: styles.main });
 
@@ -128,6 +122,7 @@ export default class RoomPage extends ContainerComponent {
 
     this.roomInfoBlock = new RoomInfoBlock({
       roomName: roomInfo.name,
+      roomId: roomInfo.id,
       currentCount: roomInfo.playerCount,
       totalCount: roomInfo.maxPlayers,
     });
@@ -137,24 +132,15 @@ export default class RoomPage extends ContainerComponent {
     this.appendChildren([new RoomHeader(), main]);
   }
 
-  public destroyPage(): void {
-    this.redTeamSection?.destroyComponent();
-    this.blueTeamSection?.destroyComponent();
-    this.choosingSection?.destroyComponent();
-    this.roomInfoBlock?.destroyComponent();
-
-    this.blueTeamSection = null;
-    this.redTeamSection = null;
-    this.choosingSection = null;
-    this.roomInfoBlock = null;
-
-    super.destroy();
-
-    if (RoomPage.currentUnsubscribe) {
-      RoomPage.currentUnsubscribe();
-      RoomPage.currentUnsubscribe = null;
+  public override destroy(): this {
+    if (RoomPage.unsubscribe) {
+      RoomPage.unsubscribe();
+      RoomPage.unsubscribe = null;
     }
 
     this.unsubscribeFromSocket();
+    super.destroy();
+
+    return this;
   }
 }

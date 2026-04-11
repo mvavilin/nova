@@ -10,7 +10,7 @@ export default class LanguageButton extends ButtonComponent {
   constructor() {
     super({
       classes:
-        'text-base md:text-lg bg-green-600 w-12 h-7 md:w-14 md:h-8 rounded-md font-main font-bold text-white hover:cursor-pointer hover:bg-green-700 hover:transition-colors hover:duration-300',
+        'text-base sm:text-lg bg-green-600 w-16 h-8 sm:w-18 sm:h-9 rounded-md font-main font-bold text-white hover:cursor-pointer hover:bg-green-700 hover:transition-colors hover:duration-300',
     });
 
     this.addSubscriptions([store.subscribe((state, action) => this.switchLanguage(state, action))]);

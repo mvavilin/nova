@@ -10,9 +10,9 @@ const styles = {
   container: 'flex flex-col items-center gap-5',
   containerRoleBtn: 'flex justify-center gap-5 flex-wrap',
   button:
-    'w-44 h-9 shrink-0 whitespace-normal leading-tight text-base text-white text-center font-main font-bold rounded-md hover:cursor-pointer hover:bg-green-600/80 hover:transition-colors hover:duration-300',
-  buttonRed: 'bg-red-500/80',
-  buttonBlue: 'bg-blue-500/80',
+    'w-44 h-9 shrink-0 whitespace-normal leading-tight text-sm min-[450px]:text-base text-white text-center font-main font-bold rounded-md hover:cursor-pointer hover:transition-colors hover:duration-300',
+  buttonRed: 'bg-red-500 hover:bg-red-600',
+  buttonBlue: 'bg-blue-500 hover:bg-blue-600',
 };
 
 export default class RoomTeamButtons extends ContainerComponent {
@@ -173,15 +173,5 @@ export default class RoomTeamButtons extends ContainerComponent {
     this.spyButton.setContent(t(TranslationKeys.ROOM_SPYMASTER_BTN));
     this.agentButton.setContent(t(TranslationKeys.ROOM_AGENT_BTN));
     this.leaveButton.setContent(t(TranslationKeys.ROOM_LEAVE_TEAM_BTN));
-  }
-
-  public destroyComponent(): void {
-    this.destroyChildren();
-
-    this.spyButton = null;
-    this.agentButton = null;
-    this.leaveButton = null;
-
-    super.destroy();
   }
 }

@@ -10,12 +10,8 @@ import { showErrorToast } from '@utils';
 import type { CheckQuestion } from '@repo/shared/src/types/question';
 
 class SocketClient extends BaseSocketClient {
-  // private tabId: string;
   constructor(serverUrl: string) {
     super(serverUrl);
-
-    // this.tabId = Math.random().toString(36).substring(7);
-    // console.log(`[SocketInit] Вкладка: ${this.tabId}, ID сокета: ${this.socket.id}`);
   }
 
   public onSessionToken(handler: (payload: { sessionToken: string }) => void): void {
@@ -202,7 +198,5 @@ class SocketClient extends BaseSocketClient {
 }
 
 const socketClient = new SocketClient(ServerUrl.DEPLOY_BASE);
-// socketClient.socket.onAny((eventName, ...args) => {
-//   console.log(`>>> [ANY EVENT] Пришло событие: ${eventName}`, args);
-// });
+
 export default socketClient;

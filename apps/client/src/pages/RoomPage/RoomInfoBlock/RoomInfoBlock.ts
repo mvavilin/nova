@@ -6,18 +6,22 @@ import store from '@/store/store';
 import { SocketActionTypes } from '@/store/actions';
 import type { RoomInfo } from '@shared/types/room';
 import { Timer } from '@/pages/GamePage/components';
+import { Toast } from '@/components';
+import MessageType from '@constants/messageType';
 
 const styles = {
   container:
-    'min-w-[350px] flex justify-center max-[950px]:flex-col max-[950px]:justify-between items-center gap-8 text-white text-2xl font-bold bg-white/25 px-4 py-4 rounded',
+    'flex flex-col justify-center max-[640px]:w-full sm:flex-row sm:justify-between items-center gap-8 text-white text-xl min-[450px]:text-2xl font-bold bg-white/25 px-4 py-4 rounded',
   textContainerRow: 'w-full flex gap-2 items-center',
-  textContainerCol: 'flex flex-col self-center',
-  span: 'text-brand truncate',
+  textContainerCol: 'flex flex-col self-center flex-1',
+  span: 'max-w-[200px] text-brand truncate',
   button:
-    'w-34 h-12 shrink-0 bg-cyan-600 rounded-md whitespace-normal leading-tight text-base hover:cursor-pointer hover:bg-green-600 hover:transition-colors hover:duration-300',
+    'w-44 min-h-9 h-12 shrink-0 bg-blue-500 rounded-md whitespace-normal leading-tight text-sm min-[450px]:text-base hover:cursor-pointer hover:bg-blue-600 hover:transition-colors hover:duration-300 flex-1',
   timerContainer:
-    'h-full p-2 bg-green-600/70 flex flex-col justify-center items-center gap-5 text-brand text-2xl font-bold transition-all duration-500 opacity-0 scale-95 -> opacity-100 scale-100 rounded hidden',
+    'h-full flex-[2] p-2 bg-green-600/70 flex flex-col justify-center items-center gap-5 text-brand text-xl min-[450px]:text-2xl font-bold transition-all duration-500 rounded hidden',
   timerMessage: 'text-center',
+  copyButton:
+    'w-10 h-10 rounded bg-transparent hover:bg-white/10 hover:cursor-pointer hover:duration-300',
 };
 
 export default class RoomInfoBlock extends ContainerComponent {
@@ -29,17 +33,20 @@ export default class RoomInfoBlock extends ContainerComponent {
   private timer: Timer | null = null;
   private timerMessage: TextComponent | null = null;
 
-  constructor({ roomName, currentCount, totalCount }: RoomInfoBlockProps) {
+  constructor({ roomName, roomId, currentCount, totalCount }: RoomInfoBlockProps) {
     super({ classes: styles.container });
 
-    this.render({ roomName, currentCount, totalCount });
+    this.render({ roomName, roomId, currentCount, totalCount });
   }
 
-  private render({ roomName, currentCount, totalCount }: RoomInfoBlockProps): void {
+  private render({ roomName, roomId, currentCount, totalCount }: RoomInfoBlockProps): void {
     const textContainerColumn = new ContainerComponent({
       classes: styles.textContainerCol,
     });
-    const textContainerRoomRow = new ContainerComponent({
+    const textContainerRoomName = new ContainerComponent({
+      classes: styles.textContainerRow,
+    });
+    const textContainerRoomId = new ContainerComponent({
       classes: styles.textContainerRow,
     });
     const textContainerCountRow1 = new ContainerComponent({
@@ -52,8 +59,37 @@ export default class RoomInfoBlock extends ContainerComponent {
     this.roomTitle = new TextComponent({
       content: t(TranslationKeys.ROOM_INFO_TITLE),
     });
+
     const name = new TextComponent({ content: roomName, classes: styles.span });
-    textContainerRoomRow.appendChildren([this.roomTitle, name]);
+    textContainerRoomName.appendChildren([this.roomTitle, name]);
+
+    const idContainer = new ContainerComponent({
+      classes: styles.textContainerRow,
+    });
+    const id = new TextComponent({ content: roomId, classes: styles.span });
+    if (id.element instanceof HTMLElement) {
+      id.element.title = roomId;
+    }
+
+    textContainerRoomId.appendChildren([new TextComponent({ content: 'ID:' }), id]);
+
+    const copyButton = new ButtonComponent({
+      content: '📄',
+      classes: styles.copyButton,
+      listeners: {
+        click: (): void => {
+          navigator.clipboard.writeText(roomId);
+          new Toast({
+            type: MessageType.SUCCESS,
+            message: t(TranslationKeys.ROOM_COPY_MESSAGE),
+          });
+        },
+      },
+    });
+    if (copyButton.element instanceof HTMLElement) {
+      copyButton.element.title = 'Скопировать ID';
+    }
+    idContainer.appendChildren([textContainerRoomId, copyButton]);
 
     this.playersTitle = new TextComponent({
       content: t(TranslationKeys.ROOM_INFO_PLAYERS),
@@ -71,7 +107,11 @@ export default class RoomInfoBlock extends ContainerComponent {
     textContainerCountRow1.appendChildren([this.playersCount, allCount]);
     textContainerCountRow2.appendChildren([this.playersTitle, textContainerCountRow1]);
 
-    textContainerColumn.appendChildren([textContainerRoomRow, textContainerCountRow2]);
+    textContainerColumn.appendChildren([
+      textContainerRoomName,
+      idContainer,
+      textContainerCountRow2,
+    ]);
 
     this.leaveButton = new ButtonComponent({
       classes: styles.button,
@@ -137,19 +177,5 @@ export default class RoomInfoBlock extends ContainerComponent {
     this.playersTitle.setContent(t(TranslationKeys.ROOM_INFO_PLAYERS));
     this.leaveButton.setContent(t(TranslationKeys.ROOM_LEAVE_ROOM_BTN));
     this.timerMessage.setContent(t(TranslationKeys.ROOM_TIMER_MESSAGE));
-  }
-
-  public destroyComponent(): void {
-    this.roomTitle = null;
-    this.playersTitle = null;
-    this.playersCount = null;
-    this.leaveButton = null;
-    this.timerContainer = null;
-    this.timer = null;
-    this.timerMessage = null;
-
-    this.destroyChildren();
-
-    super.destroy();
   }
 }

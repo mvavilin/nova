@@ -5,12 +5,13 @@ import type InputForm from '../InputForm/InputForm';
 import { FormActionTypes } from '@/store/actions/form.actions';
 import { Overlay } from '../ui';
 import Loader from '../ui/Loader/Loader';
-
-const messageToUser = 'Sending data to server...';
+import { TranslationKeys } from '@/i18n/translationKeys';
+import { t } from 'i18n';
 
 const styles = {
   form: 'w-70 p-6 sm:w-80 sm:p-8 md:w-90 md:p-10 bg-white/45 rounded-xl my-auto flex flex-col justify-center items-center gap-2 m-0',
 };
+
 export default class BaseForm extends FormComponent {
   private formId: FormType;
   protected title: HeadingComponent;
@@ -75,7 +76,7 @@ export default class BaseForm extends FormComponent {
 
     this.isSubmiting = true;
 
-    const loaderOverlay = new Overlay(new Loader(messageToUser));
+    const loaderOverlay = new Overlay(new Loader(t(TranslationKeys.FORM_MESSAGE_TO_USER)));
     loaderOverlay.show();
 
     const data = this.getFormInputValues();

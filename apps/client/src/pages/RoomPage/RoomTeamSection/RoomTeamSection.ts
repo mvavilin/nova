@@ -8,11 +8,11 @@ import type { Player, RoomInfo, Teams } from '@shared/types/room';
 
 const styles = {
   container:
-    'w-[45%] min-[950px]:w-[40%] min-w-[350px] shrink-0 flex flex-col flex-wrap gap-8 justify-between items-center text-white text-lg p-5 rounded',
+    'min-[950px]:w-[45%] min-w-[280px] shrink-0 flex flex-col flex-wrap gap-8 justify-between items-center text-white text-lg p-5 rounded',
   containerRed: 'bg-gradient-to-br from-red-600/25 to-white/25',
-  containerBlue: 'bg-gradient-to-br from-cyan-600/25 to-white/25',
-  titleRed: 'text-2xl text-red-500 font-bold',
-  titleBlue: 'text-2xl text-cyan-500 font-bold',
+  containerBlue: 'bg-gradient-to-br from-blue-600/25 to-white/25',
+  titleRed: 'text-xl min-[450px]:text-2xl text-red-500 font-bold',
+  titleBlue: 'text-xl min-[450px]:text-2xl text-blue-500 font-bold',
   list: 'w-full flex flex-col items-stretch',
 };
 
@@ -56,11 +56,7 @@ export default class RoomTeamSection extends ContainerComponent {
 
   private updatePlayersList(players: Player[]): void {
     if (!this.listContainer) return;
-    for (const item of this.items) {
-      item.destroyComponent();
-    }
     this.items = [];
-
     this.listContainer.destroyChildren();
 
     const header = {
@@ -99,19 +95,5 @@ export default class RoomTeamSection extends ContainerComponent {
     for (const item of this.items) {
       item.switchLanguage();
     }
-  }
-
-  public destroyComponent(): void {
-    for (const item of this.items) {
-      item.destroy();
-    }
-    this.items = [];
-
-    this.buttons?.destroyComponent();
-    this.buttons = null;
-
-    this.destroyChildren();
-
-    super.destroy();
   }
 }

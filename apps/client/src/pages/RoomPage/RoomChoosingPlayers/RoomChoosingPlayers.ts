@@ -7,8 +7,8 @@ import { t } from '@/i18n';
 
 const styles = {
   container:
-    'w-[40%] min-w-[250px] flex flex-col items-center justify-center gap-5 p-4 bg-white/25 text-white text-lg rounded',
-  title: 'text-2xl text-center font-bold',
+    'w-[40%] min-w-[280px] flex flex-col items-center justify-center gap-5 p-4 bg-white/25 text-white text-lg rounded',
+  title: 'text-xl min-[450px]:text-2xl text-center font-bold',
   list: 'w-full grid grid-cols-[repeat(auto-fill,150px)] justify-center items-center gap-5',
 };
 
@@ -53,13 +53,5 @@ export default class RoomChoosingPlayers extends ContainerComponent {
   public switchLanguage(): void {
     if (!this.title) return;
     this.title.setContent(t(TranslationKeys.ROOM_PLAYERS_CHOOSING));
-  }
-
-  public destroyComponent(): void {
-    this.listContainer = null;
-    this.title = null;
-
-    this.destroyChildren();
-    super.destroy();
   }
 }

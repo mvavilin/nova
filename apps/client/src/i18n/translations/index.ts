@@ -45,7 +45,6 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     ...gameRules[Language.RU],
     ...roomPageLanguage[Language.RU],
     ...aboutUs[Language.RU],
-    ...aboutUs[Language.EN],
     ...lobbyPage[Language.RU],
     ...gamePage[Language.RU],
     ...knowledgeCheckModal[Language.RU],

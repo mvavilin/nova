@@ -45,6 +45,10 @@ export default function appReducer(state: State, action: AppActions): State {
       };
     }
 
+    case AppActionTypes.GO_TO_WELCOME_PAGE: {
+      return { ...state };
+    }
+
     default: {
       return state;
     }

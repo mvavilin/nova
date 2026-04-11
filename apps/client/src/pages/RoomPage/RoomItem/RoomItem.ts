@@ -5,7 +5,7 @@ import { TranslationKeys } from '@/i18n/translationKeys';
 import { t } from '@/i18n';
 
 const styles = {
-  item: 'grid grid-cols-[1fr_3fr_2fr] items-center justify-center gap p-2 outline outline-white',
+  item: 'grid grid-cols-[2fr_2fr_2fr] items-center justify-center gap-2 p-2 outline outline-white text-sm min-[450px]:text-base',
   indexNumber: 'text-center',
   role: 'text-center',
 };
@@ -20,7 +20,9 @@ export default class RoomItem extends BaseComponent {
     super({ tag: 'li' });
 
     this.isHeader = number === '№';
-    const liStyles = this.isHeader ? `${styles.item} font-bold text-center` : styles.item;
+    const liStyles = this.isHeader
+      ? `${styles.item} justify-center font-bold text-center`
+      : styles.item;
     this.setClasses(liStyles);
 
     this.isAgent = player.role === 'agent';
@@ -60,12 +62,5 @@ export default class RoomItem extends BaseComponent {
         this.role.setContent(t(TranslationKeys.ROOM_SPYMASTER));
       }
     }
-  }
-  public destroyComponent(): void {
-    this.role = null;
-    this.user = null;
-
-    this.destroyChildren();
-    super.destroy();
   }
 }

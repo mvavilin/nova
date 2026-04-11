@@ -21,15 +21,12 @@ export default class Router {
   private render(): void {
     const children = this.app.children;
 
-    for (const child of children)
-      if ('destroyPage' in child && typeof child.destroyPage === 'function') {
-        child.destroyPage();
-      } else {
-        child.destroy();
-      }
+    for (const child of children) {
+      child.destroy();
+    }
+
     const path = globalThis.location.pathname;
 
-    //нужно для сброса форм при нажатии кнопок вперед/назад и переходе со стр
     const isUnAuthPage = path === URLS.LOGIN() || path === URLS.REGISTRATION();
     if (isUnAuthPage) {
       store.dispatch({ type: FormActionTypes.CLEAN_DATA });

@@ -18,7 +18,6 @@ const formLanguage = {
     [TranslationKeys.FORM_ERROR_MESSAGE_PASSWORD_REQUIREMENTS]: `•\u00A0Password must contain one capital English letter and one special character.`,
     [TranslationKeys.FORM_ERROR_MESSAGE_PASSWORD_MIN_LENGTH]: `•\u00A0Minimum length is 6 characters.`,
     [TranslationKeys.FORM_ERROR_MESSAGE_CONFIRM_PASSWORD]: `•\u00A0Passwords don't match.`,
-
     [TranslationKeys.FORM_ERROR]: 'Error',
     [TranslationKeys.FORM_ERROR_400]: 'please fill in all fields in form.',
     [TranslationKeys.FORM_ERROR_403]: 'invalid email or password.',
@@ -26,6 +25,7 @@ const formLanguage = {
     [TranslationKeys.FORM_ERROR_500]: 'server error. Please try later.',
     [TranslationKeys.FORM_ERROR_UNKNOWN]: 'unknown error.',
     [TranslationKeys.FORM_ERROR_CONNECTION]: 'connection error. Please check your internet.',
+    [TranslationKeys.FORM_MESSAGE_TO_USER]: 'Sending data to server...',
   },
 
   [Language.RU]: {
@@ -52,6 +52,7 @@ const formLanguage = {
     [TranslationKeys.FORM_ERROR_UNKNOWN]: 'неизвестная ошибка.',
     [TranslationKeys.FORM_ERROR_CONNECTION]:
       'ошибка подключения. Пожалуйста, проверьте состояние вашего Интернета.',
+    [TranslationKeys.FORM_MESSAGE_TO_USER]: 'Отправка данных на сервер...',
   },
 };
 

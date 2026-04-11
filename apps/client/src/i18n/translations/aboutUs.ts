@@ -14,7 +14,7 @@ const aboutUs = {
     [TranslationKeys.ABOUT_US_HIGHLIGHTS_LIST]: `
 • Monorepo with frontend and backend
 • Pure TypeScript — no frameworks, no shortcuts
-• Real-time gameplay via WebSocket
+• Real-time gameplay via Socket.IO
 • Custom architecture (ComponentsAPI, StateAPI)
 `,
 
@@ -32,22 +32,22 @@ const aboutUs = {
     [TranslationKeys.ABOUT_US_SERGEY_TITLE]: 'Sergey Elsukov (Backend)',
     [TranslationKeys.ABOUT_US_SERGEY_LIST]: `
 • Backend with Express + Socket.IO
-• Authentication (JWT, login/register)
+• Authentication (JWT, login/registration)
 • PostgreSQL & Docker setup
 • Data validation (zod)
-• Game room management
+• Lobby, Room, Game, Profile management
 • Socket message typing
 • CORS & server monitoring
 `,
 
     [TranslationKeys.ABOUT_US_ELENA_TITLE]: 'Elena Valiullina (Frontend)',
     [TranslationKeys.ABOUT_US_ELENA_LIST]: `
-• Registration page (multiple iterations)
+• Development of registration, login and room pages
 • Form validation
-• JWT & session storage handling
-• Backend API integration
+• JWT handling on the client side
+• Working with API
+• Working with Socket.IO
 • UI/UX and visual design
-• Adapting to evolving architecture
 `,
 
     [TranslationKeys.ABOUT_US_ANDREY_TITLE]: 'Andrey Zharkikh (Frontend)',
@@ -74,7 +74,7 @@ const aboutUs = {
     [TranslationKeys.ABOUT_US_HIGHLIGHTS_LIST]: `
 • Монорепозиторий с frontend и backend
 • Чистый TypeScript — без фреймворков
-• Real-time взаимодействие через WebSocket
+• Real-time взаимодействие через Socket.IO
 • Собственная архитектура (ComponentsAPI, StateAPI)
 `,
 
@@ -94,22 +94,22 @@ const aboutUs = {
     [TranslationKeys.ABOUT_US_SERGEY_TITLE]: 'Sergey Elsukov (Backend)',
     [TranslationKeys.ABOUT_US_SERGEY_LIST]: `
 • Backend на Express + Socket.IO
-• Реализация авторизации (JWT, login/register)
+• Реализация авторизации (JWT, login/registration)
 • Работа с PostgreSQL и Docker
 • Валидация данных (zod)
-• Менеджер игровых комнат
+• Менеджер лобби, комнат, игры, профиля
 • Типизация socket-сообщений
 • CORS и мониторинг сервера
 `,
 
     [TranslationKeys.ABOUT_US_ELENA_TITLE]: 'Elena Valiullina (Frontend)',
     [TranslationKeys.ABOUT_US_ELENA_LIST]: `
-• Реализация страницы регистрации (несколько итераций)
+• Разработка страниц регистрации, логина и комнаты;
 • Валидация форм
-• Работа с JWT и session storage
-• Интеграция с backend API
+• Работа с JWT на стороне клиента
+• Работа с API
+• Работа с Socket.IO
 • UI/UX и визуальный дизайн
-• Адаптация под evolving архитектуру
 `,
 
     [TranslationKeys.ABOUT_US_ANDREY_TITLE]: 'Andrey Zharkikh (Frontend)',

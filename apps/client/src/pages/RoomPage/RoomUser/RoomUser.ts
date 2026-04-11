@@ -3,7 +3,7 @@ import type { RoomUserProps } from './RoomUser.types';
 import { Avatar } from '@/components';
 
 const styles = {
-  container: 'w-[150px] flex items-center justify-center justify-self-center gap-4',
+  container: 'w-full flex items-center justify-start gap-4',
   userName: 'truncate',
 };
 

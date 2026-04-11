@@ -1,5 +1,5 @@
 import store from '@store';
-import { BaseComponent, ContainerComponent, HeadingComponent } from '@ComponentsAPI';
+import { ContainerComponent, HeadingComponent } from '@ComponentsAPI';
 import { Logo, ExitButton } from '@components';
 import RoomUser from '../RoomUser/RoomUser';
 import LanguageButton from '@/components/LanguageButton/LanguageButton';
@@ -8,15 +8,16 @@ import { t } from '@/i18n';
 
 const styles = {
   header:
-    'w-full min-w-[350px] max-w-7xl grid grid-cols-1 min-w-[650px]:grid-cols-[1fr_1fr_2fr] md:grid-cols-[1fr_1fr_1fr] gap-4 p-4 items-center bg-white/25 text-white rounded place-items-center',
-  title: 'text-2xl text-center font-bold',
-  container: 'flex justify-between items-center',
-  userMenu: 'flex items-center justify-end gap-4 justify-self-end',
+    'min-w-[280px] w-full max-w-7xl flex flex-col md:flex-row gap-8 p-4 justify-between items-center bg-white/35 text-white rounded',
+  title: 'text-xl min-[450px]:text-2xl text-center font-bold',
+  container: 'flex justify-between items-center gap-2',
+  userMenu: 'items-center',
 };
 
 export default class RoomHeader extends ContainerComponent {
-  private userMenu: BaseComponent | null = null;
+  private user: RoomUser | null = null;
   private title: HeadingComponent | null = null;
+  private logo: Logo | null = null;
 
   constructor() {
     super({ tag: 'header', classes: styles.header });
@@ -33,29 +34,23 @@ export default class RoomHeader extends ContainerComponent {
       classes: styles.title,
     });
 
-    this.userMenu = new BaseComponent({ classes: styles.userMenu });
-
     const username = store.getState().username;
     const userId = store.getState().id;
-    if (username && userId) {
-      this.userMenu.appendChildren([new RoomUser({ username: username, id: userId })]);
-    }
+    if (!username || !userId) return;
+    this.user = new RoomUser({ username, id: userId });
+    this.user.removeClasses('justify-start');
+    this.user.setClasses('justify-center');
 
-    container.appendChildren([new LanguageButton(), this.userMenu, new ExitButton()]);
+    container.appendChildren([new LanguageButton(), this.user, new ExitButton()]);
 
-    this.appendChildren([new Logo(), this.title, container]);
+    this.logo = new Logo();
+    this.logo.setClasses('pointer-events-none');
+
+    this.appendChildren([this.logo, this.title, container]);
   }
 
   public switchLanguage(): void {
     if (!this.title) return;
     this.title.setContent(t(TranslationKeys.ROOM_TITLE));
-  }
-
-  public destroyComponent(): void {
-    this.userMenu = null;
-    this.title = null;
-
-    this.destroyChildren();
-    super.destroy();
   }
 }

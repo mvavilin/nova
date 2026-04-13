@@ -1,7 +1,7 @@
 import type { Socket } from 'socket.io';
 import type {
   CardTestResult,
-  CheckResults,
+  // CheckResults,
   ClientToServerEvents,
   ServerToClientEvents,
 } from '../../../../../packages/shared/src/socketEvents.ts';
@@ -230,22 +230,22 @@ function setupCardChooseHandler(
   const { userId } = socket.data;
   socket.on('game:card-choose', ({ cardId }) => {
     const game = roomManager.getGameByUserId(userId);
-    if (game) {
-      const response = game.chooseCard(userId, cardId);
-      if (!('error' in response)) {
-        const { players, recipients } = response;
-        for (const recipient of recipients) {
-          const socketId = socketIdMap.get(recipient);
-          if (socketId) {
-            io.to(socketId).emit('game:card-chosen', { cardId, players });
-            logger.emit(recipient, 'game:card-chosen', { cardId, players });
-          }
-        }
-        game.startCheckPhase((results) => {
-          sendResults(game, results);
-        });
+    if (!game) return;
+
+    const response = game.chooseCard(userId, cardId);
+    if ('error' in response) return;
+
+    const { players, recipients } = response;
+    for (const recipient of recipients) {
+      const socketId = socketIdMap.get(recipient);
+      if (socketId) {
+        io.to(socketId).emit('game:card-chosen', { cardId, players });
+        logger.emit(recipient, 'game:card-chosen', { cardId, players });
       }
     }
+    // game.startCheckPhase((results) => {
+    //   sendResults(game, results);
+    // });
   });
 }
 
@@ -284,38 +284,38 @@ function setupCheckGiveHandler(
   });
 }
 
-function sendResults(game: Game, results: CheckResults): void {
-  const { type, payload } = results;
-  if (type === 'turn-end') {
-    const playerIds = game.getPlayerIds();
-    const { correct, team } = payload;
-    for (const playerId of playerIds) {
-      const socketId = socketIdMap.get(playerId);
-      if (socketId) {
-        io.to(socketId).emit('game:check-results', { correct });
-        logger.emit(playerId, 'game:check-results', { correct });
+// function sendResults(game: Game, results: CheckResults): void {
+//   const { type, payload } = results;
+//   if (type === 'turn-end') {
+//     const playerIds = game.getPlayerIds();
+//     const { correct, team } = payload;
+//     for (const playerId of playerIds) {
+//       const socketId = socketIdMap.get(playerId);
+//       if (socketId) {
+//         io.to(socketId).emit('game:check-results', { correct });
+//         logger.emit(playerId, 'game:check-results', { correct });
 
-        io.to(socketId).emit('game:turn-changed', { team });
-        logger.emit(playerId, 'game:turn-changed', { team });
-      }
-    }
-  }
+//         io.to(socketId).emit('game:turn-changed', { team });
+//         logger.emit(playerId, 'game:turn-changed', { team });
+//       }
+//     }
+//   }
 
-  if (type === 'game-end') {
-    const playerIds = game.getPlayerIds();
-    const { gameEndInfo, winPlayerIds } = payload;
-    for (const playerId of playerIds) {
-      const socketId = socketIdMap.get(playerId);
-      if (socketId) {
-        io.to(socketId).emit('game:check-results', { correct: false });
-        logger.emit(playerId, 'game:check-results', { correct: false });
-        const win = winPlayerIds.includes(playerId);
-        io.to(socketId).emit('game:game-end', { gameEndInfo: { ...gameEndInfo, win } });
-        logger.emit(playerId, 'game:game-end', { gameEndInfo: { ...gameEndInfo, win } });
-      }
-    }
-  }
-}
+//   if (type === 'game-end') {
+//     const playerIds = game.getPlayerIds();
+//     const { gameEndInfo, winPlayerIds } = payload;
+//     for (const playerId of playerIds) {
+//       const socketId = socketIdMap.get(playerId);
+//       if (socketId) {
+//         io.to(socketId).emit('game:check-results', { correct: false });
+//         logger.emit(playerId, 'game:check-results', { correct: false });
+//         const win = winPlayerIds.includes(playerId);
+//         io.to(socketId).emit('game:game-end', { gameEndInfo: { ...gameEndInfo, win } });
+//         logger.emit(playerId, 'game:game-end', { gameEndInfo: { ...gameEndInfo, win } });
+//       }
+//     }
+//   }
+// }
 
 function setupGameStateHandler(
   socket: Socket<ClientToServerEvents, ServerToClientEvents, object, SocketData>

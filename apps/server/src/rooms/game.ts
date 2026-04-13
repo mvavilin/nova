@@ -45,6 +45,7 @@ export class Game {
   private accepts: Array<{ userId: string; accept: boolean }> = [];
   private score: Score = { red: 0, blue: 0 };
   private playerAnswers = new Map<string, boolean[]>();
+  private playerChoices: Map<string, string> = new Map();
 
   constructor(roomId: string, maxPlayers: number) {
     this.id = uuid();
@@ -179,34 +180,72 @@ export class Game {
     return { clue, agentIds };
   }
 
+  // public chooseCard(
+  //   userId: string,
+  //   cardId: string
+  // ): { players: Player[]; recipients: string[] } | { error: ErrorCode } {
+  //   const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+  //   const agent = team.find((player) => player.role === 'agent' && player.id === userId);
+
+  //   if (agent && this.gamePhase === 'guess') {
+  //     const card = this.cards.find((card) => card.id === cardId);
+
+  //     if (card && !card.whoSees.has(agent.team)) {
+  //       let choice = this.chosenCards.get(cardId);
+  //       if (choice) {
+  //         if (choice.includes(userId)) {
+  //           choice = choice.filter((id) => id !== userId);
+  //         } else {
+  //           choice.push(userId);
+  //         }
+  //       } else {
+  //         choice = [userId];
+  //       }
+  //       this.chosenCards.set(cardId, choice);
+  //       const players = team.filter((player) => choice.includes(player.id));
+  //       const recipients = team.map((player) => player.id);
+  //       return { players, recipients };
+  //     }
+  //   }
+  //   return { error: 'ACTION_IS_PROHIBITED' };
+  // }
+
   public chooseCard(
     userId: string,
     cardId: string
   ): { players: Player[]; recipients: string[] } | { error: ErrorCode } {
     const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+
     const agent = team.find((player) => player.role === 'agent' && player.id === userId);
 
-    if (agent && this.gamePhase === 'guess') {
-      const card = this.cards.find((card) => card.id === cardId);
-
-      if (card && !card.whoSees.has(agent.team)) {
-        let choice = this.chosenCards.get(cardId);
-        if (choice) {
-          if (choice.includes(userId)) {
-            choice = choice.filter((id) => id !== userId);
-          } else {
-            choice.push(userId);
-          }
-        } else {
-          choice = [userId];
-        }
-        this.chosenCards.set(cardId, choice);
-        const players = team.filter((player) => choice.includes(player.id));
-        const recipients = team.map((player) => player.id);
-        return { players, recipients };
-      }
+    if (!agent || this.gamePhase !== 'guess') {
+      return { error: 'ACTION_IS_PROHIBITED' };
     }
-    return { error: 'ACTION_IS_PROHIBITED' };
+
+    const card = this.cards.find((card) => card.id === cardId);
+
+    if (!card || card.whoSees.has(agent.team)) {
+      return { error: 'ACTION_IS_PROHIBITED' };
+    }
+
+    const currentChoice = this.playerChoices.get(userId);
+
+    // 🔁 toggle логика
+    if (currentChoice === cardId) {
+      // снять выбор
+      this.playerChoices.delete(userId);
+    } else {
+      // заменить или поставить новый
+      this.playerChoices.set(userId, cardId);
+    }
+
+    // 📊 собрать игроков, выбравших эту карту
+    const players = team.filter((player) => this.playerChoices.get(player.id) === cardId);
+
+    // 📡 отправляем всей команде
+    const recipients = team.map((player) => player.id);
+
+    return { players, recipients };
   }
 
   private turnChange(): string {
@@ -261,6 +300,160 @@ export class Game {
     const spymasterId = this.turnChange();
     return { type: 'no-change', payload: { team: this.currentTeam, spymasterId, playerIds } };
   }
+
+  // private guessTest(): CardTestResult {
+  //   this.stopPhaseTimer();
+
+  //   const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
+
+  //   // ❗ 0 голосов → смена хода
+  //   if (this.playerChoices.size === 0) {
+  //     const playerIds = team.map((player) => player.id);
+  //     const spymasterId = this.turnChange();
+
+  //     return {
+  //       type: 'no-change',
+  //       payload: { team: this.currentTeam, spymasterId, playerIds },
+  //     };
+  //   }
+
+  //   // 📊 группируем: cardId → userIds[]
+  //   const grouped = new Map<string, string[]>();
+
+  //   for (const [userId, cardId] of this.playerChoices.entries()) {
+  //     if (!grouped.has(cardId)) {
+  //       grouped.set(cardId, []);
+  //     }
+  //     grouped.get(cardId)!.push(userId);
+  //   }
+
+  //   // 🔍 ищем максимум голосов
+  //   let maxVotes = 0;
+  //   let candidates: [string, string[]][] = [];
+
+  //   for (const entry of grouped.entries()) {
+  //     const count = entry[1].length;
+
+  //     if (count > maxVotes) {
+  //       maxVotes = count;
+  //       candidates = [entry];
+  //     } else if (count === maxVotes) {
+  //       candidates.push(entry);
+  //     }
+  //   }
+
+  //   // 🎲 если несколько — случайная карта
+  //   const [cardId, userIds] = candidates[Math.floor(Math.random() * candidates.length)];
+
+  //   const card = this.cards.find((c) => c.id === cardId);
+  //   if (!card) {
+  //     const playerIds = team.map((player) => player.id);
+  //     const spymasterId = this.turnChange();
+
+  //     return {
+  //       type: 'no-change',
+  //       payload: { team: this.currentTeam, spymasterId, playerIds },
+  //     };
+  //   }
+
+  //   const opponentColor = this.currentTeam === 'red' ? 'blue' : 'red';
+
+  //   // 🧹 очищаем выборы перед дальнейшей логикой
+  //   this.playerChoices.clear();
+
+  //   switch (card.color) {
+  //     case this.currentTeam:
+  //     case 'neutral': {
+  //       // 👤 выбираем отвечающего
+  //       const userId = userIds[Math.floor(Math.random() * userIds.length)];
+
+  //       const checkQuestion = this.getCheckQuestion(card.word);
+
+  //       if (userId && checkQuestion) {
+  //         this.checkQuestion = checkQuestion;
+
+  //         const { question, question_en } = checkQuestion;
+
+  //         const playerIds = team.map((player) => player.id);
+
+  //         // 👁 открываем карту для всех
+  //         card.whoSees.add(this.currentTeam);
+  //         card.whoSees.add(opponentColor);
+
+  //         this.answerUserId = userId;
+  //         this.answerCard = card;
+
+  //         this.updateScore();
+
+  //         return {
+  //           type: 'own',
+  //           payload: {
+  //             userId,
+  //             question,
+  //             question_en,
+  //             card,
+  //             score: this.score,
+  //             playerIds,
+  //           },
+  //         };
+  //       }
+
+  //       // fallback
+  //       const playerIds = team.map((player) => player.id);
+  //       const spymasterId = this.turnChange();
+
+  //       return {
+  //         type: 'no-change',
+  //         payload: { team: this.currentTeam, spymasterId, playerIds },
+  //       };
+  //     }
+
+  //     case opponentColor: {
+  //       const recipients = team.map((player) => player.id);
+
+  //       card.whoSees.add(this.currentTeam);
+
+  //       const spymasterId = this.turnChange();
+
+  //       return {
+  //         type: 'alien',
+  //         payload: {
+  //           spymasterId,
+  //           team: this.currentTeam,
+  //           cardId: card.id,
+  //           color: card.color,
+  //           recipients,
+  //         },
+  //       };
+  //     }
+
+  //     case 'bomb': {
+  //       this.stopPhaseTimer();
+
+  //       const opponentTeam = this.currentTeam === 'red' ? this.blueTeam : this.redTeam;
+
+  //       const winPlayerIds = opponentTeam.map((player) => player.id);
+
+  //       const gameEndInfo = this.getGameEndInfo(true);
+
+  //       card.whoSees.add(this.currentTeam);
+
+  //       gameEndInfo.winningTeam = opponentTeam === this.redTeam ? 'red' : 'blue';
+
+  //       this.gamePhase = 'finish';
+
+  //       return {
+  //         type: 'bomb',
+  //         payload: {
+  //           cardId: card.id,
+  //           color: card.color,
+  //           gameEndInfo,
+  //           winPlayerIds,
+  //         },
+  //       };
+  //     }
+  //   }
+  // }
 
   private chosenOwnCard(choice: [string, string[]], card: Card): CardTestResult {
     const termWithUserIds = 1;

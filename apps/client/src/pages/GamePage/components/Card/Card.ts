@@ -2,6 +2,7 @@ import { BaseComponent, ContainerComponent } from '@ComponentsAPI';
 import { type Card, CardColorEnum } from '@repo/shared/src/types/game';
 import store from '@/store/store';
 import { GameActionTypes } from '@/store/actions';
+import { socketClient } from '@/api/SocketClientAPI';
 
 type CardProperties = {
   card: Card;
@@ -23,6 +24,13 @@ export default class CardComponent extends BaseComponent {
     }
 
     this.render(card);
+
+    socketClient.onGameCardShown((payload) => {
+      if (payload.cardId === card.id) {
+        console.log(2222);
+        this.setClasses(payload.color);
+      }
+    });
   }
 
   private render(card: Card): void {

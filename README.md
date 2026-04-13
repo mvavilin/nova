@@ -16,7 +16,7 @@
 
 [![Vercel](https://img.shields.io/badge/Nova_Codenames_Game-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://nova-codenames-client.vercel.app/)
 
-## Запуск приложения
+## ▶️ Запуск приложения
 
 - Клонируйте этот репозиторий:
 
@@ -24,7 +24,7 @@
 git clone https://github.com/mvavilin/nova
 ```
 
-- Чтобы установить все зависимости, запустите:
+- Зайдите в папку `Nova-Codenames` и чтобы установить все зависимости, запустите:
 
 ```
 npm install
@@ -38,10 +38,10 @@ npm run dev
 
 - После этого вы сможете получить к нему доступ по адресу `localhost:5173`.
 
-## Запуск сервера
+## ▶️ Запуск сервера
 
-- Запуск сервера описан в файле [Nova Codenames server](https://github.com/mvavilin/Nova-Codenames/blob/main/apps/server/README.md).
-  Для работы с сервером следует изменить ServerUrl.DEPLOY_BASE на ServerUrl.LOCAL_BASE в файлах [form.fetcher.middleware.ts](https://github.com/mvavilin/Nova-Codenames/blob/main/apps/client/src/store/middlewares/form.fetcher.middleware.ts) и [SocketClient.ts](https://github.com/mvavilin/Nova-Codenames/blob/main/apps/client/src/api/SocketClientAPI/SocketClient.ts).
+- Запуск сервера на локальной машине описан в файле [Nova Codenames server](https://github.com/mvavilin/Nova-Codenames/blob/main/apps/server/README.md).
+  Для локальной работы с сервером следует изменить ServerUrl.DEPLOY_BASE на ServerUrl.LOCAL_BASE в файлах [form.fetcher.middleware.ts](https://github.com/mvavilin/Nova-Codenames/blob/main/apps/client/src/store/middlewares/form.fetcher.middleware.ts) и [SocketClient.ts](https://github.com/mvavilin/Nova-Codenames/blob/main/apps/client/src/api/SocketClientAPI/SocketClient.ts).
 
 ## 🛠️ Технологии
 

@@ -164,11 +164,14 @@ export const TranslationKeys = {
 
   [LogMessageKeys.LOG_VOTE_STARTED]: 'logVoteStarted',
   [LogMessageKeys.LOG_VOTE_ENDED]: 'logVoteEnded',
+  [LogMessageKeys.LOG_VOTE_CHANGED]: 'logVoteChanged',
 
   [LogMessageKeys.LOG_OWN_CARD_CHOSEN_RED]: 'logOwnCardChosenRed',
   [LogMessageKeys.LOG_OWN_CARD_CHOSEN_BLUE]: 'logOwnCardChosenBlue',
   [LogMessageKeys.LOG_OTHER_CARD_CHOSEN_RED]: 'logOtherCardChosenRed',
   [LogMessageKeys.LOG_OTHER_CARD_CHOSEN_BLUE]: 'logOtherCardChosenBlue',
+  [LogMessageKeys.LOG_OWN_CARD_CHOSEN_RED_NEITRAL]: 'logOwnCardChosenRedNeitral',
+  [LogMessageKeys.LOG_OWN_CARD_CHOSEN_BLUE_NEITRAL]: 'logOwnCardChosenBlueNeitral',
 
   [LogMessageKeys.LOG_CARD_REVEALED_RED]: 'logCardRevealedRed',
   [LogMessageKeys.LOG_CARD_REVEALED_BLUE]: 'logCardRevealedBlue',

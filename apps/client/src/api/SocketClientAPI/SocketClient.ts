@@ -121,8 +121,12 @@ class SocketClient extends BaseSocketClient {
     this.socket.on(ServerEventType.GAME_CLUE_GIVEN, handler);
   }
 
-  public onGameCardChosen(handler: (payload: { cardId: string; players: Player[] }) => void): void {
-    this.socket.on(ServerEventType.GAME_CARD_CHOSEN, handler);
+  // public onGameCardChosen(handler: (payload: { cardId: string; players: Player[] }) => void): void {
+  //   this.socket.on(ServerEventType.GAME_CARD_CHOSEN, handler);
+  // }
+
+  public onGameVotesUpdated(handler: (payload: { votes: Record<string, Player[]> }) => void): void {
+    this.socket.on(ServerEventType.GAME_VOTES_UPDATED, handler);
   }
 
   public onGameCardShown(handler: (payload: { cardId: string; color: CardColor }) => void): void {

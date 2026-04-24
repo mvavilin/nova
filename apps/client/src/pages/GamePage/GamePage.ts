@@ -34,30 +34,24 @@ export default class GamePage extends ContainerComponent {
   private setupSocketListeners(): void {
     // GAME_ASK_CLUE
     socketClient.onGameAskClue(() => {
-      console.log('[GamePage] Получено событие: GAME_ASK_CLUE - запрос подсказки у шпиона');
-
       logOutput.addMessage({ key: LogMessageKeys.LOG_HINT_PHASE_STARTED });
       logOutput.addMessage({ key: LogMessageKeys.LOG_HINT_REQUEST });
     });
 
     // GAME_START
-    socketClient.onGameStart((payload) => {
-      console.log('[GamePage] Получено событие: GAME_START - игра началась', payload);
+    // socketClient.onGameStart((payload) => {
+    //   console.log('[GamePage] Получено событие: GAME_START - игра началась', payload);
 
-      logOutput.addMessage({ key: LogMessageKeys.LOG_START_GAME });
-    });
+    //   logOutput.addMessage({ key: LogMessageKeys.LOG_START_GAME });
+    // });
 
     // GAME_CLUE_TIMEOUT
     socketClient.onGameClueTimeout(() => {
-      console.log('[GamePage] Получено событие: GAME_CLUE_TIMEOUT - время подсказки истекло');
-
       logOutput.addMessage({ key: LogMessageKeys.LOG_HINT_TIMEOUT });
     });
 
     // GAME_TURN_CHANGED
     socketClient.onGameTurnChanged((payload) => {
-      console.log('[GamePage] Получено событие: GAME_TURN_CHANGED - смена хода', payload);
-
       if (payload.team === TeamsEnum.RED) {
         logOutput.addMessage({
           type: LogMessageType.RED,
@@ -81,8 +75,6 @@ export default class GamePage extends ContainerComponent {
 
     // GAME_CLUE_GIVEN
     socketClient.onGameClueGiven((payload) => {
-      console.log('[GamePage] Получено событие: GAME_CLUE_GIVEN - подсказка передана', payload);
-
       logOutput.addMessage({
         key: LogMessageKeys.LOG_HINT_GIVEN,
         info: payload.clue,
@@ -92,11 +84,18 @@ export default class GamePage extends ContainerComponent {
     });
 
     // GAME_CARD_CHOSEN
-    socketClient.onGameCardChosen((payload) => {
-      console.log('[GamePage] Получено событие: GAME_CARD_CHOSEN - карта выбрана', payload);
+    // socketClient.onGameCardChosen((payload) => {
+    //   console.log('[GamePage] Получено событие: GAME_CARD_CHOSEN - карта выбрана', payload);
+    //   logOutput.addMessage({
+    //     key: LogMessageKeys.LOG_VOTE_ENDED,
+    //     info: payload.cardId,
+    //   });
+    // });
+
+    //GAME_CARD_CHANGED
+    socketClient.onGameVotesUpdated(() => {
       logOutput.addMessage({
-        key: LogMessageKeys.LOG_VOTE_ENDED,
-        info: payload.cardId,
+        key: LogMessageKeys.LOG_VOTE_CHANGED,
       });
     });
 

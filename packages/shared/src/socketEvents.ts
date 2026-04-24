@@ -61,7 +61,8 @@ export enum ServerEventType {
   GAME_CLUE_TIMEOUT = 'game:clue-timeout',
   GAME_TURN_CHANGED = 'game:turn-changed',
   GAME_CLUE_GIVEN = 'game:clue-given',
-  GAME_CARD_CHOSEN = 'game:card-chosen',
+  // GAME_CARD_CHOSEN = 'game:card-chosen',
+  GAME_VOTES_UPDATED = 'game:votes-updated',
   GAME_CARD_SHOWN = 'game:card-shown',
   GAME_ASK_ANSWER = 'game:ask-answer',
   GAME_ANSWER_TIMEOUT = 'game:answer-timeout',
@@ -201,7 +202,8 @@ export type ServerEvent =
   | { type: 'game:clue-timeout' }
   | { type: 'game:turn-changed'; payload: { team: Teams } }
   | { type: 'game:clue-given'; payload: { clue: string } }
-  | { type: 'game:card-chosen'; payload: { cardId: string; players: Player[] } }
+  // | { type: 'game:card-chosen'; payload: { cardId: string; players: Player[] } }
+  | { type: 'game:votes-updated'; payload: { votes: Record<string, Player[]> } }
   | { type: 'game:card-shown'; payload: { cardId: string; color: CardColor } }
   | {
       type: 'game:ask-answer';

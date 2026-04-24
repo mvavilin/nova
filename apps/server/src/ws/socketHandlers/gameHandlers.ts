@@ -235,14 +235,28 @@ function setupCardChooseHandler(
     const response = game.chooseCard(userId, cardId);
     if ('error' in response) return;
 
-    const { players, recipients } = response;
+    const { votes, recipients } = response;
+    // берем сокеты один раз (без цикла emit)
+    // const socketIds = recipients.map((id) => socketIdMap.get(id)).filter(Boolean) as string[];
+
+    // if (!socketIds.length) return;
+
+    // io.to(socketIds).emit('game:votes-updated', {
+    //   votes,
+    // });
+
+    // logger.emit('system', 'game:votes-updated', {
+    //   votes,
+    // });
+
     for (const recipient of recipients) {
       const socketId = socketIdMap.get(recipient);
       if (socketId) {
-        io.to(socketId).emit('game:card-chosen', { cardId, players });
-        logger.emit(recipient, 'game:card-chosen', { cardId, players });
+        io.to(socketId).emit('game:votes-updated', { votes });
+        logger.emit(recipient, 'game:votes-updated', { votes });
       }
     }
+
     // game.startCheckPhase((results) => {
     //   sendResults(game, results);
     // });

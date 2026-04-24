@@ -19,16 +19,19 @@ const gamePage = {
     [TranslationKeys.LOG_HINT_TIMEOUT]: 'Hint time expired!',
     [TranslationKeys.LOG_HINT_PHASE_STARTED]: 'Hint phase started',
     [TranslationKeys.LOG_HINT_PHASE_ENDED]: 'Hint phase ended',
-    [TranslationKeys.LOG_HINT_REQUEST]: 'Enter a hint (word and number)',
+    [TranslationKeys.LOG_HINT_REQUEST]: 'Enter a hint',
     [TranslationKeys.LOG_HINT_GIVEN]: 'Hint: ',
 
     [TranslationKeys.LOG_VOTE_STARTED]: 'Card selection voting started',
     [TranslationKeys.LOG_VOTE_ENDED]: 'Card selection voting ended',
+    [TranslationKeys.LOG_VOTE_CHANGED]: 'Player select card',
 
     [TranslationKeys.LOG_OWN_CARD_CHOSEN_RED]: 'Red team agents chose their card: ',
     [TranslationKeys.LOG_OWN_CARD_CHOSEN_BLUE]: 'Blue team agents chose their card: ',
     [TranslationKeys.LOG_OTHER_CARD_CHOSEN_RED]: 'Red team agents chose an enemy card: ',
     [TranslationKeys.LOG_OTHER_CARD_CHOSEN_BLUE]: 'Blue team agents chose an enemy card: ',
+    [TranslationKeys.LOG_OWN_CARD_CHOSEN_RED_NEITRAL]: 'Red team agents chose a neitral card: ',
+    [TranslationKeys.LOG_OWN_CARD_CHOSEN_BLUE_NEITRAL]: 'Blue team agents chose a neitral card: ',
 
     [TranslationKeys.LOG_CARD_REVEALED_RED]: 'Red card revealed!',
     [TranslationKeys.LOG_CARD_REVEALED_BLUE]: 'Blue card revealed!',
@@ -63,16 +66,17 @@ const gamePage = {
 
     [TranslationKeys.LOG_START_GAME]: 'Игра началась!',
 
-    [TranslationKeys.LOG_HINT_RED]: 'Капитан команды дает подсказку',
-    [TranslationKeys.LOG_HINT_BLUE]: 'Капитан команды дает подсказку',
+    [TranslationKeys.LOG_HINT_RED]: 'Капитан красной команды дает подсказку',
+    [TranslationKeys.LOG_HINT_BLUE]: 'Капитан синей команды дает подсказку',
     [TranslationKeys.LOG_HINT_TIMEOUT]: 'Время подсказки истекло!',
     [TranslationKeys.LOG_HINT_PHASE_STARTED]: 'Старт фазы подсказки',
     [TranslationKeys.LOG_HINT_PHASE_ENDED]: 'Завершение фазы подсказки',
-    [TranslationKeys.LOG_HINT_REQUEST]: 'Введите подсказку (слово и число)',
+    [TranslationKeys.LOG_HINT_REQUEST]: 'Введите подсказку',
     [TranslationKeys.LOG_HINT_GIVEN]: 'Подсказка: ',
 
     [TranslationKeys.LOG_VOTE_STARTED]: 'Голосование выбора карточки запущено',
     [TranslationKeys.LOG_VOTE_ENDED]: 'Голосование выбора карточки завершено',
+    [TranslationKeys.LOG_VOTE_CHANGED]: 'Игрок выбрал карточку',
 
     [TranslationKeys.LOG_OWN_CARD_CHOSEN_RED]:
       'Оперативники красной команды выбрали свою карточку: ',
@@ -82,11 +86,14 @@ const gamePage = {
       'Оперативники красной команды выбрали чужую карточку: ',
     [TranslationKeys.LOG_OTHER_CARD_CHOSEN_BLUE]:
       'Оперативники синей команды выбрали чужую карточку: ',
+    [TranslationKeys.LOG_OWN_CARD_CHOSEN_RED_NEITRAL]:
+      'Оперативники красной команды выбрали нейтральную карточку: ',
+    [TranslationKeys.LOG_OWN_CARD_CHOSEN_BLUE_NEITRAL]:
+      'Оперативники синей команды выбрали нейтральную карточку: ',
 
     [TranslationKeys.LOG_CARD_REVEALED_RED]: 'Открыта красная карта!',
     [TranslationKeys.LOG_CARD_REVEALED_BLUE]: 'Открыта синяя карта!',
-    [TranslationKeys.LOG_CARD_REVEALED_NEUTRAL]:
-      'Открыта нейтральная карта! Ход переходит к другой команде',
+    [TranslationKeys.LOG_CARD_REVEALED_NEUTRAL]: 'Открыта нейтральная карта!',
     [TranslationKeys.LOG_CARD_REVEALED_BOMB]: 'БОМБА! Игра окончена!',
 
     [TranslationKeys.LOG_CHECKING_ANSWER_RED]: 'Красная команда проверяет ответ',

@@ -45,7 +45,10 @@ export class Game {
   private accepts: Array<{ userId: string; accept: boolean }> = [];
   private score: Score = { red: 0, blue: 0 };
   private playerAnswers = new Map<string, boolean[]>();
-  private playerChoices: Map<string, string> = new Map();
+  // private playerChoices: Map<string, string> = new Map();
+
+  // private playerVotes: new Map<userId, cardId>
+  private playerVotes = new Map<string, string>();
 
   constructor(roomId: string, maxPlayers: number) {
     this.id = uuid();
@@ -138,7 +141,7 @@ export class Game {
       const word = words[i];
       const color = colors[i];
       if (word && color) {
-        this.cards.push({ id: uuid(), word, color, whoSees: new Set() });
+        this.cards.push({ id: uuid(), word, color, whoSees: new Set(), isRevealed: false });
       }
     }
   }
@@ -213,9 +216,8 @@ export class Game {
   public chooseCard(
     userId: string,
     cardId: string
-  ): { players: Player[]; recipients: string[] } | { error: ErrorCode } {
+  ): { votes: Record<string, Player[]>; recipients: string[] } | { error: ErrorCode } {
     const team = this.currentTeam === 'red' ? this.redTeam : this.blueTeam;
-
     const agent = team.find((player) => player.role === 'agent' && player.id === userId);
 
     if (!agent || this.gamePhase !== 'guess') {
@@ -224,28 +226,38 @@ export class Game {
 
     const card = this.cards.find((card) => card.id === cardId);
 
-    if (!card || card.whoSees.has(agent.team)) {
+    if (!card || card.isRevealed || card.whoSees.has(agent.team)) {
       return { error: 'ACTION_IS_PROHIBITED' };
     }
 
-    const currentChoice = this.playerChoices.get(userId);
+    // текущий выбор игрока
+    const currentCardId = this.playerVotes.get(userId);
 
-    // 🔁 toggle логика
-    if (currentChoice === cardId) {
-      // снять выбор
-      this.playerChoices.delete(userId);
+    // toggle логика
+    if (currentCardId === cardId) {
+      this.playerVotes.delete(userId);
     } else {
-      // заменить или поставить новый
-      this.playerChoices.set(userId, cardId);
+      this.playerVotes.set(userId, cardId);
     }
 
-    // 📊 собрать игроков, выбравших эту карту
-    const players = team.filter((player) => this.playerChoices.get(player.id) === cardId);
+    // пересобираем votes
+    const votes: Record<string, Player[]> = {};
 
-    // 📡 отправляем всей команде
+    for (const player of team) {
+      const votedCardId = this.playerVotes.get(player.id);
+
+      if (!votedCardId) continue;
+
+      if (!votes[votedCardId]) {
+        votes[votedCardId] = [];
+      }
+
+      votes[votedCardId].push(player);
+    }
+
     const recipients = team.map((player) => player.id);
 
-    return { players, recipients };
+    return { votes, recipients };
   }
 
   private turnChange(): string {
